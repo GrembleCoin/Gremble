@@ -1,18 +1,57 @@
-const canvas = document.getElementById("gameCanvas");
-const ctx = canvas.getContext("2d");
-
-const startButton = document.getElementById("startGame");
-const scoreElement = document.getElementById("gameScore");
-const livesElement = document.getElementById("gameLives");
-const gameMessage = document.getElementById("gameMessage");
-
-const leftButton = document.getElementById("moveLeft");
-const rightButton = document.getElementById("moveRight");
+/* =========================================================
+   GREMBLE COIN CATCH
+   GAME + SUPABASE LEADERBOARD
+========================================================= */
 
 
-/* =========================================
+/* =========================================================
+   SUPABASE
+========================================================= */
+
+const SUPABASE_URL =
+    "https://tffzjqeckoezursrvcpw.supabase.co";
+
+const SUPABASE_KEY =
+    "sb_publishable_MFdYqNoOg1FEx-6PSjJwjQ_oCIo94ME";
+
+const SCORES_API =
+    `${SUPABASE_URL}/rest/v1/scores`;
+
+
+
+/* =========================================================
+   GAME ELEMENTS
+========================================================= */
+
+const canvas =
+    document.getElementById("gameCanvas");
+
+const ctx =
+    canvas.getContext("2d");
+
+const startButton =
+    document.getElementById("startGame");
+
+const scoreElement =
+    document.getElementById("gameScore");
+
+const livesElement =
+    document.getElementById("gameLives");
+
+const gameMessage =
+    document.getElementById("gameMessage");
+
+const leftButton =
+    document.getElementById("moveLeft");
+
+const rightButton =
+    document.getElementById("moveRight");
+
+
+
+/* =========================================================
    CANVAS
-========================================= */
+========================================================= */
 
 const GAME_WIDTH = 900;
 const GAME_HEIGHT = 560;
@@ -21,9 +60,19 @@ canvas.width = GAME_WIDTH;
 canvas.height = GAME_HEIGHT;
 
 
-/* =========================================
+
+/* =========================================================
+   FLOOR
+========================================================= */
+
+const FLOOR_Y =
+    GAME_HEIGHT - 72;
+
+
+
+/* =========================================================
    GAME STATE
-========================================= */
+========================================================= */
 
 let gameRunning = false;
 
@@ -38,10 +87,15 @@ let spawnInterval = 1000;
 
 let fallSpeed = 2.8;
 
+let animationFrameId = null;
 
-/* =========================================
+let scoreSubmitted = false;
+
+
+
+/* =========================================================
    CONTROLS
-========================================= */
+========================================================= */
 
 const keys = {
     left: false,
@@ -49,183 +103,280 @@ const keys = {
 };
 
 
-/* =========================================
+
+/* =========================================================
    PLAYER
-========================================= */
+========================================================= */
 
 const player = {
-    x: GAME_WIDTH / 2 - 40,
-    y: GAME_HEIGHT - 125,
 
-    width: 80,
-    height: 115,
+    x:
+        GAME_WIDTH / 2 - 40,
 
-    speed: 10
+    y:
+        FLOOR_Y - 115,
+
+    width:
+        80,
+
+    height:
+        115,
+
+    speed:
+        10
 };
 
 
-/* =========================================
+
+/* =========================================================
    IMAGES
-========================================= */
+========================================================= */
 
 const images = {};
+
 
 
 /* PLAYER */
 
 images.player = new Image();
-images.player.src = "gremble3.png";
+
+images.player.src =
+    "gremble3.png";
+
 
 
 /* GREMBLECOIN */
 
-images.gremblecoin = new Image();
-images.gremblecoin.src = "gremblecoin.png";
+images.gremblecoin =
+    new Image();
+
+images.gremblecoin.src =
+    "gremblecoin.png";
+
 
 
 /* BAD COINS */
 
-images.bitcoin = new Image();
-images.bitcoin.src = "bitcoin.png";
+images.bitcoin =
+    new Image();
 
-images.ethereum = new Image();
-images.ethereum.src = "ethereum.png";
-
-images.solana = new Image();
-images.solana.src = "solana.png";
-
-images.dogecoin = new Image();
-images.dogecoin.src = "dogecoin.png";
-
-images.pepe = new Image();
-images.pepe.src = "pepe.png";
-
-images.shiba = new Image();
-images.shiba.src = "shiba.png";
+images.bitcoin.src =
+    "bitcoin.png";
 
 
-/* =========================================
+images.ethereum =
+    new Image();
+
+images.ethereum.src =
+    "ethereum.png";
+
+
+images.solana =
+    new Image();
+
+images.solana.src =
+    "solana.png";
+
+
+images.dogecoin =
+    new Image();
+
+images.dogecoin.src =
+    "dogecoin.png";
+
+
+images.pepe =
+    new Image();
+
+images.pepe.src =
+    "pepe.png";
+
+
+images.shiba =
+    new Image();
+
+images.shiba.src =
+    "shiba.png";
+
+
+
+/* =========================================================
    COIN TYPES
-========================================= */
+========================================================= */
 
 const goodCoin = {
-    name: "GREMBLE",
-    image: images.gremblecoin,
-    good: true
+
+    name:
+        "GREMBLE",
+
+    image:
+        images.gremblecoin,
+
+    good:
+        true
 };
+
 
 
 const badCoins = [
 
     {
-        name: "BITCOIN",
-        image: images.bitcoin,
-        good: false
+        name:
+            "BITCOIN",
+
+        image:
+            images.bitcoin,
+
+        good:
+            false
     },
 
-    {
-        name: "ETHEREUM",
-        image: images.ethereum,
-        good: false
-    },
 
     {
-        name: "SOLANA",
-        image: images.solana,
-        good: false
+        name:
+            "ETHEREUM",
+
+        image:
+            images.ethereum,
+
+        good:
+            false
     },
 
-    {
-        name: "DOGECOIN",
-        image: images.dogecoin,
-        good: false
-    },
 
     {
-        name: "PEPE",
-        image: images.pepe,
-        good: false
+        name:
+            "SOLANA",
+
+        image:
+            images.solana,
+
+        good:
+            false
     },
 
+
     {
-        name: "SHIBA",
-        image: images.shiba,
-        good: false
+        name:
+            "DOGECOIN",
+
+        image:
+            images.dogecoin,
+
+        good:
+            false
+    },
+
+
+    {
+        name:
+            "PEPE",
+
+        image:
+            images.pepe,
+
+        good:
+            false
+    },
+
+
+    {
+        name:
+            "SHIBA",
+
+        image:
+            images.shiba,
+
+        good:
+            false
     }
 
 ];
 
 
-/* =========================================
-   KEYBOARD
-========================================= */
 
-document.addEventListener("keydown", (event) => {
+/* =========================================================
+   KEYBOARD CONTROLS
+========================================================= */
 
-    const key = event.key.toLowerCase();
+document.addEventListener(
+    "keydown",
+    (event) => {
 
-
-    if (
-        event.key === "ArrowLeft" ||
-        key === "a"
-    ) {
-
-        keys.left = true;
-
-        event.preventDefault();
-
-    }
+        const key =
+            event.key.toLowerCase();
 
 
-    if (
-        event.key === "ArrowRight" ||
-        key === "d"
-    ) {
+        if (
+            event.key === "ArrowLeft" ||
+            key === "a"
+        ) {
 
-        keys.right = true;
+            keys.left = true;
 
-        event.preventDefault();
+            event.preventDefault();
 
-    }
-
-});
+        }
 
 
-document.addEventListener("keyup", (event) => {
+        if (
+            event.key === "ArrowRight" ||
+            key === "d"
+        ) {
 
-    const key = event.key.toLowerCase();
+            keys.right = true;
 
+            event.preventDefault();
 
-    if (
-        event.key === "ArrowLeft" ||
-        key === "a"
-    ) {
-
-        keys.left = false;
+        }
 
     }
+);
 
 
-    if (
-        event.key === "ArrowRight" ||
-        key === "d"
-    ) {
 
-        keys.right = false;
+document.addEventListener(
+    "keyup",
+    (event) => {
+
+        const key =
+            event.key.toLowerCase();
+
+
+        if (
+            event.key === "ArrowLeft" ||
+            key === "a"
+        ) {
+
+            keys.left = false;
+
+        }
+
+
+        if (
+            event.key === "ArrowRight" ||
+            key === "d"
+        ) {
+
+            keys.right = false;
+
+        }
 
     }
+);
 
-});
 
 
-/* =========================================
+/* =========================================================
    MOBILE CONTROLS
-========================================= */
+========================================================= */
 
 function pressLeft(event) {
 
     if (event) {
+
         event.preventDefault();
+
     }
 
     keys.left = true;
@@ -233,10 +384,13 @@ function pressLeft(event) {
 }
 
 
+
 function releaseLeft(event) {
 
     if (event) {
+
         event.preventDefault();
+
     }
 
     keys.left = false;
@@ -244,10 +398,13 @@ function releaseLeft(event) {
 }
 
 
+
 function pressRight(event) {
 
     if (event) {
+
         event.preventDefault();
+
     }
 
     keys.right = true;
@@ -255,10 +412,13 @@ function pressRight(event) {
 }
 
 
+
 function releaseRight(event) {
 
     if (event) {
+
         event.preventDefault();
+
     }
 
     keys.right = false;
@@ -266,81 +426,98 @@ function releaseRight(event) {
 }
 
 
-/* LEFT */
 
-leftButton.addEventListener(
-    "touchstart",
-    pressLeft,
-    {
-        passive: false
-    }
-);
+if (leftButton) {
 
-leftButton.addEventListener(
-    "touchend",
-    releaseLeft,
-    {
-        passive: false
-    }
-);
-
-leftButton.addEventListener(
-    "mousedown",
-    pressLeft
-);
-
-leftButton.addEventListener(
-    "mouseup",
-    releaseLeft
-);
-
-leftButton.addEventListener(
-    "mouseleave",
-    releaseLeft
-);
+    leftButton.addEventListener(
+        "touchstart",
+        pressLeft,
+        {
+            passive: false
+        }
+    );
 
 
-/* RIGHT */
-
-rightButton.addEventListener(
-    "touchstart",
-    pressRight,
-    {
-        passive: false
-    }
-);
-
-rightButton.addEventListener(
-    "touchend",
-    releaseRight,
-    {
-        passive: false
-    }
-);
-
-rightButton.addEventListener(
-    "mousedown",
-    pressRight
-);
-
-rightButton.addEventListener(
-    "mouseup",
-    releaseRight
-);
-
-rightButton.addEventListener(
-    "mouseleave",
-    releaseRight
-);
+    leftButton.addEventListener(
+        "touchend",
+        releaseLeft,
+        {
+            passive: false
+        }
+    );
 
 
-/* =========================================
+    leftButton.addEventListener(
+        "mousedown",
+        pressLeft
+    );
+
+
+    leftButton.addEventListener(
+        "mouseup",
+        releaseLeft
+    );
+
+
+    leftButton.addEventListener(
+        "mouseleave",
+        releaseLeft
+    );
+
+}
+
+
+
+if (rightButton) {
+
+    rightButton.addEventListener(
+        "touchstart",
+        pressRight,
+        {
+            passive: false
+        }
+    );
+
+
+    rightButton.addEventListener(
+        "touchend",
+        releaseRight,
+        {
+            passive: false
+        }
+    );
+
+
+    rightButton.addEventListener(
+        "mousedown",
+        pressRight
+    );
+
+
+    rightButton.addEventListener(
+        "mouseup",
+        releaseRight
+    );
+
+
+    rightButton.addEventListener(
+        "mouseleave",
+        releaseRight
+    );
+
+}
+
+
+
+/* =========================================================
    SPAWN COIN
-========================================= */
+========================================================= */
 
 function spawnCoin() {
 
-    const chance = Math.random();
+    const chance =
+        Math.random();
+
 
     let coinType;
 
@@ -350,11 +527,16 @@ function spawnCoin() {
        40% OTHER COINS
     */
 
-    if (chance < 0.60) {
+    if (
+        chance < 0.60
+    ) {
 
-        coinType = goodCoin;
+        coinType =
+            goodCoin;
 
-    } else {
+    }
+
+    else {
 
         const randomBad =
             Math.floor(
@@ -369,17 +551,22 @@ function spawnCoin() {
     }
 
 
+
     const size =
         coinType.good
             ? 64
             : 60;
 
 
+
     fallingCoins.push({
 
         x:
             Math.random() *
-            (GAME_WIDTH - size),
+            (
+                GAME_WIDTH -
+                size
+            ),
 
         y:
             -size - 120,
@@ -392,7 +579,8 @@ function spawnCoin() {
 
         speed:
             fallSpeed +
-            Math.random() * 1.3,
+            Math.random() *
+            1.3,
 
         type:
             coinType
@@ -402,13 +590,16 @@ function spawnCoin() {
 }
 
 
-/* =========================================
+
+/* =========================================================
    PLAYER MOVEMENT
-========================================= */
+========================================================= */
 
 function updatePlayer() {
 
-    if (keys.left) {
+    if (
+        keys.left
+    ) {
 
         player.x -=
             player.speed;
@@ -416,7 +607,9 @@ function updatePlayer() {
     }
 
 
-    if (keys.right) {
+    if (
+        keys.right
+    ) {
 
         player.x +=
             player.speed;
@@ -424,11 +617,15 @@ function updatePlayer() {
     }
 
 
-    if (player.x < 0) {
+
+    if (
+        player.x < 0
+    ) {
 
         player.x = 0;
 
     }
+
 
 
     if (
@@ -446,11 +643,20 @@ function updatePlayer() {
 }
 
 
-/* =========================================
-   COLLISION
-========================================= */
 
-function collision(player, coin) {
+/* =========================================================
+   COLLISION
+========================================================= */
+
+function collision(
+    player,
+    coin
+) {
+
+    /*
+       Smaller player hitbox
+       so collisions feel fair.
+    */
 
     const playerHitbox = {
 
@@ -465,11 +671,12 @@ function collision(player, coin) {
 
         height:
             player.height - 24
-
     };
 
 
-    const padding = 7;
+    const coinPadding =
+        7;
+
 
 
     return (
@@ -477,37 +684,77 @@ function collision(player, coin) {
         playerHitbox.x <
         coin.x +
         coin.width -
-        padding
+        coinPadding
 
         &&
 
         playerHitbox.x +
         playerHitbox.width >
         coin.x +
-        padding
+        coinPadding
 
         &&
 
         playerHitbox.y <
         coin.y +
         coin.height -
-        padding
+        coinPadding
 
         &&
 
         playerHitbox.y +
         playerHitbox.height >
         coin.y +
-        padding
+        coinPadding
 
     );
 
 }
 
 
-/* =========================================
+
+/* =========================================================
+   LOSE LIFE
+========================================================= */
+
+function loseLife(
+    message
+) {
+
+    lives--;
+
+
+    livesElement.textContent =
+        lives;
+
+
+    flashDamage();
+
+
+    gameMessage.innerHTML =
+        message;
+
+
+    if (
+        lives <= 0
+    ) {
+
+        endGame();
+
+        return true;
+
+    }
+
+
+    return false;
+
+}
+
+
+
+/* =========================================================
    UPDATE COINS
-========================================= */
+========================================================= */
 
 function updateCoins() {
 
@@ -528,6 +775,11 @@ function updateCoins() {
             coin.speed;
 
 
+
+        /* =================================================
+           PLAYER CATCHES COIN
+        ================================================= */
+
         if (
             collision(
                 player,
@@ -535,11 +787,15 @@ function updateCoins() {
             )
         ) {
 
+
+            /* GREMBLECOIN */
+
             if (
                 coin.type.good
             ) {
 
                 score++;
+
 
                 scoreElement.textContent =
                     score;
@@ -547,35 +803,48 @@ function updateCoins() {
 
                 increaseDifficulty();
 
-            } else {
 
-                lives--;
+                gameMessage.innerHTML =
+                    `
+                    Nice!
+                    <strong>+1 GrembleCoin</strong>
+                    `;
 
-                livesElement.textContent =
-                    lives;
+            }
 
 
-                flashDamage();
+            /* BAD COIN */
 
+            else {
 
-                if (
-                    lives <= 0
-                ) {
-
-                    fallingCoins.splice(
-                        i,
-                        1
+                const gameEnded =
+                    loseLife(
+                        `
+                        Wrong coin!
+                        <strong>-1 LIFE</strong>
+                        `
                     );
 
 
-                    endGame();
+                fallingCoins.splice(
+                    i,
+                    1
+                );
 
+
+                if (
+                    gameEnded
+                ) {
 
                     return;
 
                 }
 
+
+                continue;
+
             }
+
 
 
             fallingCoins.splice(
@@ -589,9 +858,58 @@ function updateCoins() {
         }
 
 
+
+        /* =================================================
+           GREMBLECOIN WAS MISSED
+        ================================================= */
+
         if (
+            coin.type.good &&
             coin.y >
-            GAME_HEIGHT + 100
+            FLOOR_Y + 15
+        ) {
+
+            fallingCoins.splice(
+                i,
+                1
+            );
+
+
+            const gameEnded =
+                loseLife(
+                    `
+                    You missed GrembleCoin!
+                    <strong>-1 LIFE</strong>
+                    `
+                );
+
+
+            if (
+                gameEnded
+            ) {
+
+                return;
+
+            }
+
+
+            continue;
+
+        }
+
+
+
+        /* =================================================
+           BAD COIN FALLS PAST PLAYER
+
+           GOOD!
+           Player correctly avoided it.
+        ================================================= */
+
+        if (
+            !coin.type.good &&
+            coin.y >
+            GAME_HEIGHT + 80
         ) {
 
             fallingCoins.splice(
@@ -606,11 +924,18 @@ function updateCoins() {
 }
 
 
-/* =========================================
+
+/* =========================================================
    DIFFICULTY
-========================================= */
+========================================================= */
 
 function increaseDifficulty() {
+
+    /*
+       Every 5 score:
+       faster falling
+       faster spawning
+    */
 
     if (
         score > 0 &&
@@ -632,9 +957,10 @@ function increaseDifficulty() {
 }
 
 
-/* =========================================
+
+/* =========================================================
    DAMAGE EFFECT
-========================================= */
+========================================================= */
 
 function flashDamage() {
 
@@ -651,15 +977,16 @@ function flashDamage() {
             );
 
         },
-        170
+        200
     );
 
 }
 
 
-/* =========================================
+
+/* =========================================================
    BACKGROUND
-========================================= */
+========================================================= */
 
 function drawBackground() {
 
@@ -671,9 +998,8 @@ function drawBackground() {
     );
 
 
-    /* =====================================
-       DARK GREEN SPACE BACKGROUND
-    ===================================== */
+
+    /* DARK BACKGROUND */
 
     const gradient =
         ctx.createLinearGradient(
@@ -691,14 +1017,8 @@ function drawBackground() {
 
 
     gradient.addColorStop(
-        0.45,
-        "#021b13"
-    );
-
-
-    gradient.addColorStop(
-        0.78,
-        "#032719"
+        0.48,
+        "#021c13"
     );
 
 
@@ -720,37 +1040,36 @@ function drawBackground() {
     );
 
 
-    /* =====================================
-       CENTER GREEN ATMOSPHERE
-    ===================================== */
+
+    /* CENTER GREEN GLOW */
 
     const centerGlow =
         ctx.createRadialGradient(
             GAME_WIDTH / 2,
-            GAME_HEIGHT * 0.65,
-            10,
+            GAME_HEIGHT * 0.60,
+            20,
 
             GAME_WIDTH / 2,
-            GAME_HEIGHT * 0.65,
-            430
+            GAME_HEIGHT * 0.60,
+            420
         );
 
 
     centerGlow.addColorStop(
         0,
-        "rgba(0,255,110,0.13)"
+        "rgba(0,255,110,0.09)"
     );
 
 
     centerGlow.addColorStop(
         0.45,
-        "rgba(0,180,85,0.05)"
+        "rgba(0,160,80,0.04)"
     );
 
 
     centerGlow.addColorStop(
         1,
-        "rgba(0,120,60,0)"
+        "rgba(0,100,50,0)"
     );
 
 
@@ -766,9 +1085,8 @@ function drawBackground() {
     );
 
 
-    /* =====================================
-       STARS
-    ===================================== */
+
+    /* STARS */
 
     for (
         let i = 0;
@@ -777,28 +1095,28 @@ function drawBackground() {
     ) {
 
         const x =
-            (i * 137 + 23) %
+            (
+                i * 137 +
+                23
+            ) %
             GAME_WIDTH;
 
 
         const y =
-            (i * 83 + 41) %
-            (GAME_HEIGHT - 90);
+            (
+                i * 83 +
+                41
+            ) %
+            (
+                GAME_HEIGHT -
+                95
+            );
 
 
-        if (
+        ctx.fillStyle =
             i % 5 === 0
-        ) {
-
-            ctx.fillStyle =
-                "rgba(110,255,150,0.75)";
-
-        } else {
-
-            ctx.fillStyle =
-                "rgba(255,255,255,0.22)";
-
-        }
+                ? "rgba(110,255,150,0.70)"
+                : "rgba(255,255,255,0.20)";
 
 
         const starSize =
@@ -817,28 +1135,36 @@ function drawBackground() {
     }
 
 
-    /* =====================================
-       BRIGHT STARS
-    ===================================== */
+
+    /* BRIGHT STARS */
 
     const brightStars = [
 
         [75, 120],
+
         [185, 265],
+
         [320, 95],
+
         [450, 180],
+
         [610, 110],
+
         [760, 255],
+
         [850, 150]
 
     ];
 
 
     brightStars.forEach(
-        star => {
+        (star) => {
 
-            const x = star[0];
-            const y = star[1];
+            const x =
+                star[0];
+
+            const y =
+                star[1];
 
 
             ctx.save();
@@ -870,46 +1196,33 @@ function drawBackground() {
     );
 
 
-    /* =====================================
-       FLOOR POSITION
-    ===================================== */
 
-    const horizonY =
-        GAME_HEIGHT - 72;
-
-
-    const floorBottom =
-        GAME_HEIGHT;
-
-
-    /* =====================================
-       FLOOR GLOW
-    ===================================== */
+    /* FLOOR GLOW */
 
     const floorGlow =
         ctx.createLinearGradient(
             0,
-            horizonY - 55,
+            FLOOR_Y - 45,
             0,
-            floorBottom
+            FLOOR_Y + 45
         );
 
 
     floorGlow.addColorStop(
         0,
-        "rgba(0,255,100,0)"
+        "rgba(40,255,100,0)"
     );
 
 
     floorGlow.addColorStop(
-        0.45,
-        "rgba(0,255,100,0.06)"
+        0.5,
+        "rgba(40,255,100,0.08)"
     );
 
 
     floorGlow.addColorStop(
         1,
-        "rgba(0,255,100,0.12)"
+        "rgba(40,255,100,0)"
     );
 
 
@@ -919,35 +1232,32 @@ function drawBackground() {
 
     ctx.fillRect(
         0,
-        horizonY - 55,
+        FLOOR_Y - 45,
         GAME_WIDTH,
-        floorBottom -
-        horizonY +
-        55
+        90
     );
 
 
-    /* =====================================
-       HORIZON NEON LINE
-    ===================================== */
+
+    /* SINGLE GREEN FLOOR LINE */
 
     ctx.save();
 
 
-    ctx.strokeStyle =
-        "rgba(70,255,110,0.90)";
-
-
     ctx.shadowColor =
-        "#39ff74";
+        "#32ff6a";
 
 
     ctx.shadowBlur =
-        20;
+        16;
+
+
+    ctx.strokeStyle =
+        "#32ff6a";
 
 
     ctx.lineWidth =
-        1.4;
+        2;
 
 
     ctx.beginPath();
@@ -955,13 +1265,44 @@ function drawBackground() {
 
     ctx.moveTo(
         0,
-        horizonY
+        FLOOR_Y
     );
 
 
     ctx.lineTo(
         GAME_WIDTH,
-        horizonY
+        FLOOR_Y
+    );
+
+
+    ctx.stroke();
+
+
+
+    ctx.shadowBlur =
+        4;
+
+
+    ctx.strokeStyle =
+        "rgba(170,255,190,0.50)";
+
+
+    ctx.lineWidth =
+        1;
+
+
+    ctx.beginPath();
+
+
+    ctx.moveTo(
+        0,
+        FLOOR_Y - 1
+    );
+
+
+    ctx.lineTo(
+        GAME_WIDTH,
+        FLOOR_Y - 1
     );
 
 
@@ -970,189 +1311,13 @@ function drawBackground() {
 
     ctx.restore();
 
-
-    /* =====================================
-       HORIZONTAL FLOOR GRID
-    ===================================== */
-
-    ctx.save();
-
-
-    ctx.strokeStyle =
-        "rgba(45,255,100,0.22)";
-
-
-    ctx.lineWidth =
-        1;
-
-
-    const horizontalLines = 7;
-
-
-    for (
-        let i = 1;
-        i <= horizontalLines;
-        i++
-    ) {
-
-        const progress =
-            i /
-            horizontalLines;
-
-
-        const curvedProgress =
-            progress *
-            progress;
-
-
-        const y =
-            horizonY +
-            curvedProgress *
-            (
-                floorBottom -
-                horizonY
-            );
-
-
-        ctx.beginPath();
-
-
-        ctx.moveTo(
-            0,
-            y
-        );
-
-
-        ctx.lineTo(
-            GAME_WIDTH,
-            y
-        );
-
-
-        ctx.stroke();
-
-    }
-
-
-    ctx.restore();
-
-
-    /* =====================================
-       VERTICAL PERSPECTIVE GRID
-    ===================================== */
-
-    ctx.save();
-
-
-    ctx.strokeStyle =
-        "rgba(45,255,100,0.22)";
-
-
-    ctx.lineWidth =
-        1;
-
-
-    const vanishingX =
-        GAME_WIDTH / 2;
-
-
-    const columns =
-        18;
-
-
-    for (
-        let i = 0;
-        i <= columns;
-        i++
-    ) {
-
-        const bottomX =
-            (
-                GAME_WIDTH /
-                columns
-            ) * i;
-
-
-        ctx.beginPath();
-
-
-        ctx.moveTo(
-            vanishingX,
-            horizonY
-        );
-
-
-        ctx.lineTo(
-            bottomX,
-            floorBottom
-        );
-
-
-        ctx.stroke();
-
-    }
-
-
-    ctx.restore();
-
-
-    /* =====================================
-       STRONG CENTER PLATFORM GLOW
-    ===================================== */
-
-    ctx.save();
-
-
-    const platformGlow =
-        ctx.createRadialGradient(
-            GAME_WIDTH / 2,
-            horizonY + 8,
-            10,
-
-            GAME_WIDTH / 2,
-            horizonY + 8,
-            240
-        );
-
-
-    platformGlow.addColorStop(
-        0,
-        "rgba(80,255,110,0.30)"
-    );
-
-
-    platformGlow.addColorStop(
-        0.35,
-        "rgba(25,255,100,0.12)"
-    );
-
-
-    platformGlow.addColorStop(
-        1,
-        "rgba(0,255,100,0)"
-    );
-
-
-    ctx.fillStyle =
-        platformGlow;
-
-
-    ctx.fillRect(
-        GAME_WIDTH / 2 - 260,
-        horizonY - 60,
-        520,
-        120
-    );
-
-
-    ctx.restore();
-
 }
 
 
-/* =========================================
+
+/* =========================================================
    DRAW PLAYER
-========================================= */
+========================================================= */
 
 function drawPlayer() {
 
@@ -1190,11 +1355,14 @@ function drawPlayer() {
 }
 
 
-/* =========================================
-   DRAW COIN TRAIL
-========================================= */
 
-function drawCoinTrail(coin) {
+/* =========================================================
+   DRAW COIN TRAIL
+========================================================= */
+
+function drawCoinTrail(
+    coin
+) {
 
     const centerX =
         coin.x +
@@ -1212,13 +1380,13 @@ function drawCoinTrail(coin) {
 
 
     const bottomWidth =
-        coin.width * 0.72;
+        coin.width *
+        0.72;
 
 
-    /*
-       GREMBLECOIN = GREEN
-       OTHERS = RED
-    */
+
+    /* GREMBLE = GREEN */
+    /* BAD = RED */
 
     const colors =
         coin.type.good
@@ -1239,7 +1407,6 @@ function drawCoinTrail(coin) {
 
                 glow:
                     "rgba(70,255,130,0.50)"
-
             }
 
             : {
@@ -1258,13 +1425,11 @@ function drawCoinTrail(coin) {
 
                 glow:
                     "rgba(255,60,60,0.32)"
-
             };
 
 
-    /* =====================================
-       MAIN CONE LIGHT
-    ===================================== */
+
+    /* MAIN LIGHT */
 
     ctx.save();
 
@@ -1272,7 +1437,9 @@ function drawCoinTrail(coin) {
     const gradient =
         ctx.createLinearGradient(
             centerX,
-            coinTop - trailHeight,
+            coinTop -
+            trailHeight,
+
             centerX,
             coinTop
         );
@@ -1319,13 +1486,15 @@ function drawCoinTrail(coin) {
 
     ctx.moveTo(
         centerX - 2,
-        coinTop - trailHeight
+        coinTop -
+        trailHeight
     );
 
 
     ctx.lineTo(
         centerX + 2,
-        coinTop - trailHeight
+        coinTop -
+        trailHeight
     );
 
 
@@ -1352,89 +1521,8 @@ function drawCoinTrail(coin) {
     ctx.restore();
 
 
-    /* =====================================
-       INNER LIGHT
-    ===================================== */
 
-    ctx.save();
-
-
-    const innerHeight =
-        trailHeight * 0.82;
-
-
-    const innerGradient =
-        ctx.createLinearGradient(
-            centerX,
-            coinTop - innerHeight,
-            centerX,
-            coinTop
-        );
-
-
-    innerGradient.addColorStop(
-        0,
-        colors.transparent
-    );
-
-
-    innerGradient.addColorStop(
-        0.65,
-        colors.soft
-    );
-
-
-    innerGradient.addColorStop(
-        1,
-        colors.strong
-    );
-
-
-    ctx.fillStyle =
-        innerGradient;
-
-
-    ctx.beginPath();
-
-
-    ctx.moveTo(
-        centerX - 1,
-        coinTop - innerHeight
-    );
-
-
-    ctx.lineTo(
-        centerX + 1,
-        coinTop - innerHeight
-    );
-
-
-    ctx.lineTo(
-        centerX +
-        coin.width * 0.18,
-        coinTop
-    );
-
-
-    ctx.lineTo(
-        centerX -
-        coin.width * 0.18,
-        coinTop
-    );
-
-
-    ctx.closePath();
-
-
-    ctx.fill();
-
-
-    ctx.restore();
-
-
-    /* =====================================
-       THIN LIGHT STREAKS
-    ===================================== */
+    /* LIGHT STREAKS */
 
     ctx.save();
 
@@ -1447,19 +1535,29 @@ function drawCoinTrail(coin) {
 
     for (
         let i = 0;
+
         i < streaks;
+
         i++
     ) {
 
         const normalized =
             streaks === 1
+
                 ? 0
+
                 : i /
-                (streaks - 1);
+                (
+                    streaks -
+                    1
+                );
 
 
         const offset =
-            (normalized - 0.5) *
+            (
+                normalized -
+                0.5
+            ) *
             coin.width *
             0.48;
 
@@ -1468,7 +1566,12 @@ function drawCoinTrail(coin) {
             trailHeight *
             (
                 0.35 +
-                ((i * 19) % 45) /
+                (
+                    (
+                        i * 19
+                    ) %
+                    45
+                ) /
                 100
             );
 
@@ -1481,7 +1584,9 @@ function drawCoinTrail(coin) {
         const streakGradient =
             ctx.createLinearGradient(
                 x,
-                coinTop - streakHeight,
+                coinTop -
+                streakHeight,
+
                 x,
                 coinTop
             );
@@ -1539,9 +1644,8 @@ function drawCoinTrail(coin) {
     ctx.restore();
 
 
-    /* =====================================
-       GLOW DIRECTLY ABOVE COIN
-    ===================================== */
+
+    /* COIN CONNECTION GLOW */
 
     ctx.save();
 
@@ -1602,14 +1706,15 @@ function drawCoinTrail(coin) {
 }
 
 
-/* =========================================
+
+/* =========================================================
    DRAW COINS
-========================================= */
+========================================================= */
 
 function drawCoins() {
 
     fallingCoins.forEach(
-        coin => {
+        (coin) => {
 
             const image =
                 coin.type.image;
@@ -1625,20 +1730,15 @@ function drawCoins() {
             }
 
 
-            /*
-               LIGHT BEHIND COIN
-            */
 
             drawCoinTrail(
                 coin
             );
 
 
-            /*
-               COIN PNG
-            */
 
             ctx.save();
+
 
 
             if (
@@ -1652,7 +1752,9 @@ function drawCoins() {
                 ctx.shadowBlur =
                     24;
 
-            } else {
+            }
+
+            else {
 
                 ctx.shadowColor =
                     "rgba(255,70,70,0.38)";
@@ -1662,6 +1764,7 @@ function drawCoins() {
                     16;
 
             }
+
 
 
             ctx.drawImage(
@@ -1683,11 +1786,14 @@ function drawCoins() {
 }
 
 
-/* =========================================
-   GAME LOOP
-========================================= */
 
-function gameLoop(timestamp) {
+/* =========================================================
+   GAME LOOP
+========================================================= */
+
+function gameLoop(
+    timestamp
+) {
 
     if (
         !gameRunning
@@ -1698,7 +1804,9 @@ function gameLoop(timestamp) {
     }
 
 
+
     updatePlayer();
+
 
 
     if (
@@ -1716,7 +1824,25 @@ function gameLoop(timestamp) {
     }
 
 
+
     updateCoins();
+
+
+
+    if (
+        !gameRunning
+    ) {
+
+        drawBackground();
+
+        drawCoins();
+
+        drawPlayer();
+
+        return;
+
+    }
+
 
 
     drawBackground();
@@ -1728,18 +1854,37 @@ function gameLoop(timestamp) {
     drawPlayer();
 
 
-    requestAnimationFrame(
-        gameLoop
-    );
+
+    animationFrameId =
+        requestAnimationFrame(
+            gameLoop
+        );
 
 }
 
 
-/* =========================================
+
+/* =========================================================
    START GAME
-========================================= */
+========================================================= */
 
 function startGame() {
+
+    /*
+       Prevent multiple loops.
+    */
+
+    if (
+        animationFrameId
+    ) {
+
+        cancelAnimationFrame(
+            animationFrameId
+        );
+
+    }
+
+
 
     score = 0;
 
@@ -1757,9 +1902,20 @@ function startGame() {
         1000;
 
 
+    scoreSubmitted =
+        false;
+
+
+
     player.x =
         GAME_WIDTH / 2 -
         player.width / 2;
+
+
+    player.y =
+        FLOOR_Y -
+        player.height;
+
 
 
     scoreElement.textContent =
@@ -1770,16 +1926,23 @@ function startGame() {
         lives;
 
 
+
     gameMessage.innerHTML =
         `
-        Catch
+        Catch every
         <strong>GrembleCoin</strong>.
         Avoid every other coin.
         `;
 
 
+
+    hideSubmitPanel();
+
+
+
     gameRunning =
         true;
+
 
 
     startButton.textContent =
@@ -1790,21 +1953,49 @@ function startGame() {
         performance.now();
 
 
-    requestAnimationFrame(
-        gameLoop
-    );
+
+    animationFrameId =
+        requestAnimationFrame(
+            gameLoop
+        );
 
 }
 
 
-/* =========================================
+
+/* =========================================================
    GAME OVER
-========================================= */
+========================================================= */
 
 function endGame() {
 
     gameRunning =
         false;
+
+
+    keys.left =
+        false;
+
+
+    keys.right =
+        false;
+
+
+
+    if (
+        animationFrameId
+    ) {
+
+        cancelAnimationFrame(
+            animationFrameId
+        );
+
+
+        animationFrameId =
+            null;
+
+    }
+
 
 
     gameMessage.innerHTML =
@@ -1815,15 +2006,1256 @@ function endGame() {
         `;
 
 
+
     startButton.textContent =
         "PLAY AGAIN";
+
+
+
+    showSubmitPanel();
 
 }
 
 
-/* =========================================
+
+/* =========================================================
+   LEADERBOARD UI
+========================================================= */
+
+function createLeaderboardUI() {
+
+    const gameWrapper =
+        document.querySelector(
+            ".game-wrapper"
+        );
+
+
+    if (
+        !gameWrapper
+    ) {
+
+        return;
+
+    }
+
+
+
+    /*
+       Avoid creating twice.
+    */
+
+    if (
+        document.getElementById(
+            "leaderboardSection"
+        )
+    ) {
+
+        return;
+
+    }
+
+
+
+    const section =
+        document.createElement(
+            "div"
+        );
+
+
+    section.id =
+        "leaderboardSection";
+
+
+    section.innerHTML =
+        `
+
+        <div class="score-submit-panel" id="scoreSubmitPanel">
+
+            <div class="submit-small-title">
+                GAME OVER
+            </div>
+
+            <div class="submit-score">
+                YOUR SCORE:
+                <strong id="finalScore">
+                    0
+                </strong>
+            </div>
+
+            <div class="nickname-row">
+
+                <input
+                    type="text"
+                    id="playerNickname"
+                    maxlength="16"
+                    placeholder="ENTER NICKNAME"
+                    autocomplete="off"
+                >
+
+                <button
+                    type="button"
+                    id="submitScoreButton"
+                >
+                    SUBMIT SCORE
+                </button>
+
+            </div>
+
+            <div
+                id="submitStatus"
+                class="submit-status"
+            ></div>
+
+        </div>
+
+
+        <div class="leaderboard-panel">
+
+            <div class="leaderboard-header">
+
+                <div>
+
+                    <div class="leaderboard-small">
+                        GREMBLE ARCADE
+                    </div>
+
+                    <h3>
+                        TOP PLAYERS
+                    </h3>
+
+                </div>
+
+                <button
+                    type="button"
+                    id="refreshLeaderboard"
+                >
+                    ↻
+                </button>
+
+            </div>
+
+
+            <div
+                id="leaderboardList"
+                class="leaderboard-list"
+            >
+
+                <div class="leaderboard-loading">
+                    Loading leaderboard...
+                </div>
+
+            </div>
+
+        </div>
+
+        `;
+
+
+    gameWrapper.appendChild(
+        section
+    );
+
+
+
+    addLeaderboardStyles();
+
+
+
+    const submitButton =
+        document.getElementById(
+            "submitScoreButton"
+        );
+
+
+    submitButton.addEventListener(
+        "click",
+        submitScore
+    );
+
+
+
+    const nicknameInput =
+        document.getElementById(
+            "playerNickname"
+        );
+
+
+    nicknameInput.addEventListener(
+        "keydown",
+        (event) => {
+
+            if (
+                event.key ===
+                "Enter"
+            ) {
+
+                submitScore();
+
+            }
+
+        }
+    );
+
+
+
+    const refreshButton =
+        document.getElementById(
+            "refreshLeaderboard"
+        );
+
+
+    refreshButton.addEventListener(
+        "click",
+        loadLeaderboard
+    );
+
+
+
+    hideSubmitPanel();
+
+
+    loadLeaderboard();
+
+}
+
+
+
+/* =========================================================
+   LEADERBOARD STYLES
+========================================================= */
+
+function addLeaderboardStyles() {
+
+    if (
+        document.getElementById(
+            "leaderboardStyles"
+        )
+    ) {
+
+        return;
+
+    }
+
+
+
+    const style =
+        document.createElement(
+            "style"
+        );
+
+
+    style.id =
+        "leaderboardStyles";
+
+
+    style.textContent =
+        `
+
+        #leaderboardSection {
+            border-top:
+                1px solid
+                rgba(80,255,130,.14);
+
+            background:
+                #010806;
+        }
+
+
+        .score-submit-panel {
+            display: none;
+
+            padding:
+                30px;
+
+            text-align:
+                center;
+
+            border-bottom:
+                1px solid
+                rgba(80,255,130,.12);
+
+            background:
+                radial-gradient(
+                    circle at center,
+                    rgba(60,255,120,.07),
+                    transparent 60%
+                );
+        }
+
+
+        .submit-small-title {
+            margin-bottom:
+                8px;
+
+            color:
+                #65ff91;
+
+            font-size:
+                10px;
+
+            font-weight:
+                900;
+
+            letter-spacing:
+                3px;
+        }
+
+
+        .submit-score {
+            margin-bottom:
+                20px;
+
+            color:
+                #96a39d;
+
+            font-size:
+                14px;
+        }
+
+
+        .submit-score strong {
+            color:
+                #65ff91;
+
+            font-size:
+                24px;
+
+            margin-left:
+                6px;
+        }
+
+
+        .nickname-row {
+            max-width:
+                570px;
+
+            margin:
+                0 auto;
+
+            display:
+                flex;
+
+            gap:
+                10px;
+        }
+
+
+        #playerNickname {
+            flex:
+                1;
+
+            min-width:
+                0;
+
+            height:
+                50px;
+
+            padding:
+                0 18px;
+
+            outline:
+                none;
+
+            border:
+                1px solid
+                rgba(80,255,130,.25);
+
+            border-radius:
+                12px;
+
+            background:
+                #03120d;
+
+            color:
+                #ffffff;
+
+            font-family:
+                inherit;
+
+            font-size:
+                13px;
+
+            font-weight:
+                800;
+
+            letter-spacing:
+                1px;
+        }
+
+
+        #playerNickname:focus {
+            border-color:
+                #58ff82;
+
+            box-shadow:
+                0 0 18px
+                rgba(80,255,130,.10);
+        }
+
+
+        #submitScoreButton {
+            min-width:
+                170px;
+
+            height:
+                50px;
+
+            border:
+                0;
+
+            border-radius:
+                12px;
+
+            background:
+                #5cff73;
+
+            color:
+                #001007;
+
+            font-size:
+                11px;
+
+            font-weight:
+                900;
+
+            letter-spacing:
+                1px;
+
+            cursor:
+                pointer;
+        }
+
+
+        #submitScoreButton:disabled {
+            opacity:
+                .45;
+
+            cursor:
+                default;
+        }
+
+
+        .submit-status {
+            min-height:
+                18px;
+
+            margin-top:
+                12px;
+
+            color:
+                #86928d;
+
+            font-size:
+                11px;
+        }
+
+
+        .leaderboard-panel {
+            padding:
+                32px;
+        }
+
+
+        .leaderboard-header {
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                space-between;
+
+            margin-bottom:
+                22px;
+        }
+
+
+        .leaderboard-small {
+            margin-bottom:
+                5px;
+
+            color:
+                #5cff83;
+
+            font-size:
+                9px;
+
+            font-weight:
+                900;
+
+            letter-spacing:
+                3px;
+        }
+
+
+        .leaderboard-header h3 {
+            margin:
+                0;
+
+            color:
+                #ffffff;
+
+            font-size:
+                24px;
+        }
+
+
+        #refreshLeaderboard {
+            width:
+                42px;
+
+            height:
+                42px;
+
+            border:
+                1px solid
+                rgba(80,255,130,.22);
+
+            border-radius:
+                50%;
+
+            background:
+                transparent;
+
+            color:
+                #65ff8a;
+
+            font-size:
+                20px;
+
+            cursor:
+                pointer;
+        }
+
+
+        .leaderboard-list {
+            display:
+                flex;
+
+            flex-direction:
+                column;
+
+            gap:
+                7px;
+        }
+
+
+        .leaderboard-row {
+            min-height:
+                54px;
+
+            padding:
+                0 17px;
+
+            display:
+                grid;
+
+            grid-template-columns:
+                50px 1fr 90px;
+
+            align-items:
+                center;
+
+            border:
+                1px solid
+                rgba(255,255,255,.05);
+
+            border-radius:
+                12px;
+
+            background:
+                rgba(255,255,255,.018);
+        }
+
+
+        .leaderboard-row.top-three {
+            border-color:
+                rgba(90,255,130,.15);
+
+            background:
+                rgba(70,255,115,.035);
+        }
+
+
+        .leaderboard-position {
+            color:
+                #5cff83;
+
+            font-size:
+                13px;
+
+            font-weight:
+                900;
+        }
+
+
+        .leaderboard-name {
+            overflow:
+                hidden;
+
+            color:
+                #dce4df;
+
+            font-size:
+                13px;
+
+            font-weight:
+                800;
+
+            text-overflow:
+                ellipsis;
+
+            white-space:
+                nowrap;
+        }
+
+
+        .leaderboard-score {
+            color:
+                #5cff83;
+
+            text-align:
+                right;
+
+            font-size:
+                18px;
+
+            font-weight:
+                900;
+        }
+
+
+        .leaderboard-loading,
+        .leaderboard-empty {
+            padding:
+                30px;
+
+            text-align:
+                center;
+
+            color:
+                #77847e;
+
+            font-size:
+                12px;
+        }
+
+
+        @media (max-width: 600px) {
+
+            .score-submit-panel,
+            .leaderboard-panel {
+                padding:
+                    22px 14px;
+            }
+
+
+            .nickname-row {
+                flex-direction:
+                    column;
+            }
+
+
+            #submitScoreButton {
+                width:
+                    100%;
+            }
+
+
+            .leaderboard-row {
+                grid-template-columns:
+                    38px 1fr 65px;
+
+                padding:
+                    0 12px;
+            }
+
+        }
+
+        `;
+
+
+    document.head.appendChild(
+        style
+    );
+
+}
+
+
+
+/* =========================================================
+   SHOW SCORE SUBMIT PANEL
+========================================================= */
+
+function showSubmitPanel() {
+
+    const panel =
+        document.getElementById(
+            "scoreSubmitPanel"
+        );
+
+
+    const finalScore =
+        document.getElementById(
+            "finalScore"
+        );
+
+
+    const nickname =
+        document.getElementById(
+            "playerNickname"
+        );
+
+
+    const status =
+        document.getElementById(
+            "submitStatus"
+        );
+
+
+    const button =
+        document.getElementById(
+            "submitScoreButton"
+        );
+
+
+
+    if (
+        !panel
+    ) {
+
+        return;
+
+    }
+
+
+
+    panel.style.display =
+        "block";
+
+
+    finalScore.textContent =
+        score;
+
+
+    status.textContent =
+        "";
+
+
+    nickname.value =
+        "";
+
+
+    button.disabled =
+        false;
+
+
+    setTimeout(
+        () => {
+
+            nickname.focus();
+
+        },
+        100
+    );
+
+}
+
+
+
+/* =========================================================
+   HIDE SCORE PANEL
+========================================================= */
+
+function hideSubmitPanel() {
+
+    const panel =
+        document.getElementById(
+            "scoreSubmitPanel"
+        );
+
+
+    if (
+        panel
+    ) {
+
+        panel.style.display =
+            "none";
+
+    }
+
+}
+
+
+
+/* =========================================================
+   CLEAN NICKNAME
+========================================================= */
+
+function cleanNickname(
+    nickname
+) {
+
+    return nickname
+
+        .trim()
+
+        .replace(
+            /[^a-zA-Z0-9_\- ]/g,
+            ""
+        )
+
+        .slice(
+            0,
+            16
+        );
+
+}
+
+
+
+/* =========================================================
+   SUBMIT SCORE
+========================================================= */
+
+async function submitScore() {
+
+    if (
+        scoreSubmitted
+    ) {
+
+        return;
+
+    }
+
+
+
+    if (
+        gameRunning
+    ) {
+
+        return;
+
+    }
+
+
+
+    const nicknameInput =
+        document.getElementById(
+            "playerNickname"
+        );
+
+
+    const submitButton =
+        document.getElementById(
+            "submitScoreButton"
+        );
+
+
+    const status =
+        document.getElementById(
+            "submitStatus"
+        );
+
+
+
+    const nickname =
+        cleanNickname(
+            nicknameInput.value
+        );
+
+
+
+    if (
+        nickname.length < 2
+    ) {
+
+        status.textContent =
+            "Nickname must have at least 2 characters.";
+
+        return;
+
+    }
+
+
+
+    /*
+       Score comes ONLY from
+       the game's current score variable.
+    */
+
+    const finalGameScore =
+        Number(score);
+
+
+
+    if (
+        !Number.isInteger(
+            finalGameScore
+        ) ||
+        finalGameScore < 0
+    ) {
+
+        status.textContent =
+            "Invalid score.";
+
+        return;
+
+    }
+
+
+
+    submitButton.disabled =
+        true;
+
+
+    status.textContent =
+        "Submitting score...";
+
+
+
+    try {
+
+        const response =
+            await fetch(
+                SCORES_API,
+                {
+
+                    method:
+                        "POST",
+
+
+                    headers: {
+
+                        "Content-Type":
+                            "application/json",
+
+                        "apikey":
+                            SUPABASE_KEY,
+
+                        "Authorization":
+                            `Bearer ${SUPABASE_KEY}`,
+
+                        "Prefer":
+                            "return=minimal"
+                    },
+
+
+                    body:
+                        JSON.stringify(
+                            {
+
+                                name:
+                                    nickname,
+
+                                score:
+                                    finalGameScore
+
+                            }
+                        )
+                }
+            );
+
+
+
+        if (
+            !response.ok
+        ) {
+
+            const errorText =
+                await response.text();
+
+
+            throw new Error(
+                errorText
+            );
+
+        }
+
+
+
+        scoreSubmitted =
+            true;
+
+
+        status.textContent =
+            "Score submitted!";
+
+
+        nicknameInput.disabled =
+            true;
+
+
+        submitButton.textContent =
+            "SAVED";
+
+
+        await loadLeaderboard();
+
+    }
+
+    catch (
+        error
+    ) {
+
+        console.error(
+            "Score submit error:",
+            error
+        );
+
+
+        status.textContent =
+            "Could not submit score. Try again.";
+
+
+        submitButton.disabled =
+            false;
+
+    }
+
+}
+
+
+
+/* =========================================================
+   LOAD LEADERBOARD
+========================================================= */
+
+async function loadLeaderboard() {
+
+    const list =
+        document.getElementById(
+            "leaderboardList"
+        );
+
+
+    if (
+        !list
+    ) {
+
+        return;
+
+    }
+
+
+
+    list.innerHTML =
+        `
+        <div class="leaderboard-loading">
+            Loading leaderboard...
+        </div>
+        `;
+
+
+
+    try {
+
+        /*
+           TOP 10
+           highest score first.
+
+           created_at ascending is used
+           as a tie breaker.
+        */
+
+        const url =
+            `${SCORES_API}?select=name,score,created_at&order=score.desc,created_at.asc&limit=10`;
+
+
+
+        const response =
+            await fetch(
+                url,
+                {
+
+                    method:
+                        "GET",
+
+
+                    headers: {
+
+                        "apikey":
+                            SUPABASE_KEY,
+
+                        "Authorization":
+                            `Bearer ${SUPABASE_KEY}`
+
+                    }
+
+                }
+            );
+
+
+
+        if (
+            !response.ok
+        ) {
+
+            const errorText =
+                await response.text();
+
+
+            throw new Error(
+                errorText
+            );
+
+        }
+
+
+
+        const scores =
+            await response.json();
+
+
+
+        renderLeaderboard(
+            scores
+        );
+
+    }
+
+    catch (
+        error
+    ) {
+
+        console.error(
+            "Leaderboard error:",
+            error
+        );
+
+
+        list.innerHTML =
+            `
+            <div class="leaderboard-empty">
+                Leaderboard unavailable.
+            </div>
+            `;
+
+    }
+
+}
+
+
+
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
+
+function escapeHTML(
+    text
+) {
+
+    const element =
+        document.createElement(
+            "div"
+        );
+
+
+    element.textContent =
+        String(text);
+
+
+    return element.innerHTML;
+
+}
+
+
+
+/* =========================================================
+   RENDER LEADERBOARD
+========================================================= */
+
+function renderLeaderboard(
+    scores
+) {
+
+    const list =
+        document.getElementById(
+            "leaderboardList"
+        );
+
+
+
+    if (
+        !scores ||
+        scores.length === 0
+    ) {
+
+        list.innerHTML =
+            `
+            <div class="leaderboard-empty">
+                No scores yet. Be the first.
+            </div>
+            `;
+
+
+        return;
+
+    }
+
+
+
+    list.innerHTML =
+        scores
+
+            .map(
+                (
+                    item,
+                    index
+                ) => {
+
+                    const position =
+                        index + 1;
+
+
+                    const safeName =
+                        escapeHTML(
+                            item.name
+                        );
+
+
+                    const safeScore =
+                        Number(
+                            item.score
+                        ) || 0;
+
+
+                    return `
+                    
+                    <div class="
+                        leaderboard-row
+                        ${position <= 3 ? "top-three" : ""}
+                    ">
+
+                        <div class="leaderboard-position">
+                            #${position}
+                        </div>
+
+                        <div class="leaderboard-name">
+                            ${safeName}
+                        </div>
+
+                        <div class="leaderboard-score">
+                            ${safeScore}
+                        </div>
+
+                    </div>
+
+                    `;
+
+                }
+            )
+
+            .join("");
+
+}
+
+
+
+/* =========================================================
    START BUTTON
-========================================= */
+========================================================= */
 
 startButton.addEventListener(
     "click",
@@ -1831,17 +3263,23 @@ startButton.addEventListener(
 );
 
 
-/* =========================================
-   INITIAL SCREEN
-========================================= */
 
-function drawInitialScreen() {
+/* =========================================================
+   INITIALIZATION
+========================================================= */
+
+function initializeGame() {
 
     drawBackground();
 
+
     drawPlayer();
+
+
+    createLeaderboardUI();
 
 }
 
 
-drawInitialScreen();
+
+initializeGame();
