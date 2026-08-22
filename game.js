@@ -124,6 +124,7 @@ const player = {
 
     speed:
         10
+
 };
 
 
@@ -214,6 +215,7 @@ const goodCoin = {
 
     good:
         true
+
 };
 
 
@@ -231,7 +233,6 @@ const badCoins = [
             false
     },
 
-
     {
         name:
             "ETHEREUM",
@@ -242,7 +243,6 @@ const badCoins = [
         good:
             false
     },
-
 
     {
         name:
@@ -255,7 +255,6 @@ const badCoins = [
             false
     },
 
-
     {
         name:
             "DOGECOIN",
@@ -267,7 +266,6 @@ const badCoins = [
             false
     },
 
-
     {
         name:
             "PEPE",
@@ -278,7 +276,6 @@ const badCoins = [
         good:
             false
     },
-
 
     {
         name:
@@ -296,7 +293,7 @@ const badCoins = [
 
 
 /* =========================================================
-   KEYBOARD CONTROLS
+   KEYBOARD
 ========================================================= */
 
 document.addEventListener(
@@ -374,9 +371,7 @@ document.addEventListener(
 function pressLeft(event) {
 
     if (event) {
-
         event.preventDefault();
-
     }
 
     keys.left = true;
@@ -384,13 +379,10 @@ function pressLeft(event) {
 }
 
 
-
 function releaseLeft(event) {
 
     if (event) {
-
         event.preventDefault();
-
     }
 
     keys.left = false;
@@ -398,13 +390,10 @@ function releaseLeft(event) {
 }
 
 
-
 function pressRight(event) {
 
     if (event) {
-
         event.preventDefault();
-
     }
 
     keys.right = true;
@@ -412,13 +401,10 @@ function pressRight(event) {
 }
 
 
-
 function releaseRight(event) {
 
     if (event) {
-
         event.preventDefault();
-
     }
 
     keys.right = false;
@@ -437,7 +423,6 @@ if (leftButton) {
         }
     );
 
-
     leftButton.addEventListener(
         "touchend",
         releaseLeft,
@@ -446,18 +431,15 @@ if (leftButton) {
         }
     );
 
-
     leftButton.addEventListener(
         "mousedown",
         pressLeft
     );
 
-
     leftButton.addEventListener(
         "mouseup",
         releaseLeft
     );
-
 
     leftButton.addEventListener(
         "mouseleave",
@@ -478,7 +460,6 @@ if (rightButton) {
         }
     );
 
-
     rightButton.addEventListener(
         "touchend",
         releaseRight,
@@ -487,18 +468,15 @@ if (rightButton) {
         }
     );
 
-
     rightButton.addEventListener(
         "mousedown",
         pressRight
     );
 
-
     rightButton.addEventListener(
         "mouseup",
         releaseRight
     );
-
 
     rightButton.addEventListener(
         "mouseleave",
@@ -518,7 +496,6 @@ function spawnCoin() {
     const chance =
         Math.random();
 
-
     let coinType;
 
 
@@ -534,9 +511,7 @@ function spawnCoin() {
         coinType =
             goodCoin;
 
-    }
-
-    else {
+    } else {
 
         const randomBad =
             Math.floor(
@@ -551,12 +526,10 @@ function spawnCoin() {
     }
 
 
-
     const size =
         coinType.good
             ? 64
             : 60;
-
 
 
     fallingCoins.push({
@@ -617,7 +590,6 @@ function updatePlayer() {
     }
 
 
-
     if (
         player.x < 0
     ) {
@@ -625,7 +597,6 @@ function updatePlayer() {
         player.x = 0;
 
     }
-
 
 
     if (
@@ -653,11 +624,6 @@ function collision(
     coin
 ) {
 
-    /*
-       Smaller player hitbox
-       so collisions feel fair.
-    */
-
     const playerHitbox = {
 
         x:
@@ -671,12 +637,12 @@ function collision(
 
         height:
             player.height - 24
+
     };
 
 
     const coinPadding =
         7;
-
 
 
     return (
@@ -776,9 +742,9 @@ function updateCoins() {
 
 
 
-        /* =================================================
-           PLAYER CATCHES COIN
-        ================================================= */
+        /* =========================================
+           PLAYER TOUCHES COIN
+        ========================================== */
 
         if (
             collision(
@@ -813,9 +779,15 @@ function updateCoins() {
             }
 
 
-            /* BAD COIN */
+            /* WRONG COIN */
 
             else {
+
+                fallingCoins.splice(
+                    i,
+                    1
+                );
+
 
                 const gameEnded =
                     loseLife(
@@ -824,12 +796,6 @@ function updateCoins() {
                         <strong>-1 LIFE</strong>
                         `
                     );
-
-
-                fallingCoins.splice(
-                    i,
-                    1
-                );
 
 
                 if (
@@ -846,7 +812,6 @@ function updateCoins() {
             }
 
 
-
             fallingCoins.splice(
                 i,
                 1
@@ -859,9 +824,9 @@ function updateCoins() {
 
 
 
-        /* =================================================
-           GREMBLECOIN WAS MISSED
-        ================================================= */
+        /* =========================================
+           MISSED GREMBLECOIN
+        ========================================== */
 
         if (
             coin.type.good &&
@@ -899,12 +864,9 @@ function updateCoins() {
 
 
 
-        /* =================================================
-           BAD COIN FALLS PAST PLAYER
-
-           GOOD!
-           Player correctly avoided it.
-        ================================================= */
+        /* =========================================
+           BAD COIN SUCCESSFULLY AVOIDED
+        ========================================== */
 
         if (
             !coin.type.good &&
@@ -930,12 +892,6 @@ function updateCoins() {
 ========================================================= */
 
 function increaseDifficulty() {
-
-    /*
-       Every 5 score:
-       faster falling
-       faster spawning
-    */
 
     if (
         score > 0 &&
@@ -996,7 +952,6 @@ function drawBackground() {
         GAME_WIDTH,
         GAME_HEIGHT
     );
-
 
 
     /* DARK BACKGROUND */
@@ -1385,9 +1340,6 @@ function drawCoinTrail(
 
 
 
-    /* GREMBLE = GREEN */
-    /* BAD = RED */
-
     const colors =
         coin.type.good
 
@@ -1407,6 +1359,7 @@ function drawCoinTrail(
 
                 glow:
                     "rgba(70,255,130,0.50)"
+
             }
 
             : {
@@ -1425,6 +1378,7 @@ function drawCoinTrail(
 
                 glow:
                     "rgba(255,60,60,0.32)"
+
             };
 
 
@@ -1535,17 +1489,13 @@ function drawCoinTrail(
 
     for (
         let i = 0;
-
         i < streaks;
-
         i++
     ) {
 
         const normalized =
             streaks === 1
-
                 ? 0
-
                 : i /
                 (
                     streaks -
@@ -1645,7 +1595,7 @@ function drawCoinTrail(
 
 
 
-    /* COIN CONNECTION GLOW */
+    /* CONNECTION GLOW */
 
     ctx.save();
 
@@ -1730,15 +1680,12 @@ function drawCoins() {
             }
 
 
-
             drawCoinTrail(
                 coin
             );
 
 
-
             ctx.save();
-
 
 
             if (
@@ -1752,9 +1699,7 @@ function drawCoins() {
                 ctx.shadowBlur =
                     24;
 
-            }
-
-            else {
+            } else {
 
                 ctx.shadowColor =
                     "rgba(255,70,70,0.38)";
@@ -1764,7 +1709,6 @@ function drawCoins() {
                     16;
 
             }
-
 
 
             ctx.drawImage(
@@ -1804,9 +1748,7 @@ function gameLoop(
     }
 
 
-
     updatePlayer();
-
 
 
     if (
@@ -1824,9 +1766,7 @@ function gameLoop(
     }
 
 
-
     updateCoins();
-
 
 
     if (
@@ -1844,7 +1784,6 @@ function gameLoop(
     }
 
 
-
     drawBackground();
 
 
@@ -1852,7 +1791,6 @@ function gameLoop(
 
 
     drawPlayer();
-
 
 
     animationFrameId =
@@ -1870,10 +1808,6 @@ function gameLoop(
 
 function startGame() {
 
-    /*
-       Prevent multiple loops.
-    */
-
     if (
         animationFrameId
     ) {
@@ -1883,7 +1817,6 @@ function startGame() {
         );
 
     }
-
 
 
     score = 0;
@@ -1906,7 +1839,6 @@ function startGame() {
         false;
 
 
-
     player.x =
         GAME_WIDTH / 2 -
         player.width / 2;
@@ -1917,14 +1849,12 @@ function startGame() {
         player.height;
 
 
-
     scoreElement.textContent =
         score;
 
 
     livesElement.textContent =
         lives;
-
 
 
     gameMessage.innerHTML =
@@ -1935,14 +1865,14 @@ function startGame() {
         `;
 
 
+    resetSubmitPanel();
+
 
     hideSubmitPanel();
 
 
-
     gameRunning =
         true;
-
 
 
     startButton.textContent =
@@ -1951,7 +1881,6 @@ function startGame() {
 
     lastSpawn =
         performance.now();
-
 
 
     animationFrameId =
@@ -1969,6 +1898,15 @@ function startGame() {
 
 function endGame() {
 
+    if (
+        !gameRunning
+    ) {
+
+        return;
+
+    }
+
+
     gameRunning =
         false;
 
@@ -1979,7 +1917,6 @@ function endGame() {
 
     keys.right =
         false;
-
 
 
     if (
@@ -1997,7 +1934,6 @@ function endGame() {
     }
 
 
-
     gameMessage.innerHTML =
         `
         GAME OVER —
@@ -2006,10 +1942,8 @@ function endGame() {
         `;
 
 
-
     startButton.textContent =
         "PLAY AGAIN";
-
 
 
     showSubmitPanel();
@@ -2019,7 +1953,7 @@ function endGame() {
 
 
 /* =========================================================
-   LEADERBOARD UI
+   CREATE LEADERBOARD
 ========================================================= */
 
 function createLeaderboardUI() {
@@ -2039,11 +1973,6 @@ function createLeaderboardUI() {
     }
 
 
-
-    /*
-       Avoid creating twice.
-    */
-
     if (
         document.getElementById(
             "leaderboardSection"
@@ -2053,7 +1982,6 @@ function createLeaderboardUI() {
         return;
 
     }
-
 
 
     const section =
@@ -2069,18 +1997,25 @@ function createLeaderboardUI() {
     section.innerHTML =
         `
 
-        <div class="score-submit-panel" id="scoreSubmitPanel">
+        <div
+            class="score-submit-panel"
+            id="scoreSubmitPanel"
+        >
 
             <div class="submit-small-title">
                 GAME OVER
             </div>
 
             <div class="submit-score">
+
                 YOUR SCORE:
+
                 <strong id="finalScore">
                     0
                 </strong>
+
             </div>
+
 
             <div class="nickname-row">
 
@@ -2092,6 +2027,7 @@ function createLeaderboardUI() {
                     autocomplete="off"
                 >
 
+
                 <button
                     type="button"
                     id="submitScoreButton"
@@ -2100,6 +2036,7 @@ function createLeaderboardUI() {
                 </button>
 
             </div>
+
 
             <div
                 id="submitStatus"
@@ -2125,9 +2062,11 @@ function createLeaderboardUI() {
 
                 </div>
 
+
                 <button
                     type="button"
                     id="refreshLeaderboard"
+                    aria-label="Refresh leaderboard"
                 >
                     ↻
                 </button>
@@ -2156,9 +2095,7 @@ function createLeaderboardUI() {
     );
 
 
-
     addLeaderboardStyles();
-
 
 
     const submitButton =
@@ -2173,7 +2110,6 @@ function createLeaderboardUI() {
     );
 
 
-
     const nicknameInput =
         document.getElementById(
             "playerNickname"
@@ -2185,8 +2121,7 @@ function createLeaderboardUI() {
         (event) => {
 
             if (
-                event.key ===
-                "Enter"
+                event.key === "Enter"
             ) {
 
                 submitScore();
@@ -2195,7 +2130,6 @@ function createLeaderboardUI() {
 
         }
     );
-
 
 
     const refreshButton =
@@ -2208,7 +2142,6 @@ function createLeaderboardUI() {
         "click",
         loadLeaderboard
     );
-
 
 
     hideSubmitPanel();
@@ -2237,7 +2170,6 @@ function addLeaderboardStyles() {
     }
 
 
-
     const style =
         document.createElement(
             "style"
@@ -2262,7 +2194,8 @@ function addLeaderboardStyles() {
 
 
         .score-submit-panel {
-            display: none;
+            display:
+                none;
 
             padding:
                 30px;
@@ -2685,7 +2618,70 @@ function addLeaderboardStyles() {
 
 
 /* =========================================================
-   SHOW SCORE SUBMIT PANEL
+   RESET SUBMIT PANEL
+========================================================= */
+
+function resetSubmitPanel() {
+
+    const nicknameInput =
+        document.getElementById(
+            "playerNickname"
+        );
+
+
+    const submitButton =
+        document.getElementById(
+            "submitScoreButton"
+        );
+
+
+    const status =
+        document.getElementById(
+            "submitStatus"
+        );
+
+
+    if (
+        nicknameInput
+    ) {
+
+        nicknameInput.disabled =
+            false;
+
+        nicknameInput.value =
+            "";
+
+    }
+
+
+    if (
+        submitButton
+    ) {
+
+        submitButton.disabled =
+            false;
+
+        submitButton.textContent =
+            "SUBMIT SCORE";
+
+    }
+
+
+    if (
+        status
+    ) {
+
+        status.textContent =
+            "";
+
+    }
+
+}
+
+
+
+/* =========================================================
+   SHOW SCORE PANEL
 ========================================================= */
 
 function showSubmitPanel() {
@@ -2720,7 +2716,6 @@ function showSubmitPanel() {
         );
 
 
-
     if (
         !panel
     ) {
@@ -2730,31 +2725,66 @@ function showSubmitPanel() {
     }
 
 
-
     panel.style.display =
         "block";
 
 
-    finalScore.textContent =
-        score;
+    if (
+        finalScore
+    ) {
+
+        finalScore.textContent =
+            score;
+
+    }
 
 
-    status.textContent =
-        "";
+    if (
+        status
+    ) {
+
+        status.textContent =
+            "";
+
+    }
 
 
-    nickname.value =
-        "";
+    if (
+        nickname
+    ) {
+
+        nickname.disabled =
+            false;
+
+        nickname.value =
+            "";
+
+    }
 
 
-    button.disabled =
-        false;
+    if (
+        button
+    ) {
+
+        button.disabled =
+            false;
+
+        button.textContent =
+            "SUBMIT SCORE";
+
+    }
 
 
     setTimeout(
         () => {
 
-            nickname.focus();
+            if (
+                nickname
+            ) {
+
+                nickname.focus();
+
+            }
 
         },
         100
@@ -2816,7 +2846,7 @@ function cleanNickname(
 
 
 /* =========================================================
-   SUBMIT SCORE
+   SUBMIT SCORE TO SUPABASE
 ========================================================= */
 
 async function submitScore() {
@@ -2830,7 +2860,6 @@ async function submitScore() {
     }
 
 
-
     if (
         gameRunning
     ) {
@@ -2838,7 +2867,6 @@ async function submitScore() {
         return;
 
     }
-
 
 
     const nicknameInput =
@@ -2859,12 +2887,10 @@ async function submitScore() {
         );
 
 
-
     const nickname =
         cleanNickname(
             nicknameInput.value
         );
-
 
 
     if (
@@ -2879,15 +2905,8 @@ async function submitScore() {
     }
 
 
-
-    /*
-       Score comes ONLY from
-       the game's current score variable.
-    */
-
     const finalGameScore =
         Number(score);
-
 
 
     if (
@@ -2905,14 +2924,12 @@ async function submitScore() {
     }
 
 
-
     submitButton.disabled =
         true;
 
 
     status.textContent =
         "Submitting score...";
-
 
 
     try {
@@ -2934,11 +2951,9 @@ async function submitScore() {
                         "apikey":
                             SUPABASE_KEY,
 
-                        "Authorization":
-                            `Bearer ${SUPABASE_KEY}`,
-
                         "Prefer":
                             "return=minimal"
+
                     },
 
 
@@ -2954,9 +2969,9 @@ async function submitScore() {
 
                             }
                         )
+
                 }
             );
-
 
 
         if (
@@ -2967,12 +2982,18 @@ async function submitScore() {
                 await response.text();
 
 
+            console.error(
+                "Supabase submit response:",
+                response.status,
+                errorText
+            );
+
+
             throw new Error(
                 errorText
             );
 
         }
-
 
 
         scoreSubmitted =
@@ -2984,6 +3005,10 @@ async function submitScore() {
 
 
         nicknameInput.disabled =
+            true;
+
+
+        submitButton.disabled =
             true;
 
 
@@ -3019,7 +3044,7 @@ async function submitScore() {
 
 
 /* =========================================================
-   LOAD LEADERBOARD
+   LOAD LEADERBOARD FROM SUPABASE
 ========================================================= */
 
 async function loadLeaderboard() {
@@ -3039,7 +3064,6 @@ async function loadLeaderboard() {
     }
 
 
-
     list.innerHTML =
         `
         <div class="leaderboard-loading">
@@ -3048,20 +3072,10 @@ async function loadLeaderboard() {
         `;
 
 
-
     try {
-
-        /*
-           TOP 10
-           highest score first.
-
-           created_at ascending is used
-           as a tie breaker.
-        */
 
         const url =
             `${SCORES_API}?select=name,score,created_at&order=score.desc,created_at.asc&limit=10`;
-
 
 
         const response =
@@ -3076,16 +3090,12 @@ async function loadLeaderboard() {
                     headers: {
 
                         "apikey":
-                            SUPABASE_KEY,
-
-                        "Authorization":
-                            `Bearer ${SUPABASE_KEY}`
+                            SUPABASE_KEY
 
                     }
 
                 }
             );
-
 
 
         if (
@@ -3096,6 +3106,13 @@ async function loadLeaderboard() {
                 await response.text();
 
 
+            console.error(
+                "Supabase leaderboard response:",
+                response.status,
+                errorText
+            );
+
+
             throw new Error(
                 errorText
             );
@@ -3103,10 +3120,8 @@ async function loadLeaderboard() {
         }
 
 
-
         const scores =
             await response.json();
-
 
 
         renderLeaderboard(
@@ -3176,7 +3191,6 @@ function renderLeaderboard(
         );
 
 
-
     if (
         !scores ||
         scores.length === 0
@@ -3193,7 +3207,6 @@ function renderLeaderboard(
         return;
 
     }
-
 
 
     list.innerHTML =
