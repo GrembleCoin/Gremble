@@ -29,32 +29,24 @@
         </div>
 
 
-        <!-- =========================================
-             NAVBAR
-        ========================================== -->
-
+        <!-- NAVBAR -->
         <nav class="navbar">
 
-            <!-- LOGO -->
             <a href="#top" class="brand-logo">
                 <img src="gremble.png" alt="Gremble">
             </a>
 
 
-            <!-- NAVIGATION -->
             <div class="nav-links">
-
                 <a href="#different">Different</a>
                 <a href="#story">Story</a>
                 <a href="#roadmap">Roadmap</a>
                 <a href="#arcade">Arcade</a>
                 <a href="#be-early">Be Early</a>
                 <a href="#faq">FAQ</a>
-
             </div>
 
 
-            <!-- SOCIALS -->
             <div class="nav-socials">
 
                 <!-- X -->
@@ -65,7 +57,6 @@
                     class="social-icon"
                     aria-label="Gremble on X"
                 >
-
                     <svg
                         viewBox="0 0 24 24"
                         width="18"
@@ -74,7 +65,6 @@
                     >
                         <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.657l-5.214-6.817-5.967 6.817H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231 5.45-6.231Zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77Z"/>
                     </svg>
-
                 </a>
 
 
@@ -86,7 +76,6 @@
                     class="social-icon"
                     aria-label="Gremble Telegram"
                 >
-
                     <svg
                         viewBox="0 0 24 24"
                         width="20"
@@ -95,32 +84,20 @@
                     >
                         <path d="M21.944 2.506a1.5 1.5 0 0 0-1.552-.21L2.74 9.236c-1.23.486-1.214 1.194-.224 1.497l4.53 1.414 1.73 5.385c.21.58.106.81.718.81.472 0 .68-.216.944-.472l2.177-2.116 4.528 3.344c.834.46 1.434.222 1.642-.774l2.972-14.006c.304-1.22-.466-1.773-1.313-1.812ZM8.29 11.822l10.82-6.827c.54-.328 1.036-.152.63.208l-8.93 8.06-.348 3.73-2.172-5.17Z"/>
                     </svg>
-
                 </a>
 
             </div>
 
 
-            <!-- BUY -->
             <button class="buy-btn" type="button">
-
-                <span class="buy-main">
-                    BUY GREMBLE
-                </span>
-
-                <span class="buy-coming">
-                    COMING SOON
-                </span>
-
+                <span class="buy-main">BUY GREMBLE</span>
+                <span class="buy-coming">COMING SOON</span>
             </button>
 
         </nav>
 
 
-        <!-- =========================================
-             HERO CONTENT
-        ========================================== -->
-
+        <!-- HERO CONTENT -->
         <div class="hero-content">
 
             <div class="left-side">
@@ -131,17 +108,10 @@
 
 
                 <h1>
-
                     WE'RE<br>
-
                     BUILDING<br>
-
-                    <span class="highlight">
-                        SOMETHING
-                    </span><br>
-
+                    <span class="highlight">SOMETHING</span><br>
                     DIFFERENT<span class="highlight">.</span>
-
                 </h1>
 
 
@@ -247,15 +217,9 @@
 
 
                     <h2>
-
                         NOT EVERYONE<br>
-
                         IS BORN TO<br>
-
-                        <span>
-                            FOLLOW THE WORLD.
-                        </span>
-
+                        <span>FOLLOW THE WORLD.</span>
                     </h2>
 
 
@@ -309,15 +273,9 @@
 
 
                     <h2>
-
                         THE WORLD<br>
-
                         GOT SMALLER.<br>
-
-                        <span>
-                            THE OPPORTUNITIES DIDN'T.
-                        </span>
-
+                        <span>THE OPPORTUNITIES DIDN'T.</span>
                     </h2>
 
 
@@ -363,13 +321,8 @@
 
 
             <h2 class="center-title">
-
                 OUR PLAN.<br>
-
-                <span>
-                    OUR FUTURE.
-                </span>
-
+                <span>OUR FUTURE.</span>
             </h2>
 
 
@@ -395,7 +348,7 @@
 
 
     <!-- =========================================
-         ARCADE
+         GREMBLE ARCADE / GAME
     ========================================== -->
 
     <section class="arcade-section" id="arcade">
@@ -407,48 +360,135 @@
             </div>
 
 
-            <div class="arcade-content">
+            <div class="arcade-heading">
 
-                <div>
-
-                    <p class="eyebrow">
-                        MORE THAN JUST WATCHING
-                    </p>
+                <p class="eyebrow">
+                    CATCH GREMBLE. AVOID THE REST.
+                </p>
 
 
-                    <h2>
+                <h2>
+                    GREMBLE<br>
+                    <span>COIN CATCH.</span>
+                </h2>
 
-                        ENTER THE<br>
 
-                        <span>
-                            GREMBLE ARCADE.
+                <p class="arcade-description">
+                    Catch GrembleCoin to increase your score.
+                    Touch Bitcoin, Ethereum, Solana, Dogecoin,
+                    Pepe or Shiba and you lose a life.
+                    You only have three.
+                </p>
+
+            </div>
+
+
+            <!-- GAME CONTAINER -->
+            <div class="game-wrapper">
+
+
+                <!-- GAME TOP BAR -->
+                <div class="game-topbar">
+
+                    <div class="game-stat">
+
+                        <span class="stat-label">
+                            SCORE
                         </span>
 
-                    </h2>
+                        <strong id="gameScore">
+                            0
+                        </strong>
+
+                    </div>
 
 
-                    <p>
-                        This part of the Gremble world is still being built.
-                        Games and new experiences are coming.
-                    </p>
+                    <div class="game-title-small">
+                        GREMBLE ARCADE
+                    </div>
 
 
-                    <button type="button" class="coming-btn">
-                        COMING SOON
+                    <div class="game-stat lives-stat">
+
+                        <span class="stat-label">
+                            LIVES
+                        </span>
+
+                        <div class="lives-display">
+                            <span class="heart">♥</span>
+                            <strong id="gameLives">3</strong>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- GAME MESSAGE -->
+                <div
+                    class="game-message"
+                    id="gameMessage"
+                >
+                    Catch <strong>GrembleCoin</strong>.
+                    Avoid every other coin.
+                </div>
+
+
+                <!-- CANVAS -->
+                <div class="canvas-wrapper">
+
+                    <canvas
+                        id="gameCanvas"
+                        width="900"
+                        height="560"
+                    ></canvas>
+
+                </div>
+
+
+                <!-- MOBILE CONTROLS -->
+                <div class="mobile-controls">
+
+                    <button
+                        id="moveLeft"
+                        class="control-btn"
+                        type="button"
+                        aria-label="Move left"
+                    >
+                        ←
+                    </button>
+
+
+                    <button
+                        id="moveRight"
+                        class="control-btn"
+                        type="button"
+                        aria-label="Move right"
+                    >
+                        →
                     </button>
 
                 </div>
 
 
-                <div class="arcade-box">
+                <!-- START -->
+                <div class="game-bottom">
 
-                    <span>
-                        G
-                    </span>
+                    <button
+                        id="startGame"
+                        class="start-game-btn"
+                        type="button"
+                    >
+                        START GAME
+                    </button>
 
-                    <small>
-                        ARCADE
-                    </small>
+
+                    <p>
+                        MOVE WITH
+                        <strong>A / D</strong>
+                        OR
+                        <strong>← / →</strong>
+                    </p>
 
                 </div>
 
@@ -473,13 +513,8 @@
 
 
             <h2>
-
                 YOU'RE NOT<br>
-
-                <span>
-                    TOO LATE.
-                </span>
-
+                <span>TOO LATE.</span>
             </h2>
 
 
@@ -532,13 +567,8 @@
 
 
             <h2 class="faq-title">
-
                 QUESTIONS?<br>
-
-                <span>
-                    GOOD.
-                </span>
-
+                <span>GOOD.</span>
             </h2>
 
 
@@ -652,6 +682,13 @@
         </p>
 
     </footer>
+
+
+    <!-- =========================================
+         GAME JAVASCRIPT
+    ========================================== -->
+
+    <script src="game.js"></script>
 
 </body>
 
