@@ -50,12 +50,20 @@ const keys = {
 
 
 /* =========================================
+   FLOOR
+========================================= */
+
+const FLOOR_Y = GAME_HEIGHT - 72;
+
+
+/* =========================================
    PLAYER
 ========================================= */
 
 const player = {
     x: GAME_WIDTH / 2 - 40,
-    y: GAME_HEIGHT - 125,
+
+    y: FLOOR_Y - 115,
 
     width: 80,
     height: 115,
@@ -361,7 +369,6 @@ function spawnCoin() {
                 Math.random() *
                 badCoins.length
             );
-
 
         coinType =
             badCoins[randomBad];
@@ -672,7 +679,7 @@ function drawBackground() {
 
 
     /* =====================================
-       DARK GREEN SPACE BACKGROUND
+       DARK SPACE BACKGROUND
     ===================================== */
 
     const gradient =
@@ -691,14 +698,8 @@ function drawBackground() {
 
 
     gradient.addColorStop(
-        0.45,
-        "#021b13"
-    );
-
-
-    gradient.addColorStop(
-        0.78,
-        "#032719"
+        0.48,
+        "#021c13"
     );
 
 
@@ -721,36 +722,36 @@ function drawBackground() {
 
 
     /* =====================================
-       CENTER GREEN ATMOSPHERE
+       SOFT CENTER GREEN GLOW
     ===================================== */
 
     const centerGlow =
         ctx.createRadialGradient(
             GAME_WIDTH / 2,
-            GAME_HEIGHT * 0.65,
-            10,
+            GAME_HEIGHT * 0.60,
+            20,
 
             GAME_WIDTH / 2,
-            GAME_HEIGHT * 0.65,
-            430
+            GAME_HEIGHT * 0.60,
+            420
         );
 
 
     centerGlow.addColorStop(
         0,
-        "rgba(0,255,110,0.13)"
+        "rgba(0,255,110,0.09)"
     );
 
 
     centerGlow.addColorStop(
         0.45,
-        "rgba(0,180,85,0.05)"
+        "rgba(0,160,80,0.04)"
     );
 
 
     centerGlow.addColorStop(
         1,
-        "rgba(0,120,60,0)"
+        "rgba(0,100,50,0)"
     );
 
 
@@ -783,7 +784,7 @@ function drawBackground() {
 
         const y =
             (i * 83 + 41) %
-            (GAME_HEIGHT - 90);
+            (GAME_HEIGHT - 95);
 
 
         if (
@@ -791,12 +792,12 @@ function drawBackground() {
         ) {
 
             ctx.fillStyle =
-                "rgba(110,255,150,0.75)";
+                "rgba(110,255,150,0.70)";
 
         } else {
 
             ctx.fillStyle =
-                "rgba(255,255,255,0.22)";
+                "rgba(255,255,255,0.20)";
 
         }
 
@@ -818,7 +819,7 @@ function drawBackground() {
 
 
     /* =====================================
-       BRIGHT STARS
+       SOME BRIGHT STARS
     ===================================== */
 
     const brightStars = [
@@ -871,45 +872,33 @@ function drawBackground() {
 
 
     /* =====================================
-       FLOOR POSITION
-    ===================================== */
-
-    const horizonY =
-        GAME_HEIGHT - 72;
-
-
-    const floorBottom =
-        GAME_HEIGHT;
-
-
-    /* =====================================
-       FLOOR GLOW
+       VERY SOFT GLOW AROUND FLOOR LINE
     ===================================== */
 
     const floorGlow =
         ctx.createLinearGradient(
             0,
-            horizonY - 55,
+            FLOOR_Y - 45,
             0,
-            floorBottom
+            FLOOR_Y + 45
         );
 
 
     floorGlow.addColorStop(
         0,
-        "rgba(0,255,100,0)"
+        "rgba(40,255,100,0)"
     );
 
 
     floorGlow.addColorStop(
-        0.45,
-        "rgba(0,255,100,0.06)"
+        0.5,
+        "rgba(40,255,100,0.08)"
     );
 
 
     floorGlow.addColorStop(
         1,
-        "rgba(0,255,100,0.12)"
+        "rgba(40,255,100,0)"
     );
 
 
@@ -919,35 +908,33 @@ function drawBackground() {
 
     ctx.fillRect(
         0,
-        horizonY - 55,
+        FLOOR_Y - 45,
         GAME_WIDTH,
-        floorBottom -
-        horizonY +
-        55
+        90
     );
 
 
     /* =====================================
-       HORIZON NEON LINE
+       SINGLE NEON FLOOR LINE
     ===================================== */
 
     ctx.save();
 
 
-    ctx.strokeStyle =
-        "rgba(70,255,110,0.90)";
-
-
     ctx.shadowColor =
-        "#39ff74";
+        "#32ff6a";
 
 
     ctx.shadowBlur =
-        20;
+        16;
+
+
+    ctx.strokeStyle =
+        "#32ff6a";
 
 
     ctx.lineWidth =
-        1.4;
+        2;
 
 
     ctx.beginPath();
@@ -955,194 +942,49 @@ function drawBackground() {
 
     ctx.moveTo(
         0,
-        horizonY
+        FLOOR_Y
     );
 
 
     ctx.lineTo(
         GAME_WIDTH,
-        horizonY
+        FLOOR_Y
     );
 
 
     ctx.stroke();
 
 
-    ctx.restore();
+    /* second tiny highlight */
 
-
-    /* =====================================
-       HORIZONTAL FLOOR GRID
-    ===================================== */
-
-    ctx.save();
+    ctx.shadowBlur =
+        4;
 
 
     ctx.strokeStyle =
-        "rgba(45,255,100,0.22)";
+        "rgba(170,255,190,0.50)";
 
 
     ctx.lineWidth =
         1;
 
 
-    const horizontalLines = 7;
+    ctx.beginPath();
 
 
-    for (
-        let i = 1;
-        i <= horizontalLines;
-        i++
-    ) {
-
-        const progress =
-            i /
-            horizontalLines;
-
-
-        const curvedProgress =
-            progress *
-            progress;
-
-
-        const y =
-            horizonY +
-            curvedProgress *
-            (
-                floorBottom -
-                horizonY
-            );
-
-
-        ctx.beginPath();
-
-
-        ctx.moveTo(
-            0,
-            y
-        );
-
-
-        ctx.lineTo(
-            GAME_WIDTH,
-            y
-        );
-
-
-        ctx.stroke();
-
-    }
-
-
-    ctx.restore();
-
-
-    /* =====================================
-       VERTICAL PERSPECTIVE GRID
-    ===================================== */
-
-    ctx.save();
-
-
-    ctx.strokeStyle =
-        "rgba(45,255,100,0.22)";
-
-
-    ctx.lineWidth =
-        1;
-
-
-    const vanishingX =
-        GAME_WIDTH / 2;
-
-
-    const columns =
-        18;
-
-
-    for (
-        let i = 0;
-        i <= columns;
-        i++
-    ) {
-
-        const bottomX =
-            (
-                GAME_WIDTH /
-                columns
-            ) * i;
-
-
-        ctx.beginPath();
-
-
-        ctx.moveTo(
-            vanishingX,
-            horizonY
-        );
-
-
-        ctx.lineTo(
-            bottomX,
-            floorBottom
-        );
-
-
-        ctx.stroke();
-
-    }
-
-
-    ctx.restore();
-
-
-    /* =====================================
-       STRONG CENTER PLATFORM GLOW
-    ===================================== */
-
-    ctx.save();
-
-
-    const platformGlow =
-        ctx.createRadialGradient(
-            GAME_WIDTH / 2,
-            horizonY + 8,
-            10,
-
-            GAME_WIDTH / 2,
-            horizonY + 8,
-            240
-        );
-
-
-    platformGlow.addColorStop(
+    ctx.moveTo(
         0,
-        "rgba(80,255,110,0.30)"
+        FLOOR_Y - 1
     );
 
 
-    platformGlow.addColorStop(
-        0.35,
-        "rgba(25,255,100,0.12)"
+    ctx.lineTo(
+        GAME_WIDTH,
+        FLOOR_Y - 1
     );
 
 
-    platformGlow.addColorStop(
-        1,
-        "rgba(0,255,100,0)"
-    );
-
-
-    ctx.fillStyle =
-        platformGlow;
-
-
-    ctx.fillRect(
-        GAME_WIDTH / 2 - 260,
-        horizonY - 60,
-        520,
-        120
-    );
+    ctx.stroke();
 
 
     ctx.restore();
@@ -1217,7 +1059,7 @@ function drawCoinTrail(coin) {
 
     /*
        GREMBLECOIN = GREEN
-       OTHERS = RED
+       OTHER COINS = RED
     */
 
     const colors =
@@ -1263,7 +1105,7 @@ function drawCoinTrail(coin) {
 
 
     /* =====================================
-       MAIN CONE LIGHT
+       MAIN TAPERED LIGHT
     ===================================== */
 
     ctx.save();
@@ -1339,86 +1181,6 @@ function drawCoinTrail(coin) {
     ctx.lineTo(
         centerX -
         bottomWidth / 2,
-        coinTop
-    );
-
-
-    ctx.closePath();
-
-
-    ctx.fill();
-
-
-    ctx.restore();
-
-
-    /* =====================================
-       INNER LIGHT
-    ===================================== */
-
-    ctx.save();
-
-
-    const innerHeight =
-        trailHeight * 0.82;
-
-
-    const innerGradient =
-        ctx.createLinearGradient(
-            centerX,
-            coinTop - innerHeight,
-            centerX,
-            coinTop
-        );
-
-
-    innerGradient.addColorStop(
-        0,
-        colors.transparent
-    );
-
-
-    innerGradient.addColorStop(
-        0.65,
-        colors.soft
-    );
-
-
-    innerGradient.addColorStop(
-        1,
-        colors.strong
-    );
-
-
-    ctx.fillStyle =
-        innerGradient;
-
-
-    ctx.beginPath();
-
-
-    ctx.moveTo(
-        centerX - 1,
-        coinTop - innerHeight
-    );
-
-
-    ctx.lineTo(
-        centerX + 1,
-        coinTop - innerHeight
-    );
-
-
-    ctx.lineTo(
-        centerX +
-        coin.width * 0.18,
-        coinTop
-    );
-
-
-    ctx.lineTo(
-        centerX -
-        coin.width * 0.18,
         coinTop
     );
 
@@ -1625,18 +1387,10 @@ function drawCoins() {
             }
 
 
-            /*
-               LIGHT BEHIND COIN
-            */
-
             drawCoinTrail(
                 coin
             );
 
-
-            /*
-               COIN PNG
-            */
 
             ctx.save();
 
@@ -1760,6 +1514,11 @@ function startGame() {
     player.x =
         GAME_WIDTH / 2 -
         player.width / 2;
+
+
+    player.y =
+        FLOOR_Y -
+        player.height;
 
 
     scoreElement.textContent =
