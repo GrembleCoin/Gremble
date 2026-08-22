@@ -1,194 +1,215 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Gremble — Building Something Different</title>
+    <title>Gremble</title>
+
+    <meta
+        name="description"
+        content="Gremble is more than a memecoin. It's a character, a world and a community building it together starting from almost nothing."
+    >
 
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-    <!-- ========================================
-         HERO
-    ========================================= -->
-
-    <main class="hero" id="top">
-
-        <nav class="navbar">
-
-            <!-- LOGO -->
-            <a href="#top" class="brand-logo">
-                <img src="gremble.png" alt="Gremble">
-            </a>
+    <!-- STARS -->
+    <div class="stars"></div>
 
 
-            <!-- MENU -->
-            <div class="nav-links">
+    <!-- HEADER -->
+    <header class="header">
 
-                <a href="#different">Different</a>
-                <a href="#story">Story</a>
-                <a href="#roadmap">Roadmap</a>
-                <a href="#arcade">Arcade</a>
-                <a href="#be-early">Be Early</a>
-                <a href="#faq">FAQ</a>
-
-            </div>
+        <!-- LOGO -->
+        <a href="#home" class="logo">
+            <img src="gremble.png" alt="Gremble">
+        </a>
 
 
-            <!-- SOCIAL ICONS -->
-            <div class="nav-socials">
-
-                <!-- X -->
-                <a
-                    href="https://x.com/GrembleCoin"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="social-icon"
-                    aria-label="Gremble on X"
-                >
-                    <svg
-                        viewBox="0 0 24 24"
-                        width="18"
-                        height="18"
-                        fill="currentColor"
-                    >
-                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.657l-5.214-6.817-5.967 6.817H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231 5.45-6.231Zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77Z"/>
-                    </svg>
-                </a>
-
-
-                <!-- TELEGRAM -->
-                <a
-                    href="https://t.me/gremblecoin"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="social-icon"
-                    aria-label="Gremble Telegram"
-                >
-                    <svg
-                        viewBox="0 0 24 24"
-                        width="20"
-                        height="20"
-                        fill="currentColor"
-                    >
-                        <path d="M21.944 2.506a1.5 1.5 0 0 0-1.552-.21L2.74 9.236c-1.23.486-1.214 1.194-.224 1.497l4.53 1.414 1.73 5.385c.21.58.106.81.718.81.472 0 .68-.216.944-.472l2.177-2.116 4.528 3.344c.834.46 1.434.222 1.642-.774l2.972-14.006c.304-1.22-.466-1.773-1.313-1.812ZM8.29 11.822l10.82-6.827c.54-.328 1.036-.152.63.208l-8.93 8.06-.348 3.73-2.172-5.17Z"/>
-                    </svg>
-                </a>
-
-            </div>
-
-
-            <!-- BUY -->
-            <button class="buy-btn" type="button">
-
-                <span class="buy-main">
-                    BUY GREMBLE
-                </span>
-
-                <span class="buy-coming">
-                    COMING SOON
-                </span>
-
-            </button>
-
+        <!-- NAVIGATION -->
+        <nav class="nav">
+            <a href="#different">Different</a>
+            <a href="#story">Story</a>
+            <a href="#roadmap">Roadmap</a>
+            <a href="#arcade">Arcade</a>
+            <a href="#early">Be Early</a>
+            <a href="#faq">FAQ</a>
         </nav>
 
 
-        <!-- HERO CONTENT -->
-        <div class="hero-content">
+        <!-- SOCIALS -->
+        <div class="header-right">
 
-            <!-- LEFT -->
-            <div class="left-side">
+            <a
+                href="https://x.com/GrembleCoin"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="social-button"
+                aria-label="Gremble on X"
+            >
+                𝕏
+            </a>
 
-                <p class="contract">
-                    CONTRACT ADDRESS: COMING SOON
-                </p>
 
-                <h1>
-                    WE'RE<br>
-                    BUILDING<br>
-                    <span class="highlight">SOMETHING</span><br>
-                    DIFFERENT<span class="highlight">.</span>
-                </h1>
+            <a
+                href="https://t.me/gremblecoin"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="social-button"
+                aria-label="Gremble Telegram"
+            >
+                ✈
+            </a>
 
-                <div class="hero-line"></div>
 
-                <p class="description">
-                    Gremble is more than a memecoin.
-                    It's a character a world and a community
-                    building it together starting from almost nothing.
-                </p>
+            <div class="buy-button">
+                <span>BUY GREMBLE</span>
+                <small>COMING SOON</small>
+            </div>
 
-                <div class="buttons">
+        </div>
 
-                    <a href="#story" class="primary-btn">
-                        READ THE STORY
-                    </a>
+    </header>
 
-                    <a href="#arcade" class="secondary-btn">
-                        PLAY THE ARCADE
-                    </a>
 
-                </div>
 
+    <!-- HERO -->
+    <main id="home" class="hero">
+
+        <!-- LEFT SIDE -->
+        <div class="hero-left">
+
+            <div class="contract">
+                CONTRACT ADDRESS: COMING SOON
             </div>
 
 
-            <!-- RIGHT -->
-            <div class="right-side">
+            <h1>
+                WE'RE<br>
+                BUILDING<br>
+                <span>SOMETHING</span><br>
+                DIFFERENT<span class="dot">.</span>
+            </h1>
 
-                <div class="character-glow"></div>
 
-                <img
-                    src="gremble2.png"
-                    alt="Gremble"
-                    class="gremble-character"
-                >
+            <div class="hero-line"></div>
+
+
+            <p class="hero-description">
+                Gremble is more than a memecoin. It's a character a world and a
+                community building it together starting from almost nothing.
+            </p>
+
+
+            <div class="hero-buttons">
+
+                <a href="#story" class="primary-button">
+                    READ THE STORY
+                </a>
+
+                <a href="#arcade" class="secondary-button">
+                    PLAY THE ARCADE
+                </a>
 
             </div>
+
+        </div>
+
+
+
+        <!-- RIGHT SIDE - NORMAL IMAGE -->
+        <div class="hero-right">
+
+            <img
+                src="gremble2.png"
+                alt="Gremble character"
+                class="hero-image"
+            >
 
         </div>
 
     </main>
 
 
-    <!-- ========================================
-         DIFFERENT
-    ========================================= -->
 
-    <section class="different-section" id="different">
+    <!-- DIFFERENT -->
+    <section id="different" class="section">
 
-        <div class="section-container">
+        <div class="section-label">
+            GREMBLE
+        </div>
 
-            <div class="section-label">
-                01 — WHY DIFFERENT?
-            </div>
+        <h2>
+            SOMETHING<br>
+            <span>DIFFERENT.</span>
+        </h2>
 
-            <div class="different-content">
+        <p>
+            Gremble is a memecoin project built around a character,
+            a story and a community growing together from the beginning.
+        </p>
 
-                <p class="eyebrow">
-                    THIS IS ONLY THE BEGINNING
-                </p>
+    </section>
 
-                <h2>
-                    NOT JUST<br>
-                    ANOTHER <span>MEME.</span>
-                </h2>
 
-                <p class="large-text">
-                    Gremble starts with a character.
-                    But the goal is to build something
-                    bigger around him.
-                </p>
+
+    <!-- STORY -->
+    <section id="story" class="section">
+
+        <div class="section-label">
+            THE STORY
+        </div>
+
+        <h2>
+            THIS IS ONLY<br>
+            <span>THE BEGINNING.</span>
+        </h2>
+
+        <div class="story-grid">
+
+            <div class="story-card">
+
+                <span class="number">01</span>
+
+                <h3>A BROKEN WORLD</h3>
 
                 <p>
-                    A world. A story. Ideas. Games.
-                    And a community that can actually
-                    watch it grow and become part of it.
+                    The old world was destroyed by bad decisions,
+                    conflict and people fighting for power.
+                    What remained was a world waiting to be rebuilt.
+                </p>
+
+            </div>
+
+
+            <div class="story-card">
+
+                <span class="number">02</span>
+
+                <h3>GREMBLE</h3>
+
+                <p>
+                    Gremble came from a wealthy family that benefited
+                    from the old world. But he wanted something different.
+                    He wanted to build something of his own.
+                </p>
+
+            </div>
+
+
+            <div class="story-card">
+
+                <span class="number">03</span>
+
+                <h3>THE BEGINNING</h3>
+
+                <p>
+                    Instead of waiting for someone else to change things,
+                    Gremble started building. The community is part of that
+                    journey from the very beginning.
                 </p>
 
             </div>
@@ -198,363 +219,175 @@
     </section>
 
 
-    <!-- ========================================
-         STORY 01
-    ========================================= -->
 
-    <section class="story-section" id="story">
+    <!-- ROADMAP -->
+    <section id="roadmap" class="section roadmap-section">
 
-        <div class="section-container">
+        <div class="section-label">
+            ROADMAP
+        </div>
 
-            <div class="section-label">
-                02 — THE STORY
-            </div>
+        <h2>
+            OUR PLAN.<br>
+            <span>OUR JOURNEY.</span>
+        </h2>
 
-            <div class="story-grid">
 
-                <div class="story-number">
-                    01
-                </div>
+        <div class="roadmap-image-container">
 
-                <div class="story-content">
-
-                    <p class="story-small">
-                        BEFORE GREMBLE
-                    </p>
-
-                    <h2>
-                        NOT EVERYONE<br>
-                        IS BORN TO<br>
-                        <span>FOLLOW THE WORLD.</span>
-                    </h2>
-
-                    <p>
-                        Gremble came from a world built
-                        by people who never wanted anything to change.
-                    </p>
-
-                    <p>
-                        His family had power, money and a place at the top.
-                        They benefited from the world exactly as it was.
-                    </p>
-
-                    <p>
-                        But Gremble saw something different.
-                        He didn't want to simply inherit the old world.
-                        He wanted to build something of his own.
-                    </p>
-
-                </div>
-
-            </div>
+            <img
+                src="roadmap.png"
+                alt="Gremble Roadmap"
+                class="roadmap-image"
+            >
 
         </div>
 
     </section>
 
 
-    <!-- ========================================
-         STORY 02
-    ========================================= -->
 
-    <section class="story-section story-dark">
+    <!-- ARCADE -->
+    <section id="arcade" class="section">
 
-        <div class="section-container">
+        <div class="section-label">
+            GREMBLE ARCADE
+        </div>
 
-            <div class="story-grid">
+        <h2>
+            PLAY.<br>
+            <span>COMING SOON.</span>
+        </h2>
 
-                <div class="story-number">
-                    02
-                </div>
+        <p>
+            The Gremble Arcade is being built.
+            Games and community challenges will come later.
+        </p>
 
-                <div class="story-content">
+        <div class="coming-card">
 
-                    <p class="story-small">
-                        AFTER THE WAR
-                    </p>
+            <span>GREMBLE ARCADE</span>
 
-                    <h2>
-                        THE WORLD<br>
-                        GOT SMALLER.<br>
-                        <span>THE OPPORTUNITIES DIDN'T.</span>
-                    </h2>
-
-                    <p>
-                        After a devastating war caused by the mistakes
-                        of powerful people, the world was never the same again.
-                    </p>
-
-                    <p>
-                        Millions disappeared. Cities changed.
-                        The old system survived, but the world around it
-                        became something new.
-                    </p>
-
-                    <p>
-                        For Gremble, that meant one thing:
-                        if the old world was broken, maybe this was
-                        the moment to build something different.
-                    </p>
-
-                </div>
-
-            </div>
+            <strong>COMING SOON</strong>
 
         </div>
 
     </section>
 
 
-    <!-- ========================================
-         ROADMAP
-    ========================================= -->
 
-    <section class="roadmap-section" id="roadmap">
+    <!-- BE EARLY -->
+    <section id="early" class="section early-section">
 
-        <div class="section-container">
+        <div class="section-label">
+            BE EARLY
+        </div>
 
-            <div class="section-label">
-                03 — THE ROADMAP
-            </div>
+        <h2>
+            JOIN BEFORE<br>
+            <span>THE CROWD.</span>
+        </h2>
 
-            <h2 class="center-title">
-                OUR PLAN.<br>
-                <span>OUR FUTURE.</span>
-            </h2>
+        <p>
+            Gremble is still at the beginning.
+            Join the community and watch it grow from day one.
+        </p>
 
-            <p class="roadmap-intro">
-                From the beginning to something much bigger.
-                This is where we want to take Gremble.
-            </p>
 
-            <div class="roadmap-image-wrap">
+        <div class="community-buttons">
 
-                <img
-                    src="roadmap.png"
-                    alt="Gremble Roadmap"
-                    class="roadmap-image"
-                >
+            <a
+                href="https://x.com/GrembleCoin"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="primary-button"
+            >
+                FOLLOW ON X
+            </a>
 
-            </div>
+
+            <a
+                href="https://t.me/gremblecoin"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="secondary-button"
+            >
+                JOIN TELEGRAM
+            </a>
 
         </div>
 
     </section>
 
 
-    <!-- ========================================
-         ARCADE
-    ========================================= -->
 
-    <section class="arcade-section" id="arcade">
+    <!-- FAQ -->
+    <section id="faq" class="section">
 
-        <div class="section-container">
+        <div class="section-label">
+            FAQ
+        </div>
 
-            <div class="section-label">
-                04 — THE ARCADE
-            </div>
+        <h2>
+            QUESTIONS.<br>
+            <span>ANSWERS.</span>
+        </h2>
 
-            <div class="arcade-content">
 
-                <div>
+        <div class="faq">
 
-                    <p class="eyebrow">
-                        MORE THAN JUST WATCHING
-                    </p>
+            <details>
+                <summary>What is Gremble?</summary>
 
-                    <h2>
-                        ENTER THE<br>
-                        <span>GREMBLE ARCADE.</span>
-                    </h2>
+                <p>
+                    Gremble is a memecoin project built around a character,
+                    a story and a community.
+                </p>
+            </details>
 
-                    <p>
-                        This part of the Gremble world is still being built.
-                        Games and new experiences are coming.
-                    </p>
 
-                    <button type="button" class="coming-btn">
-                        COMING SOON
-                    </button>
+            <details>
+                <summary>Is Gremble launched?</summary>
 
-                </div>
+                <p>
+                    Not yet. The project is still in its early phase.
+                </p>
+            </details>
 
-                <div class="arcade-box">
 
-                    <span>G</span>
+            <details>
+                <summary>What is the contract address?</summary>
 
-                    <small>
-                        ARCADE
-                    </small>
+                <p>
+                    The contract address is coming soon.
+                </p>
+            </details>
 
-                </div>
 
-            </div>
+            <details>
+                <summary>Where can I join the community?</summary>
+
+                <p>
+                    You can follow Gremble on X and join the official
+                    Telegram community.
+                </p>
+            </details>
 
         </div>
 
     </section>
 
 
-    <!-- ========================================
-         BE EARLY
-    ========================================= -->
 
-    <section class="early-section" id="be-early">
-
-        <div class="section-container early-content">
-
-            <div class="section-label">
-                05 — BE EARLY
-            </div>
-
-            <h2>
-                YOU'RE NOT<br>
-                <span>TOO LATE.</span>
-            </h2>
-
-            <p>
-                The Gremble world is still at the beginning.
-                If you want to be here while it is being built,
-                now is the time.
-            </p>
-
-            <div class="early-buttons">
-
-                <a
-                    href="https://t.me/gremblecoin"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="primary-btn"
-                >
-                    JOIN TELEGRAM
-                </a>
-
-                <a
-                    href="https://x.com/GrembleCoin"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="secondary-btn"
-                >
-                    FOLLOW ON X
-                </a>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- ========================================
-         FAQ
-    ========================================= -->
-
-    <section class="faq-section" id="faq">
-
-        <div class="section-container">
-
-            <div class="section-label">
-                06 — FAQ
-            </div>
-
-            <h2 class="faq-title">
-                QUESTIONS?<br>
-                <span>GOOD.</span>
-            </h2>
-
-            <div class="faq-list">
-
-                <div class="faq-item">
-
-                    <h3>
-                        What is Gremble?
-                    </h3>
-
-                    <p>
-                        Gremble is a memecoin project built around a character,
-                        a growing world and a community.
-                    </p>
-
-                </div>
-
-
-                <div class="faq-item">
-
-                    <h3>
-                        Is Gremble available to buy?
-                    </h3>
-
-                    <p>
-                        Not yet. The official contract address
-                        and launch information will be announced
-                        through the official Gremble channels.
-                    </p>
-
-                </div>
-
-
-                <div class="faq-item">
-
-                    <h3>
-                        Is the story already finished?
-                    </h3>
-
-                    <p>
-                        No. The Gremble world is still being built.
-                        There is much more to come.
-                    </p>
-
-                </div>
-
-
-                <div class="faq-item">
-
-                    <h3>
-                        Where can I follow Gremble?
-                    </h3>
-
-                    <p>
-                        Follow Gremble on X or join the Telegram community.
-                    </p>
-
-                </div>
-
-
-                <div class="faq-item">
-
-                    <h3>
-                        How can I be part of it?
-                    </h3>
-
-                    <p>
-                        Follow the project, join the community
-                        and watch what we build next.
-                    </p>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- ========================================
-         FOOTER
-    ========================================= -->
-
+    <!-- FOOTER -->
     <footer>
 
         <div class="footer-left">
 
-            <img
-                src="gremble.png"
-                alt="Gremble"
-                class="footer-logo"
-            >
+            <img src="gremble.png" alt="Gremble">
 
         </div>
+
 
         <a
             href="https://linktr.ee/gremblecoin"
@@ -565,12 +398,14 @@
             ALL LINKS
         </a>
 
+
         <p>
             BUILDING SOMETHING DIFFERENT.
         </p>
 
     </footer>
 
-</body>
 
+
+</body>
 </html>
