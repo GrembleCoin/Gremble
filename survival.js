@@ -20,7 +20,7 @@ const SURVIVAL_SCORES_API =
 
 
 /* =========================================================
-   HTML ELEMENTS
+   HTML
 ========================================================= */
 
 const survivalCanvas =
@@ -71,14 +71,13 @@ survivalCanvas.height = SH;
 
 
 /* =========================================================
-   GAME STATE
+   STATE
 ========================================================= */
 
 let survivalRunning = false;
 let survivalPaused = false;
 
 let survivalFrame = null;
-
 let survivalLastFrame = 0;
 
 let survivalStartTime = 0;
@@ -100,6 +99,7 @@ let coinSpawnInterval = 2600;
 let coinsCollected = 0;
 
 let scoreMultiplier = 1;
+
 let enemySpeedMultiplier = 1;
 
 let magnetRadius = 100;
@@ -111,6 +111,32 @@ let survivalScoreSubmitted = false;
 let finalSurvivalScore = 0;
 let finalSurvivalTime = 0;
 let finalSurvivalWave = 1;
+
+
+
+/* =========================================================
+   IGNORE GAME KEYS WHILE TYPING
+========================================================= */
+
+function survivalIsTyping(
+    target
+) {
+
+    if (!target) {
+        return false;
+    }
+
+
+    return (
+
+        target.tagName === "INPUT" ||
+        target.tagName === "TEXTAREA" ||
+        target.tagName === "SELECT" ||
+        target.isContentEditable
+
+    );
+
+}
 
 
 
@@ -151,13 +177,15 @@ survivalImages.enemies =
     enemyFiles.map(
         file => {
 
-            const img =
+            const image =
                 new Image();
 
-            img.src =
+
+            image.src =
                 file;
 
-            return img;
+
+            return image;
 
         }
     );
@@ -223,7 +251,7 @@ const survivalKeys = {
 
 
 /* =========================================================
-   INPUT
+   KEYBOARD
 ========================================================= */
 
 document.addEventListener(
@@ -231,12 +259,19 @@ document.addEventListener(
     event => {
 
         if (
+            survivalIsTyping(
+                event.target
+            )
+        ) {
+            return;
+        }
+
+
+        if (
             !survivalRunning ||
             survivalPaused
         ) {
-
             return;
-
         }
 
 
@@ -249,7 +284,8 @@ document.addEventListener(
             event.key === "ArrowUp"
         ) {
 
-            survivalKeys.up = true;
+            survivalKeys.up =
+                true;
 
             event.preventDefault();
 
@@ -261,7 +297,8 @@ document.addEventListener(
             event.key === "ArrowDown"
         ) {
 
-            survivalKeys.down = true;
+            survivalKeys.down =
+                true;
 
             event.preventDefault();
 
@@ -273,7 +310,8 @@ document.addEventListener(
             event.key === "ArrowLeft"
         ) {
 
-            survivalKeys.left = true;
+            survivalKeys.left =
+                true;
 
             event.preventDefault();
 
@@ -285,7 +323,8 @@ document.addEventListener(
             event.key === "ArrowRight"
         ) {
 
-            survivalKeys.right = true;
+            survivalKeys.right =
+                true;
 
             event.preventDefault();
 
@@ -297,6 +336,7 @@ document.addEventListener(
         ) {
 
             survivalDash();
+
 
             event.preventDefault();
 
@@ -310,6 +350,15 @@ document.addEventListener(
     "keyup",
     event => {
 
+        if (
+            survivalIsTyping(
+                event.target
+            )
+        ) {
+            return;
+        }
+
+
         const key =
             event.key.toLowerCase();
 
@@ -319,7 +368,8 @@ document.addEventListener(
             event.key === "ArrowUp"
         ) {
 
-            survivalKeys.up = false;
+            survivalKeys.up =
+                false;
 
         }
 
@@ -329,7 +379,8 @@ document.addEventListener(
             event.key === "ArrowDown"
         ) {
 
-            survivalKeys.down = false;
+            survivalKeys.down =
+                false;
 
         }
 
@@ -339,7 +390,8 @@ document.addEventListener(
             event.key === "ArrowLeft"
         ) {
 
-            survivalKeys.left = false;
+            survivalKeys.left =
+                false;
 
         }
 
@@ -349,7 +401,8 @@ document.addEventListener(
             event.key === "ArrowRight"
         ) {
 
-            survivalKeys.right = false;
+            survivalKeys.right =
+                false;
 
         }
 
@@ -368,9 +421,7 @@ function survivalDash() {
         !survivalRunning ||
         survivalPaused
     ) {
-
         return;
-
     }
 
 
@@ -383,9 +434,7 @@ function survivalDash() {
         survivalPlayer.lastDash <
         survivalPlayer.dashCooldown
     ) {
-
         return;
-
     }
 
 
@@ -394,7 +443,8 @@ function survivalDash() {
 
 
     survivalPlayer.dashUntil =
-        now + 220;
+        now +
+        220;
 
 
     dashStatus.textContent =
@@ -405,7 +455,7 @@ function survivalDash() {
 
 
 /* =========================================================
-   PLAYER MOVEMENT
+   MOVEMENT
 ========================================================= */
 
 function updateSurvivalPlayer(
@@ -417,39 +467,23 @@ function updateSurvivalPlayer(
     let dy = 0;
 
 
-    if (
-        survivalKeys.left
-    ) {
-
+    if (survivalKeys.left) {
         dx--;
-
     }
 
 
-    if (
-        survivalKeys.right
-    ) {
-
+    if (survivalKeys.right) {
         dx++;
-
     }
 
 
-    if (
-        survivalKeys.up
-    ) {
-
+    if (survivalKeys.up) {
         dy--;
-
     }
 
 
-    if (
-        survivalKeys.down
-    ) {
-
+    if (survivalKeys.down) {
         dy++;
-
     }
 
 
@@ -465,8 +499,12 @@ function updateSurvivalPlayer(
             );
 
 
-        dx /= length;
-        dy /= length;
+        dx /=
+            length;
+
+
+        dy /=
+            length;
 
     }
 
@@ -480,7 +518,8 @@ function updateSurvivalPlayer(
         survivalPlayer.dashUntil
     ) {
 
-        speed *= 3;
+        speed *=
+            3;
 
     }
 
@@ -502,6 +541,7 @@ function updateSurvivalPlayer(
     survivalPlayer.x =
         Math.max(
             10,
+
             Math.min(
                 SW -
                 survivalPlayer.width -
@@ -515,6 +555,7 @@ function updateSurvivalPlayer(
     survivalPlayer.y =
         Math.max(
             10,
+
             Math.min(
                 SH -
                 survivalPlayer.height -
@@ -552,13 +593,15 @@ function updateDashDisplay(
         dashStatus.textContent =
             "DASHING";
 
+
         return;
 
     }
 
 
     if (
-        remaining <= 0
+        remaining <=
+        0
     ) {
 
         dashStatus.textContent =
@@ -585,7 +628,8 @@ function spawnSurvivalEnemy() {
 
     const side =
         Math.floor(
-            Math.random() * 4
+            Math.random() *
+            4
         );
 
 
@@ -599,11 +643,10 @@ function spawnSurvivalEnemy() {
     let y;
 
 
-    if (
-        side === 0
-    ) {
+    if (side === 0) {
 
-        x = -size;
+        x =
+            -size;
 
         y =
             Math.random() *
@@ -612,12 +655,11 @@ function spawnSurvivalEnemy() {
     }
 
 
-    if (
-        side === 1
-    ) {
+    if (side === 1) {
 
         x =
-            SW + size;
+            SW +
+            size;
 
         y =
             Math.random() *
@@ -626,29 +668,27 @@ function spawnSurvivalEnemy() {
     }
 
 
-    if (
-        side === 2
-    ) {
-
-        x =
-            Math.random() *
-            SW;
-
-        y = -size;
-
-    }
-
-
-    if (
-        side === 3
-    ) {
+    if (side === 2) {
 
         x =
             Math.random() *
             SW;
 
         y =
-            SH + size;
+            -size;
+
+    }
+
+
+    if (side === 3) {
+
+        x =
+            Math.random() *
+            SW;
+
+        y =
+            SH +
+            size;
 
     }
 
@@ -853,7 +893,8 @@ function updateSurvivalEnemies(
             enemies.length -
             1;
 
-        i >= 0;
+        i >=
+        0;
 
         i--
     ) {
@@ -862,43 +903,44 @@ function updateSurvivalEnemies(
             enemies[i];
 
 
-        const px =
+        const playerCenterX =
             survivalPlayer.x +
             survivalPlayer.width /
             2;
 
 
-        const py =
+        const playerCenterY =
             survivalPlayer.y +
             survivalPlayer.height /
             2;
 
 
-        const ex =
+        const enemyCenterX =
             enemy.x +
             enemy.width /
             2;
 
 
-        const ey =
+        const enemyCenterY =
             enemy.y +
             enemy.height /
             2;
 
 
         const dx =
-            px -
-            ex;
+            playerCenterX -
+            enemyCenterX;
 
 
         const dy =
-            py -
-            ey;
+            playerCenterY -
+            enemyCenterY;
 
 
         const length =
             Math.max(
                 0.001,
+
                 Math.sqrt(
                     dx * dx +
                     dy * dy
@@ -933,15 +975,12 @@ function updateSurvivalEnemies(
             )
         ) {
 
-
-            /* DASH DESTROYS ENEMY */
-
             if (
                 now <
                 survivalPlayer.dashUntil
             ) {
 
-                createParticles(
+                createSurvivalParticles(
                     enemy.x,
                     enemy.y,
                     "#ff5555"
@@ -991,7 +1030,8 @@ function updateSurvivalCoins(
             survivalCoins.length -
             1;
 
-        i >= 0;
+        i >=
+        0;
 
         i--
     ) {
@@ -1006,8 +1046,6 @@ function updateSurvivalCoins(
                 coin
             );
 
-
-        /* MAGNET */
 
         if (
             distance <
@@ -1051,6 +1089,7 @@ function updateSurvivalCoins(
             const length =
                 Math.max(
                     1,
+
                     Math.sqrt(
                         dx * dx +
                         dy * dy
@@ -1087,7 +1126,7 @@ function updateSurvivalCoins(
             )
         ) {
 
-            createParticles(
+            createSurvivalParticles(
                 coin.x,
                 coin.y,
                 "#65ff83"
@@ -1144,9 +1183,7 @@ function damageSurvivalPlayer(
         now <
         survivalPlayer.invulnerableUntil
     ) {
-
         return;
-
     }
 
 
@@ -1222,7 +1259,7 @@ function damageSurvivalPlayer(
    PARTICLES
 ========================================================= */
 
-function createParticles(
+function createSurvivalParticles(
     x,
     y,
     color
@@ -1274,7 +1311,7 @@ function createParticles(
    UPDATE PARTICLES
 ========================================================= */
 
-function updateParticles(
+function updateSurvivalParticles(
     delta
 ) {
 
@@ -1283,34 +1320,36 @@ function updateParticles(
             particles.length -
             1;
 
-        i >= 0;
+        i >=
+        0;
 
         i--
     ) {
 
-        const p =
+        const particle =
             particles[i];
 
 
-        p.x +=
-            p.dx *
+        particle.x +=
+            particle.dx *
             delta *
             60;
 
 
-        p.y +=
-            p.dy *
+        particle.y +=
+            particle.dy *
             delta *
             60;
 
 
-        p.life -=
+        particle.life -=
             delta *
             2;
 
 
         if (
-            p.life <= 0
+            particle.life <=
+            0
         ) {
 
             particles.splice(
@@ -1327,7 +1366,7 @@ function updateParticles(
 
 
 /* =========================================================
-   WAVE SYSTEM
+   WAVES
 ========================================================= */
 
 function updateWave() {
@@ -1360,6 +1399,7 @@ function updateWave() {
         enemySpawnInterval =
             Math.max(
                 260,
+
                 1000 -
                 survivalWave *
                 60
@@ -1486,6 +1526,7 @@ const survivalUpgrades = [
             survivalPlayer.lives =
                 Math.min(
                     survivalPlayer.maxLives,
+
                     survivalPlayer.lives +
                     1
                 );
@@ -1524,7 +1565,7 @@ const survivalUpgrades = [
 
 
 /* =========================================================
-   SHOW UPGRADE SCREEN
+   UPGRADE SCREEN
 ========================================================= */
 
 function showUpgradeScreen() {
@@ -1533,7 +1574,7 @@ function showUpgradeScreen() {
         true;
 
 
-    const shuffled =
+    const options =
         [
             ...survivalUpgrades
         ]
@@ -1541,11 +1582,8 @@ function showUpgradeScreen() {
             () =>
                 Math.random() -
                 0.5
-        );
-
-
-    const options =
-        shuffled.slice(
+        )
+        .slice(
             0,
             3
         );
@@ -1574,6 +1612,7 @@ function showUpgradeScreen() {
 
             button.innerHTML =
                 `
+
                 <div class="upgrade-icon">
                     ${upgrade.icon}
                 </div>
@@ -1585,6 +1624,7 @@ function showUpgradeScreen() {
                 <p>
                     ${upgrade.description}
                 </p>
+
                 `;
 
 
@@ -1709,10 +1749,11 @@ function drawSurvivalBackground() {
             0
 
                 ? "rgba(100,255,150,.65)"
+
                 : "rgba(255,255,255,.15)";
 
 
-        const starSize =
+        const size =
             i %
             9 ===
             0
@@ -1724,14 +1765,12 @@ function drawSurvivalBackground() {
         sctx.fillRect(
             x,
             y,
-            starSize,
-            starSize
+            size,
+            size
         );
 
     }
 
-
-    /* ARENA BORDER */
 
     sctx.save();
 
@@ -1764,8 +1803,6 @@ function drawSurvivalBackground() {
 
     sctx.restore();
 
-
-    /* CENTER RING */
 
     sctx.save();
 
@@ -1800,6 +1837,28 @@ function drawSurvivalBackground() {
     sctx.stroke();
 
 
+    sctx.beginPath();
+
+
+    sctx.arc(
+        SW /
+        2,
+
+        SH /
+        2,
+
+        95,
+
+        0,
+
+        Math.PI *
+        2
+    );
+
+
+    sctx.stroke();
+
+
     sctx.restore();
 
 }
@@ -1807,7 +1866,7 @@ function drawSurvivalBackground() {
 
 
 /* =========================================================
-   DRAW PLAYER
+   PLAYER
 ========================================================= */
 
 function drawSurvivalPlayer(
@@ -1815,7 +1874,9 @@ function drawSurvivalPlayer(
 ) {
 
     if (
-        !survivalImages.player.complete
+        !survivalImages.player.complete ||
+        survivalImages.player.naturalWidth ===
+        0
     ) {
 
         return;
@@ -1942,7 +2003,7 @@ function drawSurvivalPlayer(
 
 
 /* =========================================================
-   DRAW ENEMIES
+   ENEMIES
 ========================================================= */
 
 function drawSurvivalEnemies() {
@@ -1951,7 +2012,9 @@ function drawSurvivalEnemies() {
         enemy => {
 
             if (
-                !enemy.image.complete
+                !enemy.image.complete ||
+                enemy.image.naturalWidth ===
+                0
             ) {
 
                 return;
@@ -1991,7 +2054,7 @@ function drawSurvivalEnemies() {
 
 
 /* =========================================================
-   DRAW GREMBLECOINS
+   GREMBLECOINS
 ========================================================= */
 
 function drawSurvivalCoins(
@@ -2002,7 +2065,9 @@ function drawSurvivalCoins(
         coin => {
 
             if (
-                !survivalImages.coin.complete
+                !survivalImages.coin.complete ||
+                survivalImages.coin.naturalWidth ===
+                0
             ) {
 
                 return;
@@ -2052,28 +2117,28 @@ function drawSurvivalCoins(
 
 
 /* =========================================================
-   DRAW PARTICLES
+   PARTICLES
 ========================================================= */
 
-function drawParticles() {
+function drawSurvivalParticles() {
 
     particles.forEach(
-        p => {
+        particle => {
 
             sctx.globalAlpha =
                 Math.max(
                     0,
-                    p.life
+                    particle.life
                 );
 
 
             sctx.fillStyle =
-                p.color;
+                particle.color;
 
 
             sctx.fillRect(
-                p.x,
-                p.y,
+                particle.x,
+                particle.y,
                 4,
                 4
             );
@@ -2141,18 +2206,12 @@ function survivalGameLoop(
     timestamp
 ) {
 
-    if (
-        !survivalRunning
-    ) {
-
+    if (!survivalRunning) {
         return;
-
     }
 
 
-    if (
-        !survivalLastFrame
-    ) {
+    if (!survivalLastFrame) {
 
         survivalLastFrame =
             timestamp;
@@ -2180,9 +2239,7 @@ function survivalGameLoop(
         performance.now();
 
 
-    if (
-        !survivalPaused
-    ) {
+    if (!survivalPaused) {
 
         survivalElapsed =
             (
@@ -2242,7 +2299,7 @@ function survivalGameLoop(
         );
 
 
-        updateParticles(
+        updateSurvivalParticles(
             delta
         );
 
@@ -2283,7 +2340,7 @@ function survivalGameLoop(
     drawSurvivalEnemies();
 
 
-    drawParticles();
+    drawSurvivalParticles();
 
 
     drawSurvivalPlayer(
@@ -2301,14 +2358,12 @@ function survivalGameLoop(
 
 
 /* =========================================================
-   START GAME
+   START
 ========================================================= */
 
 function startSurvival() {
 
-    if (
-        survivalFrame
-    ) {
+    if (survivalFrame) {
 
         cancelAnimationFrame(
             survivalFrame
@@ -2415,6 +2470,22 @@ function startSurvival() {
         0;
 
 
+    survivalKeys.up =
+        false;
+
+
+    survivalKeys.down =
+        false;
+
+
+    survivalKeys.left =
+        false;
+
+
+    survivalKeys.right =
+        false;
+
+
     survivalLivesElement.textContent =
         "3";
 
@@ -2482,12 +2553,8 @@ function startSurvival() {
 
 function endSurvival() {
 
-    if (
-        !survivalRunning
-    ) {
-
+    if (!survivalRunning) {
         return;
-
     }
 
 
@@ -2502,19 +2569,20 @@ function endSurvival() {
     survivalKeys.up =
         false;
 
+
     survivalKeys.down =
         false;
 
+
     survivalKeys.left =
         false;
+
 
     survivalKeys.right =
         false;
 
 
-    if (
-        survivalFrame
-    ) {
+    if (survivalFrame) {
 
         cancelAnimationFrame(
             survivalFrame
@@ -2563,6 +2631,33 @@ function endSurvival() {
 
 
 /* =========================================================
+   TELEGRAM USERNAME
+========================================================= */
+
+function cleanSurvivalTelegramUsername(
+    value
+) {
+
+    return value
+        .trim()
+        .replace(
+            /^@/,
+            ""
+        )
+        .replace(
+            /[^a-zA-Z0-9_]/g,
+            ""
+        )
+        .slice(
+            0,
+            32
+        );
+
+}
+
+
+
+/* =========================================================
    CREATE LEADERBOARD UI
 ========================================================= */
 
@@ -2574,12 +2669,8 @@ function createSurvivalLeaderboardUI() {
         );
 
 
-    if (
-        !wrapper
-    ) {
-
+    if (!wrapper) {
         return;
-
     }
 
 
@@ -2588,9 +2679,7 @@ function createSurvivalLeaderboardUI() {
             "survivalLeaderboardSection"
         )
     ) {
-
         return;
-
     }
 
 
@@ -2670,8 +2759,8 @@ function createSurvivalLeaderboardUI() {
                 <input
                     type="text"
                     id="survivalNickname"
-                    maxlength="16"
-                    placeholder="ENTER NICKNAME"
+                    maxlength="32"
+                    placeholder="TELEGRAM USERNAME"
                     autocomplete="off"
                 >
 
@@ -2684,6 +2773,12 @@ function createSurvivalLeaderboardUI() {
                 </button>
 
             </div>
+
+
+            <p class="survival-telegram-note">
+                Enter your Telegram username so we can contact you
+                if your score wins a competition.
+            </p>
 
 
             <div
@@ -2725,25 +2820,11 @@ function createSurvivalLeaderboardUI() {
 
             <div class="survival-leaderboard-columns">
 
-                <span>
-                    RANK
-                </span>
-
-                <span>
-                    PLAYER
-                </span>
-
-                <span>
-                    TIME
-                </span>
-
-                <span>
-                    WAVE
-                </span>
-
-                <span>
-                    SCORE
-                </span>
+                <span>RANK</span>
+                <span>PLAYER</span>
+                <span>TIME</span>
+                <span>WAVE</span>
+                <span>SCORE</span>
 
             </div>
 
@@ -2772,6 +2853,42 @@ function createSurvivalLeaderboardUI() {
     addSurvivalLeaderboardStyles();
 
 
+    const nicknameInput =
+        document.getElementById(
+            "survivalNickname"
+        );
+
+
+    nicknameInput.addEventListener(
+        "keydown",
+        event => {
+
+            event.stopPropagation();
+
+
+            if (
+                event.key ===
+                "Enter"
+            ) {
+
+                submitSurvivalScore();
+
+            }
+
+        }
+    );
+
+
+    nicknameInput.addEventListener(
+        "keyup",
+        event => {
+
+            event.stopPropagation();
+
+        }
+    );
+
+
     document
         .getElementById(
             "survivalSubmitScore"
@@ -2779,27 +2896,6 @@ function createSurvivalLeaderboardUI() {
         .addEventListener(
             "click",
             submitSurvivalScore
-        );
-
-
-    document
-        .getElementById(
-            "survivalNickname"
-        )
-        .addEventListener(
-            "keydown",
-            event => {
-
-                if (
-                    event.key ===
-                    "Enter"
-                ) {
-
-                    submitSurvivalScore();
-
-                }
-
-            }
         );
 
 
@@ -2833,9 +2929,7 @@ function addSurvivalLeaderboardStyles() {
             "survivalLeaderboardStyles"
         )
     ) {
-
         return;
-
     }
 
 
@@ -2875,13 +2969,6 @@ function addSurvivalLeaderboardStyles() {
             border-bottom:
                 1px solid
                 rgba(80,255,130,.12);
-
-            background:
-                radial-gradient(
-                    circle at center,
-                    rgba(60,255,120,.08),
-                    transparent 65%
-                );
         }
 
 
@@ -2906,9 +2993,6 @@ function addSurvivalLeaderboardStyles() {
         .survival-submit-panel h3 {
             margin:
                 0 0 25px;
-
-            color:
-                #ffffff;
 
             font-size:
                 23px;
@@ -2943,9 +3027,6 @@ function addSurvivalLeaderboardStyles() {
 
             border-radius:
                 12px;
-
-            background:
-                rgba(255,255,255,.015);
         }
 
 
@@ -3065,9 +3146,6 @@ function addSurvivalLeaderboardStyles() {
             font-weight:
                 900;
 
-            letter-spacing:
-                1px;
-
             cursor:
                 pointer;
         }
@@ -3076,9 +3154,24 @@ function addSurvivalLeaderboardStyles() {
         #survivalSubmitScore:disabled {
             opacity:
                 .45;
+        }
 
-            cursor:
-                default;
+
+        .survival-telegram-note {
+            max-width:
+                570px;
+
+            margin:
+                11px auto 0;
+
+            color:
+                #708078;
+
+            font-size:
+                10px;
+
+            line-height:
+                1.5;
         }
 
 
@@ -3136,9 +3229,6 @@ function addSurvivalLeaderboardStyles() {
         .survival-leaderboard-head h3 {
             margin-top:
                 6px;
-
-            color:
-                #ffffff;
 
             font-size:
                 24px;
@@ -3342,18 +3432,10 @@ function addSurvivalLeaderboardStyles() {
             .survival-leaderboard-row {
                 grid-template-columns:
                     35px 1fr 70px;
-
-                gap:
-                    6px;
             }
 
 
-            .survival-time-value {
-                display:
-                    none;
-            }
-
-
+            .survival-time-value,
             .survival-wave-value {
                 display:
                     none;
@@ -3384,12 +3466,8 @@ function showSurvivalSubmitPanel() {
         );
 
 
-    if (
-        !panel
-    ) {
-
+    if (!panel) {
         return;
-
     }
 
 
@@ -3486,40 +3564,12 @@ function hideSurvivalSubmitPanel() {
         );
 
 
-    if (
-        panel
-    ) {
+    if (panel) {
 
         panel.style.display =
             "none";
 
     }
-
-}
-
-
-
-/* =========================================================
-   CLEAN NICKNAME
-========================================================= */
-
-function cleanSurvivalNickname(
-    value
-) {
-
-    return value
-
-        .trim()
-
-        .replace(
-            /[^a-zA-Z0-9_\- ]/g,
-            ""
-        )
-
-        .slice(
-            0,
-            16
-        );
 
 }
 
@@ -3534,9 +3584,7 @@ async function submitSurvivalScore() {
     if (
         survivalScoreSubmitted
     ) {
-
         return;
-
     }
 
 
@@ -3559,18 +3607,18 @@ async function submitSurvivalScore() {
 
 
     const name =
-        cleanSurvivalNickname(
+        cleanSurvivalTelegramUsername(
             input.value
         );
 
 
     if (
         name.length <
-        2
+        5
     ) {
 
         status.textContent =
-            "Nickname must have at least 2 characters.";
+            "Enter a valid Telegram username.";
 
         return;
 
@@ -3614,8 +3662,7 @@ async function submitSurvivalScore() {
                         JSON.stringify(
                             {
 
-                                name:
-                                    name,
+                                name,
 
                                 score:
                                     finalSurvivalScore,
@@ -3633,23 +3680,21 @@ async function submitSurvivalScore() {
             );
 
 
-        if (
-            !response.ok
-        ) {
+        if (!response.ok) {
 
-            const errorText =
+            const error =
                 await response.text();
 
 
             console.error(
                 "Survival score error:",
                 response.status,
-                errorText
+                error
             );
 
 
             throw new Error(
-                errorText
+                error
             );
 
         }
@@ -3679,9 +3724,7 @@ async function submitSurvivalScore() {
 
     }
 
-    catch (
-        error
-    ) {
+    catch (error) {
 
         console.error(
             error
@@ -3713,12 +3756,8 @@ async function loadSurvivalLeaderboard() {
         );
 
 
-    if (
-        !list
-    ) {
-
+    if (!list) {
         return;
-
     }
 
 
@@ -3752,16 +3791,10 @@ async function loadSurvivalLeaderboard() {
             );
 
 
-        if (
-            !response.ok
-        ) {
-
-            const errorText =
-                await response.text();
-
+        if (!response.ok) {
 
             throw new Error(
-                errorText
+                await response.text()
             );
 
         }
@@ -3777,12 +3810,10 @@ async function loadSurvivalLeaderboard() {
 
     }
 
-    catch (
-        error
-    ) {
+    catch (error) {
 
         console.error(
-            "Survival leaderboard error:",
+            "Survival leaderboard:",
             error
         );
 
@@ -3801,11 +3832,11 @@ async function loadSurvivalLeaderboard() {
 
 
 /* =========================================================
-   ESCAPE HTML
+   SAFE HTML
 ========================================================= */
 
 function survivalEscapeHTML(
-    text
+    value
 ) {
 
     const div =
@@ -3816,7 +3847,7 @@ function survivalEscapeHTML(
 
     div.textContent =
         String(
-            text
+            value
         );
 
 
@@ -3861,22 +3892,15 @@ function renderSurvivalLeaderboard(
 
     list.innerHTML =
         data
-
             .map(
                 (
-                    item,
+                    player,
                     index
                 ) => {
 
                     const rank =
                         index +
                         1;
-
-
-                    const safeName =
-                        survivalEscapeHTML(
-                            item.name
-                        );
 
 
                     return `
@@ -3891,19 +3915,19 @@ function renderSurvivalLeaderboard(
                         </div>
 
                         <div class="survival-player-name">
-                            ${safeName}
+                            @${survivalEscapeHTML(player.name)}
                         </div>
 
                         <div class="survival-time-value">
-                            ${formatSurvivalTime(Number(item.time) || 0)}
+                            ${formatSurvivalTime(Number(player.time) || 0)}
                         </div>
 
                         <div class="survival-wave-value">
-                            W${Number(item.wave) || 1}
+                            W${Number(player.wave) || 1}
                         </div>
 
                         <div class="survival-score-value">
-                            ${Number(item.score) || 0}
+                            ${Number(player.score) || 0}
                         </div>
 
                     </div>
@@ -3912,7 +3936,6 @@ function renderSurvivalLeaderboard(
 
                 }
             )
-
             .join("");
 
 }
@@ -3931,7 +3954,7 @@ survivalStartButton.addEventListener(
 
 
 /* =========================================================
-   INITIALIZATION
+   INITIALIZE
 ========================================================= */
 
 function initializeSurvival() {

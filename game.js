@@ -8,43 +8,43 @@
    SUPABASE
 ========================================================= */
 
-const SUPABASE_URL =
+const COIN_SUPABASE_URL =
     "https://tffzjqeckoezursrvcpw.supabase.co";
 
-const SUPABASE_KEY =
+const COIN_SUPABASE_KEY =
     "sb_publishable_MFdYqNoOg1FEx-6PSjJwjQ_oCIo94ME";
 
-const SCORES_API =
-    `${SUPABASE_URL}/rest/v1/scores`;
+const COIN_SCORES_API =
+    `${COIN_SUPABASE_URL}/rest/v1/scores`;
 
 
 
 /* =========================================================
-   GAME ELEMENTS
+   HTML
 ========================================================= */
 
-const canvas =
+const gameCanvas =
     document.getElementById("gameCanvas");
 
-const ctx =
-    canvas.getContext("2d");
+const gameCtx =
+    gameCanvas.getContext("2d");
 
-const startButton =
+const startGameButton =
     document.getElementById("startGame");
 
-const scoreElement =
+const gameScoreElement =
     document.getElementById("gameScore");
 
-const livesElement =
+const gameLivesElement =
     document.getElementById("gameLives");
 
 const gameMessage =
     document.getElementById("gameMessage");
 
-const leftButton =
+const moveLeftButton =
     document.getElementById("moveLeft");
 
-const rightButton =
+const moveRightButton =
     document.getElementById("moveRight");
 
 
@@ -56,17 +56,8 @@ const rightButton =
 const GAME_WIDTH = 900;
 const GAME_HEIGHT = 560;
 
-canvas.width = GAME_WIDTH;
-canvas.height = GAME_HEIGHT;
-
-
-
-/* =========================================================
-   FLOOR
-========================================================= */
-
-const FLOOR_Y =
-    GAME_HEIGHT - 72;
+gameCanvas.width = GAME_WIDTH;
+gameCanvas.height = GAME_HEIGHT;
 
 
 
@@ -76,28 +67,30 @@ const FLOOR_Y =
 
 let gameRunning = false;
 
-let score = 0;
-let lives = 3;
+let gameFrame = null;
 
-let fallingCoins = [];
+let gameScore = 0;
+let gameLives = 3;
 
-let lastSpawn = 0;
+let gameObjects = [];
 
-let spawnInterval = 1000;
+let gameLastSpawn = 0;
 
-let fallSpeed = 2.8;
+let gameSpawnInterval = 850;
 
-let animationFrameId = null;
+let gameBaseFallSpeed = 3.8;
 
-let scoreSubmitted = false;
+let gameScoreSubmitted = false;
+
+let finalCoinScore = 0;
 
 
 
 /* =========================================================
-   CONTROLS
+   INPUT STATE
 ========================================================= */
 
-const keys = {
+const gameKeys = {
     left: false,
     right: false
 };
@@ -105,27 +98,22 @@ const keys = {
 
 
 /* =========================================================
-   PLAYER
+   IGNORE GAME KEYS WHILE TYPING
 ========================================================= */
 
-const player = {
+function isTypingInField(target) {
 
-    x:
-        GAME_WIDTH / 2 - 40,
+    if (!target) {
+        return false;
+    }
 
-    y:
-        FLOOR_Y - 115,
-
-    width:
-        80,
-
-    height:
-        115,
-
-    speed:
-        10
-
-};
+    return (
+        target.tagName === "INPUT" ||
+        target.tagName === "TEXTAREA" ||
+        target.tagName === "SELECT" ||
+        target.isContentEditable
+    );
+}
 
 
 
@@ -133,70 +121,62 @@ const player = {
    IMAGES
 ========================================================= */
 
-const images = {};
+const coinGameImages = {};
 
 
+coinGameImages.player =
+    new Image();
 
-/* PLAYER */
-
-images.player = new Image();
-
-images.player.src =
+coinGameImages.player.src =
     "gremble3.png";
 
 
-
-/* GREMBLECOIN */
-
-images.gremblecoin =
+coinGameImages.gremblecoin =
     new Image();
 
-images.gremblecoin.src =
+coinGameImages.gremblecoin.src =
     "gremblecoin.png";
 
 
-
-/* BAD COINS */
-
-images.bitcoin =
+coinGameImages.bitcoin =
     new Image();
 
-images.bitcoin.src =
+coinGameImages.bitcoin.src =
     "bitcoin.png";
 
 
-images.ethereum =
+coinGameImages.ethereum =
     new Image();
 
-images.ethereum.src =
+coinGameImages.ethereum.src =
     "ethereum.png";
 
 
-images.solana =
+coinGameImages.solana =
     new Image();
 
-images.solana.src =
+coinGameImages.solana.src =
     "solana.png";
 
 
-images.dogecoin =
+coinGameImages.dogecoin =
     new Image();
 
-images.dogecoin.src =
+coinGameImages.dogecoin.src =
     "dogecoin.png";
 
 
-images.pepe =
+coinGameImages.pepe =
     new Image();
 
-images.pepe.src =
+coinGameImages.pepe.src =
     "pepe.png";
 
 
-images.shiba =
+coinGameImages.shiba =
     new Image();
 
-images.shiba.src =
+coinGameImages.shiba.src =
     "shiba.png";
 
 
@@ -205,90 +185,70 @@ images.shiba.src =
    COIN TYPES
 ========================================================= */
 
-const goodCoin = {
+const badCoinTypes = [
 
-    name:
-        "GREMBLE",
+    {
+        name: "BITCOIN",
+        image: coinGameImages.bitcoin
+    },
 
-    image:
-        images.gremblecoin,
+    {
+        name: "ETHEREUM",
+        image: coinGameImages.ethereum
+    },
 
-    good:
-        true
+    {
+        name: "SOLANA",
+        image: coinGameImages.solana
+    },
+
+    {
+        name: "DOGECOIN",
+        image: coinGameImages.dogecoin
+    },
+
+    {
+        name: "PEPE",
+        image: coinGameImages.pepe
+    },
+
+    {
+        name: "SHIBA",
+        image: coinGameImages.shiba
+    }
+
+];
+
+
+
+/* =========================================================
+   PLAYER
+========================================================= */
+
+const coinPlayer = {
+
+    width: 64,
+    height: 90,
+
+    x:
+        GAME_WIDTH / 2 - 32,
+
+    y:
+        GAME_HEIGHT - 112,
+
+    speed:
+        9.5
 
 };
 
 
 
-const badCoins = [
+/* =========================================================
+   FLOOR
+========================================================= */
 
-    {
-        name:
-            "BITCOIN",
-
-        image:
-            images.bitcoin,
-
-        good:
-            false
-    },
-
-    {
-        name:
-            "ETHEREUM",
-
-        image:
-            images.ethereum,
-
-        good:
-            false
-    },
-
-    {
-        name:
-            "SOLANA",
-
-        image:
-            images.solana,
-
-        good:
-            false
-    },
-
-    {
-        name:
-            "DOGECOIN",
-
-        image:
-            images.dogecoin,
-
-        good:
-            false
-    },
-
-    {
-        name:
-            "PEPE",
-
-        image:
-            images.pepe,
-
-        good:
-            false
-    },
-
-    {
-        name:
-            "SHIBA",
-
-        image:
-            images.shiba,
-
-        good:
-            false
-    }
-
-];
+const COIN_FLOOR_Y =
+    GAME_HEIGHT - 20;
 
 
 
@@ -298,18 +258,28 @@ const badCoins = [
 
 document.addEventListener(
     "keydown",
-    (event) => {
+    event => {
+
+        if (
+            isTypingInField(
+                event.target
+            )
+        ) {
+            return;
+        }
+
 
         const key =
             event.key.toLowerCase();
 
 
         if (
-            event.key === "ArrowLeft" ||
-            key === "a"
+            key === "a" ||
+            event.key === "ArrowLeft"
         ) {
 
-            keys.left = true;
+            gameKeys.left =
+                true;
 
             event.preventDefault();
 
@@ -317,11 +287,12 @@ document.addEventListener(
 
 
         if (
-            event.key === "ArrowRight" ||
-            key === "d"
+            key === "d" ||
+            event.key === "ArrowRight"
         ) {
 
-            keys.right = true;
+            gameKeys.right =
+                true;
 
             event.preventDefault();
 
@@ -329,33 +300,43 @@ document.addEventListener(
 
     }
 );
-
 
 
 document.addEventListener(
     "keyup",
-    (event) => {
+    event => {
+
+        if (
+            isTypingInField(
+                event.target
+            )
+        ) {
+            return;
+        }
+
 
         const key =
             event.key.toLowerCase();
 
 
         if (
-            event.key === "ArrowLeft" ||
-            key === "a"
+            key === "a" ||
+            event.key === "ArrowLeft"
         ) {
 
-            keys.left = false;
+            gameKeys.left =
+                false;
 
         }
 
 
         if (
-            event.key === "ArrowRight" ||
-            key === "d"
+            key === "d" ||
+            event.key === "ArrowRight"
         ) {
 
-            keys.right = false;
+            gameKeys.right =
+                false;
 
         }
 
@@ -365,200 +346,95 @@ document.addEventListener(
 
 
 /* =========================================================
-   MOBILE CONTROLS
+   MOBILE BUTTONS
 ========================================================= */
 
-function pressLeft(event) {
+function holdLeftStart(event) {
 
-    if (event) {
-        event.preventDefault();
-    }
+    event.preventDefault();
 
-    keys.left = true;
-
-}
-
-
-function releaseLeft(event) {
-
-    if (event) {
-        event.preventDefault();
-    }
-
-    keys.left = false;
+    gameKeys.left =
+        true;
 
 }
 
 
-function pressRight(event) {
+function holdLeftEnd(event) {
 
-    if (event) {
-        event.preventDefault();
-    }
+    event.preventDefault();
 
-    keys.right = true;
-
-}
-
-
-function releaseRight(event) {
-
-    if (event) {
-        event.preventDefault();
-    }
-
-    keys.right = false;
+    gameKeys.left =
+        false;
 
 }
 
 
+function holdRightStart(event) {
 
-if (leftButton) {
+    event.preventDefault();
 
-    leftButton.addEventListener(
-        "touchstart",
-        pressLeft,
-        {
-            passive: false
-        }
+    gameKeys.right =
+        true;
+
+}
+
+
+function holdRightEnd(event) {
+
+    event.preventDefault();
+
+    gameKeys.right =
+        false;
+
+}
+
+
+if (moveLeftButton) {
+
+    moveLeftButton.addEventListener(
+        "pointerdown",
+        holdLeftStart
     );
 
-    leftButton.addEventListener(
-        "touchend",
-        releaseLeft,
-        {
-            passive: false
-        }
+    moveLeftButton.addEventListener(
+        "pointerup",
+        holdLeftEnd
     );
 
-    leftButton.addEventListener(
-        "mousedown",
-        pressLeft
+    moveLeftButton.addEventListener(
+        "pointerleave",
+        holdLeftEnd
     );
 
-    leftButton.addEventListener(
-        "mouseup",
-        releaseLeft
-    );
-
-    leftButton.addEventListener(
-        "mouseleave",
-        releaseLeft
+    moveLeftButton.addEventListener(
+        "pointercancel",
+        holdLeftEnd
     );
 
 }
 
 
+if (moveRightButton) {
 
-if (rightButton) {
-
-    rightButton.addEventListener(
-        "touchstart",
-        pressRight,
-        {
-            passive: false
-        }
+    moveRightButton.addEventListener(
+        "pointerdown",
+        holdRightStart
     );
 
-    rightButton.addEventListener(
-        "touchend",
-        releaseRight,
-        {
-            passive: false
-        }
+    moveRightButton.addEventListener(
+        "pointerup",
+        holdRightEnd
     );
 
-    rightButton.addEventListener(
-        "mousedown",
-        pressRight
+    moveRightButton.addEventListener(
+        "pointerleave",
+        holdRightEnd
     );
 
-    rightButton.addEventListener(
-        "mouseup",
-        releaseRight
+    moveRightButton.addEventListener(
+        "pointercancel",
+        holdRightEnd
     );
-
-    rightButton.addEventListener(
-        "mouseleave",
-        releaseRight
-    );
-
-}
-
-
-
-/* =========================================================
-   SPAWN COIN
-========================================================= */
-
-function spawnCoin() {
-
-    const chance =
-        Math.random();
-
-    let coinType;
-
-
-    /*
-       60% GREMBLECOIN
-       40% OTHER COINS
-    */
-
-    if (
-        chance < 0.60
-    ) {
-
-        coinType =
-            goodCoin;
-
-    } else {
-
-        const randomBad =
-            Math.floor(
-                Math.random() *
-                badCoins.length
-            );
-
-
-        coinType =
-            badCoins[randomBad];
-
-    }
-
-
-    const size =
-        coinType.good
-            ? 64
-            : 60;
-
-
-    fallingCoins.push({
-
-        x:
-            Math.random() *
-            (
-                GAME_WIDTH -
-                size
-            ),
-
-        y:
-            -size - 120,
-
-        width:
-            size,
-
-        height:
-            size,
-
-        speed:
-            fallSpeed +
-            Math.random() *
-            1.3,
-
-        type:
-            coinType
-
-    });
 
 }
 
@@ -568,48 +444,140 @@ function spawnCoin() {
    PLAYER MOVEMENT
 ========================================================= */
 
-function updatePlayer() {
+function updateCoinPlayer() {
 
-    if (
-        keys.left
-    ) {
+    if (gameKeys.left) {
 
-        player.x -=
-            player.speed;
+        coinPlayer.x -=
+            coinPlayer.speed;
 
     }
 
 
-    if (
-        keys.right
-    ) {
+    if (gameKeys.right) {
 
-        player.x +=
-            player.speed;
+        coinPlayer.x +=
+            coinPlayer.speed;
 
     }
 
 
-    if (
-        player.x < 0
-    ) {
+    coinPlayer.x =
+        Math.max(
+            10,
+            Math.min(
+                GAME_WIDTH -
+                coinPlayer.width -
+                10,
 
-        player.x = 0;
+                coinPlayer.x
+            )
+        );
+
+}
+
+
+
+/* =========================================================
+   SPAWN
+========================================================= */
+
+function spawnCoinObject() {
+
+    const isGremble =
+        Math.random() <
+        0.35;
+
+
+    const size =
+        isGremble
+            ? 55
+            : 52 +
+              Math.random() *
+              9;
+
+
+    let image;
+    let name;
+
+
+    if (isGremble) {
+
+        image =
+            coinGameImages.gremblecoin;
+
+        name =
+            "GREMBLECOIN";
+
+    }
+
+    else {
+
+        const bad =
+            badCoinTypes[
+                Math.floor(
+                    Math.random() *
+                    badCoinTypes.length
+                )
+            ];
+
+
+        image =
+            bad.image;
+
+        name =
+            bad.name;
 
     }
 
 
-    if (
-        player.x +
-        player.width >
-        GAME_WIDTH
-    ) {
+    const difficulty =
+        1 +
+        gameScore *
+        0.012;
 
-        player.x =
-            GAME_WIDTH -
-            player.width;
 
-    }
+    const speed =
+        Math.min(
+            11,
+
+            gameBaseFallSpeed +
+            difficulty +
+            Math.random() *
+            1.25
+        );
+
+
+    gameObjects.push({
+
+        x:
+            20 +
+            Math.random() *
+            (
+                GAME_WIDTH -
+                size -
+                40
+            ),
+
+        y:
+            -size -
+            80,
+
+        width:
+            size,
+
+        height:
+            size,
+
+        speed,
+
+        image,
+
+        isGremble,
+
+        name
+
+    });
 
 }
 
@@ -619,57 +587,50 @@ function updatePlayer() {
    COLLISION
 ========================================================= */
 
-function collision(
+function coinCollision(
     player,
     coin
 ) {
 
-    const playerHitbox = {
+    const playerXPadding =
+        8;
 
-        x:
-            player.x + 14,
-
-        y:
-            player.y + 18,
-
-        width:
-            player.width - 28,
-
-        height:
-            player.height - 24
-
-    };
-
+    const playerYPadding =
+        7;
 
     const coinPadding =
-        7;
+        5;
 
 
     return (
 
-        playerHitbox.x <
+        player.x +
+        playerXPadding <
         coin.x +
         coin.width -
         coinPadding
 
         &&
 
-        playerHitbox.x +
-        playerHitbox.width >
+        player.x +
+        player.width -
+        playerXPadding >
         coin.x +
         coinPadding
 
         &&
 
-        playerHitbox.y <
+        player.y +
+        playerYPadding <
         coin.y +
         coin.height -
         coinPadding
 
         &&
 
-        playerHitbox.y +
-        playerHitbox.height >
+        player.y +
+        player.height -
+        playerYPadding >
         coin.y +
         coinPadding
 
@@ -683,244 +644,27 @@ function collision(
    LOSE LIFE
 ========================================================= */
 
-function loseLife(
+function loseCoinLife(
     message
 ) {
 
-    lives--;
+    if (!gameRunning) {
+        return;
+    }
 
 
-    livesElement.textContent =
-        lives;
+    gameLives--;
 
 
-    flashDamage();
+    gameLivesElement.textContent =
+        gameLives;
 
 
-    gameMessage.innerHTML =
+    gameMessage.textContent =
         message;
 
 
-    if (
-        lives <= 0
-    ) {
-
-        endGame();
-
-        return true;
-
-    }
-
-
-    return false;
-
-}
-
-
-
-/* =========================================================
-   UPDATE COINS
-========================================================= */
-
-function updateCoins() {
-
-    for (
-        let i =
-            fallingCoins.length - 1;
-
-        i >= 0;
-
-        i--
-    ) {
-
-        const coin =
-            fallingCoins[i];
-
-
-        coin.y +=
-            coin.speed;
-
-
-
-        /* =========================================
-           PLAYER TOUCHES COIN
-        ========================================== */
-
-        if (
-            collision(
-                player,
-                coin
-            )
-        ) {
-
-
-            /* GREMBLECOIN */
-
-            if (
-                coin.type.good
-            ) {
-
-                score++;
-
-
-                scoreElement.textContent =
-                    score;
-
-
-                increaseDifficulty();
-
-
-                gameMessage.innerHTML =
-                    `
-                    Nice!
-                    <strong>+1 GrembleCoin</strong>
-                    `;
-
-            }
-
-
-            /* WRONG COIN */
-
-            else {
-
-                fallingCoins.splice(
-                    i,
-                    1
-                );
-
-
-                const gameEnded =
-                    loseLife(
-                        `
-                        Wrong coin!
-                        <strong>-1 LIFE</strong>
-                        `
-                    );
-
-
-                if (
-                    gameEnded
-                ) {
-
-                    return;
-
-                }
-
-
-                continue;
-
-            }
-
-
-            fallingCoins.splice(
-                i,
-                1
-            );
-
-
-            continue;
-
-        }
-
-
-
-        /* =========================================
-           MISSED GREMBLECOIN
-        ========================================== */
-
-        if (
-            coin.type.good &&
-            coin.y >
-            FLOOR_Y + 15
-        ) {
-
-            fallingCoins.splice(
-                i,
-                1
-            );
-
-
-            const gameEnded =
-                loseLife(
-                    `
-                    You missed GrembleCoin!
-                    <strong>-1 LIFE</strong>
-                    `
-                );
-
-
-            if (
-                gameEnded
-            ) {
-
-                return;
-
-            }
-
-
-            continue;
-
-        }
-
-
-
-        /* =========================================
-           BAD COIN SUCCESSFULLY AVOIDED
-        ========================================== */
-
-        if (
-            !coin.type.good &&
-            coin.y >
-            GAME_HEIGHT + 80
-        ) {
-
-            fallingCoins.splice(
-                i,
-                1
-            );
-
-        }
-
-    }
-
-}
-
-
-
-/* =========================================================
-   DIFFICULTY
-========================================================= */
-
-function increaseDifficulty() {
-
-    if (
-        score > 0 &&
-        score % 5 === 0
-    ) {
-
-        fallSpeed +=
-            0.35;
-
-
-        spawnInterval =
-            Math.max(
-                330,
-                spawnInterval - 65
-            );
-
-    }
-
-}
-
-
-
-/* =========================================================
-   DAMAGE EFFECT
-========================================================= */
-
-function flashDamage() {
-
-    canvas.classList.add(
+    gameCanvas.classList.add(
         "damage"
     );
 
@@ -928,13 +672,114 @@ function flashDamage() {
     setTimeout(
         () => {
 
-            canvas.classList.remove(
+            gameCanvas.classList.remove(
                 "damage"
             );
 
         },
-        200
+        160
     );
+
+
+    if (
+        gameLives <= 0
+    ) {
+
+        endCoinGame();
+
+    }
+
+}
+
+
+
+/* =========================================================
+   UPDATE OBJECTS
+========================================================= */
+
+function updateGameObjects() {
+
+    for (
+        let i =
+            gameObjects.length - 1;
+
+        i >= 0;
+
+        i--
+    ) {
+
+        const coin =
+            gameObjects[i];
+
+
+        coin.y +=
+            coin.speed;
+
+
+        if (
+            coinCollision(
+                coinPlayer,
+                coin
+            )
+        ) {
+
+            gameObjects.splice(
+                i,
+                1
+            );
+
+
+            if (coin.isGremble) {
+
+                gameScore++;
+
+
+                gameScoreElement.textContent =
+                    gameScore;
+
+
+                gameMessage.innerHTML =
+                    `GREMBLECOIN <strong>+1</strong>`;
+
+            }
+
+            else {
+
+                loseCoinLife(
+                    `${coin.name}! YOU LOST A LIFE.`
+                );
+
+            }
+
+
+            continue;
+
+        }
+
+
+        if (
+            coin.y >
+            GAME_HEIGHT +
+            coin.height
+        ) {
+
+            gameObjects.splice(
+                i,
+                1
+            );
+
+
+            if (coin.isGremble) {
+
+                loseCoinLife(
+                    "YOU MISSED GREMBLECOIN!"
+                );
+
+            }
+
+        }
+
+    }
 
 }
 
@@ -944,20 +789,10 @@ function flashDamage() {
    BACKGROUND
 ========================================================= */
 
-function drawBackground() {
-
-    ctx.clearRect(
-        0,
-        0,
-        GAME_WIDTH,
-        GAME_HEIGHT
-    );
-
-
-    /* DARK BACKGROUND */
+function drawCoinBackground() {
 
     const gradient =
-        ctx.createLinearGradient(
+        gameCtx.createLinearGradient(
             0,
             0,
             GAME_WIDTH,
@@ -967,352 +802,130 @@ function drawBackground() {
 
     gradient.addColorStop(
         0,
-        "#010907"
+        "#00100a"
     );
 
 
     gradient.addColorStop(
-        0.48,
-        "#021c13"
+        0.55,
+        "#002819"
     );
 
 
     gradient.addColorStop(
         1,
-        "#001008"
+        "#00120c"
     );
 
 
-    ctx.fillStyle =
+    gameCtx.fillStyle =
         gradient;
 
 
-    ctx.fillRect(
+    gameCtx.fillRect(
         0,
         0,
         GAME_WIDTH,
         GAME_HEIGHT
     );
 
-
-
-    /* CENTER GREEN GLOW */
-
-    const centerGlow =
-        ctx.createRadialGradient(
-            GAME_WIDTH / 2,
-            GAME_HEIGHT * 0.60,
-            20,
-
-            GAME_WIDTH / 2,
-            GAME_HEIGHT * 0.60,
-            420
-        );
-
-
-    centerGlow.addColorStop(
-        0,
-        "rgba(0,255,110,0.09)"
-    );
-
-
-    centerGlow.addColorStop(
-        0.45,
-        "rgba(0,160,80,0.04)"
-    );
-
-
-    centerGlow.addColorStop(
-        1,
-        "rgba(0,100,50,0)"
-    );
-
-
-    ctx.fillStyle =
-        centerGlow;
-
-
-    ctx.fillRect(
-        0,
-        0,
-        GAME_WIDTH,
-        GAME_HEIGHT
-    );
-
-
-
-    /* STARS */
 
     for (
         let i = 0;
-        i < 90;
+        i < 70;
         i++
     ) {
 
         const x =
             (
-                i * 137 +
-                23
+                i *
+                137 +
+                19
             ) %
             GAME_WIDTH;
 
 
         const y =
             (
-                i * 83 +
-                41
+                i *
+                83 +
+                27
             ) %
             (
                 GAME_HEIGHT -
-                95
+                50
             );
 
 
-        ctx.fillStyle =
-            i % 5 === 0
-                ? "rgba(110,255,150,0.70)"
-                : "rgba(255,255,255,0.20)";
+        gameCtx.fillStyle =
+            i % 8 === 0
+
+                ? "rgba(90,255,130,.75)"
+
+                : "rgba(255,255,255,.17)";
 
 
-        const starSize =
-            i % 7 === 0
+        const size =
+            i % 11 === 0
                 ? 2
                 : 1;
 
 
-        ctx.fillRect(
+        gameCtx.fillRect(
             x,
             y,
-            starSize,
-            starSize
+            size,
+            size
         );
 
     }
 
 
-
-    /* BRIGHT STARS */
-
-    const brightStars = [
-
-        [75, 120],
-
-        [185, 265],
-
-        [320, 95],
-
-        [450, 180],
-
-        [610, 110],
-
-        [760, 255],
-
-        [850, 150]
-
-    ];
+    gameCtx.save();
 
 
-    brightStars.forEach(
-        (star) => {
-
-            const x =
-                star[0];
-
-            const y =
-                star[1];
+    gameCtx.strokeStyle =
+        "#41ff79";
 
 
-            ctx.save();
+    gameCtx.shadowColor =
+        "#41ff79";
 
 
-            ctx.shadowColor =
-                "#73ff9e";
+    gameCtx.shadowBlur =
+        14;
 
 
-            ctx.shadowBlur =
-                10;
-
-
-            ctx.fillStyle =
-                "#d8ffe3";
-
-
-            ctx.fillRect(
-                x - 1,
-                y - 1,
-                3,
-                3
-            );
-
-
-            ctx.restore();
-
-        }
-    );
-
-
-
-    /* FLOOR GLOW */
-
-    const floorGlow =
-        ctx.createLinearGradient(
-            0,
-            FLOOR_Y - 45,
-            0,
-            FLOOR_Y + 45
-        );
-
-
-    floorGlow.addColorStop(
-        0,
-        "rgba(40,255,100,0)"
-    );
-
-
-    floorGlow.addColorStop(
-        0.5,
-        "rgba(40,255,100,0.08)"
-    );
-
-
-    floorGlow.addColorStop(
-        1,
-        "rgba(40,255,100,0)"
-    );
-
-
-    ctx.fillStyle =
-        floorGlow;
-
-
-    ctx.fillRect(
-        0,
-        FLOOR_Y - 45,
-        GAME_WIDTH,
-        90
-    );
-
-
-
-    /* SINGLE GREEN FLOOR LINE */
-
-    ctx.save();
-
-
-    ctx.shadowColor =
-        "#32ff6a";
-
-
-    ctx.shadowBlur =
-        16;
-
-
-    ctx.strokeStyle =
-        "#32ff6a";
-
-
-    ctx.lineWidth =
+    gameCtx.lineWidth =
         2;
 
 
-    ctx.beginPath();
+    gameCtx.beginPath();
 
 
-    ctx.moveTo(
+    gameCtx.moveTo(
         0,
-        FLOOR_Y
+        COIN_FLOOR_Y
     );
 
 
-    ctx.lineTo(
+    gameCtx.lineTo(
         GAME_WIDTH,
-        FLOOR_Y
+        COIN_FLOOR_Y
     );
 
 
-    ctx.stroke();
+    gameCtx.stroke();
 
 
-
-    ctx.shadowBlur =
-        4;
-
-
-    ctx.strokeStyle =
-        "rgba(170,255,190,0.50)";
-
-
-    ctx.lineWidth =
-        1;
-
-
-    ctx.beginPath();
-
-
-    ctx.moveTo(
-        0,
-        FLOOR_Y - 1
-    );
-
-
-    ctx.lineTo(
-        GAME_WIDTH,
-        FLOOR_Y - 1
-    );
-
-
-    ctx.stroke();
-
-
-    ctx.restore();
+    gameCtx.restore();
 
 }
 
 
 
 /* =========================================================
-   DRAW PLAYER
-========================================================= */
-
-function drawPlayer() {
-
-    if (
-        images.player.complete &&
-        images.player.naturalWidth > 0
-    ) {
-
-        ctx.save();
-
-
-        ctx.shadowColor =
-            "rgba(50,255,130,0.22)";
-
-
-        ctx.shadowBlur =
-            14;
-
-
-        ctx.drawImage(
-            images.player,
-
-            player.x,
-            player.y,
-
-            player.width,
-            player.height
-        );
-
-
-        ctx.restore();
-
-    }
-
-}
-
-
-
-/* =========================================================
-   DRAW COIN TRAIL
+   TRAIL
 ========================================================= */
 
 function drawCoinTrail(
@@ -1321,358 +934,134 @@ function drawCoinTrail(
 
     const centerX =
         coin.x +
-        coin.width / 2;
-
-
-    const coinTop =
-        coin.y + 5;
+        coin.width /
+        2;
 
 
     const trailHeight =
-        coin.type.good
-            ? 150
-            : 120;
-
-
-    const bottomWidth =
-        coin.width *
-        0.72;
-
-
-
-    const colors =
-        coin.type.good
-
-            ? {
-
-                transparent:
-                    "rgba(70,255,130,0)",
-
-                soft:
-                    "rgba(70,255,130,0.07)",
-
-                medium:
-                    "rgba(70,255,130,0.20)",
-
-                strong:
-                    "rgba(110,255,150,0.52)",
-
-                glow:
-                    "rgba(70,255,130,0.50)"
-
-            }
-
-            : {
-
-                transparent:
-                    "rgba(255,65,65,0)",
-
-                soft:
-                    "rgba(255,65,65,0.05)",
-
-                medium:
-                    "rgba(255,70,70,0.15)",
-
-                strong:
-                    "rgba(255,100,100,0.38)",
-
-                glow:
-                    "rgba(255,60,60,0.32)"
-
-            };
-
-
-
-    /* MAIN LIGHT */
-
-    ctx.save();
+        115;
 
 
     const gradient =
-        ctx.createLinearGradient(
+        gameCtx.createLinearGradient(
             centerX,
-            coinTop -
+            coin.y -
             trailHeight,
 
             centerX,
-            coinTop
+            coin.y
         );
 
 
-    gradient.addColorStop(
-        0,
-        colors.transparent
-    );
+    if (coin.isGremble) {
 
-
-    gradient.addColorStop(
-        0.30,
-        colors.soft
-    );
-
-
-    gradient.addColorStop(
-        0.70,
-        colors.medium
-    );
-
-
-    gradient.addColorStop(
-        1,
-        colors.strong
-    );
-
-
-    ctx.fillStyle =
-        gradient;
-
-
-    ctx.shadowColor =
-        colors.glow;
-
-
-    ctx.shadowBlur =
-        18;
-
-
-    ctx.beginPath();
-
-
-    ctx.moveTo(
-        centerX - 2,
-        coinTop -
-        trailHeight
-    );
-
-
-    ctx.lineTo(
-        centerX + 2,
-        coinTop -
-        trailHeight
-    );
-
-
-    ctx.lineTo(
-        centerX +
-        bottomWidth / 2,
-        coinTop
-    );
-
-
-    ctx.lineTo(
-        centerX -
-        bottomWidth / 2,
-        coinTop
-    );
-
-
-    ctx.closePath();
-
-
-    ctx.fill();
-
-
-    ctx.restore();
-
-
-
-    /* LIGHT STREAKS */
-
-    ctx.save();
-
-
-    const streaks =
-        coin.type.good
-            ? 7
-            : 5;
-
-
-    for (
-        let i = 0;
-        i < streaks;
-        i++
-    ) {
-
-        const normalized =
-            streaks === 1
-                ? 0
-                : i /
-                (
-                    streaks -
-                    1
-                );
-
-
-        const offset =
-            (
-                normalized -
-                0.5
-            ) *
-            coin.width *
-            0.48;
-
-
-        const streakHeight =
-            trailHeight *
-            (
-                0.35 +
-                (
-                    (
-                        i * 19
-                    ) %
-                    45
-                ) /
-                100
-            );
-
-
-        const x =
-            centerX +
-            offset;
-
-
-        const streakGradient =
-            ctx.createLinearGradient(
-                x,
-                coinTop -
-                streakHeight,
-
-                x,
-                coinTop
-            );
-
-
-        streakGradient.addColorStop(
+        gradient.addColorStop(
             0,
-            colors.transparent
+            "rgba(50,255,110,0)"
         );
 
 
-        streakGradient.addColorStop(
-            0.68,
-            colors.medium
+        gradient.addColorStop(
+            0.5,
+            "rgba(50,255,110,.14)"
         );
 
 
-        streakGradient.addColorStop(
+        gradient.addColorStop(
             1,
-            colors.strong
+            "rgba(70,255,120,.65)"
+        );
+
+    }
+
+    else {
+
+        gradient.addColorStop(
+            0,
+            "rgba(255,60,70,0)"
         );
 
 
-        ctx.strokeStyle =
-            streakGradient;
-
-
-        ctx.lineWidth =
-            i % 2 === 0
-                ? 1.4
-                : 0.7;
-
-
-        ctx.beginPath();
-
-
-        ctx.moveTo(
-            x,
-            coinTop -
-            streakHeight
+        gradient.addColorStop(
+            0.5,
+            "rgba(255,60,70,.10)"
         );
 
 
-        ctx.lineTo(
-            x,
-            coinTop
+        gradient.addColorStop(
+            1,
+            "rgba(255,60,70,.38)"
         );
-
-
-        ctx.stroke();
 
     }
 
 
-    ctx.restore();
+    gameCtx.save();
 
 
-
-    /* CONNECTION GLOW */
-
-    ctx.save();
+    gameCtx.fillStyle =
+        gradient;
 
 
-    const connectionGlow =
-        ctx.createRadialGradient(
-            centerX,
-            coin.y + 5,
-            0,
-
-            centerX,
-            coin.y + 5,
-            coin.width * 0.68
-        );
+    gameCtx.beginPath();
 
 
-    connectionGlow.addColorStop(
-        0,
-        colors.strong
-    );
-
-
-    connectionGlow.addColorStop(
-        0.35,
-        colors.medium
-    );
-
-
-    connectionGlow.addColorStop(
-        1,
-        colors.transparent
-    );
-
-
-    ctx.fillStyle =
-        connectionGlow;
-
-
-    ctx.beginPath();
-
-
-    ctx.arc(
+    gameCtx.moveTo(
         centerX,
-        coin.y + 5,
-
-        coin.width * 0.68,
-
-        0,
-        Math.PI * 2
+        coin.y -
+        trailHeight
     );
 
 
-    ctx.fill();
+    gameCtx.lineTo(
+        coin.x +
+        coin.width *
+        0.78,
+
+        coin.y +
+        4
+    );
 
 
-    ctx.restore();
+    gameCtx.lineTo(
+        coin.x +
+        coin.width *
+        0.22,
+
+        coin.y +
+        4
+    );
+
+
+    gameCtx.closePath();
+
+
+    gameCtx.fill();
+
+
+    gameCtx.restore();
 
 }
 
 
 
 /* =========================================================
-   DRAW COINS
+   DRAW OBJECTS
 ========================================================= */
 
-function drawCoins() {
+function drawGameObjects() {
 
-    fallingCoins.forEach(
-        (coin) => {
+    gameObjects.forEach(
+        coin => {
 
-            const image =
-                coin.type.image;
+            drawCoinTrail(
+                coin
+            );
 
 
             if (
-                !image.complete ||
-                image.naturalWidth === 0
+                !coin.image.complete ||
+                coin.image.naturalWidth === 0
             ) {
 
                 return;
@@ -1680,39 +1069,25 @@ function drawCoins() {
             }
 
 
-            drawCoinTrail(
-                coin
-            );
+            gameCtx.save();
 
 
-            ctx.save();
+            gameCtx.shadowColor =
+                coin.isGremble
+
+                    ? "rgba(70,255,120,.95)"
+
+                    : "rgba(255,60,60,.48)";
 
 
-            if (
-                coin.type.good
-            ) {
-
-                ctx.shadowColor =
-                    "rgba(70,255,130,0.80)";
+            gameCtx.shadowBlur =
+                coin.isGremble
+                    ? 25
+                    : 15;
 
 
-                ctx.shadowBlur =
-                    24;
-
-            } else {
-
-                ctx.shadowColor =
-                    "rgba(255,70,70,0.38)";
-
-
-                ctx.shadowBlur =
-                    16;
-
-            }
-
-
-            ctx.drawImage(
-                image,
+            gameCtx.drawImage(
+                coin.image,
 
                 coin.x,
                 coin.y,
@@ -1722,7 +1097,7 @@ function drawCoins() {
             );
 
 
-            ctx.restore();
+            gameCtx.restore();
 
         }
     );
@@ -1732,15 +1107,14 @@ function drawCoins() {
 
 
 /* =========================================================
-   GAME LOOP
+   DRAW PLAYER
 ========================================================= */
 
-function gameLoop(
-    timestamp
-) {
+function drawCoinPlayer() {
 
     if (
-        !gameRunning
+        !coinGameImages.player.complete ||
+        coinGameImages.player.naturalWidth === 0
     ) {
 
         return;
@@ -1748,54 +1122,102 @@ function gameLoop(
     }
 
 
-    updatePlayer();
+    gameCtx.save();
+
+
+    gameCtx.shadowColor =
+        "rgba(60,255,120,.32)";
+
+
+    gameCtx.shadowBlur =
+        18;
+
+
+    gameCtx.drawImage(
+        coinGameImages.player,
+
+        coinPlayer.x,
+        coinPlayer.y,
+
+        coinPlayer.width,
+        coinPlayer.height
+    );
+
+
+    gameCtx.restore();
+
+}
+
+
+
+/* =========================================================
+   DIFFICULTY
+========================================================= */
+
+function updateCoinDifficulty() {
+
+    gameSpawnInterval =
+        Math.max(
+            320,
+
+            850 -
+            gameScore *
+            12
+        );
+
+}
+
+
+
+/* =========================================================
+   GAME LOOP
+========================================================= */
+
+function coinGameLoop(
+    timestamp
+) {
+
+    if (!gameRunning) {
+        return;
+    }
+
+
+    updateCoinPlayer();
+
+
+    updateCoinDifficulty();
 
 
     if (
         timestamp -
-        lastSpawn >
-        spawnInterval
+        gameLastSpawn >
+        gameSpawnInterval
     ) {
 
-        spawnCoin();
+        spawnCoinObject();
 
 
-        lastSpawn =
+        gameLastSpawn =
             timestamp;
 
     }
 
 
-    updateCoins();
+    updateGameObjects();
 
 
-    if (
-        !gameRunning
-    ) {
-
-        drawBackground();
-
-        drawCoins();
-
-        drawPlayer();
-
-        return;
-
-    }
+    drawCoinBackground();
 
 
-    drawBackground();
+    drawGameObjects();
 
 
-    drawCoins();
+    drawCoinPlayer();
 
 
-    drawPlayer();
-
-
-    animationFrameId =
+    gameFrame =
         requestAnimationFrame(
-            gameLoop
+            coinGameLoop
         );
 
 }
@@ -1806,86 +1228,88 @@ function gameLoop(
    START GAME
 ========================================================= */
 
-function startGame() {
+function startCoinGame() {
 
-    if (
-        animationFrameId
-    ) {
+    if (gameFrame) {
 
         cancelAnimationFrame(
-            animationFrameId
+            gameFrame
         );
 
     }
-
-
-    score = 0;
-
-    lives = 3;
-
-
-    fallingCoins = [];
-
-
-    fallSpeed =
-        2.8;
-
-
-    spawnInterval =
-        1000;
-
-
-    scoreSubmitted =
-        false;
-
-
-    player.x =
-        GAME_WIDTH / 2 -
-        player.width / 2;
-
-
-    player.y =
-        FLOOR_Y -
-        player.height;
-
-
-    scoreElement.textContent =
-        score;
-
-
-    livesElement.textContent =
-        lives;
-
-
-    gameMessage.innerHTML =
-        `
-        Catch every
-        <strong>GrembleCoin</strong>.
-        Avoid every other coin.
-        `;
-
-
-    resetSubmitPanel();
-
-
-    hideSubmitPanel();
 
 
     gameRunning =
         true;
 
 
-    startButton.textContent =
+    gameScore =
+        0;
+
+
+    gameLives =
+        3;
+
+
+    gameObjects =
+        [];
+
+
+    gameSpawnInterval =
+        850;
+
+
+    gameScoreSubmitted =
+        false;
+
+
+    coinPlayer.x =
+        GAME_WIDTH /
+        2 -
+        coinPlayer.width /
+        2;
+
+
+    coinPlayer.y =
+        GAME_HEIGHT -
+        coinPlayer.height -
+        20;
+
+
+    gameKeys.left =
+        false;
+
+
+    gameKeys.right =
+        false;
+
+
+    gameScoreElement.textContent =
+        "0";
+
+
+    gameLivesElement.textContent =
+        "3";
+
+
+    gameMessage.innerHTML =
+        `Catch every <strong>GrembleCoin</strong>. Avoid every other coin.`;
+
+
+    startGameButton.textContent =
         "RESTART GAME";
 
 
-    lastSpawn =
+    hideCoinSubmitPanel();
+
+
+    gameLastSpawn =
         performance.now();
 
 
-    animationFrameId =
+    gameFrame =
         requestAnimationFrame(
-            gameLoop
+            coinGameLoop
         );
 
 }
@@ -1896,14 +1320,10 @@ function startGame() {
    GAME OVER
 ========================================================= */
 
-function endGame() {
+function endCoinGame() {
 
-    if (
-        !gameRunning
-    ) {
-
+    if (!gameRunning) {
         return;
-
     }
 
 
@@ -1911,76 +1331,95 @@ function endGame() {
         false;
 
 
-    keys.left =
+    gameKeys.left =
         false;
 
 
-    keys.right =
+    gameKeys.right =
         false;
 
 
-    if (
-        animationFrameId
-    ) {
+    if (gameFrame) {
 
         cancelAnimationFrame(
-            animationFrameId
+            gameFrame
         );
 
 
-        animationFrameId =
+        gameFrame =
             null;
 
     }
 
 
+    finalCoinScore =
+        gameScore;
+
+
     gameMessage.innerHTML =
-        `
-        GAME OVER —
-        SCORE:
-        <strong>${score}</strong>
-        `;
+        `GAME OVER — SCORE <strong>${finalCoinScore}</strong>`;
 
 
-    startButton.textContent =
+    startGameButton.textContent =
         "PLAY AGAIN";
 
 
-    showSubmitPanel();
+    showCoinSubmitPanel();
 
 }
 
 
 
 /* =========================================================
-   CREATE LEADERBOARD
+   TELEGRAM USERNAME
 ========================================================= */
 
-function createLeaderboardUI() {
+function cleanCoinTelegramUsername(
+    value
+) {
 
-    const gameWrapper =
+    return value
+        .trim()
+        .replace(
+            /^@/,
+            ""
+        )
+        .replace(
+            /[^a-zA-Z0-9_]/g,
+            ""
+        )
+        .slice(
+            0,
+            32
+        );
+
+}
+
+
+
+/* =========================================================
+   CREATE LEADERBOARD UI
+========================================================= */
+
+function createCoinLeaderboardUI() {
+
+    const wrapper =
         document.querySelector(
             ".game-wrapper"
         );
 
 
-    if (
-        !gameWrapper
-    ) {
-
+    if (!wrapper) {
         return;
-
     }
 
 
     if (
         document.getElementById(
-            "leaderboardSection"
+            "coinLeaderboardSection"
         )
     ) {
-
         return;
-
     }
 
 
@@ -1991,46 +1430,44 @@ function createLeaderboardUI() {
 
 
     section.id =
-        "leaderboardSection";
+        "coinLeaderboardSection";
 
 
     section.innerHTML =
         `
 
         <div
-            class="score-submit-panel"
-            id="scoreSubmitPanel"
+            id="coinSubmitPanel"
+            class="coin-submit-panel"
         >
 
-            <div class="submit-small-title">
+            <div class="coin-submit-label">
                 GAME OVER
             </div>
 
-            <div class="submit-score">
 
+            <h3>
                 YOUR SCORE:
-
-                <strong id="finalScore">
+                <strong id="coinFinalScore">
                     0
                 </strong>
+            </h3>
 
-            </div>
 
-
-            <div class="nickname-row">
+            <div class="coin-submit-row">
 
                 <input
+                    id="coinNickname"
                     type="text"
-                    id="playerNickname"
-                    maxlength="16"
-                    placeholder="ENTER NICKNAME"
+                    maxlength="32"
+                    placeholder="TELEGRAM USERNAME"
                     autocomplete="off"
                 >
 
 
                 <button
+                    id="coinSubmitScore"
                     type="button"
-                    id="submitScoreButton"
                 >
                     SUBMIT SCORE
                 </button>
@@ -2038,23 +1475,30 @@ function createLeaderboardUI() {
             </div>
 
 
+            <p class="coin-telegram-note">
+                Enter your Telegram username so we can contact you
+                if your score wins a competition.
+            </p>
+
+
             <div
-                id="submitStatus"
-                class="submit-status"
+                id="coinSubmitStatus"
+                class="coin-submit-status"
             ></div>
 
         </div>
 
 
-        <div class="leaderboard-panel">
 
-            <div class="leaderboard-header">
+        <div class="coin-leaderboard">
+
+            <div class="coin-leaderboard-head">
 
                 <div>
 
-                    <div class="leaderboard-small">
+                    <span>
                         GREMBLE ARCADE
-                    </div>
+                    </span>
 
                     <h3>
                         TOP PLAYERS
@@ -2064,8 +1508,8 @@ function createLeaderboardUI() {
 
 
                 <button
+                    id="coinRefreshLeaderboard"
                     type="button"
-                    id="refreshLeaderboard"
                     aria-label="Refresh leaderboard"
                 >
                     ↻
@@ -2075,11 +1519,11 @@ function createLeaderboardUI() {
 
 
             <div
-                id="leaderboardList"
-                class="leaderboard-list"
+                id="coinLeaderboardList"
+                class="coin-leaderboard-list"
             >
 
-                <div class="leaderboard-loading">
+                <div class="coin-board-empty">
                     Loading leaderboard...
                 </div>
 
@@ -2090,41 +1534,33 @@ function createLeaderboardUI() {
         `;
 
 
-    gameWrapper.appendChild(
+    wrapper.appendChild(
         section
     );
 
 
-    addLeaderboardStyles();
+    addCoinLeaderboardStyles();
 
 
-    const submitButton =
+    const input =
         document.getElementById(
-            "submitScoreButton"
+            "coinNickname"
         );
 
 
-    submitButton.addEventListener(
-        "click",
-        submitScore
-    );
-
-
-    const nicknameInput =
-        document.getElementById(
-            "playerNickname"
-        );
-
-
-    nicknameInput.addEventListener(
+    input.addEventListener(
         "keydown",
-        (event) => {
+        event => {
+
+            event.stopPropagation();
+
 
             if (
-                event.key === "Enter"
+                event.key ===
+                "Enter"
             ) {
 
-                submitScore();
+                submitCoinScore();
 
             }
 
@@ -2132,41 +1568,57 @@ function createLeaderboardUI() {
     );
 
 
-    const refreshButton =
-        document.getElementById(
-            "refreshLeaderboard"
-        );
+    input.addEventListener(
+        "keyup",
+        event => {
 
+            event.stopPropagation();
 
-    refreshButton.addEventListener(
-        "click",
-        loadLeaderboard
+        }
     );
 
 
-    hideSubmitPanel();
+    document
+        .getElementById(
+            "coinSubmitScore"
+        )
+        .addEventListener(
+            "click",
+            submitCoinScore
+        );
 
 
-    loadLeaderboard();
+    document
+        .getElementById(
+            "coinRefreshLeaderboard"
+        )
+        .addEventListener(
+            "click",
+            loadCoinLeaderboard
+        );
+
+
+    hideCoinSubmitPanel();
+
+
+    loadCoinLeaderboard();
 
 }
 
 
 
 /* =========================================================
-   LEADERBOARD STYLES
+   LEADERBOARD CSS
 ========================================================= */
 
-function addLeaderboardStyles() {
+function addCoinLeaderboardStyles() {
 
     if (
         document.getElementById(
-            "leaderboardStyles"
+            "coinLeaderboardStyles"
         )
     ) {
-
         return;
-
     }
 
 
@@ -2177,13 +1629,13 @@ function addLeaderboardStyles() {
 
 
     style.id =
-        "leaderboardStyles";
+        "coinLeaderboardStyles";
 
 
     style.textContent =
         `
 
-        #leaderboardSection {
+        #coinLeaderboardSection {
             border-top:
                 1px solid
                 rgba(80,255,130,.14);
@@ -2193,12 +1645,12 @@ function addLeaderboardStyles() {
         }
 
 
-        .score-submit-panel {
+        .coin-submit-panel {
             display:
                 none;
 
             padding:
-                30px;
+                32px;
 
             text-align:
                 center;
@@ -2206,25 +1658,18 @@ function addLeaderboardStyles() {
             border-bottom:
                 1px solid
                 rgba(80,255,130,.12);
-
-            background:
-                radial-gradient(
-                    circle at center,
-                    rgba(60,255,120,.07),
-                    transparent 60%
-                );
         }
 
 
-        .submit-small-title {
+        .coin-submit-label {
             margin-bottom:
-                8px;
+                9px;
 
             color:
-                #65ff91;
+                #61ff82;
 
             font-size:
-                10px;
+                9px;
 
             font-weight:
                 900;
@@ -2234,33 +1679,33 @@ function addLeaderboardStyles() {
         }
 
 
-        .submit-score {
+        .coin-submit-panel h3 {
             margin-bottom:
-                20px;
-
-            color:
-                #96a39d;
+                22px;
 
             font-size:
-                14px;
+                18px;
+
+            color:
+                #9aa69f;
         }
 
 
-        .submit-score strong {
-            color:
-                #65ff91;
-
-            font-size:
-                24px;
-
+        .coin-submit-panel h3 strong {
             margin-left:
                 6px;
+
+            color:
+                #62ff82;
+
+            font-size:
+                25px;
         }
 
 
-        .nickname-row {
-            max-width:
-                570px;
+        .coin-submit-row {
+            width:
+                min(570px,100%);
 
             margin:
                 0 auto;
@@ -2273,7 +1718,7 @@ function addLeaderboardStyles() {
         }
 
 
-        #playerNickname {
+        #coinNickname {
             flex:
                 1;
 
@@ -2291,7 +1736,7 @@ function addLeaderboardStyles() {
 
             border:
                 1px solid
-                rgba(80,255,130,.25);
+                rgba(80,255,130,.24);
 
             border-radius:
                 12px;
@@ -2300,13 +1745,7 @@ function addLeaderboardStyles() {
                 #03120d;
 
             color:
-                #ffffff;
-
-            font-family:
-                inherit;
-
-            font-size:
-                13px;
+                white;
 
             font-weight:
                 800;
@@ -2316,17 +1755,13 @@ function addLeaderboardStyles() {
         }
 
 
-        #playerNickname:focus {
+        #coinNickname:focus {
             border-color:
-                #58ff82;
-
-            box-shadow:
-                0 0 18px
-                rgba(80,255,130,.10);
+                #62ff82;
         }
 
 
-        #submitScoreButton {
+        #coinSubmitScore {
             min-width:
                 170px;
 
@@ -2351,45 +1786,60 @@ function addLeaderboardStyles() {
             font-weight:
                 900;
 
-            letter-spacing:
-                1px;
-
             cursor:
                 pointer;
         }
 
 
-        #submitScoreButton:disabled {
+        #coinSubmitScore:disabled {
             opacity:
-                .45;
-
-            cursor:
-                default;
+                .5;
         }
 
 
-        .submit-status {
-            min-height:
-                18px;
+        .coin-telegram-note {
+            width:
+                min(570px,100%);
 
-            margin-top:
-                12px;
+            margin:
+                11px auto 0;
 
             color:
-                #86928d;
+                #708078;
+
+            font-size:
+                10px;
+
+            line-height:
+                1.5;
+        }
+
+
+        .coin-submit-status {
+            min-height:
+                17px;
+
+            margin-top:
+                10px;
+
+            color:
+                #7c8983;
 
             font-size:
                 11px;
         }
 
 
-        .leaderboard-panel {
+        .coin-leaderboard {
             padding:
                 32px;
         }
 
 
-        .leaderboard-header {
+        .coin-leaderboard-head {
+            margin-bottom:
+                24px;
+
             display:
                 flex;
 
@@ -2398,16 +1848,10 @@ function addLeaderboardStyles() {
 
             justify-content:
                 space-between;
-
-            margin-bottom:
-                22px;
         }
 
 
-        .leaderboard-small {
-            margin-bottom:
-                5px;
-
+        .coin-leaderboard-head span {
             color:
                 #5cff83;
 
@@ -2422,19 +1866,16 @@ function addLeaderboardStyles() {
         }
 
 
-        .leaderboard-header h3 {
-            margin:
-                0;
-
-            color:
-                #ffffff;
+        .coin-leaderboard-head h3 {
+            margin-top:
+                6px;
 
             font-size:
                 24px;
         }
 
 
-        #refreshLeaderboard {
+        #coinRefreshLeaderboard {
             width:
                 42px;
 
@@ -2462,30 +1903,21 @@ function addLeaderboardStyles() {
         }
 
 
-        .leaderboard-list {
-            display:
-                flex;
-
-            flex-direction:
-                column;
-
-            gap:
-                7px;
-        }
-
-
-        .leaderboard-row {
+        .coin-board-row {
             min-height:
-                54px;
+                56px;
+
+            margin-bottom:
+                7px;
 
             padding:
-                0 17px;
+                0 16px;
 
             display:
                 grid;
 
             grid-template-columns:
-                50px 1fr 90px;
+                60px 1fr 100px;
 
             align-items:
                 center;
@@ -2502,7 +1934,7 @@ function addLeaderboardStyles() {
         }
 
 
-        .leaderboard-row.top-three {
+        .coin-board-row.top-three {
             border-color:
                 rgba(90,255,130,.15);
 
@@ -2511,7 +1943,7 @@ function addLeaderboardStyles() {
         }
 
 
-        .leaderboard-position {
+        .coin-board-rank {
             color:
                 #5cff83;
 
@@ -2523,7 +1955,7 @@ function addLeaderboardStyles() {
         }
 
 
-        .leaderboard-name {
+        .coin-board-name {
             overflow:
                 hidden;
 
@@ -2544,7 +1976,7 @@ function addLeaderboardStyles() {
         }
 
 
-        .leaderboard-score {
+        .coin-board-score {
             color:
                 #5cff83;
 
@@ -2559,10 +1991,9 @@ function addLeaderboardStyles() {
         }
 
 
-        .leaderboard-loading,
-        .leaderboard-empty {
+        .coin-board-empty {
             padding:
-                30px;
+                35px;
 
             text-align:
                 center;
@@ -2577,31 +2008,22 @@ function addLeaderboardStyles() {
 
         @media (max-width: 600px) {
 
-            .score-submit-panel,
-            .leaderboard-panel {
+            .coin-submit-panel,
+            .coin-leaderboard {
                 padding:
                     22px 14px;
             }
 
 
-            .nickname-row {
+            .coin-submit-row {
                 flex-direction:
                     column;
             }
 
 
-            #submitScoreButton {
+            #coinSubmitScore {
                 width:
                     100%;
-            }
-
-
-            .leaderboard-row {
-                grid-template-columns:
-                    38px 1fr 65px;
-
-                padding:
-                    0 12px;
             }
 
         }
@@ -2618,110 +2040,19 @@ function addLeaderboardStyles() {
 
 
 /* =========================================================
-   RESET SUBMIT PANEL
+   SHOW SUBMIT
 ========================================================= */
 
-function resetSubmitPanel() {
-
-    const nicknameInput =
-        document.getElementById(
-            "playerNickname"
-        );
-
-
-    const submitButton =
-        document.getElementById(
-            "submitScoreButton"
-        );
-
-
-    const status =
-        document.getElementById(
-            "submitStatus"
-        );
-
-
-    if (
-        nicknameInput
-    ) {
-
-        nicknameInput.disabled =
-            false;
-
-        nicknameInput.value =
-            "";
-
-    }
-
-
-    if (
-        submitButton
-    ) {
-
-        submitButton.disabled =
-            false;
-
-        submitButton.textContent =
-            "SUBMIT SCORE";
-
-    }
-
-
-    if (
-        status
-    ) {
-
-        status.textContent =
-            "";
-
-    }
-
-}
-
-
-
-/* =========================================================
-   SHOW SCORE PANEL
-========================================================= */
-
-function showSubmitPanel() {
+function showCoinSubmitPanel() {
 
     const panel =
         document.getElementById(
-            "scoreSubmitPanel"
+            "coinSubmitPanel"
         );
 
 
-    const finalScore =
-        document.getElementById(
-            "finalScore"
-        );
-
-
-    const nickname =
-        document.getElementById(
-            "playerNickname"
-        );
-
-
-    const status =
-        document.getElementById(
-            "submitStatus"
-        );
-
-
-    const button =
-        document.getElementById(
-            "submitScoreButton"
-        );
-
-
-    if (
-        !panel
-    ) {
-
+    if (!panel) {
         return;
-
     }
 
 
@@ -2729,62 +2060,56 @@ function showSubmitPanel() {
         "block";
 
 
-    if (
-        finalScore
-    ) {
-
-        finalScore.textContent =
-            score;
-
-    }
+    document
+        .getElementById(
+            "coinFinalScore"
+        )
+        .textContent =
+        finalCoinScore;
 
 
-    if (
-        status
-    ) {
-
-        status.textContent =
-            "";
-
-    }
+    const input =
+        document.getElementById(
+            "coinNickname"
+        );
 
 
-    if (
-        nickname
-    ) {
-
-        nickname.disabled =
-            false;
-
-        nickname.value =
-            "";
-
-    }
+    const button =
+        document.getElementById(
+            "coinSubmitScore"
+        );
 
 
-    if (
-        button
-    ) {
+    const status =
+        document.getElementById(
+            "coinSubmitStatus"
+        );
 
-        button.disabled =
-            false;
 
-        button.textContent =
-            "SUBMIT SCORE";
+    input.value =
+        "";
 
-    }
+
+    input.disabled =
+        false;
+
+
+    button.disabled =
+        false;
+
+
+    button.textContent =
+        "SUBMIT SCORE";
+
+
+    status.textContent =
+        "";
 
 
     setTimeout(
         () => {
 
-            if (
-                nickname
-            ) {
-
-                nickname.focus();
-
-            }
+            input.focus();
 
         },
         100
@@ -2795,20 +2120,18 @@ function showSubmitPanel() {
 
 
 /* =========================================================
-   HIDE SCORE PANEL
+   HIDE SUBMIT
 ========================================================= */
 
-function hideSubmitPanel() {
+function hideCoinSubmitPanel() {
 
     const panel =
         document.getElementById(
-            "scoreSubmitPanel"
+            "coinSubmitPanel"
         );
 
 
-    if (
-        panel
-    ) {
+    if (panel) {
 
         panel.style.display =
             "none";
@@ -2820,111 +2143,56 @@ function hideSubmitPanel() {
 
 
 /* =========================================================
-   CLEAN NICKNAME
+   SUBMIT SCORE
 ========================================================= */
 
-function cleanNickname(
-    nickname
-) {
-
-    return nickname
-
-        .trim()
-
-        .replace(
-            /[^a-zA-Z0-9_\- ]/g,
-            ""
-        )
-
-        .slice(
-            0,
-            16
-        );
-
-}
-
-
-
-/* =========================================================
-   SUBMIT SCORE TO SUPABASE
-========================================================= */
-
-async function submitScore() {
+async function submitCoinScore() {
 
     if (
-        scoreSubmitted
+        gameScoreSubmitted
     ) {
-
         return;
-
     }
 
 
-    if (
-        gameRunning
-    ) {
-
-        return;
-
-    }
-
-
-    const nicknameInput =
+    const input =
         document.getElementById(
-            "playerNickname"
+            "coinNickname"
         );
 
 
-    const submitButton =
+    const button =
         document.getElementById(
-            "submitScoreButton"
+            "coinSubmitScore"
         );
 
 
     const status =
         document.getElementById(
-            "submitStatus"
+            "coinSubmitStatus"
         );
 
 
-    const nickname =
-        cleanNickname(
-            nicknameInput.value
+    const name =
+        cleanCoinTelegramUsername(
+            input.value
         );
 
 
     if (
-        nickname.length < 2
+        name.length <
+        5
     ) {
 
         status.textContent =
-            "Nickname must have at least 2 characters.";
+            "Enter a valid Telegram username.";
 
         return;
 
     }
 
 
-    const finalGameScore =
-        Number(score);
-
-
-    if (
-        !Number.isInteger(
-            finalGameScore
-        ) ||
-        finalGameScore < 0
-    ) {
-
-        status.textContent =
-            "Invalid score.";
-
-        return;
-
-    }
-
-
-    submitButton.disabled =
+    button.disabled =
         true;
 
 
@@ -2936,7 +2204,7 @@ async function submitScore() {
 
         const response =
             await fetch(
-                SCORES_API,
+                COIN_SCORES_API,
                 {
 
                     method:
@@ -2949,7 +2217,7 @@ async function submitScore() {
                             "application/json",
 
                         "apikey":
-                            SUPABASE_KEY,
+                            COIN_SUPABASE_KEY,
 
                         "Prefer":
                             "return=minimal"
@@ -2962,10 +2230,10 @@ async function submitScore() {
                             {
 
                                 name:
-                                    nickname,
+                                    name,
 
                                 score:
-                                    finalGameScore
+                                    finalCoinScore
 
                             }
                         )
@@ -2974,58 +2242,53 @@ async function submitScore() {
             );
 
 
-        if (
-            !response.ok
-        ) {
+        if (!response.ok) {
 
-            const errorText =
+            const error =
                 await response.text();
 
 
             console.error(
-                "Supabase submit response:",
+                "Coin score error:",
                 response.status,
-                errorText
+                error
             );
 
 
             throw new Error(
-                errorText
+                error
             );
 
         }
 
 
-        scoreSubmitted =
+        gameScoreSubmitted =
             true;
+
+
+        input.disabled =
+            true;
+
+
+        button.disabled =
+            true;
+
+
+        button.textContent =
+            "SAVED";
 
 
         status.textContent =
             "Score submitted!";
 
 
-        nicknameInput.disabled =
-            true;
-
-
-        submitButton.disabled =
-            true;
-
-
-        submitButton.textContent =
-            "SAVED";
-
-
-        await loadLeaderboard();
+        await loadCoinLeaderboard();
 
     }
 
-    catch (
-        error
-    ) {
+    catch (error) {
 
         console.error(
-            "Score submit error:",
             error
         );
 
@@ -3034,7 +2297,7 @@ async function submitScore() {
             "Could not submit score. Try again.";
 
 
-        submitButton.disabled =
+        button.disabled =
             false;
 
     }
@@ -3044,29 +2307,25 @@ async function submitScore() {
 
 
 /* =========================================================
-   LOAD LEADERBOARD FROM SUPABASE
+   LOAD LEADERBOARD
 ========================================================= */
 
-async function loadLeaderboard() {
+async function loadCoinLeaderboard() {
 
     const list =
         document.getElementById(
-            "leaderboardList"
+            "coinLeaderboardList"
         );
 
 
-    if (
-        !list
-    ) {
-
+    if (!list) {
         return;
-
     }
 
 
     list.innerHTML =
         `
-        <div class="leaderboard-loading">
+        <div class="coin-board-empty">
             Loading leaderboard...
         </div>
         `;
@@ -3075,7 +2334,7 @@ async function loadLeaderboard() {
     try {
 
         const url =
-            `${SCORES_API}?select=name,score,created_at&order=score.desc,created_at.asc&limit=10`;
+            `${COIN_SCORES_API}?select=name,score,created_at&order=score.desc,created_at.asc&limit=10`;
 
 
         const response =
@@ -3083,14 +2342,10 @@ async function loadLeaderboard() {
                 url,
                 {
 
-                    method:
-                        "GET",
-
-
                     headers: {
 
                         "apikey":
-                            SUPABASE_KEY
+                            COIN_SUPABASE_KEY
 
                     }
 
@@ -3098,41 +2353,26 @@ async function loadLeaderboard() {
             );
 
 
-        if (
-            !response.ok
-        ) {
-
-            const errorText =
-                await response.text();
-
-
-            console.error(
-                "Supabase leaderboard response:",
-                response.status,
-                errorText
-            );
-
+        if (!response.ok) {
 
             throw new Error(
-                errorText
+                await response.text()
             );
 
         }
 
 
-        const scores =
+        const data =
             await response.json();
 
 
-        renderLeaderboard(
-            scores
+        renderCoinLeaderboard(
+            data
         );
 
     }
 
-    catch (
-        error
-    ) {
+    catch (error) {
 
         console.error(
             "Leaderboard error:",
@@ -3142,7 +2382,7 @@ async function loadLeaderboard() {
 
         list.innerHTML =
             `
-            <div class="leaderboard-empty">
+            <div class="coin-board-empty">
                 Leaderboard unavailable.
             </div>
             `;
@@ -3154,24 +2394,26 @@ async function loadLeaderboard() {
 
 
 /* =========================================================
-   ESCAPE HTML
+   SAFE HTML
 ========================================================= */
 
-function escapeHTML(
+function coinEscapeHTML(
     text
 ) {
 
-    const element =
+    const div =
         document.createElement(
             "div"
         );
 
 
-    element.textContent =
-        String(text);
+    div.textContent =
+        String(
+            text
+        );
 
 
-    return element.innerHTML;
+    return div.innerHTML;
 
 }
 
@@ -3181,24 +2423,24 @@ function escapeHTML(
    RENDER LEADERBOARD
 ========================================================= */
 
-function renderLeaderboard(
-    scores
+function renderCoinLeaderboard(
+    data
 ) {
 
     const list =
         document.getElementById(
-            "leaderboardList"
+            "coinLeaderboardList"
         );
 
 
     if (
-        !scores ||
-        scores.length === 0
+        !data ||
+        data.length === 0
     ) {
 
         list.innerHTML =
             `
-            <div class="leaderboard-empty">
+            <div class="coin-board-empty">
                 No scores yet. Be the first.
             </div>
             `;
@@ -3210,47 +2452,34 @@ function renderLeaderboard(
 
 
     list.innerHTML =
-        scores
-
+        data
             .map(
                 (
-                    item,
+                    player,
                     index
                 ) => {
 
-                    const position =
+                    const rank =
                         index + 1;
 
 
-                    const safeName =
-                        escapeHTML(
-                            item.name
-                        );
-
-
-                    const safeScore =
-                        Number(
-                            item.score
-                        ) || 0;
-
-
                     return `
-                    
+
                     <div class="
-                        leaderboard-row
-                        ${position <= 3 ? "top-three" : ""}
+                        coin-board-row
+                        ${rank <= 3 ? "top-three" : ""}
                     ">
 
-                        <div class="leaderboard-position">
-                            #${position}
+                        <div class="coin-board-rank">
+                            #${rank}
                         </div>
 
-                        <div class="leaderboard-name">
-                            ${safeName}
+                        <div class="coin-board-name">
+                            @${coinEscapeHTML(player.name)}
                         </div>
 
-                        <div class="leaderboard-score">
-                            ${safeScore}
+                        <div class="coin-board-score">
+                            ${Number(player.score) || 0}
                         </div>
 
                     </div>
@@ -3259,7 +2488,6 @@ function renderLeaderboard(
 
                 }
             )
-
             .join("");
 
 }
@@ -3270,29 +2498,28 @@ function renderLeaderboard(
    START BUTTON
 ========================================================= */
 
-startButton.addEventListener(
+startGameButton.addEventListener(
     "click",
-    startGame
+    startCoinGame
 );
 
 
 
 /* =========================================================
-   INITIALIZATION
+   INITIALIZE
 ========================================================= */
 
-function initializeGame() {
+function initializeCoinGame() {
 
-    drawBackground();
-
-
-    drawPlayer();
+    drawCoinBackground();
 
 
-    createLeaderboardUI();
+    drawCoinPlayer();
+
+
+    createCoinLeaderboardUI();
 
 }
 
 
-
-initializeGame();
+initializeCoinGame();
