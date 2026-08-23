@@ -44,34 +44,56 @@ button {
 ===================================================== */
 
 .container {
-    width:
-        min(1180px, calc(100% - 50px));
 
-    margin: 0 auto;
+    width:
+        min(
+            1180px,
+            calc(100% - 50px)
+        );
+
+    margin:
+        0 auto;
+
 }
 
 
 .section-tag {
-    margin-bottom: 55px;
 
-    color: #6cff83;
+    margin-bottom:
+        55px;
 
-    font-size: 10px;
-    font-weight: 900;
+    color:
+        #6cff83;
 
-    letter-spacing: 3px;
+    font-size:
+        10px;
+
+    font-weight:
+        900;
+
+    letter-spacing:
+        3px;
+
 }
 
 
 .small-green {
-    margin-bottom: 17px;
 
-    color: #65ff81;
+    margin-bottom:
+        17px;
 
-    font-size: 10px;
-    font-weight: 900;
+    color:
+        #65ff81;
 
-    letter-spacing: 3px;
+    font-size:
+        10px;
+
+    font-weight:
+        900;
+
+    letter-spacing:
+        3px;
+
 }
 
 
@@ -81,35 +103,51 @@ button {
 ===================================================== */
 
 .hero {
-    position: relative;
 
-    min-height: 100vh;
+    position:
+        relative;
+
+    min-height:
+        100vh;
+
+    overflow:
+        hidden;
 
     background:
+
         radial-gradient(
             circle at 75% 50%,
             rgba(0,160,80,.10),
             transparent 36%
         ),
+
         #02100c;
 
-    overflow: hidden;
 }
 
 
 .hero::before {
-    content: "";
 
-    position: absolute;
-    inset: 0;
+    content:
+        "";
 
-    z-index: 0;
+    position:
+        absolute;
 
-    pointer-events: none;
+    inset:
+        0;
 
-    opacity: .26;
+    z-index:
+        0;
+
+    pointer-events:
+        none;
+
+    opacity:
+        .26;
 
     background-image:
+
         radial-gradient(
             circle,
             rgba(100,255,150,.55) 1px,
@@ -118,6 +156,7 @@ button {
 
     background-size:
         190px 190px;
+
 }
 
 
@@ -127,38 +166,58 @@ button {
 ===================================================== */
 
 .shooting-stars {
-    position: absolute;
 
-    inset: 0;
+    position:
+        absolute;
 
-    z-index: 1;
+    inset:
+        0;
 
-    overflow: hidden;
+    z-index:
+        1;
 
-    pointer-events: none;
+    overflow:
+        hidden;
+
+    pointer-events:
+        none;
+
 }
 
 
 .shooting-star {
-    position: absolute;
 
-    width: 170px;
-    height: 2px;
+    position:
+        absolute;
 
-    opacity: 0;
+    width:
+        170px;
 
-    border-radius: 999px;
+    height:
+        2px;
+
+    opacity:
+        0;
+
+    border-radius:
+        999px;
 
     background:
+
         linear-gradient(
             90deg,
+
             transparent 0%,
+
             rgba(77,255,145,.10) 18%,
+
             rgba(96,255,158,.65) 72%,
+
             rgba(235,255,241,1) 100%
         );
 
     box-shadow:
+
         0 0 5px
         rgba(81,255,145,.55);
 
@@ -166,139 +225,219 @@ button {
         rotate(-42deg);
 
     animation:
+
         shootStar
         8s
         linear
         infinite;
+
 }
 
 
 .shooting-star::after {
-    content: "";
 
-    position: absolute;
+    content:
+        "";
 
-    right: -1px;
-    top: 50%;
+    position:
+        absolute;
 
-    width: 4px;
-    height: 4px;
+    right:
+        -1px;
+
+    top:
+        50%;
+
+    width:
+        4px;
+
+    height:
+        4px;
 
     transform:
         translateY(-50%);
 
-    border-radius: 50%;
+    border-radius:
+        50%;
 
-    background: #effff2;
+    background:
+        #effff2;
 
     box-shadow:
-        0 0 9px #6cff91,
+
+        0 0 9px
+        #6cff91,
+
         0 0 18px
         rgba(90,255,145,.70);
+
 }
 
 
 .star-1 {
-    top: 10%;
-    left: 78%;
 
-    animation-delay: 0s;
+    top:
+        10%;
+
+    left:
+        78%;
+
+    animation-delay:
+        0s;
+
 }
 
 
 .star-2 {
-    top: 25%;
-    left: 92%;
 
-    animation-delay: 1.4s;
+    top:
+        25%;
+
+    left:
+        92%;
+
+    animation-delay:
+        1.4s;
+
 }
 
 
 .star-3 {
-    top: 37%;
-    left: 70%;
 
-    animation-delay: 2.8s;
+    top:
+        37%;
+
+    left:
+        70%;
+
+    animation-delay:
+        2.8s;
+
 }
 
 
 .star-4 {
-    top: 53%;
-    left: 86%;
 
-    animation-delay: 4.1s;
+    top:
+        53%;
+
+    left:
+        86%;
+
+    animation-delay:
+        4.1s;
+
 }
 
 
 .star-5 {
-    top: 69%;
-    left: 76%;
 
-    animation-delay: 5.4s;
+    top:
+        69%;
+
+    left:
+        76%;
+
+    animation-delay:
+        5.4s;
+
 }
 
 
 .star-6 {
-    top: 80%;
-    left: 95%;
 
-    animation-delay: 6.5s;
+    top:
+        80%;
+
+    left:
+        95%;
+
+    animation-delay:
+        6.5s;
+
 }
 
 
 .star-7 {
-    top: 44%;
-    left: 98%;
 
-    animation-delay: 7.2s;
+    top:
+        44%;
+
+    left:
+        98%;
+
+    animation-delay:
+        7.2s;
+
 }
 
 
 @keyframes shootStar {
 
     0% {
-        opacity: 0;
+
+        opacity:
+            0;
 
         transform:
+
             translate(
                 120px,
                 -120px
             )
+
             rotate(-42deg);
+
     }
 
 
     6% {
-        opacity: 1;
+
+        opacity:
+            1;
+
     }
 
 
     27% {
-        opacity: 1;
+
+        opacity:
+            1;
+
     }
 
 
     38% {
-        opacity: 0;
+
+        opacity:
+            0;
 
         transform:
+
             translate(
                 -430px,
                 430px
             )
+
             rotate(-42deg);
+
     }
 
 
     100% {
-        opacity: 0;
+
+        opacity:
+            0;
 
         transform:
+
             translate(
                 -430px,
                 430px
             )
+
             rotate(-42deg);
+
     }
 
 }
@@ -310,104 +449,172 @@ button {
 ===================================================== */
 
 .navbar {
-    position: relative;
 
-    z-index: 20;
+    position:
+        relative;
+
+    z-index:
+        20;
 
     width:
-        min(1300px, calc(100% - 50px));
 
-    min-height: 100px;
+        min(
+            1300px,
+            calc(100% - 50px)
+        );
 
-    margin: 0 auto;
+    min-height:
+        100px;
 
-    display: flex;
-    align-items: center;
+    margin:
+        0 auto;
 
-    gap: 30px;
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        30px;
+
 }
 
 
 .logo {
-    width: 100px;
+
+    width:
+        100px;
+
 }
 
 
 .logo img {
-    width: 90px;
-    height: 70px;
 
-    object-fit: contain;
+    width:
+        90px;
+
+    height:
+        70px;
+
+    object-fit:
+        contain;
+
 }
 
 
 .nav-links {
-    flex: 1;
 
-    display: flex;
-    justify-content: center;
+    flex:
+        1;
 
-    gap: 28px;
+    display:
+        flex;
+
+    justify-content:
+        center;
+
+    gap:
+        28px;
+
 }
 
 
 .nav-links a {
-    color: #9ba6a1;
 
-    font-size: 13px;
+    color:
+        #9ba6a1;
 
-    transition: color .2s ease;
+    font-size:
+        13px;
+
+    transition:
+        color .2s ease;
+
 }
 
 
 .nav-links a:hover {
-    color: #69ff84;
+
+    color:
+        #69ff84;
+
 }
 
 
 .nav-right {
-    display: flex;
-    align-items: center;
 
-    gap: 14px;
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        12px;
+
 }
 
 
+
+/* =====================================================
+   SOCIAL ICONS
+===================================================== */
+
 .social-circle {
-    width: 43px;
-    height: 43px;
 
-    flex-shrink: 0;
+    width:
+        43px;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    height:
+        43px;
+
+    flex-shrink:
+        0;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
 
     border:
+
         1px solid
         rgba(90,255,130,.18);
 
-    border-radius: 50%;
+    border-radius:
+        50%;
 
-    color: #dce4df;
+    color:
+        #dce4df;
 
     background:
         rgba(2,16,12,.30);
 
     transition:
+
+        transform .2s ease,
         background .2s ease,
         border-color .2s ease,
-        color .2s ease,
-        transform .2s ease;
+        color .2s ease;
+
 }
 
 
 .social-circle svg {
-    display: block;
+
+    display:
+        block;
+
 }
 
 
 .social-circle:hover {
+
     transform:
         translateY(-2px);
 
@@ -417,49 +624,96 @@ button {
     background:
         rgba(80,255,120,.08);
 
-    color: #71ff8b;
+    color:
+        #71ff8b;
+
 }
 
+
+
+/* TELEGRAM */
 
 .telegram-circle svg {
+
     transform:
         translateX(-1px);
+
 }
 
 
+
+/* TIKTOK */
+
+.tiktok-circle svg {
+
+    transform:
+        translateY(1px);
+
+}
+
+
+
+/* =====================================================
+   BUY BUTTON
+===================================================== */
+
 .buy-button {
-    min-width: 170px;
 
-    padding: 11px 25px;
+    min-width:
+        170px;
 
-    border: 0;
-    border-radius: 30px;
+    padding:
+        11px 25px;
 
-    background: #78ef69;
+    margin-left:
+        3px;
 
-    color: #031008;
+    border:
+        0;
 
-    font-weight: 900;
+    border-radius:
+        30px;
+
+    background:
+        #78ef69;
+
+    color:
+        #031008;
+
+    font-weight:
+        900;
+
 }
 
 
 .buy-button span,
 .buy-button small {
-    display: block;
+
+    display:
+        block;
+
 }
 
 
 .buy-button span {
-    font-size: 12px;
+
+    font-size:
+        12px;
+
 }
 
 
 .buy-button small {
-    margin-top: 3px;
 
-    font-size: 7px;
+    margin-top:
+        3px;
 
-    letter-spacing: 2px;
+    font-size:
+        7px;
+
+    letter-spacing:
+        2px;
+
 }
 
 
@@ -469,129 +723,209 @@ button {
 ===================================================== */
 
 .hero-inner {
-    position: relative;
 
-    z-index: 5;
+    position:
+        relative;
+
+    z-index:
+        5;
 
     width:
-        min(1300px, calc(100% - 50px));
+
+        min(
+            1300px,
+            calc(100% - 50px)
+        );
 
     min-height:
-        calc(100vh - 100px);
 
-    margin: auto;
+        calc(
+            100vh - 100px
+        );
 
-    display: flex;
-    align-items: center;
+    margin:
+        auto;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
 }
 
 
 .hero-left {
-    max-width: 800px;
+
+    max-width:
+        800px;
+
 }
 
 
 .contract {
-    display: inline-block;
 
-    margin-bottom: 30px;
+    display:
+        inline-block;
 
-    padding: 12px 18px;
+    margin-bottom:
+        30px;
+
+    padding:
+        12px 18px;
 
     border:
+
         1px solid
         rgba(90,255,130,.20);
 
-    border-radius: 30px;
+    border-radius:
+        30px;
 
-    color: #78ff8d;
+    color:
+        #78ff8d;
 
-    font-size: 11px;
-    font-weight: 900;
+    font-size:
+        11px;
 
-    letter-spacing: 2px;
+    font-weight:
+        900;
+
+    letter-spacing:
+        2px;
+
 }
 
 
 .hero h1 {
+
     font-size:
-        clamp(60px,7vw,112px);
 
-    line-height: .86;
+        clamp(
+            60px,
+            7vw,
+            112px
+        );
 
-    letter-spacing: -5px;
+    line-height:
+        .86;
+
+    letter-spacing:
+        -5px;
+
 }
 
 
 .hero h1 span {
-    color: #59cda2;
+
+    color:
+        #59cda2;
+
 }
 
 
 .hero-line {
-    width: 210px;
-    height: 3px;
 
-    margin: 30px 0 25px;
+    width:
+        210px;
+
+    height:
+        3px;
+
+    margin:
+        30px 0 25px;
 
     background:
+
         linear-gradient(
             90deg,
             #59d7aa,
             transparent
         );
+
 }
 
 
 .hero-text {
-    max-width: 620px;
 
-    color: #9aa59f;
+    max-width:
+        620px;
 
-    font-size: 17px;
+    color:
+        #9aa59f;
 
-    line-height: 1.65;
+    font-size:
+        17px;
+
+    line-height:
+        1.65;
+
 }
 
 
 .hero-buttons,
 .early-buttons {
-    display: flex;
 
-    gap: 15px;
+    display:
+        flex;
 
-    margin-top: 30px;
+    gap:
+        15px;
+
+    margin-top:
+        30px;
+
 }
 
 
 .main-button,
 .outline-button {
-    min-height: 52px;
 
-    padding: 0 27px;
+    min-height:
+        52px;
 
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+    padding:
+        0 27px;
 
-    border-radius: 28px;
+    display:
+        inline-flex;
 
-    font-size: 12px;
-    font-weight: 900;
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    border-radius:
+        28px;
+
+    font-size:
+        12px;
+
+    font-weight:
+        900;
+
 }
 
 
 .main-button {
-    background: #78ef69;
 
-    color: #031008;
+    background:
+        #78ef69;
+
+    color:
+        #031008;
+
 }
 
 
 .outline-button {
+
     border:
+
         1px solid
         rgba(90,255,125,.20);
+
 }
 
 
@@ -605,30 +939,45 @@ button {
 .roadmap-section,
 .early-section,
 .faq-section {
-    padding: 140px 0;
+
+    padding:
+        140px 0;
+
 }
 
 
 .content-section,
 .roadmap-section,
 .early-section {
-    background: #04110d;
+
+    background:
+        #04110d;
+
 }
 
 
 .story-section,
 .faq-section {
-    background: #030d0a;
+
+    background:
+        #030d0a;
+
 }
 
 
 .darker-story {
-    background: #020907;
+
+    background:
+        #020907;
+
 }
 
 
 .big-copy {
-    max-width: 850px;
+
+    max-width:
+        850px;
+
 }
 
 
@@ -636,12 +985,21 @@ button {
 .story-copy h2,
 .center-heading h2,
 .faq-heading h2 {
+
     font-size:
-        clamp(55px,7vw,105px);
 
-    line-height: .87;
+        clamp(
+            55px,
+            7vw,
+            105px
+        );
 
-    letter-spacing: -4px;
+    line-height:
+        .87;
+
+    letter-spacing:
+        -4px;
+
 }
 
 
@@ -649,107 +1007,176 @@ button {
 .story-copy h2 span,
 .center-heading h2 span,
 .faq-heading h2 span {
-    color: #5acfa3;
+
+    color:
+        #5acfa3;
+
 }
 
 
 .large-paragraph {
-    max-width: 720px;
 
-    margin-top: 35px;
+    max-width:
+        720px;
 
-    color: #d5ddd9;
+    margin-top:
+        35px;
 
-    font-size: 23px;
+    color:
+        #d5ddd9;
 
-    line-height: 1.5;
+    font-size:
+        23px;
+
+    line-height:
+        1.5;
+
 }
 
 
 .normal-paragraph {
-    max-width: 650px;
 
-    margin-top: 20px;
+    max-width:
+        650px;
 
-    color: #89958f;
+    margin-top:
+        20px;
 
-    line-height: 1.7;
+    color:
+        #89958f;
+
+    line-height:
+        1.7;
+
 }
 
 
+
+/* =====================================================
+   STORY
+===================================================== */
+
 .story-row {
-    display: grid;
+
+    display:
+        grid;
 
     grid-template-columns:
         30% 70%;
 
-    gap: 50px;
+    gap:
+        50px;
+
 }
 
 
 .story-number {
+
     color:
         rgba(90,255,125,.06);
 
     font-size:
-        clamp(120px,18vw,250px);
 
-    line-height: .8;
+        clamp(
+            120px,
+            18vw,
+            250px
+        );
 
-    font-weight: 900;
+    line-height:
+        .8;
+
+    font-weight:
+        900;
+
 }
 
 
 .story-copy p:not(.small-green) {
-    max-width: 660px;
 
-    margin-top: 20px;
+    max-width:
+        660px;
 
-    color: #8d9993;
+    margin-top:
+        20px;
 
-    font-size: 17px;
+    color:
+        #8d9993;
 
-    line-height: 1.7;
+    font-size:
+        17px;
+
+    line-height:
+        1.7;
+
 }
 
 
+
+/* =====================================================
+   CENTER HEADING
+===================================================== */
+
 .center-heading {
-    text-align: center;
+
+    text-align:
+        center;
+
 }
 
 
 .center-heading > p:last-child {
-    max-width: 650px;
+
+    max-width:
+        650px;
 
     margin:
         25px auto 0;
 
-    color: #8b9791;
+    color:
+        #8b9791;
+
 }
 
 
+
+/* =====================================================
+   ROADMAP
+===================================================== */
+
 .roadmap-box {
-    max-width: 930px;
+
+    max-width:
+        930px;
 
     margin:
         60px auto 0;
 
-    padding: 8px;
+    padding:
+        8px;
 
     border:
+
         1px solid
         rgba(90,255,125,.14);
 
-    border-radius: 24px;
+    border-radius:
+        24px;
+
 }
 
 
 .roadmap-box img {
-    display: block;
 
-    width: 100%;
+    display:
+        block;
 
-    border-radius: 18px;
+    width:
+        100%;
+
+    border-radius:
+        18px;
+
 }
 
 
@@ -759,108 +1186,153 @@ button {
 ===================================================== */
 
 .arcade-section {
+
     padding:
         140px 0 170px;
 
     background:
+
         radial-gradient(
             circle at 50% 35%,
             rgba(30,255,120,.07),
             transparent 40%
         ),
+
         #020b08;
+
 }
 
 
 .arcade-title {
-    max-width: 850px;
 
-    margin-bottom: 55px;
+    max-width:
+        850px;
+
+    margin-bottom:
+        55px;
+
 }
 
 
 .arcade-title h2,
 .game-page-heading h2 {
+
     font-size:
-        clamp(60px,8vw,110px);
 
-    line-height: .86;
+        clamp(
+            60px,
+            8vw,
+            110px
+        );
 
-    letter-spacing: -5px;
+    line-height:
+        .86;
+
+    letter-spacing:
+        -5px;
+
 }
 
 
 .arcade-title h2 span,
 .game-page-heading h2 span {
-    color: #5acfa3;
+
+    color:
+        #5acfa3;
+
 }
 
 
 .arcade-title > p:last-child,
 .game-page-heading > p:last-child {
-    max-width: 680px;
 
-    margin-top: 25px;
+    max-width:
+        680px;
 
-    color: #8e9a94;
+    margin-top:
+        25px;
 
-    font-size: 17px;
+    color:
+        #8e9a94;
 
-    line-height: 1.7;
+    font-size:
+        17px;
+
+    line-height:
+        1.7;
+
 }
 
 
 
 /* =====================================================
-   GAME CARDS
+   GAME SELECT
 ===================================================== */
 
 .game-grid {
-    display: grid;
+
+    display:
+        grid;
 
     grid-template-columns:
         repeat(2,1fr);
 
-    gap: 25px;
+    gap:
+        25px;
+
 }
 
 
 .game-choice-card {
-    position: relative;
 
-    min-height: 535px;
+    position:
+        relative;
 
-    padding: 35px;
+    min-height:
+        535px;
 
-    overflow: hidden;
+    padding:
+        35px;
 
-    text-align: left;
+    overflow:
+        hidden;
+
+    text-align:
+        left;
 
     border:
+
         1px solid
         rgba(90,255,125,.15);
 
-    border-radius: 28px;
+    border-radius:
+        28px;
 
     background:
+
         linear-gradient(
             145deg,
             #061a13,
             #010806
         );
 
-    color: white;
+    color:
+        white;
 
-    cursor: pointer;
+    cursor:
+        pointer;
 
     transition:
+
         transform .25s ease,
         border-color .25s ease,
         box-shadow .25s ease;
+
 }
 
 
 .game-choice-card:hover {
+
     transform:
         translateY(-5px);
 
@@ -868,59 +1340,90 @@ button {
         rgba(90,255,125,.43);
 
     box-shadow:
+
         0 30px 70px
         rgba(0,0,0,.38);
+
 }
 
 
 .game-number {
-    color: #60ff82;
 
-    font-size: 10px;
-    font-weight: 900;
+    color:
+        #60ff82;
 
-    letter-spacing: 3px;
+    font-size:
+        10px;
+
+    font-weight:
+        900;
+
+    letter-spacing:
+        3px;
+
 }
 
 
 .game-preview {
-    position: relative;
 
-    height: 210px;
+    position:
+        relative;
+
+    height:
+        210px;
 
     margin:
         20px 0;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display:
+        flex;
 
-    overflow: hidden;
+    align-items:
+        center;
 
-    border-radius: 18px;
+    justify-content:
+        center;
+
+    overflow:
+        hidden;
+
+    border-radius:
+        18px;
+
 }
 
 
 
-/* COIN CATCH IMAGE */
+/* =====================================================
+   COIN CARD IMAGE
+===================================================== */
 
 .coin-game-preview {
+
     background:
+
         radial-gradient(
             circle,
             rgba(65,255,120,.09),
             transparent 60%
         );
+
 }
 
 
 .coin-card-image {
-    width: 155px;
-    height: 155px;
 
-    object-fit: contain;
+    width:
+        155px;
+
+    height:
+        155px;
+
+    object-fit:
+        contain;
 
     filter:
+
         drop-shadow(
             0 0 30px
             rgba(70,255,120,.30)
@@ -928,63 +1431,89 @@ button {
 
     transition:
         transform .3s ease;
+
 }
 
 
 .game-choice-card:hover
 .coin-card-image {
+
     transform:
         scale(1.05);
+
 }
 
 
 
-/* SURVIVAL IMAGE */
+/* =====================================================
+   SURVIVAL CARD IMAGE
+===================================================== */
 
 .survival-image-preview {
+
     background:
+
         radial-gradient(
             circle at 50% 60%,
             rgba(55,255,115,.14),
             rgba(0,60,30,.04) 50%,
             transparent 75%
         );
+
 }
 
 
 .survival-image-glow {
-    position: absolute;
 
-    left: 50%;
-    bottom: 5px;
+    position:
+        absolute;
 
-    width: 210px;
-    height: 65px;
+    left:
+        50%;
+
+    bottom:
+        5px;
+
+    width:
+        210px;
+
+    height:
+        65px;
 
     transform:
         translateX(-50%);
 
-    border-radius: 50%;
+    border-radius:
+        50%;
 
     background:
         rgba(70,255,120,.10);
 
     filter:
         blur(25px);
+
 }
 
 
 .survival-cover-image {
-    position: relative;
 
-    z-index: 2;
+    position:
+        relative;
 
-    width: 185px;
-    height: 195px;
+    z-index:
+        2;
 
-    object-fit: contain;
+    width:
+        185px;
+
+    height:
+        195px;
+
+    object-fit:
+        contain;
 
     filter:
+
         drop-shadow(
             0 0 25px
             rgba(50,255,120,.25)
@@ -992,74 +1521,117 @@ button {
 
     transition:
         transform .3s ease;
+
 }
 
 
 .game-choice-card:hover
 .survival-cover-image {
+
     transform:
         scale(1.04);
+
 }
 
 
 
+/* =====================================================
+   CARD TEXT
+===================================================== */
+
 .game-choice-card h3 {
-    font-size: 34px;
+
+    font-size:
+        34px;
+
 }
 
 
 .game-choice-card p {
-    max-width: 430px;
 
-    margin-top: 14px;
+    max-width:
+        430px;
 
-    color: #8d9993;
+    margin-top:
+        14px;
 
-    line-height: 1.6;
+    color:
+        #8d9993;
+
+    line-height:
+        1.6;
+
 }
 
 
 .game-features {
-    display: flex;
-    flex-wrap: wrap;
 
-    gap: 8px;
+    display:
+        flex;
 
-    margin-top: 23px;
+    flex-wrap:
+        wrap;
+
+    gap:
+        8px;
+
+    margin-top:
+        23px;
+
 }
 
 
 .game-features span {
+
     padding:
         7px 11px;
 
     border:
+
         1px solid
         rgba(90,255,125,.15);
 
-    border-radius: 18px;
+    border-radius:
+        18px;
 
-    color: #6aff88;
+    color:
+        #6aff88;
 
-    font-size: 9px;
-    font-weight: 900;
+    font-size:
+        9px;
 
-    letter-spacing: 1px;
+    font-weight:
+        900;
+
+    letter-spacing:
+        1px;
+
 }
 
 
 .play-choice {
-    position: absolute;
 
-    left: 35px;
-    bottom: 32px;
+    position:
+        absolute;
 
-    color: #62ff83;
+    left:
+        35px;
 
-    font-size: 11px;
-    font-weight: 900;
+    bottom:
+        32px;
 
-    letter-spacing: 1px;
+    color:
+        #62ff83;
+
+    font-size:
+        11px;
+
+    font-weight:
+        900;
+
+    letter-spacing:
+        1px;
+
 }
 
 
@@ -1069,57 +1641,91 @@ button {
 ===================================================== */
 
 .arcade-game-screen {
-    display: none;
+
+    display:
+        none;
+
 }
 
 
 .arcade-game-screen.active-game-screen {
-    display: block;
+
+    display:
+        block;
+
 }
 
 
 .game-screen-top {
-    margin-bottom: 45px;
 
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    margin-bottom:
+        45px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
 }
 
 
 .game-screen-top > div {
-    color: #57635d;
 
-    font-size: 10px;
-    font-weight: 900;
+    color:
+        #57635d;
 
-    letter-spacing: 3px;
+    font-size:
+        10px;
+
+    font-weight:
+        900;
+
+    letter-spacing:
+        3px;
+
 }
 
 
 .back-to-games {
+
     padding:
         11px 18px;
 
     border:
+
         1px solid
         rgba(90,255,125,.20);
 
-    border-radius: 25px;
+    border-radius:
+        25px;
 
-    background: transparent;
+    background:
+        transparent;
 
-    color: #64ff83;
+    color:
+        #64ff83;
 
-    font-size: 10px;
-    font-weight: 900;
+    font-size:
+        10px;
 
-    cursor: pointer;
+    font-weight:
+        900;
+
+    cursor:
+        pointer;
+
 }
 
 
 .game-page-heading {
-    margin-bottom: 50px;
+
+    margin-bottom:
+        50px;
+
 }
 
 
@@ -1130,24 +1736,35 @@ button {
 
 .game-wrapper,
 .survival-wrapper {
-    width: 100%;
-    max-width: 1000px;
 
-    margin: 0 auto;
+    width:
+        100%;
 
-    overflow: hidden;
+    max-width:
+        1000px;
+
+    margin:
+        0 auto;
+
+    overflow:
+        hidden;
 
     border:
+
         1px solid
         rgba(70,255,115,.32);
 
-    border-radius: 24px;
+    border-radius:
+        24px;
 
-    background: #010806;
+    background:
+        #010806;
 
     box-shadow:
+
         0 30px 80px
         rgba(0,0,0,.35);
+
 }
 
 
@@ -1157,182 +1774,297 @@ button {
 ===================================================== */
 
 .game-topbar {
-    min-height: 88px;
+
+    min-height:
+        88px;
 
     padding:
         18px 28px;
 
-    display: grid;
+    display:
+        grid;
 
     grid-template-columns:
         1fr 1fr 1fr;
 
-    align-items: center;
+    align-items:
+        center;
 
     border-bottom:
+
         1px solid
         rgba(70,255,115,.20);
+
 }
 
 
 .game-stat {
-    display: flex;
-    flex-direction: column;
 
-    gap: 4px;
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    gap:
+        4px;
+
 }
 
 
 .stat-label {
-    color: #63ff82;
 
-    font-size: 9px;
-    font-weight: 900;
+    color:
+        #63ff82;
 
-    letter-spacing: 2px;
+    font-size:
+        9px;
+
+    font-weight:
+        900;
+
+    letter-spacing:
+        2px;
+
 }
 
 
 .game-stat strong {
-    color: #63ff82;
 
-    font-size: 28px;
+    color:
+        #63ff82;
+
+    font-size:
+        28px;
+
 }
 
 
 .game-title-small {
-    text-align: center;
 
-    color: #64ff83;
+    text-align:
+        center;
 
-    font-size: 13px;
-    font-weight: 900;
+    color:
+        #64ff83;
 
-    letter-spacing: 3px;
+    font-size:
+        13px;
+
+    font-weight:
+        900;
+
+    letter-spacing:
+        3px;
+
 }
 
 
 .lives-stat {
-    align-items: flex-end;
+
+    align-items:
+        flex-end;
+
 }
 
 
 .lives-display {
-    display: flex;
-    align-items: center;
 
-    gap: 7px;
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        7px;
+
 }
 
 
 .heart {
-    color: #ff4150;
 
-    font-size: 22px;
+    color:
+        #ff4150;
+
+    font-size:
+        22px;
+
 }
 
 
 .game-message {
-    min-height: 43px;
+
+    min-height:
+        43px;
 
     padding:
         11px 20px;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display:
+        flex;
 
-    text-align: center;
+    align-items:
+        center;
 
-    color: #ccd4d0;
+    justify-content:
+        center;
 
-    font-size: 13px;
+    text-align:
+        center;
+
+    color:
+        #ccd4d0;
+
+    font-size:
+        13px;
 
     border-bottom:
+
         1px solid
         rgba(70,255,115,.10);
+
 }
 
 
 .game-message strong {
-    margin-left: 4px;
 
-    color: #65ff83;
+    margin-left:
+        4px;
+
+    color:
+        #65ff83;
+
 }
 
 
 .canvas-wrapper {
-    width: 100%;
 
-    background: #001009;
+    width:
+        100%;
+
+    background:
+        #001009;
+
 }
 
 
 #gameCanvas {
-    display: block;
 
-    width: 100%;
-    height: auto;
+    display:
+        block;
+
+    width:
+        100%;
+
+    height:
+        auto;
+
 }
 
 
 #gameCanvas.damage {
+
     box-shadow:
+
         inset 0 0 100px
         rgba(255,30,30,.4);
+
 }
 
 
 .game-bottom {
-    padding: 20px;
 
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    padding:
+        20px;
 
-    gap: 12px;
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    align-items:
+        center;
+
+    gap:
+        12px;
 
     border-top:
+
         1px solid
         rgba(70,255,115,.15);
+
 }
 
 
 .start-game-btn {
-    min-width: 220px;
-    min-height: 50px;
 
-    border: 0;
-    border-radius: 28px;
+    min-width:
+        220px;
 
-    background: #73ed67;
+    min-height:
+        50px;
 
-    color: #031008;
+    border:
+        0;
 
-    font-size: 13px;
-    font-weight: 900;
+    border-radius:
+        28px;
 
-    cursor: pointer;
+    background:
+        #73ed67;
+
+    color:
+        #031008;
+
+    font-size:
+        13px;
+
+    font-weight:
+        900;
+
+    cursor:
+        pointer;
+
 }
 
 
 .game-bottom p {
-    color: #7e8b85;
 
-    font-size: 9px;
-    font-weight: 800;
+    color:
+        #7e8b85;
 
-    letter-spacing: 2px;
+    font-size:
+        9px;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        2px;
+
 }
 
 
 .game-bottom strong {
-    color: #65ff83;
+
+    color:
+        #65ff83;
+
 }
 
 
+
+/* =====================================================
+   MOBILE CONTROLS
+===================================================== */
+
 .mobile-controls {
-    display: none;
+
+    display:
+        none;
+
 }
 
 
@@ -1342,177 +2074,284 @@ button {
 ===================================================== */
 
 .survival-topbar {
-    min-height: 92px;
+
+    min-height:
+        92px;
 
     padding:
         17px 25px;
 
-    display: grid;
+    display:
+        grid;
 
     grid-template-columns:
         1fr 1fr 1.5fr 1fr 1fr;
 
-    align-items: center;
+    align-items:
+        center;
 
     border-bottom:
+
         1px solid
         rgba(70,255,115,.18);
+
 }
 
 
 .survival-stat {
-    display: flex;
-    flex-direction: column;
 
-    gap: 4px;
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    gap:
+        4px;
+
 }
 
 
 .survival-stat span {
-    color: #74817a;
 
-    font-size: 8px;
-    font-weight: 900;
+    color:
+        #74817a;
 
-    letter-spacing: 2px;
+    font-size:
+        8px;
+
+    font-weight:
+        900;
+
+    letter-spacing:
+        2px;
+
 }
 
 
 .survival-stat strong {
-    color: #63ff82;
 
-    font-size: 22px;
+    color:
+        #63ff82;
+
+    font-size:
+        22px;
+
 }
 
 
 .survival-logo {
-    text-align: center;
 
-    color: #65ff83;
+    text-align:
+        center;
 
-    font-size: 11px;
-    font-weight: 900;
+    color:
+        #65ff83;
 
-    letter-spacing: 3px;
+    font-size:
+        11px;
+
+    font-weight:
+        900;
+
+    letter-spacing:
+        3px;
+
 }
 
 
 .survival-lives {
-    align-items: flex-end;
+
+    align-items:
+        flex-end;
+
 }
 
 
 .survival-lives div {
-    display: flex;
 
-    gap: 6px;
+    display:
+        flex;
+
+    gap:
+        6px;
+
 }
 
 
 .survival-lives b {
-    color: #ff4050;
 
-    font-size: 20px;
+    color:
+        #ff4050;
+
+    font-size:
+        20px;
+
 }
 
 
 .survival-subbar {
-    min-height: 45px;
+
+    min-height:
+        45px;
 
     padding:
         0 22px;
 
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
 
     border-bottom:
+
         1px solid
         rgba(70,255,115,.10);
 
-    color: #87948d;
+    color:
+        #87948d;
 
-    font-size: 10px;
-    font-weight: 800;
+    font-size:
+        10px;
 
-    letter-spacing: 1px;
+    font-weight:
+        800;
+
+    letter-spacing:
+        1px;
+
 }
 
 
 #dashStatus {
-    color: #65ff83;
+
+    color:
+        #65ff83;
+
 }
 
 
 .survival-canvas-wrap {
-    position: relative;
 
-    width: 100%;
+    position:
+        relative;
 
-    background: #001009;
+    width:
+        100%;
+
+    background:
+        #001009;
+
 }
 
 
 #survivalCanvas {
-    display: block;
 
-    width: 100%;
-    height: auto;
+    display:
+        block;
+
+    width:
+        100%;
+
+    height:
+        auto;
+
 }
 
 
 #survivalCanvas.damage {
+
     box-shadow:
+
         inset 0 0 120px
         rgba(255,25,25,.45);
+
 }
 
 
 .survival-bottom {
-    padding: 20px;
 
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    padding:
+        20px;
 
-    gap: 12px;
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    align-items:
+        center;
+
+    gap:
+        12px;
 
     border-top:
+
         1px solid
         rgba(70,255,115,.14);
+
 }
 
 
 .survival-start {
-    min-width: 220px;
-    min-height: 50px;
 
-    border: 0;
-    border-radius: 27px;
+    min-width:
+        220px;
 
-    background: #73ed67;
+    min-height:
+        50px;
 
-    color: #031008;
+    border:
+        0;
 
-    font-size: 13px;
-    font-weight: 900;
+    border-radius:
+        27px;
 
-    cursor: pointer;
+    background:
+        #73ed67;
+
+    color:
+        #031008;
+
+    font-size:
+        13px;
+
+    font-weight:
+        900;
+
+    cursor:
+        pointer;
+
 }
 
 
 .survival-bottom p {
-    color: #77857e;
 
-    font-size: 9px;
-    font-weight: 900;
+    color:
+        #77857e;
 
-    letter-spacing: 1.5px;
+    font-size:
+        9px;
+
+    font-weight:
+        900;
+
+    letter-spacing:
+        1.5px;
+
 }
 
 
 .survival-bottom strong {
-    color: #65ff83;
+
+    color:
+        #65ff83;
+
 }
 
 
@@ -1522,150 +2361,227 @@ button {
 ===================================================== */
 
 .upgrade-overlay {
-    position: absolute;
 
-    inset: 0;
+    position:
+        absolute;
 
-    z-index: 20;
+    inset:
+        0;
 
-    display: none;
-    align-items: center;
-    justify-content: center;
+    z-index:
+        20;
 
-    padding: 25px;
+    display:
+        none;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    padding:
+        25px;
 
     background:
         rgba(0,8,5,.86);
 
     backdrop-filter:
         blur(8px);
+
 }
 
 
 .upgrade-overlay.visible {
-    display: flex;
+
+    display:
+        flex;
+
 }
 
 
 .upgrade-window {
+
     width:
         min(720px,100%);
 
-    text-align: center;
+    text-align:
+        center;
+
 }
 
 
 .upgrade-window h3 {
-    margin-bottom: 25px;
 
-    font-size: 28px;
+    margin-bottom:
+        25px;
+
+    font-size:
+        28px;
+
 }
 
 
 .upgrade-choices {
-    display: grid;
+
+    display:
+        grid;
 
     grid-template-columns:
         repeat(3,1fr);
 
-    gap: 12px;
+    gap:
+        12px;
+
 }
 
 
 .upgrade-card {
-    min-height: 180px;
 
-    padding: 20px;
+    min-height:
+        180px;
+
+    padding:
+        20px;
 
     border:
+
         1px solid
         rgba(90,255,130,.22);
 
-    border-radius: 18px;
+    border-radius:
+        18px;
 
-    background: #04140e;
+    background:
+        #04140e;
 
-    color: white;
+    color:
+        white;
 
-    cursor: pointer;
+    cursor:
+        pointer;
+
 }
 
 
 .upgrade-card:hover {
+
     border-color:
         #65ff83;
 
-    background: #072016;
+    background:
+        #072016;
+
 }
 
 
 .upgrade-icon {
-    margin-bottom: 14px;
 
-    color: #65ff83;
+    margin-bottom:
+        14px;
 
-    font-size: 30px;
+    color:
+        #65ff83;
+
+    font-size:
+        30px;
+
 }
 
 
 .upgrade-card h4 {
-    margin-bottom: 9px;
+
+    margin-bottom:
+        9px;
+
 }
 
 
 .upgrade-card p {
-    color: #85918b;
 
-    font-size: 11px;
+    color:
+        #85918b;
 
-    line-height: 1.5;
+    font-size:
+        11px;
+
+    line-height:
+        1.5;
+
 }
 
 
 
 /* =====================================================
-   BE EARLY / FAQ
+   BE EARLY
 ===================================================== */
 
 .early-section {
-    text-align: center;
+
+    text-align:
+        center;
+
 }
 
 
 .early-buttons {
-    justify-content: center;
+
+    justify-content:
+        center;
+
 }
 
 
+
+/* =====================================================
+   FAQ
+===================================================== */
+
 .faq-heading {
-    margin-bottom: 55px;
+
+    margin-bottom:
+        55px;
+
 }
 
 
 .faq-list {
-    max-width: 850px;
+
+    max-width:
+        850px;
+
 }
 
 
 .faq-item {
+
     padding:
         28px 0;
 
     border-top:
+
         1px solid
         rgba(255,255,255,.07);
+
 }
 
 
 .faq-item h3 {
-    margin-bottom: 12px;
+
+    margin-bottom:
+        12px;
+
 }
 
 
 .faq-item p {
-    color: #89958f;
 
-    line-height: 1.7;
+    color:
+        #89958f;
+
+    line-height:
+        1.7;
+
 }
 
 
@@ -1675,46 +2591,75 @@ button {
 ===================================================== */
 
 footer {
-    min-height: 120px;
+
+    min-height:
+        120px;
 
     padding:
         25px 60px;
 
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    display:
+        flex;
 
-    background: #010604;
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+    background:
+        #010604;
 
     border-top:
+
         1px solid
         rgba(255,255,255,.05);
+
 }
 
 
 footer img {
-    width: 80px;
-    height: 65px;
 
-    object-fit: contain;
+    width:
+        80px;
+
+    height:
+        65px;
+
+    object-fit:
+        contain;
+
 }
 
 
 .footer-link {
-    color: #63ff82;
 
-    font-size: 11px;
-    font-weight: 900;
+    color:
+        #63ff82;
+
+    font-size:
+        11px;
+
+    font-weight:
+        900;
+
 }
 
 
 footer p {
-    color: #66716c;
 
-    font-size: 10px;
-    font-weight: 900;
+    color:
+        #66716c;
 
-    letter-spacing: 2px;
+    font-size:
+        10px;
+
+    font-weight:
+        900;
+
+    letter-spacing:
+        2px;
+
 }
 
 
@@ -1723,69 +2668,154 @@ footer p {
    TABLET
 ===================================================== */
 
-@media (max-width: 900px) {
+@media (max-width: 1000px) {
+
+    .navbar {
+
+        gap:
+            17px;
+
+    }
+
 
     .nav-links {
-        display: none;
+
+        gap:
+            18px;
+
     }
 
 
     .nav-right {
-        margin-left: auto;
+
+        gap:
+            8px;
+
+    }
+
+
+    .social-circle {
+
+        width:
+            40px;
+
+        height:
+            40px;
+
+    }
+
+
+    .buy-button {
+
+        min-width:
+            145px;
+
+        padding:
+            10px 17px;
+
+    }
+
+}
+
+
+
+@media (max-width: 900px) {
+
+    .nav-links {
+
+        display:
+            none;
+
+    }
+
+
+    .nav-right {
+
+        margin-left:
+            auto;
+
     }
 
 
     .story-row {
-        grid-template-columns: 1fr;
+
+        grid-template-columns:
+            1fr;
+
     }
 
 
     .game-grid {
-        grid-template-columns: 1fr;
+
+        grid-template-columns:
+            1fr;
+
     }
 
 
     .survival-topbar {
+
         grid-template-columns:
             repeat(4,1fr);
+
     }
 
 
     .survival-logo {
-        display: none;
+
+        display:
+            none;
+
     }
 
 
     .upgrade-choices {
-        grid-template-columns: 1fr;
+
+        grid-template-columns:
+            1fr;
+
     }
 
 
     .mobile-controls {
-        display: flex;
 
-        padding: 12px;
+        display:
+            flex;
 
-        gap: 10px;
+        padding:
+            12px;
+
+        gap:
+            10px;
+
     }
 
 
     .control-btn {
-        flex: 1;
 
-        min-height: 55px;
+        flex:
+            1;
+
+        min-height:
+            55px;
 
         border:
+
             1px solid
             rgba(70,255,115,.3);
 
-        border-radius: 14px;
+        border-radius:
+            14px;
 
-        background: #03130d;
+        background:
+            #03130d;
 
-        color: #65ff83;
+        color:
+            #65ff83;
 
-        font-size: 28px;
+        font-size:
+            28px;
+
     }
 
 }
@@ -1799,55 +2829,100 @@ footer p {
 @media (max-width: 600px) {
 
     .container {
+
         width:
             calc(100% - 30px);
+
     }
 
 
     .navbar {
+
         width:
             calc(100% - 30px);
 
-        min-height: 78px;
+        min-height:
+            78px;
+
+        gap:
+            8px;
+
     }
 
 
     .logo {
-        width: 60px;
+
+        width:
+            54px;
+
     }
 
 
     .logo img {
-        width: 55px;
-        height: 50px;
+
+        width:
+            52px;
+
+        height:
+            48px;
+
     }
 
 
     .buy-button {
-        display: none;
+
+        display:
+            none;
+
     }
 
 
     .social-circle {
-        width: 38px;
-        height: 38px;
+
+        width:
+            37px;
+
+        height:
+            37px;
+
+    }
+
+
+    .nav-right {
+
+        gap:
+            7px;
+
     }
 
 
     .hero-inner {
+
         min-height:
-            calc(100vh - 78px);
+
+            calc(
+                100vh - 78px
+            );
 
         width:
             calc(100% - 36px);
+
     }
 
 
     .hero h1 {
-        font-size:
-            clamp(48px,14vw,72px);
 
-        letter-spacing: -3px;
+        font-size:
+
+            clamp(
+                48px,
+                14vw,
+                72px
+            );
+
+        letter-spacing:
+            -3px;
+
     }
 
 
@@ -1857,56 +2932,84 @@ footer p {
     .arcade-section,
     .early-section,
     .faq-section {
+
         padding:
             90px 0;
+
     }
 
 
     .game-choice-card {
-        min-height: 510px;
 
-        padding: 25px;
+        min-height:
+            510px;
+
+        padding:
+            25px;
+
     }
 
 
     .game-preview {
-        height: 190px;
+
+        height:
+            190px;
+
     }
 
 
     .survival-cover-image {
-        width: 160px;
-        height: 180px;
+
+        width:
+            160px;
+
+        height:
+            180px;
+
     }
 
 
     .survival-topbar {
-        padding: 10px;
+
+        padding:
+            10px;
 
         grid-template-columns:
             repeat(4,1fr);
+
     }
 
 
     .survival-stat strong {
-        font-size: 17px;
+
+        font-size:
+            17px;
+
     }
 
 
     .survival-subbar {
-        font-size: 8px;
+
+        font-size:
+            8px;
+
     }
 
 
     footer {
+
         padding:
             30px 20px;
 
-        flex-direction: column;
+        flex-direction:
+            column;
 
-        align-items: flex-start;
+        align-items:
+            flex-start;
 
-        gap: 20px;
+        gap:
+            20px;
+
     }
 
 }
