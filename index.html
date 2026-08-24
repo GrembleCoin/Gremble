@@ -13,7 +13,7 @@
 
     <link
         rel="stylesheet"
-        href="style.css?v=90"
+        href="style.css?v=100"
     >
 </head>
 
@@ -251,6 +251,57 @@
                         h3.55Z
                         "
                     />
+
+                </svg>
+
+            </a>
+
+
+
+            <!-- INSTAGRAM -->
+
+            <a
+                href="https://www.instagram.com/gremblecoin/"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="social-circle instagram-circle"
+                aria-label="Gremble on Instagram"
+            >
+
+                <svg
+                    viewBox="0 0 24 24"
+                    width="19"
+                    height="19"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                >
+
+                    <rect
+                        x="3"
+                        y="3"
+                        width="18"
+                        height="18"
+                        rx="5"
+                        ry="5"
+                    ></rect>
+
+                    <circle
+                        cx="12"
+                        cy="12"
+                        r="4"
+                    ></circle>
+
+                    <circle
+                        cx="17.5"
+                        cy="6.5"
+                        r="1"
+                        fill="currentColor"
+                        stroke="none"
+                    ></circle>
 
                 </svg>
 
@@ -767,7 +818,9 @@
 
 
 
-        <!-- COIN CATCH -->
+        <!-- =================================================
+             COIN CATCH
+        ================================================== -->
 
         <div
             class="arcade-game-screen"
@@ -943,7 +996,9 @@
 
 
 
-        <!-- SURVIVAL -->
+        <!-- =================================================
+             SURVIVAL
+        ================================================== -->
 
         <div
             class="arcade-game-screen"
@@ -1384,8 +1439,10 @@
 
 
         <h2 id="buyModalTitle">
+
             CHOOSE WHERE<br>
             TO BUY
+
         </h2>
 
 
@@ -1459,13 +1516,13 @@
      GAME FILES
 ===================================================== -->
 
-<script src="game.js?v=90"></script>
-<script src="survival.js?v=90"></script>
+<script src="game.js?v=100"></script>
+<script src="survival.js?v=100"></script>
 
 
 
 <!-- =====================================================
-     MAIN WEBSITE SCRIPT
+     WEBSITE SCRIPT
 ===================================================== -->
 
 <script>
@@ -1623,7 +1680,6 @@ backButtons.forEach(
 /* =====================================================
    BUY GREMBLE
 
-   IMPORTANT:
    WHEN GREMBLE LAUNCHES,
    CHANGE ONLY THESE TWO LINKS.
 ===================================================== */
@@ -1642,8 +1698,7 @@ const GREMBLE_BUY_LINKS = {
 
 /*
 
-AFTER LAUNCH, CHANGE IT LIKE THIS:
-
+AFTER LAUNCH:
 
 const GREMBLE_BUY_LINKS = {
 
@@ -1773,8 +1828,7 @@ function setupBuyLinks() {
 
 
     if (
-        activeLinks >
-        0
+        activeLinks > 0
     ) {
 
         buyComingSoon.textContent =
@@ -1785,7 +1839,7 @@ function setupBuyLinks() {
     else {
 
         buyComingSoon.textContent =
-            "TRADING LINKS";
+            "TRADING LINKS COMING AT LAUNCH";
 
     }
 
@@ -1850,7 +1904,7 @@ function closeBuyModal() {
 
 
 /* =====================================================
-   BUY MODAL EVENTS
+   BUY EVENTS
 ===================================================== */
 
 openBuyModalButton.addEventListener(
@@ -1869,7 +1923,6 @@ buyModalBackdrop.addEventListener(
     "click",
     closeBuyModal
 );
-
 
 
 document.addEventListener(
@@ -1924,7 +1977,6 @@ document.addEventListener(
 );
 
 
-/* INITIALIZE LINKS */
 
 setupBuyLinks();
 
@@ -1933,4 +1985,5 @@ setupBuyLinks();
 
 
 </body>
+
 </html>
