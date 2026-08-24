@@ -1,6 +1,6 @@
 /* =========================================================
    GREMBLE COIN CATCH
-   GAME + SUPABASE LEADERBOARD
+   GAME + MOBILE CONTROLS + SUPABASE LEADERBOARD
 ========================================================= */
 
 
@@ -20,7 +20,7 @@ const COIN_SCORES_API =
 
 
 /* =========================================================
-   HTML
+   HTML ELEMENTS
 ========================================================= */
 
 const gameCanvas =
@@ -70,6 +70,7 @@ let gameRunning = false;
 let gameFrame = null;
 
 let gameScore = 0;
+
 let gameLives = 3;
 
 let gameObjects = [];
@@ -98,10 +99,10 @@ const gameKeys = {
 
 
 /* =========================================================
-   IGNORE GAME KEYS WHILE TYPING
+   CHECK IF PLAYER IS TYPING
 ========================================================= */
 
-function isTypingInField(target) {
+function coinIsTyping(target) {
 
     if (!target) {
         return false;
@@ -113,6 +114,7 @@ function isTypingInField(target) {
         target.tagName === "SELECT" ||
         target.isContentEditable
     );
+
 }
 
 
@@ -182,7 +184,7 @@ coinGameImages.shiba.src =
 
 
 /* =========================================================
-   COIN TYPES
+   BAD COINS
 ========================================================= */
 
 const badCoinTypes = [
@@ -228,13 +230,14 @@ const badCoinTypes = [
 const coinPlayer = {
 
     width: 64,
+
     height: 90,
 
     x:
         GAME_WIDTH / 2 - 32,
 
     y:
-        GAME_HEIGHT - 112,
+        GAME_HEIGHT - 110,
 
     speed:
         9.5
@@ -242,28 +245,26 @@ const coinPlayer = {
 };
 
 
-
-/* =========================================================
-   FLOOR
-========================================================= */
-
 const COIN_FLOOR_Y =
     GAME_HEIGHT - 20;
 
 
 
 /* =========================================================
-   KEYBOARD
+   KEYBOARD CONTROLS
 ========================================================= */
 
 document.addEventListener(
     "keydown",
     event => {
 
+        /*
+           When player types Telegram username,
+           A and D work as normal letters.
+        */
+
         if (
-            isTypingInField(
-                event.target
-            )
+            coinIsTyping(event.target)
         ) {
             return;
         }
@@ -300,6 +301,7 @@ document.addEventListener(
 
     }
 );
+
 
 
 document.addEventListener(
@@ -307,9 +309,7 @@ document.addEventListener(
     event => {
 
         if (
-            isTypingInField(
-                event.target
-            )
+            coinIsTyping(event.target)
         ) {
             return;
         }
@@ -346,97 +346,336 @@ document.addEventListener(
 
 
 /* =========================================================
-   MOBILE BUTTONS
+   MOBILE CONTROLS
 ========================================================= */
 
-function holdLeftStart(event) {
+function setupMobileControl(
+    button,
+    direction
+) {
 
-    event.preventDefault();
+    if (!button) {
+        return;
+    }
 
-    gameKeys.left =
-        true;
+
+    /*
+       Browser must treat this as a game control,
+       not text / scrolling / long press.
+    */
+
+    button.style.touchAction =
+        "none";
+
+    button.style.userSelect =
+        "none";
+
+    button.style.webkitUserSelect =
+        "none";
+
+    button.style.webkitTouchCallout =
+        "none";
+
+    button.style.webkitTapHighlightColor =
+        "transparent";
+
+
+    function startMovement(event) {
+
+        event.preventDefault();
+
+        event.stopPropagation();
+
+
+        /*
+           Capture pointer so movement continues
+           even if finger moves slightly.
+        */
+
+        try {
+
+            button.setPointerCapture(
+                event.pointerId
+            );
+
+        }
+        catch (error) {
+        }
+
+
+        if (
+            direction === "left"
+        ) {
+
+            gameKeys.left =
+                true;
+
+        }
+
+
+        if (
+            direction === "right"
+        ) {
+
+            gameKeys.right =
+                true;
+
+        }
+
+    }
+
+
+    function stopMovement(event) {
+
+        if (event) {
+
+            event.preventDefault();
+
+            event.stopPropagation();
+
+        }
+
+
+        if (
+            direction === "left"
+        ) {
+
+            gameKeys.left =
+                false;
+
+        }
+
+
+        if (
+            direction === "right"
+        ) {
+
+            gameKeys.right =
+                false;
+
+        }
+
+
+        if (
+            event &&
+            event.pointerId !== undefined
+        ) {
+
+            try {
+
+                if (
+                    button.hasPointerCapture(
+                        event.pointerId
+                    )
+                ) {
+
+                    button.releasePointerCapture(
+                        event.pointerId
+                    );
+
+                }
+
+            }
+            catch (error) {
+            }
+
+        }
+
+    }
+
+
+    button.addEventListener(
+        "pointerdown",
+        startMovement
+    );
+
+
+    button.addEventListener(
+        "pointerup",
+        stopMovement
+    );
+
+
+    button.addEventListener(
+        "pointercancel",
+        stopMovement
+    );
+
+
+    button.addEventListener(
+        "lostpointercapture",
+        stopMovement
+    );
+
+
+    /*
+       Prevent Android / Chrome long-press menu.
+    */
+
+    button.addEventListener(
+        "contextmenu",
+        event => {
+
+            event.preventDefault();
+
+        }
+    );
+
+
+    button.addEventListener(
+        "selectstart",
+        event => {
+
+            event.preventDefault();
+
+        }
+    );
+
+
+    button.addEventListener(
+        "dragstart",
+        event => {
+
+            event.preventDefault();
+
+        }
+    );
+
+
+    /*
+       Extra protection for mobile browsers.
+       Does NOT disable the arrow.
+    */
+
+    button.addEventListener(
+        "touchstart",
+        event => {
+
+            event.preventDefault();
+
+        },
+        {
+            passive: false
+        }
+    );
+
+
+    button.addEventListener(
+        "touchmove",
+        event => {
+
+            event.preventDefault();
+
+        },
+        {
+            passive: false
+        }
+    );
 
 }
 
 
-function holdLeftEnd(event) {
 
-    event.preventDefault();
+/* =========================================================
+   ACTIVATE MOBILE ARROWS
+========================================================= */
+
+setupMobileControl(
+    moveLeftButton,
+    "left"
+);
+
+
+setupMobileControl(
+    moveRightButton,
+    "right"
+);
+
+
+
+/* =========================================================
+   CANVAS MOBILE PROTECTION
+========================================================= */
+
+gameCanvas.style.userSelect =
+    "none";
+
+gameCanvas.style.webkitUserSelect =
+    "none";
+
+gameCanvas.style.webkitTouchCallout =
+    "none";
+
+gameCanvas.style.webkitTapHighlightColor =
+    "transparent";
+
+
+gameCanvas.addEventListener(
+    "contextmenu",
+    event => {
+
+        event.preventDefault();
+
+    }
+);
+
+
+gameCanvas.addEventListener(
+    "selectstart",
+    event => {
+
+        event.preventDefault();
+
+    }
+);
+
+
+gameCanvas.addEventListener(
+    "dragstart",
+    event => {
+
+        event.preventDefault();
+
+    }
+);
+
+
+
+/* =========================================================
+   RELEASE CONTROLS WHEN WINDOW LOSES FOCUS
+========================================================= */
+
+function releaseCoinControls() {
 
     gameKeys.left =
+        false;
+
+    gameKeys.right =
         false;
 
 }
 
 
-function holdRightStart(event) {
-
-    event.preventDefault();
-
-    gameKeys.right =
-        true;
-
-}
+window.addEventListener(
+    "blur",
+    releaseCoinControls
+);
 
 
-function holdRightEnd(event) {
+document.addEventListener(
+    "visibilitychange",
+    () => {
 
-    event.preventDefault();
+        if (
+            document.hidden
+        ) {
 
-    gameKeys.right =
-        false;
+            releaseCoinControls();
 
-}
+        }
 
-
-if (moveLeftButton) {
-
-    moveLeftButton.addEventListener(
-        "pointerdown",
-        holdLeftStart
-    );
-
-    moveLeftButton.addEventListener(
-        "pointerup",
-        holdLeftEnd
-    );
-
-    moveLeftButton.addEventListener(
-        "pointerleave",
-        holdLeftEnd
-    );
-
-    moveLeftButton.addEventListener(
-        "pointercancel",
-        holdLeftEnd
-    );
-
-}
-
-
-if (moveRightButton) {
-
-    moveRightButton.addEventListener(
-        "pointerdown",
-        holdRightStart
-    );
-
-    moveRightButton.addEventListener(
-        "pointerup",
-        holdRightEnd
-    );
-
-    moveRightButton.addEventListener(
-        "pointerleave",
-        holdRightEnd
-    );
-
-    moveRightButton.addEventListener(
-        "pointercancel",
-        holdRightEnd
-    );
-
-}
+    }
+);
 
 
 
@@ -446,7 +685,9 @@ if (moveRightButton) {
 
 function updateCoinPlayer() {
 
-    if (gameKeys.left) {
+    if (
+        gameKeys.left
+    ) {
 
         coinPlayer.x -=
             coinPlayer.speed;
@@ -454,7 +695,9 @@ function updateCoinPlayer() {
     }
 
 
-    if (gameKeys.right) {
+    if (
+        gameKeys.right
+    ) {
 
         coinPlayer.x +=
             coinPlayer.speed;
@@ -465,6 +708,7 @@ function updateCoinPlayer() {
     coinPlayer.x =
         Math.max(
             10,
+
             Math.min(
                 GAME_WIDTH -
                 coinPlayer.width -
@@ -479,7 +723,7 @@ function updateCoinPlayer() {
 
 
 /* =========================================================
-   SPAWN
+   SPAWN COIN
 ========================================================= */
 
 function spawnCoinObject() {
@@ -501,7 +745,9 @@ function spawnCoinObject() {
     let name;
 
 
-    if (isGremble) {
+    if (
+        isGremble
+    ) {
 
         image =
             coinGameImages.gremblecoin;
@@ -531,18 +777,14 @@ function spawnCoinObject() {
     }
 
 
-    const difficulty =
-        1 +
-        gameScore *
-        0.012;
-
-
     const speed =
         Math.min(
             11,
 
             gameBaseFallSpeed +
-            difficulty +
+            1 +
+            gameScore *
+            0.012 +
             Math.random() *
             1.25
         );
@@ -644,11 +886,11 @@ function coinCollision(
    LOSE LIFE
 ========================================================= */
 
-function loseCoinLife(
-    message
-) {
+function loseCoinLife(message) {
 
-    if (!gameRunning) {
+    if (
+        !gameRunning
+    ) {
         return;
     }
 
@@ -694,7 +936,7 @@ function loseCoinLife(
 
 
 /* =========================================================
-   UPDATE OBJECTS
+   UPDATE FALLING OBJECTS
 ========================================================= */
 
 function updateGameObjects() {
@@ -716,6 +958,10 @@ function updateGameObjects() {
             coin.speed;
 
 
+        /*
+           PLAYER CAUGHT COIN
+        */
+
         if (
             coinCollision(
                 coinPlayer,
@@ -729,7 +975,9 @@ function updateGameObjects() {
             );
 
 
-            if (coin.isGremble) {
+            if (
+                coin.isGremble
+            ) {
 
                 gameScore++;
 
@@ -757,6 +1005,10 @@ function updateGameObjects() {
         }
 
 
+        /*
+           COIN MISSED
+        */
+
         if (
             coin.y >
             GAME_HEIGHT +
@@ -769,7 +1021,14 @@ function updateGameObjects() {
             );
 
 
-            if (coin.isGremble) {
+            /*
+               Missing a GrembleCoin costs a life.
+               Missing a bad coin is safe.
+            */
+
+            if (
+                coin.isGremble
+            ) {
 
                 loseCoinLife(
                     "YOU MISSED GREMBLECOIN!"
@@ -830,6 +1089,10 @@ function drawCoinBackground() {
     );
 
 
+    /*
+       STARS
+    */
+
     for (
         let i = 0;
         i < 70;
@@ -859,9 +1122,7 @@ function drawCoinBackground() {
 
         gameCtx.fillStyle =
             i % 8 === 0
-
                 ? "rgba(90,255,130,.75)"
-
                 : "rgba(255,255,255,.17)";
 
 
@@ -880,6 +1141,10 @@ function drawCoinBackground() {
 
     }
 
+
+    /*
+       ONE FLOOR LINE
+    */
 
     gameCtx.save();
 
@@ -925,12 +1190,10 @@ function drawCoinBackground() {
 
 
 /* =========================================================
-   TRAIL
+   FALLING LIGHT TRAIL
 ========================================================= */
 
-function drawCoinTrail(
-    coin
-) {
+function drawCoinTrail(coin) {
 
     const centerX =
         coin.x +
@@ -953,7 +1216,9 @@ function drawCoinTrail(
         );
 
 
-    if (coin.isGremble) {
+    if (
+        coin.isGremble
+    ) {
 
         gradient.addColorStop(
             0,
@@ -1046,7 +1311,7 @@ function drawCoinTrail(
 
 
 /* =========================================================
-   DRAW OBJECTS
+   DRAW FALLING OBJECTS
 ========================================================= */
 
 function drawGameObjects() {
@@ -1074,9 +1339,7 @@ function drawGameObjects() {
 
             gameCtx.shadowColor =
                 coin.isGremble
-
                     ? "rgba(70,255,120,.95)"
-
                     : "rgba(255,60,60,.48)";
 
 
@@ -1173,11 +1436,11 @@ function updateCoinDifficulty() {
    GAME LOOP
 ========================================================= */
 
-function coinGameLoop(
-    timestamp
-) {
+function coinGameLoop(timestamp) {
 
-    if (!gameRunning) {
+    if (
+        !gameRunning
+    ) {
         return;
     }
 
@@ -1230,7 +1493,9 @@ function coinGameLoop(
 
 function startCoinGame() {
 
-    if (gameFrame) {
+    if (
+        gameFrame
+    ) {
 
         cancelAnimationFrame(
             gameFrame
@@ -1263,6 +1528,14 @@ function startCoinGame() {
         false;
 
 
+    gameKeys.left =
+        false;
+
+
+    gameKeys.right =
+        false;
+
+
     coinPlayer.x =
         GAME_WIDTH /
         2 -
@@ -1274,14 +1547,6 @@ function startCoinGame() {
         GAME_HEIGHT -
         coinPlayer.height -
         20;
-
-
-    gameKeys.left =
-        false;
-
-
-    gameKeys.right =
-        false;
 
 
     gameScoreElement.textContent =
@@ -1322,7 +1587,9 @@ function startCoinGame() {
 
 function endCoinGame() {
 
-    if (!gameRunning) {
+    if (
+        !gameRunning
+    ) {
         return;
     }
 
@@ -1331,15 +1598,12 @@ function endCoinGame() {
         false;
 
 
-    gameKeys.left =
-        false;
+    releaseCoinControls();
 
 
-    gameKeys.right =
-        false;
-
-
-    if (gameFrame) {
+    if (
+        gameFrame
+    ) {
 
         cancelAnimationFrame(
             gameFrame
@@ -1374,16 +1638,11 @@ function endCoinGame() {
    TELEGRAM USERNAME
 ========================================================= */
 
-function cleanCoinTelegramUsername(
-    value
-) {
+function cleanCoinTelegramUsername(value) {
 
     return value
         .trim()
-        .replace(
-            /^@/,
-            ""
-        )
+        .replace(/^@/, "")
         .replace(
             /[^a-zA-Z0-9_]/g,
             ""
@@ -1409,7 +1668,9 @@ function createCoinLeaderboardUI() {
         );
 
 
-    if (!wrapper) {
+    if (
+        !wrapper
+    ) {
         return;
     }
 
@@ -1454,15 +1715,39 @@ function createCoinLeaderboardUI() {
             </h3>
 
 
+            <div class="telegram-info-box">
+
+                <strong>
+                    TELEGRAM USERNAME
+                </strong>
+
+                <p>
+                    Enter your real Telegram username.
+                    We may use it to contact you if you win
+                    a Gremble competition.
+                </p>
+
+            </div>
+
+
             <div class="coin-submit-row">
 
-                <input
-                    id="coinNickname"
-                    type="text"
-                    maxlength="32"
-                    placeholder="TELEGRAM USERNAME"
-                    autocomplete="off"
-                >
+                <div class="telegram-input-wrap">
+
+                    <span>
+                        @
+                    </span>
+
+                    <input
+                        id="coinNickname"
+                        type="text"
+                        maxlength="32"
+                        placeholder="yourusername"
+                        autocomplete="off"
+                        spellcheck="false"
+                    >
+
+                </div>
 
 
                 <button
@@ -1473,12 +1758,6 @@ function createCoinLeaderboardUI() {
                 </button>
 
             </div>
-
-
-            <p class="coin-telegram-note">
-                Enter your Telegram username so we can contact you
-                if your score wins a competition.
-            </p>
 
 
             <div
@@ -1556,8 +1835,7 @@ function createCoinLeaderboardUI() {
 
 
             if (
-                event.key ===
-                "Enter"
+                event.key === "Enter"
             ) {
 
                 submitCoinScore();
@@ -1681,13 +1959,13 @@ function addCoinLeaderboardStyles() {
 
         .coin-submit-panel h3 {
             margin-bottom:
-                22px;
-
-            font-size:
-                18px;
+                20px;
 
             color:
                 #9aa69f;
+
+            font-size:
+                18px;
         }
 
 
@@ -1700,6 +1978,58 @@ function addCoinLeaderboardStyles() {
 
             font-size:
                 25px;
+        }
+
+
+        .telegram-info-box {
+            width:
+                min(570px,100%);
+
+            margin:
+                0 auto 14px;
+
+            padding:
+                13px 16px;
+
+            text-align:
+                left;
+
+            border:
+                1px solid
+                rgba(80,255,130,.12);
+
+            border-radius:
+                12px;
+
+            background:
+                rgba(80,255,130,.03);
+        }
+
+
+        .telegram-info-box strong {
+            color:
+                #62ff82;
+
+            font-size:
+                9px;
+
+            letter-spacing:
+                2px;
+        }
+
+
+        .telegram-info-box p {
+            margin-top:
+                6px;
+
+            color:
+                #87948d;
+
+            font-size:
+                11px;
+
+            line-height:
+                1.5;
         }
 
 
@@ -1718,21 +2048,18 @@ function addCoinLeaderboardStyles() {
         }
 
 
-        #coinNickname {
+        .telegram-input-wrap {
             flex:
                 1;
-
-            min-width:
-                0;
 
             height:
                 50px;
 
-            padding:
-                0 18px;
+            display:
+                flex;
 
-            outline:
-                none;
+            align-items:
+                center;
 
             border:
                 1px solid
@@ -1744,20 +2071,59 @@ function addCoinLeaderboardStyles() {
             background:
                 #03120d;
 
-            color:
-                white;
-
-            font-weight:
-                800;
-
-            letter-spacing:
-                1px;
+            overflow:
+                hidden;
         }
 
 
-        #coinNickname:focus {
+        .telegram-input-wrap:focus-within {
             border-color:
                 #62ff82;
+        }
+
+
+        .telegram-input-wrap span {
+            padding-left:
+                16px;
+
+            color:
+                #62ff82;
+
+            font-size:
+                15px;
+
+            font-weight:
+                900;
+        }
+
+
+        #coinNickname {
+            width:
+                100%;
+
+            height:
+                100%;
+
+            padding:
+                0 14px 0 5px;
+
+            outline:
+                none;
+
+            border:
+                0;
+
+            background:
+                transparent;
+
+            color:
+                white;
+
+            font-size:
+                13px;
+
+            font-weight:
+                800;
         }
 
 
@@ -1794,24 +2160,6 @@ function addCoinLeaderboardStyles() {
         #coinSubmitScore:disabled {
             opacity:
                 .5;
-        }
-
-
-        .coin-telegram-note {
-            width:
-                min(570px,100%);
-
-            margin:
-                11px auto 0;
-
-            color:
-                #708078;
-
-            font-size:
-                10px;
-
-            line-height:
-                1.5;
         }
 
 
@@ -1976,6 +2324,15 @@ function addCoinLeaderboardStyles() {
         }
 
 
+        .coin-board-name::before {
+            content:
+                "@";
+
+            color:
+                #5cff83;
+        }
+
+
         .coin-board-score {
             color:
                 #5cff83;
@@ -2006,7 +2363,7 @@ function addCoinLeaderboardStyles() {
         }
 
 
-        @media (max-width: 600px) {
+        @media (max-width:600px) {
 
             .coin-submit-panel,
             .coin-leaderboard {
@@ -2040,7 +2397,7 @@ function addCoinLeaderboardStyles() {
 
 
 /* =========================================================
-   SHOW SUBMIT
+   SHOW SCORE SUBMIT
 ========================================================= */
 
 function showCoinSubmitPanel() {
@@ -2120,7 +2477,7 @@ function showCoinSubmitPanel() {
 
 
 /* =========================================================
-   HIDE SUBMIT
+   HIDE SCORE SUBMIT
 ========================================================= */
 
 function hideCoinSubmitPanel() {
@@ -2131,7 +2488,9 @@ function hideCoinSubmitPanel() {
         );
 
 
-    if (panel) {
+    if (
+        panel
+    ) {
 
         panel.style.display =
             "none";
@@ -2173,15 +2532,14 @@ async function submitCoinScore() {
         );
 
 
-    const name =
+    const username =
         cleanCoinTelegramUsername(
             input.value
         );
 
 
     if (
-        name.length <
-        5
+        username.length < 5
     ) {
 
         status.textContent =
@@ -2230,7 +2588,7 @@ async function submitCoinScore() {
                             {
 
                                 name:
-                                    name,
+                                    username,
 
                                 score:
                                     finalCoinScore
@@ -2242,21 +2600,12 @@ async function submitCoinScore() {
             );
 
 
-        if (!response.ok) {
-
-            const error =
-                await response.text();
-
-
-            console.error(
-                "Coin score error:",
-                response.status,
-                error
-            );
-
+        if (
+            !response.ok
+        ) {
 
             throw new Error(
-                error
+                await response.text()
             );
 
         }
@@ -2279,7 +2628,7 @@ async function submitCoinScore() {
 
 
         status.textContent =
-            "Score submitted!";
+            `Saved as @${username}`;
 
 
         await loadCoinLeaderboard();
@@ -2353,7 +2702,9 @@ async function loadCoinLeaderboard() {
             );
 
 
-        if (!response.ok) {
+        if (
+            !response.ok
+        ) {
 
             throw new Error(
                 await response.text()
@@ -2375,7 +2726,6 @@ async function loadCoinLeaderboard() {
     catch (error) {
 
         console.error(
-            "Leaderboard error:",
             error
         );
 
@@ -2397,9 +2747,7 @@ async function loadCoinLeaderboard() {
    SAFE HTML
 ========================================================= */
 
-function coinEscapeHTML(
-    text
-) {
+function coinEscapeHTML(text) {
 
     const div =
         document.createElement(
@@ -2408,9 +2756,7 @@ function coinEscapeHTML(
 
 
     div.textContent =
-        String(
-            text
-        );
+        String(text);
 
 
     return div.innerHTML;
@@ -2423,9 +2769,7 @@ function coinEscapeHTML(
    RENDER LEADERBOARD
 ========================================================= */
 
-function renderCoinLeaderboard(
-    data
-) {
+function renderCoinLeaderboard(data) {
 
     const list =
         document.getElementById(
@@ -2475,7 +2819,7 @@ function renderCoinLeaderboard(
                         </div>
 
                         <div class="coin-board-name">
-                            @${coinEscapeHTML(player.name)}
+                            ${coinEscapeHTML(player.name)}
                         </div>
 
                         <div class="coin-board-score">
