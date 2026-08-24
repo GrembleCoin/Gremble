@@ -13,7 +13,7 @@
 
     <link
         rel="stylesheet"
-        href="style.css?v=80"
+        href="style.css?v=90"
     >
 </head>
 
@@ -97,9 +97,7 @@
         <div class="nav-right">
 
 
-            <!-- =========================================
-                 X
-            ========================================== -->
+            <!-- X -->
 
             <a
                 href="https://x.com/GrembleCoin"
@@ -139,9 +137,7 @@
 
 
 
-            <!-- =========================================
-                 TELEGRAM
-            ========================================== -->
+            <!-- TELEGRAM -->
 
             <a
                 href="https://t.me/gremblecoin"
@@ -194,9 +190,7 @@
 
 
 
-            <!-- =========================================
-                 TIKTOK
-            ========================================== -->
+            <!-- TIKTOK -->
 
             <a
                 href="https://www.tiktok.com/@gremblecoin"
@@ -264,13 +258,12 @@
 
 
 
-            <!-- =========================================
-                 BUY
-            ========================================== -->
+            <!-- BUY GREMBLE -->
 
             <button
                 type="button"
                 class="buy-button"
+                id="openBuyModal"
             >
 
                 <span>
@@ -610,11 +603,6 @@
         </div>
 
 
-
-        <!-- =============================================
-             GAME SELECT
-        ============================================== -->
-
         <div
             class="arcade-select"
             id="arcadeSelect"
@@ -779,9 +767,7 @@
 
 
 
-        <!-- =============================================
-             COIN CATCH SCREEN
-        ============================================== -->
+        <!-- COIN CATCH -->
 
         <div
             class="arcade-game-screen"
@@ -957,9 +943,7 @@
 
 
 
-        <!-- =============================================
-             SURVIVAL SCREEN
-        ============================================== -->
+        <!-- SURVIVAL -->
 
         <div
             class="arcade-game-screen"
@@ -1362,19 +1346,134 @@
 
 
 <!-- =====================================================
-     GAME FILES
+     BUY GREMBLE MODAL
 ===================================================== -->
 
-<script src="game.js?v=80"></script>
-<script src="survival.js?v=80"></script>
+<div
+    class="buy-modal"
+    id="buyModal"
+    aria-hidden="true"
+>
+
+    <div
+        class="buy-modal-backdrop"
+        id="buyModalBackdrop"
+    ></div>
+
+
+    <div
+        class="buy-modal-box"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="buyModalTitle"
+    >
+
+        <button
+            type="button"
+            class="buy-modal-close"
+            id="closeBuyModal"
+            aria-label="Close"
+        >
+            ×
+        </button>
+
+
+        <p class="buy-modal-tag">
+            $GREMBLE
+        </p>
+
+
+        <h2 id="buyModalTitle">
+            CHOOSE WHERE<br>
+            TO BUY
+        </h2>
+
+
+        <p class="buy-modal-text">
+            Select the platform you want to use.
+        </p>
+
+
+        <div class="buy-platforms">
+
+
+            <!-- PUMPFUN -->
+
+            <a
+                href="#"
+                id="pumpfunBuyLink"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="buy-platform-button"
+            >
+
+                <span>
+                    PUMPFUN
+                </span>
+
+                <small>
+                    BUY $GREMBLE →
+                </small>
+
+            </a>
+
+
+
+            <!-- FOMO -->
+
+            <a
+                href="#"
+                id="fomoBuyLink"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="buy-platform-button"
+            >
+
+                <span>
+                    FOMO
+                </span>
+
+                <small>
+                    BUY $GREMBLE →
+                </small>
+
+            </a>
+
+        </div>
+
+
+        <p
+            class="buy-coming-soon"
+            id="buyComingSoon"
+        >
+            TRADING LINKS COMING AT LAUNCH
+        </p>
+
+    </div>
+
+</div>
 
 
 
 <!-- =====================================================
-     ARCADE SWITCH
+     GAME FILES
+===================================================== -->
+
+<script src="game.js?v=90"></script>
+<script src="survival.js?v=90"></script>
+
+
+
+<!-- =====================================================
+     MAIN WEBSITE SCRIPT
 ===================================================== -->
 
 <script>
+
+
+/* =====================================================
+   ARCADE SWITCH
+===================================================== */
 
 const arcadeSelect =
     document.getElementById("arcadeSelect");
@@ -1398,6 +1497,7 @@ const arcadeSection =
     document.getElementById("arcade");
 
 
+
 function hideArcadeScreens() {
 
     arcadeSelect.style.display =
@@ -1414,6 +1514,7 @@ function hideArcadeScreens() {
     );
 
 }
+
 
 
 function openCoinCatch() {
@@ -1439,6 +1540,7 @@ function openCoinCatch() {
 }
 
 
+
 function openSurvival() {
 
     hideArcadeScreens();
@@ -1460,6 +1562,7 @@ function openSurvival() {
     });
 
 }
+
 
 
 function showArcadeMenu() {
@@ -1491,6 +1594,7 @@ function showArcadeMenu() {
 }
 
 
+
 chooseCoinCatch.addEventListener(
     "click",
     openCoinCatch
@@ -1513,6 +1617,317 @@ backButtons.forEach(
 
     }
 );
+
+
+
+/* =====================================================
+   BUY GREMBLE
+
+   IMPORTANT:
+   WHEN GREMBLE LAUNCHES,
+   CHANGE ONLY THESE TWO LINKS.
+===================================================== */
+
+const GREMBLE_BUY_LINKS = {
+
+    pumpfun:
+        "",
+
+    fomo:
+        ""
+
+};
+
+
+
+/*
+
+AFTER LAUNCH, CHANGE IT LIKE THIS:
+
+
+const GREMBLE_BUY_LINKS = {
+
+    pumpfun:
+        "https://pump.fun/YOUR-LINK",
+
+    fomo:
+        "https://YOUR-FOMO-LINK"
+
+};
+
+*/
+
+
+
+/* =====================================================
+   BUY ELEMENTS
+===================================================== */
+
+const openBuyModalButton =
+    document.getElementById(
+        "openBuyModal"
+    );
+
+const buyModal =
+    document.getElementById(
+        "buyModal"
+    );
+
+const closeBuyModalButton =
+    document.getElementById(
+        "closeBuyModal"
+    );
+
+const buyModalBackdrop =
+    document.getElementById(
+        "buyModalBackdrop"
+    );
+
+const pumpfunBuyLink =
+    document.getElementById(
+        "pumpfunBuyLink"
+    );
+
+const fomoBuyLink =
+    document.getElementById(
+        "fomoBuyLink"
+    );
+
+const buyComingSoon =
+    document.getElementById(
+        "buyComingSoon"
+    );
+
+
+
+/* =====================================================
+   SET BUY LINKS
+===================================================== */
+
+function setupBuyLinks() {
+
+    let activeLinks =
+        0;
+
+
+    if (
+        GREMBLE_BUY_LINKS.pumpfun
+    ) {
+
+        pumpfunBuyLink.href =
+            GREMBLE_BUY_LINKS.pumpfun;
+
+
+        pumpfunBuyLink.classList.remove(
+            "disabled-buy-link"
+        );
+
+
+        activeLinks++;
+
+    }
+
+    else {
+
+        pumpfunBuyLink.href =
+            "#";
+
+
+        pumpfunBuyLink.classList.add(
+            "disabled-buy-link"
+        );
+
+    }
+
+
+
+    if (
+        GREMBLE_BUY_LINKS.fomo
+    ) {
+
+        fomoBuyLink.href =
+            GREMBLE_BUY_LINKS.fomo;
+
+
+        fomoBuyLink.classList.remove(
+            "disabled-buy-link"
+        );
+
+
+        activeLinks++;
+
+    }
+
+    else {
+
+        fomoBuyLink.href =
+            "#";
+
+
+        fomoBuyLink.classList.add(
+            "disabled-buy-link"
+        );
+
+    }
+
+
+
+    if (
+        activeLinks >
+        0
+    ) {
+
+        buyComingSoon.textContent =
+            "CHOOSE YOUR PLATFORM";
+
+    }
+
+    else {
+
+        buyComingSoon.textContent =
+            "TRADING LINKS";
+
+    }
+
+}
+
+
+
+/* =====================================================
+   OPEN BUY MODAL
+===================================================== */
+
+function openBuyModal() {
+
+    setupBuyLinks();
+
+
+    buyModal.classList.add(
+        "active"
+    );
+
+
+    buyModal.setAttribute(
+        "aria-hidden",
+        "false"
+    );
+
+
+    document.body.classList.add(
+        "buy-modal-open"
+    );
+
+
+    closeBuyModalButton.focus();
+
+}
+
+
+
+/* =====================================================
+   CLOSE BUY MODAL
+===================================================== */
+
+function closeBuyModal() {
+
+    buyModal.classList.remove(
+        "active"
+    );
+
+
+    buyModal.setAttribute(
+        "aria-hidden",
+        "true"
+    );
+
+
+    document.body.classList.remove(
+        "buy-modal-open"
+    );
+
+}
+
+
+
+/* =====================================================
+   BUY MODAL EVENTS
+===================================================== */
+
+openBuyModalButton.addEventListener(
+    "click",
+    openBuyModal
+);
+
+
+closeBuyModalButton.addEventListener(
+    "click",
+    closeBuyModal
+);
+
+
+buyModalBackdrop.addEventListener(
+    "click",
+    closeBuyModal
+);
+
+
+
+document.addEventListener(
+    "keydown",
+    event => {
+
+        if (
+            event.key === "Escape" &&
+            buyModal.classList.contains(
+                "active"
+            )
+        ) {
+
+            closeBuyModal();
+
+        }
+
+    }
+);
+
+
+
+/* =====================================================
+   BLOCK EMPTY LINKS
+===================================================== */
+
+[
+    pumpfunBuyLink,
+    fomoBuyLink
+
+].forEach(
+    link => {
+
+        link.addEventListener(
+            "click",
+            event => {
+
+                if (
+                    link.classList.contains(
+                        "disabled-buy-link"
+                    )
+                ) {
+
+                    event.preventDefault();
+
+                }
+
+            }
+        );
+
+    }
+);
+
+
+/* INITIALIZE LINKS */
+
+setupBuyLinks();
+
 
 </script>
 

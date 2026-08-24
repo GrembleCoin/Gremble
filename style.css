@@ -275,100 +275,51 @@ button {
 
 
 .star-1 {
-
-    top:
-        10%;
-
-    left:
-        78%;
-
-    animation-delay:
-        0s;
-
+    top: 10%;
+    left: 78%;
+    animation-delay: 0s;
 }
 
 
 .star-2 {
-
-    top:
-        25%;
-
-    left:
-        92%;
-
-    animation-delay:
-        1.4s;
-
+    top: 25%;
+    left: 92%;
+    animation-delay: 1.4s;
 }
 
 
 .star-3 {
-
-    top:
-        37%;
-
-    left:
-        70%;
-
-    animation-delay:
-        2.8s;
-
+    top: 37%;
+    left: 70%;
+    animation-delay: 2.8s;
 }
 
 
 .star-4 {
-
-    top:
-        53%;
-
-    left:
-        86%;
-
-    animation-delay:
-        4.1s;
-
+    top: 53%;
+    left: 86%;
+    animation-delay: 4.1s;
 }
 
 
 .star-5 {
-
-    top:
-        69%;
-
-    left:
-        76%;
-
-    animation-delay:
-        5.4s;
-
+    top: 69%;
+    left: 76%;
+    animation-delay: 5.4s;
 }
 
 
 .star-6 {
-
-    top:
-        80%;
-
-    left:
-        95%;
-
-    animation-delay:
-        6.5s;
-
+    top: 80%;
+    left: 95%;
+    animation-delay: 6.5s;
 }
 
 
 .star-7 {
-
-    top:
-        44%;
-
-    left:
-        98%;
-
-    animation-delay:
-        7.2s;
-
+    top: 44%;
+    left: 98%;
+    animation-delay: 7.2s;
 }
 
 
@@ -376,49 +327,37 @@ button {
 
     0% {
 
-        opacity:
-            0;
+        opacity: 0;
 
         transform:
-
             translate(
                 120px,
                 -120px
             )
-
             rotate(-42deg);
 
     }
 
 
     6% {
-
-        opacity:
-            1;
-
+        opacity: 1;
     }
 
 
     27% {
-
-        opacity:
-            1;
-
+        opacity: 1;
     }
 
 
     38% {
 
-        opacity:
-            0;
+        opacity: 0;
 
         transform:
-
             translate(
                 -430px,
                 430px
             )
-
             rotate(-42deg);
 
     }
@@ -426,16 +365,13 @@ button {
 
     100% {
 
-        opacity:
-            0;
+        opacity: 0;
 
         transform:
-
             translate(
                 -430px,
                 430px
             )
-
             rotate(-42deg);
 
     }
@@ -457,7 +393,6 @@ button {
         20;
 
     width:
-
         min(
             1300px,
             calc(100% - 50px)
@@ -482,10 +417,7 @@ button {
 
 
 .logo {
-
-    width:
-        100px;
-
+    width: 100px;
 }
 
 
@@ -535,10 +467,7 @@ button {
 
 
 .nav-links a:hover {
-
-    color:
-        #69ff84;
-
+    color: #69ff84;
 }
 
 
@@ -582,7 +511,6 @@ button {
         center;
 
     border:
-
         1px solid
         rgba(90,255,130,.18);
 
@@ -606,10 +534,7 @@ button {
 
 
 .social-circle svg {
-
-    display:
-        block;
-
+    display: block;
 }
 
 
@@ -630,25 +555,13 @@ button {
 }
 
 
-
-/* TELEGRAM */
-
 .telegram-circle svg {
-
-    transform:
-        translateX(-1px);
-
+    transform: translateX(-1px);
 }
 
 
-
-/* TIKTOK */
-
 .tiktok-circle svg {
-
-    transform:
-        translateY(1px);
-
+    transform: translateY(1px);
 }
 
 
@@ -683,23 +596,36 @@ button {
     font-weight:
         900;
 
+    cursor:
+        pointer;
+
+    transition:
+        transform .2s ease,
+        box-shadow .2s ease;
+
+}
+
+
+.buy-button:hover {
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 10px 30px
+        rgba(90,255,120,.15);
+
 }
 
 
 .buy-button span,
 .buy-button small {
-
-    display:
-        block;
-
+    display: block;
 }
 
 
 .buy-button span {
-
-    font-size:
-        12px;
-
+    font-size: 12px;
 }
 
 
@@ -731,14 +657,12 @@ button {
         5;
 
     width:
-
         min(
             1300px,
             calc(100% - 50px)
         );
 
     min-height:
-
         calc(
             100vh - 100px
         );
@@ -756,10 +680,7 @@ button {
 
 
 .hero-left {
-
-    max-width:
-        800px;
-
+    max-width: 800px;
 }
 
 
@@ -775,7 +696,6 @@ button {
         12px 18px;
 
     border:
-
         1px solid
         rgba(90,255,130,.20);
 
@@ -800,7 +720,6 @@ button {
 .hero h1 {
 
     font-size:
-
         clamp(
             60px,
             7vw,
@@ -817,10 +736,7 @@ button {
 
 
 .hero h1 span {
-
-    color:
-        #59cda2;
-
+    color: #59cda2;
 }
 
 
@@ -836,7 +752,6 @@ button {
         30px 0 25px;
 
     background:
-
         linear-gradient(
             90deg,
             #59d7aa,
@@ -922,7 +837,6 @@ button {
 .outline-button {
 
     border:
-
         1px solid
         rgba(90,255,125,.20);
 
@@ -966,18 +880,12 @@ button {
 
 
 .darker-story {
-
-    background:
-        #020907;
-
+    background: #020907;
 }
 
 
 .big-copy {
-
-    max-width:
-        850px;
-
+    max-width: 850px;
 }
 
 
@@ -987,7 +895,6 @@ button {
 .faq-heading h2 {
 
     font-size:
-
         clamp(
             55px,
             7vw,
@@ -1076,7 +983,6 @@ button {
         rgba(90,255,125,.06);
 
     font-size:
-
         clamp(
             120px,
             18vw,
@@ -1118,10 +1024,7 @@ button {
 ===================================================== */
 
 .center-heading {
-
-    text-align:
-        center;
-
+    text-align: center;
 }
 
 
@@ -1156,7 +1059,6 @@ button {
         8px;
 
     border:
-
         1px solid
         rgba(90,255,125,.14);
 
@@ -1218,7 +1120,6 @@ button {
 .game-page-heading h2 {
 
     font-size:
-
         clamp(
             60px,
             8vw,
@@ -1236,10 +1137,7 @@ button {
 
 .arcade-title h2 span,
 .game-page-heading h2 span {
-
-    color:
-        #5acfa3;
-
+    color: #5acfa3;
 }
 
 
@@ -1301,7 +1199,6 @@ button {
         left;
 
     border:
-
         1px solid
         rgba(90,255,125,.15);
 
@@ -1309,7 +1206,6 @@ button {
         28px;
 
     background:
-
         linear-gradient(
             145deg,
             #061a13,
@@ -1340,7 +1236,6 @@ button {
         rgba(90,255,125,.43);
 
     box-shadow:
-
         0 30px 70px
         rgba(0,0,0,.38);
 
@@ -1393,15 +1288,9 @@ button {
 }
 
 
-
-/* =====================================================
-   COIN CARD IMAGE
-===================================================== */
-
 .coin-game-preview {
 
     background:
-
         radial-gradient(
             circle,
             rgba(65,255,120,.09),
@@ -1423,7 +1312,6 @@ button {
         contain;
 
     filter:
-
         drop-shadow(
             0 0 30px
             rgba(70,255,120,.30)
@@ -1444,15 +1332,9 @@ button {
 }
 
 
-
-/* =====================================================
-   SURVIVAL CARD IMAGE
-===================================================== */
-
 .survival-image-preview {
 
     background:
-
         radial-gradient(
             circle at 50% 60%,
             rgba(55,255,115,.14),
@@ -1513,7 +1395,6 @@ button {
         contain;
 
     filter:
-
         drop-shadow(
             0 0 25px
             rgba(50,255,120,.25)
@@ -1534,16 +1415,8 @@ button {
 }
 
 
-
-/* =====================================================
-   CARD TEXT
-===================================================== */
-
 .game-choice-card h3 {
-
-    font-size:
-        34px;
-
+    font-size: 34px;
 }
 
 
@@ -1587,7 +1460,6 @@ button {
         7px 11px;
 
     border:
-
         1px solid
         rgba(90,255,125,.15);
 
@@ -1637,22 +1509,16 @@ button {
 
 
 /* =====================================================
-   GAME SCREEN SWITCH
+   GAME SCREEN
 ===================================================== */
 
 .arcade-game-screen {
-
-    display:
-        none;
-
+    display: none;
 }
 
 
 .arcade-game-screen.active-game-screen {
-
-    display:
-        block;
-
+    display: block;
 }
 
 
@@ -1696,7 +1562,6 @@ button {
         11px 18px;
 
     border:
-
         1px solid
         rgba(90,255,125,.20);
 
@@ -1722,10 +1587,7 @@ button {
 
 
 .game-page-heading {
-
-    margin-bottom:
-        50px;
-
+    margin-bottom: 50px;
 }
 
 
@@ -1750,7 +1612,6 @@ button {
         hidden;
 
     border:
-
         1px solid
         rgba(70,255,115,.32);
 
@@ -1761,7 +1622,6 @@ button {
         #010806;
 
     box-shadow:
-
         0 30px 80px
         rgba(0,0,0,.35);
 
@@ -1791,7 +1651,6 @@ button {
         center;
 
     border-bottom:
-
         1px solid
         rgba(70,255,115,.20);
 
@@ -1861,10 +1720,7 @@ button {
 
 
 .lives-stat {
-
-    align-items:
-        flex-end;
-
+    align-items: flex-end;
 }
 
 
@@ -1920,7 +1776,6 @@ button {
         13px;
 
     border-bottom:
-
         1px solid
         rgba(70,255,115,.10);
 
@@ -1966,7 +1821,6 @@ button {
 #gameCanvas.damage {
 
     box-shadow:
-
         inset 0 0 100px
         rgba(255,30,30,.4);
 
@@ -1991,7 +1845,6 @@ button {
         12px;
 
     border-top:
-
         1px solid
         rgba(70,255,115,.15);
 
@@ -2048,10 +1901,7 @@ button {
 
 
 .game-bottom strong {
-
-    color:
-        #65ff83;
-
+    color: #65ff83;
 }
 
 
@@ -2061,10 +1911,7 @@ button {
 ===================================================== */
 
 .mobile-controls {
-
-    display:
-        none;
-
+    display: none;
 }
 
 
@@ -2091,7 +1938,6 @@ button {
         center;
 
     border-bottom:
-
         1px solid
         rgba(70,255,115,.18);
 
@@ -2161,10 +2007,7 @@ button {
 
 
 .survival-lives {
-
-    align-items:
-        flex-end;
-
+    align-items: flex-end;
 }
 
 
@@ -2208,7 +2051,6 @@ button {
         space-between;
 
     border-bottom:
-
         1px solid
         rgba(70,255,115,.10);
 
@@ -2228,10 +2070,7 @@ button {
 
 
 #dashStatus {
-
-    color:
-        #65ff83;
-
+    color: #65ff83;
 }
 
 
@@ -2266,7 +2105,6 @@ button {
 #survivalCanvas.damage {
 
     box-shadow:
-
         inset 0 0 120px
         rgba(255,25,25,.45);
 
@@ -2291,7 +2129,6 @@ button {
         12px;
 
     border-top:
-
         1px solid
         rgba(70,255,115,.14);
 
@@ -2348,10 +2185,7 @@ button {
 
 
 .survival-bottom strong {
-
-    color:
-        #65ff83;
-
+    color: #65ff83;
 }
 
 
@@ -2393,10 +2227,7 @@ button {
 
 
 .upgrade-overlay.visible {
-
-    display:
-        flex;
-
+    display: flex;
 }
 
 
@@ -2445,7 +2276,6 @@ button {
         20px;
 
     border:
-
         1px solid
         rgba(90,255,130,.22);
 
@@ -2490,10 +2320,7 @@ button {
 
 
 .upgrade-card h4 {
-
-    margin-bottom:
-        9px;
-
+    margin-bottom: 9px;
 }
 
 
@@ -2517,18 +2344,12 @@ button {
 ===================================================== */
 
 .early-section {
-
-    text-align:
-        center;
-
+    text-align: center;
 }
 
 
 .early-buttons {
-
-    justify-content:
-        center;
-
+    justify-content: center;
 }
 
 
@@ -2538,18 +2359,12 @@ button {
 ===================================================== */
 
 .faq-heading {
-
-    margin-bottom:
-        55px;
-
+    margin-bottom: 55px;
 }
 
 
 .faq-list {
-
-    max-width:
-        850px;
-
+    max-width: 850px;
 }
 
 
@@ -2559,7 +2374,6 @@ button {
         28px 0;
 
     border-top:
-
         1px solid
         rgba(255,255,255,.07);
 
@@ -2567,10 +2381,7 @@ button {
 
 
 .faq-item h3 {
-
-    margin-bottom:
-        12px;
-
+    margin-bottom: 12px;
 }
 
 
@@ -2611,7 +2422,6 @@ footer {
         #010604;
 
     border-top:
-
         1px solid
         rgba(255,255,255,.05);
 
@@ -2665,32 +2475,418 @@ footer p {
 
 
 /* =====================================================
+   BUY GREMBLE MODAL
+===================================================== */
+
+.buy-modal {
+
+    position:
+        fixed;
+
+    inset:
+        0;
+
+    z-index:
+        9999;
+
+    display:
+        none;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    padding:
+        25px;
+
+}
+
+
+.buy-modal.active {
+    display: flex;
+}
+
+
+.buy-modal-backdrop {
+
+    position:
+        absolute;
+
+    inset:
+        0;
+
+    background:
+        rgba(0,7,5,.84);
+
+    backdrop-filter:
+        blur(10px);
+
+}
+
+
+.buy-modal-box {
+
+    position:
+        relative;
+
+    z-index:
+        2;
+
+    width:
+        min(520px,100%);
+
+    padding:
+        42px;
+
+    overflow:
+        hidden;
+
+    border:
+        1px solid
+        rgba(95,255,135,.32);
+
+    border-radius:
+        24px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #061a13,
+            #010806
+        );
+
+    box-shadow:
+        0 30px 90px
+        rgba(0,0,0,.65);
+
+    text-align:
+        center;
+
+}
+
+
+.buy-modal-box::before {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    inset:
+        0;
+
+    pointer-events:
+        none;
+
+    background:
+        radial-gradient(
+            circle at 50% 0%,
+            rgba(80,255,130,.10),
+            transparent 45%
+        );
+
+}
+
+
+.buy-modal-close {
+
+    position:
+        absolute;
+
+    z-index:
+        5;
+
+    top:
+        15px;
+
+    right:
+        17px;
+
+    width:
+        38px;
+
+    height:
+        38px;
+
+    border:
+        1px solid
+        rgba(90,255,130,.18);
+
+    border-radius:
+        50%;
+
+    background:
+        transparent;
+
+    color:
+        #8c9992;
+
+    font-size:
+        25px;
+
+    line-height:
+        1;
+
+    cursor:
+        pointer;
+
+}
+
+
+.buy-modal-close:hover {
+
+    color:
+        #65ff83;
+
+    border-color:
+        #65ff83;
+
+}
+
+
+.buy-modal-tag {
+
+    position:
+        relative;
+
+    margin-bottom:
+        13px;
+
+    color:
+        #65ff83;
+
+    font-size:
+        10px;
+
+    font-weight:
+        900;
+
+    letter-spacing:
+        3px;
+
+}
+
+
+.buy-modal-box h2 {
+
+    position:
+        relative;
+
+    font-size:
+        clamp(
+            34px,
+            6vw,
+            55px
+        );
+
+    line-height:
+        .92;
+
+    letter-spacing:
+        -2px;
+
+}
+
+
+.buy-modal-text {
+
+    position:
+        relative;
+
+    margin-top:
+        17px;
+
+    color:
+        #89968f;
+
+    font-size:
+        13px;
+
+}
+
+
+.buy-platforms {
+
+    position:
+        relative;
+
+    margin-top:
+        30px;
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(2,1fr);
+
+    gap:
+        12px;
+
+}
+
+
+.buy-platform-button {
+
+    min-height:
+        105px;
+
+    padding:
+        20px;
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    gap:
+        7px;
+
+    border:
+        1px solid
+        rgba(90,255,130,.22);
+
+    border-radius:
+        16px;
+
+    background:
+        rgba(80,255,120,.035);
+
+    transition:
+
+        transform .2s ease,
+        border-color .2s ease,
+        background .2s ease;
+
+}
+
+
+.buy-platform-button:hover {
+
+    transform:
+        translateY(-3px);
+
+    border-color:
+        rgba(90,255,130,.65);
+
+    background:
+        rgba(80,255,120,.08);
+
+}
+
+
+.buy-platform-button span {
+
+    color:
+        #f2f5f3;
+
+    font-size:
+        17px;
+
+    font-weight:
+        900;
+
+}
+
+
+.buy-platform-button small {
+
+    color:
+        #65ff83;
+
+    font-size:
+        9px;
+
+    font-weight:
+        900;
+
+    letter-spacing:
+        1px;
+
+}
+
+
+.buy-platform-button.disabled-buy-link {
+
+    opacity:
+        .38;
+
+    cursor:
+        not-allowed;
+
+}
+
+
+.buy-platform-button.disabled-buy-link:hover {
+
+    transform:
+        none;
+
+    border-color:
+        rgba(90,255,130,.22);
+
+    background:
+        rgba(80,255,120,.035);
+
+}
+
+
+.buy-coming-soon {
+
+    position:
+        relative;
+
+    margin-top:
+        18px;
+
+    color:
+        #56645d;
+
+    font-size:
+        8px;
+
+    font-weight:
+        900;
+
+    letter-spacing:
+        2px;
+
+}
+
+
+.buy-modal-open {
+    overflow: hidden;
+}
+
+
+
+/* =====================================================
    TABLET
 ===================================================== */
 
 @media (max-width: 1000px) {
 
     .navbar {
-
-        gap:
-            17px;
-
+        gap: 17px;
     }
 
 
     .nav-links {
-
-        gap:
-            18px;
-
+        gap: 18px;
     }
 
 
     .nav-right {
-
-        gap:
-            8px;
-
+        gap: 8px;
     }
 
 
@@ -2722,58 +2918,37 @@ footer p {
 @media (max-width: 900px) {
 
     .nav-links {
-
-        display:
-            none;
-
+        display: none;
     }
 
 
     .nav-right {
-
-        margin-left:
-            auto;
-
+        margin-left: auto;
     }
 
 
     .story-row {
-
-        grid-template-columns:
-            1fr;
-
+        grid-template-columns: 1fr;
     }
 
 
     .game-grid {
-
-        grid-template-columns:
-            1fr;
-
+        grid-template-columns: 1fr;
     }
 
 
     .survival-topbar {
-
-        grid-template-columns:
-            repeat(4,1fr);
-
+        grid-template-columns: repeat(4,1fr);
     }
 
 
     .survival-logo {
-
-        display:
-            none;
-
+        display: none;
     }
 
 
     .upgrade-choices {
-
-        grid-template-columns:
-            1fr;
-
+        grid-template-columns: 1fr;
     }
 
 
@@ -2782,30 +2957,58 @@ footer p {
         display:
             flex;
 
+        width:
+            100%;
+
         padding:
-            12px;
+            14px 24px;
 
         gap:
-            10px;
+            18px;
+
+        touch-action:
+            none;
+
+        -webkit-user-select:
+            none;
+
+        user-select:
+            none;
+
+        -webkit-touch-callout:
+            none;
 
     }
 
 
-    .control-btn {
+    .control-btn,
+    #moveLeft,
+    #moveRight {
 
         flex:
             1;
 
-        min-height:
-            55px;
+        min-width:
+            0;
+
+        height:
+            74px;
+
+        display:
+            flex;
+
+        align-items:
+            center;
+
+        justify-content:
+            center;
 
         border:
-
             1px solid
-            rgba(70,255,115,.3);
+            rgba(70,255,115,.30);
 
         border-radius:
-            14px;
+            20px;
 
         background:
             #03130d;
@@ -2814,7 +3017,43 @@ footer p {
             #65ff83;
 
         font-size:
-            28px;
+            34px;
+
+        line-height:
+            1;
+
+        cursor:
+            pointer;
+
+        touch-action:
+            none !important;
+
+        -webkit-user-select:
+            none !important;
+
+        user-select:
+            none !important;
+
+        -webkit-touch-callout:
+            none !important;
+
+        -webkit-tap-highlight-color:
+            transparent !important;
+
+    }
+
+
+    #moveLeft:active,
+    #moveRight:active {
+
+        background:
+            rgba(70,255,115,.10);
+
+        border-color:
+            rgba(70,255,115,.75);
+
+        transform:
+            scale(.98);
 
     }
 
@@ -2829,10 +3068,7 @@ footer p {
 @media (max-width: 600px) {
 
     .container {
-
-        width:
-            calc(100% - 30px);
-
+        width: calc(100% - 30px);
     }
 
 
@@ -2851,10 +3087,7 @@ footer p {
 
 
     .logo {
-
-        width:
-            54px;
-
+        width: 54px;
     }
 
 
@@ -2871,9 +3104,22 @@ footer p {
 
     .buy-button {
 
-        display:
-            none;
+        min-width:
+            125px;
 
+        padding:
+            9px 12px;
+
+    }
+
+
+    .buy-button span {
+        font-size: 10px;
+    }
+
+
+    .buy-button small {
+        font-size: 6px;
     }
 
 
@@ -2889,17 +3135,13 @@ footer p {
 
 
     .nav-right {
-
-        gap:
-            7px;
-
+        gap: 7px;
     }
 
 
     .hero-inner {
 
         min-height:
-
             calc(
                 100vh - 78px
             );
@@ -2913,7 +3155,6 @@ footer p {
     .hero h1 {
 
         font-size:
-
             clamp(
                 48px,
                 14vw,
@@ -2951,10 +3192,7 @@ footer p {
 
 
     .game-preview {
-
-        height:
-            190px;
-
+        height: 190px;
     }
 
 
@@ -2981,18 +3219,12 @@ footer p {
 
 
     .survival-stat strong {
-
-        font-size:
-            17px;
-
+        font-size: 17px;
     }
 
 
     .survival-subbar {
-
-        font-size:
-            8px;
-
+        font-size: 8px;
     }
 
 
@@ -3011,5 +3243,83 @@ footer p {
             20px;
 
     }
+
+
+    .buy-modal-box {
+
+        padding:
+            40px 20px 25px;
+
+    }
+
+
+    .buy-platforms {
+        grid-template-columns: 1fr;
+    }
+
+
+    .buy-platform-button {
+        min-height: 85px;
+    }
+
+}
+
+
+
+/* =====================================================
+   COIN CATCH MOBILE SELECTION FIX
+===================================================== */
+
+#gameCanvas {
+
+    -webkit-user-select:
+        none;
+
+    user-select:
+        none;
+
+    -webkit-touch-callout:
+        none;
+
+    -webkit-user-drag:
+        none;
+
+    -webkit-tap-highlight-color:
+        transparent;
+
+}
+
+
+.mobile-controls,
+#moveLeft,
+#moveRight,
+.control-btn {
+
+    -webkit-user-select:
+        none !important;
+
+    user-select:
+        none !important;
+
+    -webkit-touch-callout:
+        none !important;
+
+    -webkit-tap-highlight-color:
+        transparent !important;
+
+}
+
+
+#moveLeft,
+#moveRight {
+
+    touch-action:
+        none !important;
+
+    cursor:
+        pointer;
+
+    outline:
+        none;
 
 }
