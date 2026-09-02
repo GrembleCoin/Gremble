@@ -13,7 +13,7 @@
 
     <link
         rel="stylesheet"
-        href="style.css?v=100"
+        href="style.css?v=101"
     >
 </head>
 
@@ -30,7 +30,10 @@
 
     <!-- SHOOTING STARS -->
 
-    <div class="shooting-stars" aria-hidden="true">
+    <div
+        class="shooting-stars"
+        aria-hidden="true"
+    >
 
         <span class="shooting-star star-1"></span>
         <span class="shooting-star star-2"></span>
@@ -50,6 +53,9 @@
 
     <nav class="navbar">
 
+
+        <!-- LOGO -->
+
         <a
             href="#home"
             class="logo"
@@ -63,6 +69,8 @@
         </a>
 
 
+
+        <!-- MENU -->
 
         <div class="nav-links">
 
@@ -94,6 +102,8 @@
 
 
 
+        <!-- RIGHT NAV -->
+
         <div class="nav-right">
 
 
@@ -114,7 +124,6 @@
                     fill="currentColor"
                     aria-hidden="true"
                 >
-
                     <path
                         d="
                         M18.244 2.25h3.308
@@ -130,7 +139,6 @@
                         L17.083 19.77Z
                         "
                     />
-
                 </svg>
 
             </a>
@@ -339,6 +347,9 @@
 
     <div class="hero-inner">
 
+
+        <!-- LEFT SIDE -->
+
         <div class="hero-left">
 
             <div class="contract">
@@ -392,6 +403,216 @@
 
         </div>
 
+
+
+        <!-- =================================================
+             RIGHT SIDE - TELEGRAM LOGIN
+        ================================================== -->
+
+        <div class="hero-telegram">
+
+            <div
+                class="telegram-login-card"
+                id="telegramLoginCard"
+            >
+
+
+                <div
+                    class="telegram-login-glow"
+                    aria-hidden="true"
+                ></div>
+
+
+                <p class="telegram-card-tag">
+                    JOIN GREMBLE
+                </p>
+
+
+                <h2>
+
+                    CONNECT YOUR<br>
+
+                    <span>
+                        TELEGRAM.
+                    </span>
+
+                </h2>
+
+
+                <p class="telegram-card-text">
+
+                    Log in with Telegram to join the Gremble community
+                    and create your private profile.
+
+                </p>
+
+
+
+                <!-- TELEGRAM LOGIN -->
+
+                <div
+                    class="telegram-widget-wrap"
+                    id="telegramWidgetWrap"
+                >
+
+                    <script
+                        async
+                        src="https://telegram.org/js/telegram-widget.js?22"
+                        data-telegram-login="GrembleLoginBot"
+                        data-size="large"
+                        data-userpic="false"
+                        data-onauth="onTelegramAuth(user)"
+                    ></script>
+
+                </div>
+
+
+
+                <!-- STATUS -->
+
+                <div
+                    class="telegram-login-status"
+                    id="telegramLoginStatus"
+                >
+
+                    LOGIN WITH TELEGRAM TO CONTINUE
+
+                </div>
+
+
+
+                <!-- =================================================
+                     MEMBER PROFILE
+                ================================================== -->
+
+                <div
+                    class="member-profile"
+                    id="memberProfile"
+                    hidden
+                >
+
+
+                    <div class="member-connected">
+
+                        <div class="member-connected-dot"></div>
+
+
+                        <div>
+
+                            <small>
+                                TELEGRAM VERIFIED
+                            </small>
+
+
+                            <strong
+                                id="memberTelegramName"
+                            >
+                                Gremble Member
+                            </strong>
+
+
+                            <span
+                                id="memberTelegramUsername"
+                            >
+                                @username
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- X USERNAME -->
+
+                    <div class="member-field">
+
+                        <label
+                            for="memberXUsername"
+                        >
+                            X USERNAME
+                        </label>
+
+
+                        <input
+                            type="text"
+                            id="memberXUsername"
+                            placeholder="@yourusername"
+                            autocomplete="off"
+                            disabled
+                        >
+
+                    </div>
+
+
+
+                    <!-- SOLANA ADDRESS -->
+
+                    <div class="member-field">
+
+                        <label
+                            for="memberSolanaAddress"
+                        >
+                            SOLANA ADDRESS
+                        </label>
+
+
+                        <input
+                            type="text"
+                            id="memberSolanaAddress"
+                            placeholder="Your Solana address"
+                            autocomplete="off"
+                            spellcheck="false"
+                            disabled
+                        >
+
+                    </div>
+
+
+
+                    <button
+                        type="button"
+                        class="member-save-button"
+                        id="memberSaveButton"
+                        disabled
+                    >
+                        SAVE PROFILE
+                    </button>
+
+
+
+                    <p class="member-coming">
+
+                        PROFILE EDITING WILL BE ENABLED
+                        AFTER SECURE LOGIN SESSION SETUP
+
+                    </p>
+
+                </div>
+
+
+
+                <!-- PRIVACY -->
+
+                <div class="telegram-privacy">
+
+                    <span>
+                        🔒
+                    </span>
+
+                    <p>
+
+                        Your Telegram, X and Solana details
+                        are private and are not shown to other users.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
     </div>
 
 </section>
@@ -424,8 +645,12 @@
             <h2>
 
                 NOT JUST<br>
+
                 ANOTHER
-                <span>MEME.</span>
+
+                <span>
+                    MEME.
+                </span>
 
             </h2>
 
@@ -487,8 +712,12 @@
                 <h2>
 
                     A WORLD THAT<br>
+
                     NEEDED
-                    <span>CHANGE.</span>
+
+                    <span>
+                        CHANGE.
+                    </span>
 
                 </h2>
 
@@ -550,8 +779,12 @@
                 <h2>
 
                     STARTING FROM<br>
+
                     ALMOST
-                    <span>NOTHING.</span>
+
+                    <span>
+                        NOTHING.
+                    </span>
 
                 </h2>
 
@@ -616,7 +849,10 @@
             <h2>
 
                 OUR
-                <span>FUTURE.</span>
+
+                <span>
+                    FUTURE.
+                </span>
 
             </h2>
 
@@ -649,10 +885,14 @@
 
     <div class="container">
 
+
         <div class="section-tag">
             04 — GREMBLE ARCADE
         </div>
 
+
+
+        <!-- GAME SELECT -->
 
         <div
             class="arcade-select"
@@ -669,7 +909,10 @@
                 <h2>
 
                     GREMBLE<br>
-                    <span>ARCADE.</span>
+
+                    <span>
+                        ARCADE.
+                    </span>
 
                 </h2>
 
@@ -689,7 +932,9 @@
             <div class="game-grid">
 
 
-                <!-- COIN CATCH -->
+                <!-- =================================================
+                     GAME 1 - COIN CATCH
+                ================================================== -->
 
                 <button
                     type="button"
@@ -702,7 +947,9 @@
                     </div>
 
 
-                    <div class="game-preview coin-game-preview">
+                    <div
+                        class="game-preview coin-game-preview"
+                    >
 
                         <img
                             src="gremblecoin.png"
@@ -748,7 +995,9 @@
 
 
 
-                <!-- SURVIVAL -->
+                <!-- =================================================
+                     GAME 2 - SURVIVAL
+                ================================================== -->
 
                 <button
                     type="button"
@@ -761,9 +1010,13 @@
                     </div>
 
 
-                    <div class="game-preview survival-image-preview">
+                    <div
+                        class="game-preview survival-image-preview"
+                    >
 
-                        <div class="survival-image-glow"></div>
+                        <div
+                            class="survival-image-glow"
+                        ></div>
 
 
                         <img
@@ -819,13 +1072,14 @@
 
 
         <!-- =================================================
-             COIN CATCH
+             COIN CATCH SCREEN
         ================================================== -->
 
         <div
             class="arcade-game-screen"
             id="coinCatchScreen"
         >
+
 
             <div class="game-screen-top">
 
@@ -845,6 +1099,7 @@
             </div>
 
 
+
             <div class="game-page-heading">
 
                 <p class="small-green">
@@ -855,7 +1110,10 @@
                 <h2>
 
                     COIN
-                    <span>CATCH.</span>
+
+                    <span>
+                        CATCH.
+                    </span>
 
                 </h2>
 
@@ -875,7 +1133,11 @@
 
             <div class="game-wrapper">
 
+
+                <!-- TOPBAR -->
+
                 <div class="game-topbar">
+
 
                     <div class="game-stat">
 
@@ -890,9 +1152,11 @@
                     </div>
 
 
+
                     <div class="game-title-small">
                         GREMBLE ARCADE
                     </div>
+
 
 
                     <div class="game-stat lives-stat">
@@ -920,6 +1184,8 @@
 
 
 
+                <!-- MESSAGE -->
+
                 <div
                     id="gameMessage"
                     class="game-message"
@@ -933,6 +1199,8 @@
 
 
 
+                <!-- CANVAS -->
+
                 <div class="canvas-wrapper">
 
                     <canvas
@@ -944,6 +1212,8 @@
                 </div>
 
 
+
+                <!-- MOBILE CONTROLS -->
 
                 <div class="mobile-controls">
 
@@ -968,6 +1238,8 @@
 
 
 
+                <!-- BOTTOM -->
+
                 <div class="game-bottom">
 
                     <button
@@ -982,9 +1254,16 @@
                     <p>
 
                         MOVE WITH
-                        <strong>A / D</strong>
+
+                        <strong>
+                            A / D
+                        </strong>
+
                         OR
-                        <strong>← / →</strong>
+
+                        <strong>
+                            ← / →
+                        </strong>
 
                     </p>
 
@@ -997,13 +1276,14 @@
 
 
         <!-- =================================================
-             SURVIVAL
+             SURVIVAL SCREEN
         ================================================== -->
 
         <div
             class="arcade-game-screen"
             id="survivalScreen"
         >
+
 
             <div class="game-screen-top">
 
@@ -1034,7 +1314,10 @@
                 <h2>
 
                     GREMBLE
-                    <span>SURVIVAL.</span>
+
+                    <span>
+                        SURVIVAL.
+                    </span>
 
                 </h2>
 
@@ -1055,7 +1338,11 @@
 
             <div class="survival-wrapper">
 
+
+                <!-- SURVIVAL TOPBAR -->
+
                 <div class="survival-topbar">
+
 
                     <div class="survival-stat">
 
@@ -1068,6 +1355,7 @@
                         </strong>
 
                     </div>
+
 
 
                     <div class="survival-stat">
@@ -1083,9 +1371,11 @@
                     </div>
 
 
+
                     <div class="survival-logo">
                         GREMBLE SURVIVAL
                     </div>
+
 
 
                     <div class="survival-stat">
@@ -1101,7 +1391,10 @@
                     </div>
 
 
-                    <div class="survival-stat survival-lives">
+
+                    <div
+                        class="survival-stat survival-lives"
+                    >
 
                         <span>
                             LIVES
@@ -1126,6 +1419,8 @@
 
 
 
+                <!-- SURVIVAL MESSAGE -->
+
                 <div class="survival-subbar">
 
                     <span id="survivalMessage">
@@ -1141,7 +1436,10 @@
 
 
 
+                <!-- SURVIVAL CANVAS -->
+
                 <div class="survival-canvas-wrap">
+
 
                     <canvas
                         id="survivalCanvas"
@@ -1150,6 +1448,8 @@
                     ></canvas>
 
 
+
+                    <!-- UPGRADE OVERLAY -->
 
                     <div
                         id="upgradeOverlay"
@@ -1181,6 +1481,8 @@
 
 
 
+                <!-- SURVIVAL BOTTOM -->
+
                 <div class="survival-bottom">
 
                     <button
@@ -1195,12 +1497,18 @@
                     <p>
 
                         MOVE:
-                        <strong>WASD / ARROWS</strong>
+
+                        <strong>
+                            WASD / ARROWS
+                        </strong>
 
                         &nbsp;&nbsp;
 
                         DASH:
-                        <strong>SPACE</strong>
+
+                        <strong>
+                            SPACE
+                        </strong>
 
                     </p>
 
@@ -1237,7 +1545,10 @@
             <h2>
 
                 YOU'RE NOT<br>
-                <span>TOO LATE.</span>
+
+                <span>
+                    TOO LATE.
+                </span>
 
             </h2>
 
@@ -1302,21 +1613,25 @@
             <h2>
 
                 QUESTIONS?<br>
-                <span>GOOD.</span>
+
+                <span>
+                    GOOD.
+                </span>
 
             </h2>
 
         </div>
 
 
+
         <div class="faq-list">
+
 
             <div class="faq-item">
 
                 <h3>
                     What is Gremble?
                 </h3>
-
 
                 <p>
 
@@ -1328,12 +1643,12 @@
             </div>
 
 
+
             <div class="faq-item">
 
                 <h3>
                     Can I buy Gremble?
                 </h3>
-
 
                 <p>
 
@@ -1346,12 +1661,12 @@
             </div>
 
 
+
             <div class="faq-item">
 
                 <h3>
                     What is Gremble Arcade?
                 </h3>
-
 
                 <p>
 
@@ -1441,6 +1756,7 @@
         <h2 id="buyModalTitle">
 
             CHOOSE WHERE<br>
+
             TO BUY
 
         </h2>
@@ -1449,6 +1765,7 @@
         <p class="buy-modal-text">
             Select the platform you want to use.
         </p>
+
 
 
         <div class="buy-platforms">
@@ -1499,6 +1816,7 @@
         </div>
 
 
+
         <p
             class="buy-coming-soon"
             id="buyComingSoon"
@@ -1513,10 +1831,19 @@
 
 
 <!-- =====================================================
+     TELEGRAM LOGIN SCRIPT
+===================================================== -->
+
+<script src="telegram.js?v=101"></script>
+
+
+
+<!-- =====================================================
      GAME FILES
 ===================================================== -->
 
 <script src="game.js?v=100"></script>
+
 <script src="survival.js?v=100"></script>
 
 
@@ -1529,98 +1856,109 @@
 
 
 /* =====================================================
-   ARCADE SWITCH
+   ARCADE ELEMENTS
 ===================================================== */
 
 const arcadeSelect =
-    document.getElementById("arcadeSelect");
+    document.getElementById(
+        "arcadeSelect"
+    );
 
 const coinCatchScreen =
-    document.getElementById("coinCatchScreen");
+    document.getElementById(
+        "coinCatchScreen"
+    );
 
 const survivalScreen =
-    document.getElementById("survivalScreen");
+    document.getElementById(
+        "survivalScreen"
+    );
 
 const chooseCoinCatch =
-    document.getElementById("chooseCoinCatch");
+    document.getElementById(
+        "chooseCoinCatch"
+    );
 
 const chooseSurvival =
-    document.getElementById("chooseSurvival");
+    document.getElementById(
+        "chooseSurvival"
+    );
 
 const backButtons =
-    document.querySelectorAll("[data-back-games]");
+    document.querySelectorAll(
+        "[data-back-games]"
+    );
 
 const arcadeSection =
-    document.getElementById("arcade");
+    document.getElementById(
+        "arcade"
+    );
 
 
+
+/* =====================================================
+   HIDE ARCADE SCREENS
+===================================================== */
 
 function hideArcadeScreens() {
 
     arcadeSelect.style.display =
         "none";
 
-
     coinCatchScreen.classList.remove(
         "active-game-screen"
     );
 
-
     survivalScreen.classList.remove(
         "active-game-screen"
     );
-
 }
 
 
+
+/* =====================================================
+   OPEN COIN CATCH
+===================================================== */
 
 function openCoinCatch() {
 
     hideArcadeScreens();
 
-
     coinCatchScreen.classList.add(
         "active-game-screen"
     );
 
-
     coinCatchScreen.scrollIntoView({
-
-        behavior:
-            "smooth",
-
-        block:
-            "start"
-
+        behavior: "smooth",
+        block: "start"
     });
-
 }
 
 
+
+/* =====================================================
+   OPEN SURVIVAL
+===================================================== */
 
 function openSurvival() {
 
     hideArcadeScreens();
 
-
     survivalScreen.classList.add(
         "active-game-screen"
     );
 
-
     survivalScreen.scrollIntoView({
-
-        behavior:
-            "smooth",
-
-        block:
-            "start"
-
+        behavior: "smooth",
+        block: "start"
     });
-
 }
 
 
+
+/* =====================================================
+   SHOW ARCADE MENU
+===================================================== */
 
 function showArcadeMenu() {
 
@@ -1628,40 +1966,41 @@ function showArcadeMenu() {
         "active-game-screen"
     );
 
-
     survivalScreen.classList.remove(
         "active-game-screen"
     );
 
-
     arcadeSelect.style.display =
         "block";
 
-
     arcadeSection.scrollIntoView({
-
-        behavior:
-            "smooth",
-
-        block:
-            "start"
-
+        behavior: "smooth",
+        block: "start"
     });
-
 }
 
 
 
-chooseCoinCatch.addEventListener(
-    "click",
-    openCoinCatch
-);
+/* =====================================================
+   ARCADE EVENTS
+===================================================== */
+
+if (chooseCoinCatch) {
+
+    chooseCoinCatch.addEventListener(
+        "click",
+        openCoinCatch
+    );
+}
 
 
-chooseSurvival.addEventListener(
-    "click",
-    openSurvival
-);
+if (chooseSurvival) {
+
+    chooseSurvival.addEventListener(
+        "click",
+        openSurvival
+    );
+}
 
 
 backButtons.forEach(
@@ -1678,27 +2017,23 @@ backButtons.forEach(
 
 
 /* =====================================================
-   BUY GREMBLE
+   BUY GREMBLE LINKS
 
-   WHEN GREMBLE LAUNCHES,
-   CHANGE ONLY THESE TWO LINKS.
+   AT LAUNCH CHANGE ONLY THESE TWO LINKS.
 ===================================================== */
 
 const GREMBLE_BUY_LINKS = {
 
-    pumpfun:
-        "",
+    pumpfun: "",
 
-    fomo:
-        ""
+    fomo: ""
 
 };
 
 
-
 /*
 
-AFTER LAUNCH:
+AFTER LAUNCH EXAMPLE:
 
 const GREMBLE_BUY_LINKS = {
 
@@ -1761,8 +2096,7 @@ const buyComingSoon =
 
 function setupBuyLinks() {
 
-    let activeLinks =
-        0;
+    let activeLinks = 0;
 
 
     if (
@@ -1772,28 +2106,23 @@ function setupBuyLinks() {
         pumpfunBuyLink.href =
             GREMBLE_BUY_LINKS.pumpfun;
 
-
         pumpfunBuyLink.classList.remove(
             "disabled-buy-link"
         );
 
-
         activeLinks++;
 
     }
-
     else {
 
         pumpfunBuyLink.href =
             "#";
-
 
         pumpfunBuyLink.classList.add(
             "disabled-buy-link"
         );
 
     }
-
 
 
     if (
@@ -1803,28 +2132,23 @@ function setupBuyLinks() {
         fomoBuyLink.href =
             GREMBLE_BUY_LINKS.fomo;
 
-
         fomoBuyLink.classList.remove(
             "disabled-buy-link"
         );
 
-
         activeLinks++;
 
     }
-
     else {
 
         fomoBuyLink.href =
             "#";
-
 
         fomoBuyLink.classList.add(
             "disabled-buy-link"
         );
 
     }
-
 
 
     if (
@@ -1835,14 +2159,12 @@ function setupBuyLinks() {
             "CHOOSE YOUR PLATFORM";
 
     }
-
     else {
 
         buyComingSoon.textContent =
             "TRADING LINKS COMING AT LAUNCH";
 
     }
-
 }
 
 
@@ -1855,25 +2177,20 @@ function openBuyModal() {
 
     setupBuyLinks();
 
-
     buyModal.classList.add(
         "active"
     );
-
 
     buyModal.setAttribute(
         "aria-hidden",
         "false"
     );
 
-
     document.body.classList.add(
         "buy-modal-open"
     );
 
-
     closeBuyModalButton.focus();
-
 }
 
 
@@ -1888,17 +2205,14 @@ function closeBuyModal() {
         "active"
     );
 
-
     buyModal.setAttribute(
         "aria-hidden",
         "true"
     );
 
-
     document.body.classList.remove(
         "buy-modal-open"
     );
-
 }
 
 
@@ -1907,23 +2221,40 @@ function closeBuyModal() {
    BUY EVENTS
 ===================================================== */
 
-openBuyModalButton.addEventListener(
-    "click",
-    openBuyModal
-);
+if (openBuyModalButton) {
+
+    openBuyModalButton.addEventListener(
+        "click",
+        openBuyModal
+    );
+
+}
 
 
-closeBuyModalButton.addEventListener(
-    "click",
-    closeBuyModal
-);
+if (closeBuyModalButton) {
+
+    closeBuyModalButton.addEventListener(
+        "click",
+        closeBuyModal
+    );
+
+}
 
 
-buyModalBackdrop.addEventListener(
-    "click",
-    closeBuyModal
-);
+if (buyModalBackdrop) {
 
+    buyModalBackdrop.addEventListener(
+        "click",
+        closeBuyModal
+    );
+
+}
+
+
+
+/* =====================================================
+   ESC CLOSE
+===================================================== */
 
 document.addEventListener(
     "keydown",
@@ -1946,7 +2277,7 @@ document.addEventListener(
 
 
 /* =====================================================
-   BLOCK EMPTY LINKS
+   BLOCK EMPTY BUY LINKS
 ===================================================== */
 
 [
@@ -1954,6 +2285,7 @@ document.addEventListener(
     fomoBuyLink
 
 ].forEach(
+
     link => {
 
         link.addEventListener(
@@ -1974,6 +2306,7 @@ document.addEventListener(
         );
 
     }
+
 );
 
 
