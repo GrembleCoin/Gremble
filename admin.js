@@ -44,6 +44,15 @@ const statMembersWithSolana =
 const statCompletedProfiles =
     document.getElementById("statCompletedProfiles");
 
+const statTelegramGroupMembers =
+    document.getElementById("statTelegramGroupMembers");
+
+const statTelegramGroupNonMembers =
+    document.getElementById("statTelegramGroupNonMembers");
+
+const statTelegramGroupUnknown =
+    document.getElementById("statTelegramGroupUnknown");
+
 
 const memberSearch =
     document.getElementById("memberSearch");
@@ -70,21 +79,9 @@ let allMembers = [];
 ===================================================== */
 
 function cleanText(value) {
-
     return typeof value === "string"
         ? value.trim()
         : "";
-}
-
-
-function escapeHTML(value) {
-
-    return String(value ?? "")
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
 }
 
 
@@ -92,7 +89,6 @@ function setAdminMessage(
     message,
     type = ""
 ) {
-
     if (!adminMessage) return;
 
     adminMessage.textContent =
@@ -104,47 +100,37 @@ function setAdminMessage(
     );
 
     if (type) {
-
-        adminMessage.classList.add(
-            type
-        );
-
+        adminMessage.classList.add(type);
     }
-
 }
 
 
-function setAdminIdentity(
-    message
-) {
-
+function setAdminIdentity(message) {
     if (!adminIdentity) return;
 
     adminIdentity.textContent =
         message;
-
 }
 
 
 function getSessionToken() {
-
     return cleanText(
         localStorage.getItem(
             GREMBLE_SESSION_KEY
         )
     );
-
 }
 
 
 function getSessionExpiry() {
-
     const raw =
         localStorage.getItem(
             GREMBLE_SESSION_EXPIRY_KEY
         );
 
-    if (!raw) return null;
+    if (!raw) {
+        return null;
+    }
 
     const expiry =
         Number(raw);
@@ -158,7 +144,6 @@ function getSessionExpiry() {
 
 
 function clearLocalSession() {
-
     localStorage.removeItem(
         GREMBLE_SESSION_KEY
     );
@@ -166,19 +151,16 @@ function clearLocalSession() {
     localStorage.removeItem(
         GREMBLE_SESSION_EXPIRY_KEY
     );
-
 }
 
 
 function sessionIsExpired() {
-
     const expiry =
         getSessionExpiry();
 
     /*
-       If there is no expiry value,
-       let the secure server verify
-       the token instead.
+        Ak expiry neexistuje,
+        necháme token overiť serverom.
     */
 
     if (!expiry) {
@@ -195,11 +177,10 @@ function sessionIsExpired() {
 
 
 /* =====================================================
-   DATE FORMAT
+   DATE
 ===================================================== */
 
 function formatDate(value) {
-
     if (!value) {
         return "—";
     }
@@ -212,9 +193,7 @@ function formatDate(value) {
             date.getTime()
         )
     ) {
-
         return "—";
-
     }
 
     return date.toLocaleString(
@@ -227,7 +206,6 @@ function formatDate(value) {
             minute: "2-digit"
         }
     );
-
 }
 
 
@@ -236,7 +214,6 @@ function formatDate(value) {
 ===================================================== */
 
 function shortWallet(address) {
-
     const value =
         cleanText(address);
 
@@ -253,7 +230,6 @@ function shortWallet(address) {
         "..." +
         value.slice(-6)
     );
-
 }
 
 
@@ -265,7 +241,6 @@ async function copyText(
     value,
     button
 ) {
-
     const text =
         cleanText(value);
 
@@ -275,19 +250,15 @@ async function copyText(
         button?.textContent || "COPY";
 
     try {
-
         if (
             navigator.clipboard &&
             window.isSecureContext
         ) {
-
             await navigator.clipboard.writeText(
                 text
             );
-
         }
         else {
-
             const temp =
                 document.createElement(
                     "textarea"
@@ -317,54 +288,40 @@ async function copyText(
             );
 
             temp.remove();
-
         }
 
-
         if (button) {
-
             button.textContent =
                 "COPIED";
 
             setTimeout(
                 () => {
-
                     button.textContent =
                         oldText;
-
                 },
                 1200
             );
-
         }
-
     }
     catch (error) {
-
         console.error(
             "Copy error:",
             error
         );
 
         if (button) {
-
             button.textContent =
                 "FAILED";
 
             setTimeout(
                 () => {
-
                     button.textContent =
                         oldText;
-
                 },
                 1200
             );
-
         }
-
     }
-
 }
 
 
@@ -373,50 +330,103 @@ async function copyText(
 ===================================================== */
 
 function updateStats(stats) {
-
     const safeStats =
         stats || {};
 
-
     if (statTotalMembers) {
-
         statTotalMembers.textContent =
             Number(
                 safeStats.total_members || 0
             );
-
     }
 
-
     if (statMembersWithX) {
-
         statMembersWithX.textContent =
             Number(
                 safeStats.members_with_x || 0
             );
-
     }
 
-
     if (statMembersWithSolana) {
-
         statMembersWithSolana.textContent =
             Number(
                 safeStats.members_with_solana || 0
             );
-
     }
 
-
     if (statCompletedProfiles) {
-
         statCompletedProfiles.textContent =
             Number(
                 safeStats.completed_profiles || 0
             );
-
     }
 
+    if (statTelegramGroupMembers) {
+        statTelegramGroupMembers.textContent =
+            Number(
+                safeStats.telegram_group_members || 0
+            );
+    }
+
+    if (statTelegramGroupNonMembers) {
+        statTelegramGroupNonMembers.textContent =
+            Number(
+                safeStats.telegram_group_non_members || 0
+            );
+    }
+
+    if (statTelegramGroupUnknown) {
+        statTelegramGroupUnknown.textContent =
+            Number(
+                safeStats.telegram_group_unknown || 0
+            );
+    }
+}
+
+
+/* =====================================================
+   TELEGRAM GROUP BADGE
+===================================================== */
+
+function createTelegramGroupBadge(status) {
+    const badge =
+        document.createElement(
+            "span"
+        );
+
+    badge.className =
+        "telegram-group-badge";
+
+    if (status === "member") {
+        badge.classList.add(
+            "member"
+        );
+
+        badge.textContent =
+            "✓ IN GROUP";
+
+        return badge;
+    }
+
+    if (status === "not_member") {
+        badge.classList.add(
+            "not-member"
+        );
+
+        badge.textContent =
+            "✕ NOT IN GROUP";
+
+        return badge;
+    }
+
+    badge.classList.add(
+        "unknown"
+    );
+
+    badge.textContent =
+        "? UNKNOWN";
+
+    return badge;
 }
 
 
@@ -425,7 +435,6 @@ function updateStats(stats) {
 ===================================================== */
 
 function createMemberRow(member) {
-
     const row =
         document.createElement(
             "tr"
@@ -441,6 +450,11 @@ function createMemberRow(member) {
         cleanText(
             member.telegram_username
         );
+
+    const telegramGroupStatus =
+        cleanText(
+            member.telegram_group_status
+        ).toLowerCase();
 
     const xUsername =
         cleanText(
@@ -483,7 +497,6 @@ function createMemberRow(member) {
         );
 
     if (telegramName) {
-
         const value =
             document.createElement(
                 "span"
@@ -498,10 +511,8 @@ function createMemberRow(member) {
         telegramNameCell.appendChild(
             value
         );
-
     }
     else {
-
         const empty =
             document.createElement(
                 "span"
@@ -516,7 +527,6 @@ function createMemberRow(member) {
         telegramNameCell.appendChild(
             empty
         );
-
     }
 
 
@@ -530,7 +540,6 @@ function createMemberRow(member) {
         );
 
     if (displayTelegramUsername) {
-
         const value =
             document.createElement(
                 "span"
@@ -545,10 +554,8 @@ function createMemberRow(member) {
         telegramUsernameCell.appendChild(
             value
         );
-
     }
     else {
-
         const empty =
             document.createElement(
                 "span"
@@ -563,8 +570,23 @@ function createMemberRow(member) {
         telegramUsernameCell.appendChild(
             empty
         );
-
     }
+
+
+    /* ==========================================
+       TELEGRAM GROUP
+    ========================================== */
+
+    const telegramGroupCell =
+        document.createElement(
+            "td"
+        );
+
+    telegramGroupCell.appendChild(
+        createTelegramGroupBadge(
+            telegramGroupStatus
+        )
+    );
 
 
     /* ==========================================
@@ -577,7 +599,6 @@ function createMemberRow(member) {
         );
 
     if (displayXUsername) {
-
         const xWrap =
             document.createElement(
                 "div"
@@ -617,12 +638,10 @@ function createMemberRow(member) {
         copyButton.addEventListener(
             "click",
             () => {
-
                 copyText(
                     displayXUsername,
                     copyButton
                 );
-
             }
         );
 
@@ -638,10 +657,8 @@ function createMemberRow(member) {
         xUsernameCell.appendChild(
             xWrap
         );
-
     }
     else {
-
         const empty =
             document.createElement(
                 "span"
@@ -656,7 +673,6 @@ function createMemberRow(member) {
         xUsernameCell.appendChild(
             empty
         );
-
     }
 
 
@@ -670,7 +686,6 @@ function createMemberRow(member) {
         );
 
     if (solanaAddress) {
-
         const walletWrap =
             document.createElement(
                 "div"
@@ -715,12 +730,10 @@ function createMemberRow(member) {
         copyButton.addEventListener(
             "click",
             () => {
-
                 copyText(
                     solanaAddress,
                     copyButton
                 );
-
             }
         );
 
@@ -736,10 +749,8 @@ function createMemberRow(member) {
         solanaCell.appendChild(
             walletWrap
         );
-
     }
     else {
-
         const empty =
             document.createElement(
                 "span"
@@ -754,7 +765,6 @@ function createMemberRow(member) {
         solanaCell.appendChild(
             empty
         );
-
     }
 
 
@@ -807,6 +817,10 @@ function createMemberRow(member) {
     );
 
     row.appendChild(
+        telegramGroupCell
+    );
+
+    row.appendChild(
         xUsernameCell
     );
 
@@ -824,7 +838,6 @@ function createMemberRow(member) {
 
 
     return row;
-
 }
 
 
@@ -832,70 +845,49 @@ function createMemberRow(member) {
    RENDER MEMBERS
 ===================================================== */
 
-function renderMembers(
-    members
-) {
-
+function renderMembers(members) {
     if (!membersTableBody) {
         return;
     }
 
-
     membersTableBody.innerHTML =
         "";
-
 
     const list =
         Array.isArray(members)
             ? members
             : [];
 
-
-    if (
-        list.length === 0
-    ) {
-
+    if (list.length === 0) {
         if (membersEmpty) {
-
             membersEmpty.hidden =
                 false;
-
         }
 
         return;
-
     }
-
 
     if (membersEmpty) {
-
         membersEmpty.hidden =
             true;
-
     }
-
 
     const fragment =
         document.createDocumentFragment();
 
-
     list.forEach(
         member => {
-
             fragment.appendChild(
                 createMemberRow(
                     member
                 )
             );
-
         }
     );
-
 
     membersTableBody.appendChild(
         fragment
     );
-
 }
 
 
@@ -904,55 +896,66 @@ function renderMembers(
 ===================================================== */
 
 function filterMembers() {
-
     const search =
         cleanText(
             memberSearch?.value
         ).toLowerCase();
 
-
     if (!search) {
-
         renderMembers(
             allMembers
         );
 
         return;
-
     }
-
 
     const filtered =
         allMembers.filter(
             member => {
 
-                const values = [
+                const status =
+                    cleanText(
+                        member.telegram_group_status
+                    ).toLowerCase();
 
+                let statusText =
+                    status;
+
+                if (status === "member") {
+                    statusText +=
+                        " in group telegram";
+                }
+
+                if (status === "not_member") {
+                    statusText +=
+                        " not in group telegram";
+                }
+
+                if (status === "unknown") {
+                    statusText +=
+                        " unknown telegram";
+                }
+
+                const values = [
                     member.telegram_name,
                     member.telegram_username,
+                    statusText,
                     member.x_username,
                     member.solana_address
-
                 ];
-
 
                 return values.some(
                     value =>
-
                         cleanText(value)
                             .toLowerCase()
                             .includes(search)
-
                 );
-
             }
         );
-
 
     renderMembers(
         filtered
     );
-
 }
 
 
@@ -964,17 +967,12 @@ function showAccessError(
     status,
     message
 ) {
-
     if (adminDashboard) {
-
         adminDashboard.hidden =
             true;
-
     }
 
-
     if (status === 401) {
-
         setAdminIdentity(
             "LOGIN REQUIRED"
         );
@@ -985,12 +983,9 @@ function showAccessError(
         );
 
         return;
-
     }
 
-
     if (status === 403) {
-
         setAdminIdentity(
             "ACCESS DENIED"
         );
@@ -1001,9 +996,7 @@ function showAccessError(
         );
 
         return;
-
     }
-
 
     setAdminIdentity(
         "ERROR"
@@ -1014,7 +1007,6 @@ function showAccessError(
         "COULD NOT LOAD THE ADMIN PANEL.",
         "error"
     );
-
 }
 
 
@@ -1023,7 +1015,6 @@ function showAccessError(
 ===================================================== */
 
 async function loadAdminData() {
-
     const token =
         getSessionToken();
 
@@ -1033,13 +1024,11 @@ async function loadAdminData() {
     ========================================== */
 
     if (!token) {
-
         showAccessError(
             401
         );
 
         return;
-
     }
 
 
@@ -1050,7 +1039,6 @@ async function loadAdminData() {
     if (
         sessionIsExpired()
     ) {
-
         clearLocalSession();
 
         showAccessError(
@@ -1058,7 +1046,6 @@ async function loadAdminData() {
         );
 
         return;
-
     }
 
 
@@ -1071,18 +1058,16 @@ async function loadAdminData() {
     );
 
     setAdminMessage(
-        "VERIFYING YOUR TELEGRAM ID AND LOADING GREMBLE MEMBERS..."
+        "VERIFYING YOUR TELEGRAM ID AND CHECKING GREMBLE CHAT MEMBERSHIP..."
     );
 
 
     if (refreshMembers) {
-
         refreshMembers.disabled =
             true;
 
         refreshMembers.textContent =
             "LOADING...";
-
     }
 
 
@@ -1105,18 +1090,13 @@ async function loadAdminData() {
         let result =
             null;
 
-
         try {
-
             result =
                 await response.json();
-
         }
         catch {
-
             result =
                 null;
-
         }
 
 
@@ -1127,7 +1107,6 @@ async function loadAdminData() {
         if (
             response.status === 401
         ) {
-
             clearLocalSession();
 
             showAccessError(
@@ -1135,7 +1114,6 @@ async function loadAdminData() {
             );
 
             return;
-
         }
 
 
@@ -1146,13 +1124,11 @@ async function loadAdminData() {
         if (
             response.status === 403
         ) {
-
             showAccessError(
                 403
             );
 
             return;
-
         }
 
 
@@ -1164,12 +1140,10 @@ async function loadAdminData() {
             !response.ok ||
             !result?.success
         ) {
-
             throw new Error(
                 result?.error ||
                 "Could not load admin data."
             );
-
         }
 
 
@@ -1196,10 +1170,8 @@ async function loadAdminData() {
 
 
         if (adminDashboard) {
-
             adminDashboard.hidden =
                 false;
-
         }
 
 
@@ -1232,17 +1204,14 @@ async function loadAdminData() {
     finally {
 
         if (refreshMembers) {
-
             refreshMembers.disabled =
                 false;
 
             refreshMembers.textContent =
                 "REFRESH";
-
         }
 
     }
-
 }
 
 
@@ -1251,12 +1220,10 @@ async function loadAdminData() {
 ===================================================== */
 
 if (memberSearch) {
-
     memberSearch.addEventListener(
         "input",
         filterMembers
     );
-
 }
 
 
@@ -1265,23 +1232,18 @@ if (memberSearch) {
 ===================================================== */
 
 if (refreshMembers) {
-
     refreshMembers.addEventListener(
         "click",
         async () => {
 
             if (memberSearch) {
-
                 memberSearch.value =
                     "";
-
             }
 
             await loadAdminData();
-
         }
     );
-
 }
 
 
@@ -1292,8 +1254,6 @@ if (refreshMembers) {
 document.addEventListener(
     "DOMContentLoaded",
     () => {
-
         loadAdminData();
-
     }
 );
