@@ -1,11 +1,11 @@
 /* =====================================================
-   GREMBLE TELEGRAM LOGIN + SECURE MEMBER PROFILE
-   FILE: telegram.js
+   GREMBLE TELEGRAM LOGIN
+   File: telegram.js
 ===================================================== */
 
 
 /* =====================================================
-   EDGE FUNCTION URLS
+   CONFIG
 ===================================================== */
 
 const TELEGRAM_LOGIN_ENDPOINT =
@@ -13,11 +13,6 @@ const TELEGRAM_LOGIN_ENDPOINT =
 
 const MEMBER_PROFILE_ENDPOINT =
     "https://tffzjqeckoezursrvcpw.supabase.co/functions/v1/member-profile";
-
-
-/* =====================================================
-   SESSION STORAGE
-===================================================== */
 
 const GREMBLE_SESSION_KEY =
     "gremble_session_token";
@@ -70,15 +65,38 @@ const memberSaveButton =
         "memberSaveButton"
     );
 
-const memberComing =
-    document.querySelector(
-        ".member-coming"
+const memberLogoutButton =
+    document.getElementById(
+        "memberLogoutButton"
     );
 
 
 /* =====================================================
-   STATUS MESSAGE
+   HELPERS
 ===================================================== */
+
+function cleanText(value) {
+
+    return typeof value === "string"
+        ? value.trim()
+        : "";
+}
+
+
+function normalizeXUsername(value) {
+
+    const username =
+        cleanText(value);
+
+    if (!username) {
+        return "";
+    }
+
+    return username.startsWith("@")
+        ? username
+        : `@${username}`;
+}
+
 
 function setTelegramStatus(
     message,
@@ -99,54 +117,49 @@ function setTelegramStatus(
     );
 
     if (type) {
+
         telegramLoginStatus.classList.add(
             type
         );
     }
-
 }
 
 
 /* =====================================================
-   TEXT HELPERS
+   SESSION
 ===================================================== */
 
-function cleanText(value) {
+function getSessionToken() {
 
-    if (
-        typeof value !== "string"
-    ) {
-        return "";
-    }
-
-    return value.trim();
-
+    return cleanText(
+        localStorage.getItem(
+            GREMBLE_SESSION_KEY
+        )
+    );
 }
 
 
-function normalizeXUsername(value) {
+function getSessionExpiry() {
 
-    const username =
-        cleanText(value);
+    const raw =
+        localStorage.getItem(
+            GREMBLE_SESSION_EXPIRY_KEY
+        );
 
-    if (!username) {
-        return "";
+    if (!raw) {
+        return null;
     }
 
-    if (
-        username.startsWith("@")
-    ) {
-        return username;
+    const expiry =
+        Number(raw);
+
+    if (!Number.isFinite(expiry)) {
+        return null;
     }
 
-    return `@${username}`;
-
+    return expiry;
 }
 
-
-/* =====================================================
-   SESSION HELPERS
-===================================================== */
 
 function saveSession(
     token,
@@ -162,60 +175,20 @@ function saveSession(
         token
     );
 
-    if (expiresAt) {
+    if (
+        expiresAt !== undefined &&
+        expiresAt !== null
+    ) {
+
         localStorage.setItem(
             GREMBLE_SESSION_EXPIRY_KEY,
             String(expiresAt)
         );
     }
-
 }
 
 
-function getSessionToken() {
-
-    const token =
-        localStorage.getItem(
-            GREMBLE_SESSION_KEY
-        );
-
-    const expiresAt =
-        Number(
-            localStorage.getItem(
-                GREMBLE_SESSION_EXPIRY_KEY
-            )
-        );
-
-    if (!token) {
-        return "";
-    }
-
-    if (
-        expiresAt &&
-        Number.isFinite(expiresAt)
-    ) {
-
-        const now =
-            Math.floor(
-                Date.now() / 1000
-            );
-
-        if (expiresAt <= now) {
-
-            clearSession();
-
-            return "";
-
-        }
-
-    }
-
-    return token;
-
-}
-
-
-function clearSession() {
+function clearLocalSession() {
 
     localStorage.removeItem(
         GREMBLE_SESSION_KEY
@@ -224,55 +197,29 @@ function clearSession() {
     localStorage.removeItem(
         GREMBLE_SESSION_EXPIRY_KEY
     );
+}
 
+
+function sessionIsExpired() {
+
+    const expiry =
+        getSessionExpiry();
+
+    if (!expiry) {
+        return false;
+    }
+
+    const nowSeconds =
+        Math.floor(
+            Date.now() / 1000
+        );
+
+    return expiry <= nowSeconds;
 }
 
 
 /* =====================================================
-   ENABLE / DISABLE PROFILE EDITING
-===================================================== */
-
-function setProfileEditingEnabled(
-    enabled
-) {
-
-    if (memberXUsername) {
-        memberXUsername.disabled =
-            !enabled;
-    }
-
-    if (memberSolanaAddress) {
-        memberSolanaAddress.disabled =
-            !enabled;
-    }
-
-    if (memberSaveButton) {
-        memberSaveButton.disabled =
-            !enabled;
-    }
-
-    if (memberComing) {
-
-        if (enabled) {
-
-            memberComing.textContent =
-                "YOUR PROFILE IS PRIVATE AND CAN ONLY BE UPDATED BY YOU.";
-
-        }
-        else {
-
-            memberComing.textContent =
-                "PROFILE EDITING REQUIRES A SECURE LOGIN SESSION.";
-
-        }
-
-    }
-
-}
-
-
-/* =====================================================
-   SHOW VERIFIED MEMBER
+   MEMBER UI
 ===================================================== */
 
 function showVerifiedMember(member) {
@@ -284,12 +231,10 @@ function showVerifiedMember(member) {
         return;
     }
 
-
     const telegramName =
         cleanText(
             member.telegram_name
-        ) || "Gremble Member";
-
+        ) || "Telegram member";
 
     const telegramUsername =
         cleanText(
@@ -301,28 +246,15 @@ function showVerifiedMember(member) {
 
         memberTelegramName.textContent =
             telegramName;
-
     }
 
 
     if (memberTelegramUsername) {
 
-        if (telegramUsername) {
-
-            memberTelegramUsername.textContent =
-                `@${telegramUsername.replace(
-                    /^@/,
-                    ""
-                )}`;
-
-        }
-        else {
-
-            memberTelegramUsername.textContent =
-                "Telegram username not available";
-
-        }
-
+        memberTelegramUsername.textContent =
+            telegramUsername
+                ? `@${telegramUsername.replace(/^@/, "")}`
+                : "Telegram username not available";
     }
 
 
@@ -333,6 +265,8 @@ function showVerifiedMember(member) {
                 member.x_username || ""
             );
 
+        memberXUsername.disabled =
+            false;
     }
 
 
@@ -343,6 +277,15 @@ function showVerifiedMember(member) {
                 member.solana_address || ""
             );
 
+        memberSolanaAddress.disabled =
+            false;
+    }
+
+
+    if (memberSaveButton) {
+
+        memberSaveButton.disabled =
+            false;
     }
 
 
@@ -354,162 +297,150 @@ function showVerifiedMember(member) {
 
         telegramWidgetWrap.style.display =
             "none";
+    }
+}
 
+
+function hideMemberProfile() {
+
+    if (memberProfile) {
+
+        memberProfile.hidden =
+            true;
     }
 
+
+    if (memberTelegramName) {
+
+        memberTelegramName.textContent =
+            "Telegram member";
+    }
+
+
+    if (memberTelegramUsername) {
+
+        memberTelegramUsername.textContent =
+            "";
+    }
+
+
+    if (memberXUsername) {
+
+        memberXUsername.value =
+            "";
+    }
+
+
+    if (memberSolanaAddress) {
+
+        memberSolanaAddress.value =
+            "";
+    }
+
+
+    if (telegramWidgetWrap) {
+
+        telegramWidgetWrap.style.display =
+            "";
+    }
 }
 
 
 /* =====================================================
-   LOAD MEMBER PROFILE FROM SESSION
+   AUTHENTICATED REQUEST
 ===================================================== */
 
-async function loadMemberProfile() {
+async function memberRequest(
+    method = "GET",
+    body = null
+) {
 
     const token =
         getSessionToken();
 
+
     if (!token) {
 
-        setProfileEditingEnabled(
-            false
+        throw new Error(
+            "Please connect Telegram first."
+        );
+    }
+
+
+    const options = {
+
+        method,
+
+        headers: {
+
+            "Authorization":
+                `Bearer ${token}`
+        }
+    };
+
+
+    if (body !== null) {
+
+        options.headers[
+            "Content-Type"
+        ] = "application/json";
+
+        options.body =
+            JSON.stringify(body);
+    }
+
+
+    const response =
+        await fetch(
+            MEMBER_PROFILE_ENDPOINT,
+            options
         );
 
-        return false;
 
-    }
+    let result =
+        null;
 
 
     try {
 
-        setTelegramStatus(
-            "LOADING YOUR PROFILE...",
-            "loading"
-        );
+        result =
+            await response.json();
 
+    } catch {
 
-        const response =
-            await fetch(
-                MEMBER_PROFILE_ENDPOINT,
-                {
-
-                    method:
-                        "GET",
-
-                    headers: {
-
-                        "Authorization":
-                            `Bearer ${token}`
-
-                    }
-
-                }
-            );
-
-
-        let result =
+        result =
             null;
-
-
-        try {
-
-            result =
-                await response.json();
-
-        }
-        catch {
-
-            result =
-                null;
-
-        }
-
-
-        if (
-            response.status === 401
-        ) {
-
-            clearSession();
-
-            setProfileEditingEnabled(
-                false
-            );
-
-            return false;
-
-        }
-
-
-        if (
-            !response.ok ||
-            !result ||
-            result.success !== true
-        ) {
-
-            throw new Error(
-                result?.error ||
-                "Could not load profile."
-            );
-
-        }
-
-
-        showVerifiedMember(
-            result.member
-        );
-
-
-        setProfileEditingEnabled(
-            true
-        );
-
-
-        setTelegramStatus(
-            "TELEGRAM VERIFIED — WELCOME TO GREMBLE.",
-            "success"
-        );
-
-
-        return true;
-
-    }
-    catch (error) {
-
-        console.error(
-            "Profile load error:",
-            error
-        );
-
-
-        setTelegramStatus(
-            error?.message ||
-            "Could not load your profile.",
-            "error"
-        );
-
-
-        setProfileEditingEnabled(
-            false
-        );
-
-
-        return false;
-
     }
 
+
+    if (!response.ok) {
+
+        if (
+            response.status === 401 ||
+            response.status === 403
+        ) {
+
+            clearLocalSession();
+        }
+
+
+        throw new Error(
+            result?.error ||
+            "Could not load your profile."
+        );
+    }
+
+
+    return result;
 }
 
 
 /* =====================================================
-   TELEGRAM CALLBACK
-
-   Telegram Widget calls:
-   onTelegramAuth(user)
+   TELEGRAM LOGIN CALLBACK
 ===================================================== */
 
 window.onTelegramAuth =
 async function onTelegramAuth(user) {
-
 
     if (
         !user ||
@@ -522,7 +453,6 @@ async function onTelegramAuth(user) {
         );
 
         return;
-
     }
 
 
@@ -532,27 +462,29 @@ async function onTelegramAuth(user) {
     );
 
 
-    try {
+    if (memberSaveButton) {
 
+        memberSaveButton.disabled =
+            true;
+    }
+
+
+    try {
 
         const response =
             await fetch(
                 TELEGRAM_LOGIN_ENDPOINT,
                 {
-
                     method:
                         "POST",
 
                     headers: {
-
                         "Content-Type":
                             "application/json"
-
                     },
 
                     body:
                         JSON.stringify(user)
-
                 }
             );
 
@@ -566,53 +498,41 @@ async function onTelegramAuth(user) {
             result =
                 await response.json();
 
-        }
-        catch {
+        } catch {
 
             result =
                 null;
-
         }
 
 
         if (
             !response.ok ||
-            !result ||
-            result.success !== true
+            !result?.success
         ) {
 
             throw new Error(
                 result?.error ||
                 "Telegram verification failed."
             );
-
         }
 
 
-        if (
-            !result.session_token
-        ) {
+        if (!result.session_token) {
 
             throw new Error(
                 "Secure session was not created."
             );
-
         }
 
 
         saveSession(
             result.session_token,
-            result.session_expires_at
+            result.expires_at
         );
 
 
         showVerifiedMember(
             result.member
-        );
-
-
-        setProfileEditingEnabled(
-            true
         );
 
 
@@ -622,13 +542,7 @@ async function onTelegramAuth(user) {
         );
 
 
-        console.log(
-            "Telegram login successful."
-        );
-
-    }
-    catch (error) {
-
+    } catch (error) {
 
         console.error(
             "Telegram login error:",
@@ -636,12 +550,14 @@ async function onTelegramAuth(user) {
         );
 
 
-        clearSession();
+        clearLocalSession();
 
 
-        setProfileEditingEnabled(
-            false
-        );
+        if (memberSaveButton) {
+
+            memberSaveButton.disabled =
+                false;
+        }
 
 
         setTelegramStatus(
@@ -649,17 +565,15 @@ async function onTelegramAuth(user) {
             "Could not verify Telegram login.",
             "error"
         );
-
     }
-
 };
 
 
 /* =====================================================
-   SAVE PROFILE
+   LOAD SAVED PROFILE
 ===================================================== */
 
-async function saveMemberProfile() {
+async function restoreMemberSession() {
 
     const token =
         getSessionToken();
@@ -667,170 +581,45 @@ async function saveMemberProfile() {
 
     if (!token) {
 
-        setTelegramStatus(
-            "YOUR SESSION EXPIRED. PLEASE LOG IN AGAIN.",
-            "error"
-        );
-
-        setProfileEditingEnabled(
-            false
-        );
+        hideMemberProfile();
 
         return;
-
     }
 
 
-    const xUsername =
-        memberXUsername
-            ? cleanText(
-                memberXUsername.value
-            )
-            : "";
+    if (sessionIsExpired()) {
 
+        clearLocalSession();
 
-    const solanaAddress =
-        memberSolanaAddress
-            ? cleanText(
-                memberSolanaAddress.value
-            )
-            : "";
-
-
-    if (
-        xUsername &&
-        !/^@?[A-Za-z0-9_]{1,15}$/.test(
-            xUsername
-        )
-    ) {
+        hideMemberProfile();
 
         setTelegramStatus(
-            "ENTER A VALID X USERNAME.",
-            "error"
+            "YOUR SESSION EXPIRED — CONNECT TELEGRAM AGAIN."
         );
 
         return;
-
     }
 
 
-    if (
-        solanaAddress &&
-        !/^[1-9A-HJ-NP-Za-km-z]{32,44}$/.test(
-            solanaAddress
-        )
-    ) {
-
-        setTelegramStatus(
-            "ENTER A VALID SOLANA ADDRESS.",
-            "error"
-        );
-
-        return;
-
-    }
+    setTelegramStatus(
+        "LOADING YOUR GREMBLE PROFILE...",
+        "loading"
+    );
 
 
     try {
 
-
-        if (memberSaveButton) {
-
-            memberSaveButton.disabled =
-                true;
-
-            memberSaveButton.textContent =
-                "SAVING...";
-
-        }
-
-
-        setTelegramStatus(
-            "SAVING YOUR PROFILE...",
-            "loading"
-        );
-
-
-        const response =
-            await fetch(
-                MEMBER_PROFILE_ENDPOINT,
-                {
-
-                    method:
-                        "POST",
-
-                    headers: {
-
-                        "Content-Type":
-                            "application/json",
-
-                        "Authorization":
-                            `Bearer ${token}`
-
-                    },
-
-                    body:
-                        JSON.stringify({
-
-                            x_username:
-                                xUsername,
-
-                            solana_address:
-                                solanaAddress
-
-                        })
-
-                }
+        const result =
+            await memberRequest(
+                "GET"
             );
 
 
-        let result =
-            null;
-
-
-        try {
-
-            result =
-                await response.json();
-
-        }
-        catch {
-
-            result =
-                null;
-
-        }
-
-
-        if (
-            response.status === 401
-        ) {
-
-            clearSession();
-
-            setProfileEditingEnabled(
-                false
-            );
-
+        if (!result?.member) {
 
             throw new Error(
-                "Your session expired. Please log in again."
+                "Profile could not be loaded."
             );
-
-        }
-
-
-        if (
-            !response.ok ||
-            !result ||
-            result.success !== true
-        ) {
-
-            throw new Error(
-                result?.error ||
-                "Could not save profile."
-            );
-
         }
 
 
@@ -840,19 +629,136 @@ async function saveMemberProfile() {
 
 
         setTelegramStatus(
-            "PROFILE SAVED SUCCESSFULLY.",
+            "TELEGRAM CONNECTED.",
             "success"
         );
 
 
-    }
-    catch (error) {
+    } catch (error) {
 
+        console.error(
+            "Profile restore error:",
+            error
+        );
+
+
+        clearLocalSession();
+
+        hideMemberProfile();
+
+
+        setTelegramStatus(
+            "CONNECT TELEGRAM TO ACCESS YOUR PROFILE."
+        );
+    }
+}
+
+
+/* =====================================================
+   SAVE PROFILE
+===================================================== */
+
+async function saveMemberProfile() {
+
+    const xUsername =
+        cleanText(
+            memberXUsername?.value || ""
+        );
+
+    const solanaAddress =
+        cleanText(
+            memberSolanaAddress?.value || ""
+        );
+
+
+    if (!xUsername) {
+
+        setTelegramStatus(
+            "ENTER YOUR X USERNAME.",
+            "error"
+        );
+
+        memberXUsername?.focus();
+
+        return;
+    }
+
+
+    if (!solanaAddress) {
+
+        setTelegramStatus(
+            "ENTER YOUR SOLANA ADDRESS.",
+            "error"
+        );
+
+        memberSolanaAddress?.focus();
+
+        return;
+    }
+
+
+    if (memberSaveButton) {
+
+        memberSaveButton.disabled =
+            true;
+
+        memberSaveButton.textContent =
+            "SAVING...";
+    }
+
+
+    setTelegramStatus(
+        "SAVING YOUR PROFILE...",
+        "loading"
+    );
+
+
+    try {
+
+        const result =
+            await memberRequest(
+                "POST",
+                {
+                    x_username:
+                        xUsername,
+
+                    solana_address:
+                        solanaAddress
+                }
+            );
+
+
+        if (!result?.member) {
+
+            throw new Error(
+                "Profile was not returned after saving."
+            );
+        }
+
+
+        showVerifiedMember(
+            result.member
+        );
+
+
+        setTelegramStatus(
+            "PROFILE SAVED.",
+            "success"
+        );
+
+
+    } catch (error) {
 
         console.error(
             "Profile save error:",
             error
         );
+
+
+        if (!getSessionToken()) {
+
+            hideMemberProfile();
+        }
 
 
         setTelegramStatus(
@@ -861,34 +767,53 @@ async function saveMemberProfile() {
             "error"
         );
 
-    }
-    finally {
 
+    } finally {
 
         if (memberSaveButton) {
 
+            memberSaveButton.disabled =
+                false;
+
             memberSaveButton.textContent =
                 "SAVE PROFILE";
-
-
-            if (
-                getSessionToken()
-            ) {
-
-                memberSaveButton.disabled =
-                    false;
-
-            }
-
         }
-
     }
-
 }
 
 
 /* =====================================================
-   SAVE BUTTON EVENT
+   LOG OUT
+===================================================== */
+
+function logoutMember() {
+
+    /*
+       IMPORTANT:
+       This ONLY removes the login session
+       from this browser.
+
+       It does NOT delete the member
+       from the Supabase database.
+
+       Telegram, X and Solana details
+       remain safely stored.
+    */
+
+    clearLocalSession();
+
+    hideMemberProfile();
+
+
+    setTelegramStatus(
+        "LOGGED OUT — CONNECT TELEGRAM TO ACCESS YOUR PROFILE.",
+        "success"
+    );
+}
+
+
+/* =====================================================
+   BUTTON EVENTS
 ===================================================== */
 
 if (memberSaveButton) {
@@ -897,59 +822,57 @@ if (memberSaveButton) {
         "click",
         saveMemberProfile
     );
+}
 
+
+if (memberLogoutButton) {
+
+    memberLogoutButton.addEventListener(
+        "click",
+        logoutMember
+    );
 }
 
 
 /* =====================================================
-   INITIAL STATE
+   ENTER KEY
 ===================================================== */
 
-setProfileEditingEnabled(
-    false
-);
+[
+    memberXUsername,
+    memberSolanaAddress
+].forEach(input => {
+
+    if (!input) {
+        return;
+    }
+
+
+    input.addEventListener(
+        "keydown",
+        event => {
+
+            if (event.key !== "Enter") {
+                return;
+            }
+
+
+            event.preventDefault();
+
+            saveMemberProfile();
+        }
+    );
+});
 
 
 /* =====================================================
-   RESTORE EXISTING SESSION
-
-   If user already logged in before,
-   try loading their profile automatically.
+   START
 ===================================================== */
 
 document.addEventListener(
     "DOMContentLoaded",
-    async () => {
+    () => {
 
-        const token =
-            getSessionToken();
-
-
-        if (token) {
-
-            const loaded =
-                await loadMemberProfile();
-
-
-            if (!loaded) {
-
-                if (telegramWidgetWrap) {
-
-                    telegramWidgetWrap.style.display =
-                        "";
-
-                }
-
-            }
-
-        }
-        else {
-
-            setTelegramStatus(
-                "LOGIN WITH TELEGRAM TO CONTINUE"
-            );
-
-        }
-
+        restoreMemberSession();
     }
 );
