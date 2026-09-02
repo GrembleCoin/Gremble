@@ -9,6 +9,11 @@
         content="width=device-width, initial-scale=1.0"
     >
 
+    <meta
+        name="robots"
+        content="noindex,nofollow"
+    >
+
     <title>Gremble Admin</title>
 
     <style>
@@ -76,22 +81,28 @@
 
         .admin-glow {
             position: absolute;
+
             width: 500px;
             height: 500px;
+
             border-radius: 50%;
+
             filter: blur(110px);
+
             opacity: .12;
         }
 
         .glow-one {
             top: -220px;
             right: -120px;
+
             background: #4cff7c;
         }
 
         .glow-two {
             bottom: -280px;
             left: -150px;
+
             background: #14854d;
         }
 
@@ -101,8 +112,13 @@
         ========================================== */
 
         .admin-shell {
-            width: min(1500px, calc(100% - 40px));
+            width: min(
+                1500px,
+                calc(100% - 40px)
+            );
+
             margin: 0 auto;
+
             padding: 28px 0 50px;
         }
 
@@ -117,11 +133,15 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
+
             gap: 20px;
 
             padding: 14px 20px;
 
-            border: 1px solid rgba(103,255,134,.11);
+            border:
+                1px solid
+                rgba(103,255,134,.11);
+
             border-radius: 22px;
 
             background:
@@ -133,18 +153,21 @@
         .admin-brand {
             display: flex;
             align-items: center;
+
             gap: 14px;
         }
 
         .admin-brand img {
             width: 54px;
             height: 54px;
+
             object-fit: contain;
         }
 
         .admin-brand-copy {
             display: flex;
             flex-direction: column;
+
             gap: 3px;
         }
 
@@ -155,32 +178,42 @@
 
         .admin-brand-copy span {
             color: #65ff83;
+
             font-size: 9px;
             font-weight: 900;
+
             letter-spacing: 2.4px;
         }
 
         .admin-header-right {
             display: flex;
             align-items: center;
+
             gap: 10px;
         }
 
         .admin-status {
             display: flex;
             align-items: center;
+
             gap: 8px;
 
             padding: 10px 14px;
 
-            border: 1px solid rgba(101,255,131,.13);
+            border:
+                1px solid
+                rgba(101,255,131,.13);
+
             border-radius: 999px;
 
-            background: rgba(54,255,108,.035);
+            background:
+                rgba(54,255,108,.035);
 
             color: #9ca9a1;
+
             font-size: 9px;
             font-weight: 900;
+
             letter-spacing: 1.2px;
         }
 
@@ -193,21 +226,27 @@
             background: #65ff83;
 
             box-shadow:
-                0 0 12px rgba(101,255,131,.75);
+                0 0 12px
+                rgba(101,255,131,.75);
         }
 
         .back-site-button {
             padding: 11px 16px;
 
-            border: 1px solid rgba(255,255,255,.08);
+            border:
+                1px solid
+                rgba(255,255,255,.08);
+
             border-radius: 999px;
 
-            background: rgba(255,255,255,.035);
+            background:
+                rgba(255,255,255,.035);
 
             color: #dce5df;
 
             font-size: 9px;
             font-weight: 900;
+
             letter-spacing: 1.2px;
 
             transition:
@@ -216,8 +255,11 @@
         }
 
         .back-site-button:hover {
-            border-color: rgba(101,255,131,.25);
-            background: rgba(101,255,131,.055);
+            border-color:
+                rgba(101,255,131,.25);
+
+            background:
+                rgba(101,255,131,.055);
         }
 
 
@@ -229,6 +271,7 @@
             margin-top: 24px;
 
             display: grid;
+
             grid-template-columns:
                 minmax(0, 1.25fr)
                 minmax(280px, .75fr);
@@ -245,7 +288,10 @@
 
             overflow: hidden;
 
-            border: 1px solid rgba(101,255,131,.13);
+            border:
+                1px solid
+                rgba(101,255,131,.13);
+
             border-radius: 26px;
 
             background:
@@ -263,6 +309,7 @@
 
             font-size: 9px;
             font-weight: 900;
+
             letter-spacing: 3px;
         }
 
@@ -307,7 +354,8 @@
             background: #65ff83;
 
             box-shadow:
-                0 0 22px rgba(101,255,131,.4);
+                0 0 22px
+                rgba(101,255,131,.4);
         }
 
         .hero-orb {
@@ -335,7 +383,10 @@
         .private-card {
             padding: 28px;
 
-            border: 1px solid rgba(101,255,131,.13);
+            border:
+                1px solid
+                rgba(101,255,131,.13);
+
             border-radius: 26px;
 
             background:
@@ -347,6 +398,7 @@
 
             font-size: 9px;
             font-weight: 900;
+
             letter-spacing: 2.7px;
         }
 
@@ -368,9 +420,13 @@
 
         .private-id-box {
             margin-top: 24px;
+
             padding: 16px;
 
-            border: 1px solid rgba(101,255,131,.12);
+            border:
+                1px solid
+                rgba(101,255,131,.12);
+
             border-radius: 15px;
 
             background:
@@ -384,6 +440,7 @@
 
             font-size: 8px;
             font-weight: 900;
+
             letter-spacing: 1.7px;
         }
 
@@ -399,14 +456,18 @@
 
 
         /* ==========================================
-           STATUS SCREEN
+           MESSAGE
         ========================================== */
 
         .admin-message {
             margin-top: 22px;
+
             padding: 20px 22px;
 
-            border: 1px solid rgba(255,255,255,.07);
+            border:
+                1px solid
+                rgba(255,255,255,.07);
+
             border-radius: 18px;
 
             background:
@@ -434,7 +495,7 @@
 
 
         /* ==========================================
-           DASHBOARD CONTENT
+           DASHBOARD
         ========================================== */
 
         .admin-dashboard {
@@ -454,7 +515,10 @@
             display: grid;
 
             grid-template-columns:
-                repeat(4, minmax(0, 1fr));
+                repeat(
+                    auto-fit,
+                    minmax(170px, 1fr)
+                );
 
             gap: 14px;
         }
@@ -462,7 +526,10 @@
         .stat-card {
             padding: 22px;
 
-            border: 1px solid rgba(101,255,131,.09);
+            border:
+                1px solid
+                rgba(101,255,131,.09);
+
             border-radius: 20px;
 
             background:
@@ -476,6 +543,7 @@
 
             font-size: 8px;
             font-weight: 900;
+
             letter-spacing: 1.8px;
         }
 
@@ -501,13 +569,16 @@
 
 
         /* ==========================================
-           MEMBERS SECTION
+           MEMBERS
         ========================================== */
 
         .members-panel {
             margin-top: 22px;
 
-            border: 1px solid rgba(101,255,131,.1);
+            border:
+                1px solid
+                rgba(101,255,131,.1);
+
             border-radius: 24px;
 
             overflow: hidden;
@@ -520,6 +591,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
+
             gap: 18px;
 
             padding: 22px;
@@ -532,6 +604,7 @@
 
             font-size: 8px;
             font-weight: 900;
+
             letter-spacing: 2px;
         }
 
@@ -544,18 +617,22 @@
         .members-tools {
             display: flex;
             align-items: center;
+
             gap: 10px;
         }
 
         .member-search {
-            width: 300px;
+            width: 330px;
             max-width: 100%;
 
             min-height: 43px;
 
             padding: 0 14px;
 
-            border: 1px solid rgba(101,255,131,.12);
+            border:
+                1px solid
+                rgba(101,255,131,.12);
+
             border-radius: 12px;
 
             outline: none;
@@ -582,7 +659,10 @@
 
             padding: 0 15px;
 
-            border: 1px solid rgba(101,255,131,.13);
+            border:
+                1px solid
+                rgba(101,255,131,.13);
+
             border-radius: 12px;
 
             background:
@@ -592,7 +672,13 @@
 
             font-size: 9px;
             font-weight: 900;
+
             letter-spacing: 1.2px;
+        }
+
+        .refresh-button:disabled {
+            opacity: .55;
+            cursor: not-allowed;
         }
 
 
@@ -602,6 +688,7 @@
 
         .members-table-wrap {
             width: 100%;
+
             overflow-x: auto;
 
             border-top:
@@ -611,7 +698,8 @@
 
         .members-table {
             width: 100%;
-            min-width: 1080px;
+
+            min-width: 1220px;
 
             border-collapse: collapse;
         }
@@ -628,6 +716,7 @@
 
             font-size: 8px;
             font-weight: 900;
+
             letter-spacing: 1.6px;
         }
 
@@ -652,6 +741,7 @@
 
         .telegram-name {
             color: #f4f7f5;
+
             font-weight: 800;
         }
 
@@ -667,6 +757,7 @@
         .wallet-cell {
             display: flex;
             align-items: center;
+
             gap: 8px;
         }
 
@@ -674,7 +765,9 @@
             max-width: 220px;
 
             overflow: hidden;
+
             white-space: nowrap;
+
             text-overflow: ellipsis;
 
             color: #aab6ae;
@@ -685,7 +778,10 @@
 
             padding: 7px 9px;
 
-            border: 1px solid rgba(101,255,131,.11);
+            border:
+                1px solid
+                rgba(101,255,131,.11);
+
             border-radius: 8px;
 
             background:
@@ -695,6 +791,7 @@
 
             font-size: 7px;
             font-weight: 900;
+
             letter-spacing: .8px;
         }
 
@@ -703,8 +800,66 @@
                 rgba(101,255,131,.3);
         }
 
+
+        /* ==========================================
+           TELEGRAM GROUP BADGES
+        ========================================== */
+
+        .telegram-group-badge {
+            display: inline-flex;
+            align-items: center;
+
+            gap: 7px;
+
+            padding: 7px 10px;
+
+            border-radius: 999px;
+
+            font-size: 8px;
+            font-weight: 900;
+
+            letter-spacing: .8px;
+
+            white-space: nowrap;
+        }
+
+        .telegram-group-badge.member {
+            border:
+                1px solid
+                rgba(101,255,131,.25);
+
+            background:
+                rgba(101,255,131,.07);
+
+            color: #65ff83;
+        }
+
+        .telegram-group-badge.not-member {
+            border:
+                1px solid
+                rgba(255,89,100,.24);
+
+            background:
+                rgba(255,89,100,.06);
+
+            color: #ff717b;
+        }
+
+        .telegram-group-badge.unknown {
+            border:
+                1px solid
+                rgba(255,211,92,.22);
+
+            background:
+                rgba(255,211,92,.05);
+
+            color: #ffd35c;
+        }
+
+
         .date-value {
             color: #75837a;
+
             white-space: nowrap;
         }
 
@@ -734,11 +889,8 @@
                 grid-template-columns: 1fr;
             }
 
-            .stats-grid {
-                grid-template-columns:
-                    repeat(2, minmax(0, 1fr));
-            }
         }
+
 
         @media (max-width: 700px) {
 
@@ -754,11 +906,13 @@
 
             .admin-header {
                 align-items: flex-start;
+
                 flex-direction: column;
             }
 
             .admin-header-right {
                 width: 100%;
+
                 flex-wrap: wrap;
             }
 
@@ -776,12 +930,15 @@
 
             .members-panel-top {
                 align-items: stretch;
+
                 flex-direction: column;
             }
 
             .members-tools {
                 width: 100%;
+
                 flex-direction: column;
+
                 align-items: stretch;
             }
 
@@ -796,6 +953,7 @@
             .private-card {
                 padding: 24px 20px;
             }
+
         }
 
     </style>
@@ -966,9 +1124,12 @@
         >
 
 
-            <!-- STATS -->
+            <!-- ======================================
+                 STATS
+            ======================================= -->
 
             <div class="stats-grid">
+
 
                 <article class="stat-card">
 
@@ -1037,10 +1198,64 @@
 
                 </article>
 
+
+                <article class="stat-card">
+
+                    <span>
+                        IN TELEGRAM
+                    </span>
+
+                    <strong id="statTelegramGroupMembers">
+                        0
+                    </strong>
+
+                    <small>
+                        GREMBLE CHAT
+                    </small>
+
+                </article>
+
+
+                <article class="stat-card">
+
+                    <span>
+                        NOT IN TELEGRAM
+                    </span>
+
+                    <strong id="statTelegramGroupNonMembers">
+                        0
+                    </strong>
+
+                    <small>
+                        NOT IN GREMBLE CHAT
+                    </small>
+
+                </article>
+
+
+                <article class="stat-card">
+
+                    <span>
+                        TELEGRAM UNKNOWN
+                    </span>
+
+                    <strong id="statTelegramGroupUnknown">
+                        0
+                    </strong>
+
+                    <small>
+                        CHECK FAILED
+                    </small>
+
+                </article>
+
+
             </div>
 
 
-            <!-- MEMBERS -->
+            <!-- ======================================
+                 MEMBERS
+            ======================================= -->
 
             <section class="members-panel">
 
@@ -1067,7 +1282,7 @@
                             type="search"
                             class="member-search"
                             id="memberSearch"
-                            placeholder="Search Telegram, X or wallet..."
+                            placeholder="Search Telegram, group status, X or wallet..."
                             autocomplete="off"
                         >
 
@@ -1081,6 +1296,7 @@
 
                     </div>
 
+
                 </div>
 
 
@@ -1088,6 +1304,7 @@
 
 
                     <table class="members-table">
+
 
                         <thead>
 
@@ -1099,6 +1316,10 @@
 
                                 <th>
                                     TELEGRAM USERNAME
+                                </th>
+
+                                <th>
+                                    TELEGRAM GROUP
                                 </th>
 
                                 <th>
@@ -1125,6 +1346,7 @@
                         <tbody id="membersTableBody">
                         </tbody>
 
+
                     </table>
 
 
@@ -1139,6 +1361,7 @@
 
                 </div>
 
+
             </section>
 
 
@@ -1148,7 +1371,8 @@
     </main>
 
 
-    <script src="admin.js?v=100"></script>
+    <script src="admin.js?v=101"></script>
+
 
 </body>
 
