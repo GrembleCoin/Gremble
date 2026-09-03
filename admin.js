@@ -33,38 +33,45 @@ const adminIdentity =
 
 
 const statTotalMembers =
-    document.getElementById("statTotalMembers");
-
-const statMembersWithX =
-    document.getElementById("statMembersWithX");
-
-const statMembersWithSolana =
-    document.getElementById("statMembersWithSolana");
+    document.getElementById(
+        "statTotalMembers"
+    );
 
 const statCompletedProfiles =
-    document.getElementById("statCompletedProfiles");
+    document.getElementById(
+        "statCompletedProfiles"
+    );
 
-const statTelegramGroupMembers =
-    document.getElementById("statTelegramGroupMembers");
+const statTelegramChatMembers =
+    document.getElementById(
+        "statTelegramChatMembers"
+    );
 
-const statTelegramGroupNonMembers =
-    document.getElementById("statTelegramGroupNonMembers");
-
-const statTelegramGroupUnknown =
-    document.getElementById("statTelegramGroupUnknown");
+const statTelegramAnnouncementsMembers =
+    document.getElementById(
+        "statTelegramAnnouncementsMembers"
+    );
 
 
 const memberSearch =
-    document.getElementById("memberSearch");
+    document.getElementById(
+        "memberSearch"
+    );
 
 const refreshMembers =
-    document.getElementById("refreshMembers");
+    document.getElementById(
+        "refreshMembers"
+    );
 
 const membersTableBody =
-    document.getElementById("membersTableBody");
+    document.getElementById(
+        "membersTableBody"
+    );
 
 const membersEmpty =
-    document.getElementById("membersEmpty");
+    document.getElementById(
+        "membersEmpty"
+    );
 
 
 /* =====================================================
@@ -79,17 +86,25 @@ let allMembers = [];
 ===================================================== */
 
 function cleanText(value) {
+
     return typeof value === "string"
         ? value.trim()
         : "";
 }
 
 
+/* =====================================================
+   ADMIN MESSAGE
+===================================================== */
+
 function setAdminMessage(
     message,
     type = ""
 ) {
-    if (!adminMessage) return;
+
+    if (!adminMessage) {
+        return;
+    }
 
     adminMessage.textContent =
         message;
@@ -100,20 +115,37 @@ function setAdminMessage(
     );
 
     if (type) {
-        adminMessage.classList.add(type);
+
+        adminMessage.classList.add(
+            type
+        );
     }
 }
 
 
-function setAdminIdentity(message) {
-    if (!adminIdentity) return;
+/* =====================================================
+   ADMIN IDENTITY
+===================================================== */
+
+function setAdminIdentity(
+    message
+) {
+
+    if (!adminIdentity) {
+        return;
+    }
 
     adminIdentity.textContent =
         message;
 }
 
 
+/* =====================================================
+   SESSION
+===================================================== */
+
 function getSessionToken() {
+
     return cleanText(
         localStorage.getItem(
             GREMBLE_SESSION_KEY
@@ -123,6 +155,7 @@ function getSessionToken() {
 
 
 function getSessionExpiry() {
+
     const raw =
         localStorage.getItem(
             GREMBLE_SESSION_EXPIRY_KEY
@@ -135,7 +168,12 @@ function getSessionExpiry() {
     const expiry =
         Number(raw);
 
-    if (!Number.isFinite(expiry)) {
+    if (
+        !Number.isFinite(
+            expiry
+        )
+    ) {
+
         return null;
     }
 
@@ -144,6 +182,7 @@ function getSessionExpiry() {
 
 
 function clearLocalSession() {
+
     localStorage.removeItem(
         GREMBLE_SESSION_KEY
     );
@@ -155,12 +194,14 @@ function clearLocalSession() {
 
 
 function sessionIsExpired() {
+
     const expiry =
         getSessionExpiry();
 
     /*
-        Ak expiry neexistuje,
-        necháme token overiť serverom.
+       If there is no local expiry,
+       let the secure Edge Function
+       verify the token.
     */
 
     if (!expiry) {
@@ -181,6 +222,7 @@ function sessionIsExpired() {
 ===================================================== */
 
 function formatDate(value) {
+
     if (!value) {
         return "—";
     }
@@ -193,6 +235,7 @@ function formatDate(value) {
             date.getTime()
         )
     ) {
+
         return "—";
     }
 
@@ -214,6 +257,7 @@ function formatDate(value) {
 ===================================================== */
 
 function shortWallet(address) {
+
     const value =
         cleanText(address);
 
@@ -221,7 +265,10 @@ function shortWallet(address) {
         return "";
     }
 
-    if (value.length <= 16) {
+    if (
+        value.length <= 16
+    ) {
+
         return value;
     }
 
@@ -241,24 +288,32 @@ async function copyText(
     value,
     button
 ) {
+
     const text =
         cleanText(value);
 
-    if (!text) return;
+    if (!text) {
+        return;
+    }
 
     const oldText =
-        button?.textContent || "COPY";
+        button?.textContent ||
+        "COPY";
 
     try {
+
         if (
             navigator.clipboard &&
             window.isSecureContext
         ) {
+
             await navigator.clipboard.writeText(
                 text
             );
+
         }
         else {
+
             const temp =
                 document.createElement(
                     "textarea"
@@ -290,33 +345,42 @@ async function copyText(
             temp.remove();
         }
 
+
         if (button) {
+
             button.textContent =
                 "COPIED";
 
             setTimeout(
                 () => {
+
                     button.textContent =
                         oldText;
+
                 },
                 1200
             );
         }
+
     }
     catch (error) {
+
         console.error(
             "Copy error:",
             error
         );
 
         if (button) {
+
             button.textContent =
                 "FAILED";
 
             setTimeout(
                 () => {
+
                     button.textContent =
                         oldText;
+
                 },
                 1200
             );
@@ -326,69 +390,15 @@ async function copyText(
 
 
 /* =====================================================
-   STATS
+   TELEGRAM STATUS BADGE
 ===================================================== */
 
-function updateStats(stats) {
-    const safeStats =
-        stats || {};
+function createTelegramBadge(
+    status,
+    memberText,
+    notMemberText
+) {
 
-    if (statTotalMembers) {
-        statTotalMembers.textContent =
-            Number(
-                safeStats.total_members || 0
-            );
-    }
-
-    if (statMembersWithX) {
-        statMembersWithX.textContent =
-            Number(
-                safeStats.members_with_x || 0
-            );
-    }
-
-    if (statMembersWithSolana) {
-        statMembersWithSolana.textContent =
-            Number(
-                safeStats.members_with_solana || 0
-            );
-    }
-
-    if (statCompletedProfiles) {
-        statCompletedProfiles.textContent =
-            Number(
-                safeStats.completed_profiles || 0
-            );
-    }
-
-    if (statTelegramGroupMembers) {
-        statTelegramGroupMembers.textContent =
-            Number(
-                safeStats.telegram_group_members || 0
-            );
-    }
-
-    if (statTelegramGroupNonMembers) {
-        statTelegramGroupNonMembers.textContent =
-            Number(
-                safeStats.telegram_group_non_members || 0
-            );
-    }
-
-    if (statTelegramGroupUnknown) {
-        statTelegramGroupUnknown.textContent =
-            Number(
-                safeStats.telegram_group_unknown || 0
-            );
-    }
-}
-
-
-/* =====================================================
-   TELEGRAM GROUP BADGE
-===================================================== */
-
-function createTelegramGroupBadge(status) {
     const badge =
         document.createElement(
             "span"
@@ -397,36 +407,103 @@ function createTelegramGroupBadge(status) {
     badge.className =
         "telegram-group-badge";
 
-    if (status === "member") {
+
+    const normalizedStatus =
+        cleanText(status)
+            .toLowerCase();
+
+
+    if (
+        normalizedStatus ===
+        "member"
+    ) {
+
         badge.classList.add(
             "member"
         );
 
         badge.textContent =
-            "✓ IN GROUP";
-
-        return badge;
+            `✓ ${memberText}`;
     }
 
-    if (status === "not_member") {
+    else if (
+        normalizedStatus ===
+        "not_member"
+    ) {
+
         badge.classList.add(
             "not-member"
         );
 
         badge.textContent =
-            "✕ NOT IN GROUP";
-
-        return badge;
+            `✕ ${notMemberText}`;
     }
 
-    badge.classList.add(
-        "unknown"
-    );
+    else {
 
-    badge.textContent =
-        "? UNKNOWN";
+        badge.classList.add(
+            "unknown"
+        );
+
+        badge.textContent =
+            "? UNKNOWN";
+    }
+
 
     return badge;
+}
+
+
+/* =====================================================
+   STATS
+===================================================== */
+
+function updateStats(stats) {
+
+    const safeStats =
+        stats || {};
+
+
+    if (statTotalMembers) {
+
+        statTotalMembers.textContent =
+            Number(
+                safeStats.total_members ||
+                0
+            );
+    }
+
+
+    if (statCompletedProfiles) {
+
+        statCompletedProfiles.textContent =
+            Number(
+                safeStats.completed_profiles ||
+                0
+            );
+    }
+
+
+    if (statTelegramChatMembers) {
+
+        statTelegramChatMembers.textContent =
+            Number(
+                safeStats.telegram_chat_members ||
+                0
+            );
+    }
+
+
+    if (
+        statTelegramAnnouncementsMembers
+    ) {
+
+        statTelegramAnnouncementsMembers.textContent =
+            Number(
+                safeStats.telegram_announcements_members ||
+                0
+            );
+    }
 }
 
 
@@ -435,6 +512,7 @@ function createTelegramGroupBadge(status) {
 ===================================================== */
 
 function createMemberRow(member) {
+
     const row =
         document.createElement(
             "tr"
@@ -451,11 +529,6 @@ function createMemberRow(member) {
             member.telegram_username
         );
 
-    const telegramGroupStatus =
-        cleanText(
-            member.telegram_group_status
-        ).toLowerCase();
-
     const xUsername =
         cleanText(
             member.x_username
@@ -464,6 +537,17 @@ function createMemberRow(member) {
     const solanaAddress =
         cleanText(
             member.solana_address
+        );
+
+
+    const telegramChatStatus =
+        cleanText(
+            member.telegram_chat_status
+        );
+
+    const telegramAnnouncementsStatus =
+        cleanText(
+            member.telegram_announcements_status
         );
 
 
@@ -496,7 +580,9 @@ function createMemberRow(member) {
             "td"
         );
 
+
     if (telegramName) {
+
         const value =
             document.createElement(
                 "span"
@@ -511,8 +597,10 @@ function createMemberRow(member) {
         telegramNameCell.appendChild(
             value
         );
+
     }
     else {
+
         const empty =
             document.createElement(
                 "span"
@@ -539,7 +627,9 @@ function createMemberRow(member) {
             "td"
         );
 
+
     if (displayTelegramUsername) {
+
         const value =
             document.createElement(
                 "span"
@@ -554,8 +644,10 @@ function createMemberRow(member) {
         telegramUsernameCell.appendChild(
             value
         );
+
     }
     else {
+
         const empty =
             document.createElement(
                 "span"
@@ -574,17 +666,39 @@ function createMemberRow(member) {
 
 
     /* ==========================================
-       TELEGRAM GROUP
+       GREMBLE CHAT
     ========================================== */
 
-    const telegramGroupCell =
+    const telegramChatCell =
         document.createElement(
             "td"
         );
 
-    telegramGroupCell.appendChild(
-        createTelegramGroupBadge(
-            telegramGroupStatus
+
+    telegramChatCell.appendChild(
+        createTelegramBadge(
+            telegramChatStatus,
+            "IN CHAT",
+            "NOT IN CHAT"
+        )
+    );
+
+
+    /* ==========================================
+       GREMBLE ANNOUNCEMENTS
+    ========================================== */
+
+    const telegramAnnouncementsCell =
+        document.createElement(
+            "td"
+        );
+
+
+    telegramAnnouncementsCell.appendChild(
+        createTelegramBadge(
+            telegramAnnouncementsStatus,
+            "IN ANNOUNCEMENTS",
+            "NOT IN ANNOUNCEMENTS"
         )
     );
 
@@ -598,7 +712,9 @@ function createMemberRow(member) {
             "td"
         );
 
+
     if (displayXUsername) {
+
         const xWrap =
             document.createElement(
                 "div"
@@ -638,6 +754,7 @@ function createMemberRow(member) {
         copyButton.addEventListener(
             "click",
             () => {
+
                 copyText(
                     displayXUsername,
                     copyButton
@@ -657,8 +774,10 @@ function createMemberRow(member) {
         xUsernameCell.appendChild(
             xWrap
         );
+
     }
     else {
+
         const empty =
             document.createElement(
                 "span"
@@ -677,7 +796,7 @@ function createMemberRow(member) {
 
 
     /* ==========================================
-       SOLANA
+       SOLANA ADDRESS
     ========================================== */
 
     const solanaCell =
@@ -685,7 +804,9 @@ function createMemberRow(member) {
             "td"
         );
 
+
     if (solanaAddress) {
+
         const walletWrap =
             document.createElement(
                 "div"
@@ -730,6 +851,7 @@ function createMemberRow(member) {
         copyButton.addEventListener(
             "click",
             () => {
+
                 copyText(
                     solanaAddress,
                     copyButton
@@ -749,8 +871,10 @@ function createMemberRow(member) {
         solanaCell.appendChild(
             walletWrap
         );
+
     }
     else {
+
         const empty =
             document.createElement(
                 "span"
@@ -817,7 +941,11 @@ function createMemberRow(member) {
     );
 
     row.appendChild(
-        telegramGroupCell
+        telegramChatCell
+    );
+
+    row.appendChild(
+        telegramAnnouncementsCell
     );
 
     row.appendChild(
@@ -846,20 +974,28 @@ function createMemberRow(member) {
 ===================================================== */
 
 function renderMembers(members) {
+
     if (!membersTableBody) {
         return;
     }
 
+
     membersTableBody.innerHTML =
         "";
+
 
     const list =
         Array.isArray(members)
             ? members
             : [];
 
-    if (list.length === 0) {
+
+    if (
+        list.length === 0
+    ) {
+
         if (membersEmpty) {
+
             membersEmpty.hidden =
                 false;
         }
@@ -867,16 +1003,21 @@ function renderMembers(members) {
         return;
     }
 
+
     if (membersEmpty) {
+
         membersEmpty.hidden =
             true;
     }
 
+
     const fragment =
         document.createDocumentFragment();
 
+
     list.forEach(
         member => {
+
             fragment.appendChild(
                 createMemberRow(
                     member
@@ -884,6 +1025,7 @@ function renderMembers(members) {
             );
         }
     );
+
 
     membersTableBody.appendChild(
         fragment
@@ -896,12 +1038,15 @@ function renderMembers(members) {
 ===================================================== */
 
 function filterMembers() {
+
     const search =
         cleanText(
             memberSearch?.value
         ).toLowerCase();
 
+
     if (!search) {
+
         renderMembers(
             allMembers
         );
@@ -909,49 +1054,75 @@ function filterMembers() {
         return;
     }
 
+
     const filtered =
         allMembers.filter(
             member => {
 
-                const status =
+                const chatStatus =
                     cleanText(
-                        member.telegram_group_status
-                    ).toLowerCase();
+                        member.telegram_chat_status
+                    );
 
-                let statusText =
-                    status;
+                const announcementsStatus =
+                    cleanText(
+                        member.telegram_announcements_status
+                    );
 
-                if (status === "member") {
-                    statusText +=
-                        " in group telegram";
-                }
-
-                if (status === "not_member") {
-                    statusText +=
-                        " not in group telegram";
-                }
-
-                if (status === "unknown") {
-                    statusText +=
-                        " unknown telegram";
-                }
 
                 const values = [
+
                     member.telegram_name,
+
                     member.telegram_username,
-                    statusText,
+
                     member.x_username,
-                    member.solana_address
+
+                    member.solana_address,
+
+                    chatStatus,
+
+                    announcementsStatus,
+
+                    chatStatus === "member"
+                        ? "in chat"
+                        : "",
+
+                    chatStatus === "not_member"
+                        ? "not in chat"
+                        : "",
+
+                    announcementsStatus === "member"
+                        ? "in announcements"
+                        : "",
+
+                    announcementsStatus === "not_member"
+                        ? "not in announcements"
+                        : "",
+
+                    chatStatus === "unknown"
+                        ? "unknown"
+                        : "",
+
+                    announcementsStatus === "unknown"
+                        ? "unknown"
+                        : ""
+
                 ];
+
 
                 return values.some(
                     value =>
+
                         cleanText(value)
                             .toLowerCase()
-                            .includes(search)
+                            .includes(
+                                search
+                            )
                 );
             }
         );
+
 
     renderMembers(
         filtered
@@ -967,12 +1138,16 @@ function showAccessError(
     status,
     message
 ) {
+
     if (adminDashboard) {
+
         adminDashboard.hidden =
             true;
     }
 
+
     if (status === 401) {
+
         setAdminIdentity(
             "LOGIN REQUIRED"
         );
@@ -985,7 +1160,9 @@ function showAccessError(
         return;
     }
 
+
     if (status === 403) {
+
         setAdminIdentity(
             "ACCESS DENIED"
         );
@@ -997,6 +1174,7 @@ function showAccessError(
 
         return;
     }
+
 
     setAdminIdentity(
         "ERROR"
@@ -1015,6 +1193,7 @@ function showAccessError(
 ===================================================== */
 
 async function loadAdminData() {
+
     const token =
         getSessionToken();
 
@@ -1024,6 +1203,7 @@ async function loadAdminData() {
     ========================================== */
 
     if (!token) {
+
         showAccessError(
             401
         );
@@ -1033,12 +1213,13 @@ async function loadAdminData() {
 
 
     /* ==========================================
-       LOCAL EXPIRY CHECK
+       LOCAL EXPIRY
     ========================================== */
 
     if (
         sessionIsExpired()
     ) {
+
         clearLocalSession();
 
         showAccessError(
@@ -1058,11 +1239,12 @@ async function loadAdminData() {
     );
 
     setAdminMessage(
-        "VERIFYING YOUR TELEGRAM ID AND CHECKING GREMBLE CHAT MEMBERSHIP..."
+        "VERIFYING YOUR TELEGRAM ID AND CHECKING BOTH GREMBLE TELEGRAM COMMUNITIES..."
     );
 
 
     if (refreshMembers) {
+
         refreshMembers.disabled =
             true;
 
@@ -1090,11 +1272,15 @@ async function loadAdminData() {
         let result =
             null;
 
+
         try {
+
             result =
                 await response.json();
+
         }
         catch {
+
             result =
                 null;
         }
@@ -1107,6 +1293,7 @@ async function loadAdminData() {
         if (
             response.status === 401
         ) {
+
             clearLocalSession();
 
             showAccessError(
@@ -1124,6 +1311,7 @@ async function loadAdminData() {
         if (
             response.status === 403
         ) {
+
             showAccessError(
                 403
             );
@@ -1133,13 +1321,14 @@ async function loadAdminData() {
 
 
         /* ==========================================
-           OTHER ERROR
+           ERROR
         ========================================== */
 
         if (
             !response.ok ||
             !result?.success
         ) {
+
             throw new Error(
                 result?.error ||
                 "Could not load admin data."
@@ -1170,6 +1359,7 @@ async function loadAdminData() {
 
 
         if (adminDashboard) {
+
             adminDashboard.hidden =
                 false;
         }
@@ -1181,7 +1371,7 @@ async function loadAdminData() {
 
 
         setAdminMessage(
-            `ACCESS GRANTED — ${allMembers.length} GREMBLE MEMBER${allMembers.length === 1 ? "" : "S"} LOADED.`,
+            `ACCESS GRANTED — ${allMembers.length} GREMBLE MEMBER${allMembers.length === 1 ? "" : "S"} LOADED. TELEGRAM CHAT AND ANNOUNCEMENTS CHECKED.`,
             "success"
         );
 
@@ -1204,13 +1394,13 @@ async function loadAdminData() {
     finally {
 
         if (refreshMembers) {
+
             refreshMembers.disabled =
                 false;
 
             refreshMembers.textContent =
                 "REFRESH";
         }
-
     }
 }
 
@@ -1220,6 +1410,7 @@ async function loadAdminData() {
 ===================================================== */
 
 if (memberSearch) {
+
     memberSearch.addEventListener(
         "input",
         filterMembers
@@ -1232,11 +1423,13 @@ if (memberSearch) {
 ===================================================== */
 
 if (refreshMembers) {
+
     refreshMembers.addEventListener(
         "click",
         async () => {
 
             if (memberSearch) {
+
                 memberSearch.value =
                     "";
             }
@@ -1248,12 +1441,13 @@ if (refreshMembers) {
 
 
 /* =====================================================
-   START ADMIN PANEL
+   START
 ===================================================== */
 
 document.addEventListener(
     "DOMContentLoaded",
     () => {
+
         loadAdminData();
     }
 );
