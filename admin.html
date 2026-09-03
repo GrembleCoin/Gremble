@@ -87,7 +87,6 @@
 
         .admin-glow {
             position: absolute;
-
             width: 500px;
             height: 500px;
 
@@ -162,14 +161,12 @@
                 blur(18px);
         }
 
-
         .admin-brand {
             display: flex;
             align-items: center;
 
             gap: 14px;
         }
-
 
         .admin-brand img {
             width: 54px;
@@ -178,7 +175,6 @@
             object-fit: contain;
         }
 
-
         .admin-brand-copy {
             display: flex;
             flex-direction: column;
@@ -186,13 +182,11 @@
             gap: 3px;
         }
 
-
         .admin-brand-copy strong {
             font-size: 18px;
 
             letter-spacing: 1px;
         }
-
 
         .admin-brand-copy span {
             color: #65ff83;
@@ -203,14 +197,12 @@
             letter-spacing: 2.4px;
         }
 
-
         .admin-header-right {
             display: flex;
             align-items: center;
 
             gap: 10px;
         }
-
 
         .admin-status {
             display: flex;
@@ -239,7 +231,6 @@
             letter-spacing: 1.2px;
         }
 
-
         .admin-status-dot {
             width: 8px;
             height: 8px;
@@ -252,7 +243,6 @@
                 0 0 12px
                 rgba(101,255,131,.75);
         }
-
 
         .back-site-button {
             padding:
@@ -280,7 +270,6 @@
                 background .2s ease;
         }
 
-
         .back-site-button:hover {
             border-color:
                 rgba(101,255,131,.25);
@@ -306,7 +295,6 @@
             gap: 22px;
         }
 
-
         .admin-hero-main {
             position: relative;
 
@@ -330,7 +318,6 @@
                 );
         }
 
-
         .hero-mini-tag {
             margin-bottom: 18px;
 
@@ -341,7 +328,6 @@
 
             letter-spacing: 3px;
         }
-
 
         .admin-hero-main h1 {
             max-width: 850px;
@@ -358,11 +344,9 @@
             letter-spacing: -3px;
         }
 
-
         .admin-hero-main h1 span {
             color: #65ff83;
         }
-
 
         .admin-hero-main p {
             max-width: 650px;
@@ -375,7 +359,6 @@
 
             line-height: 1.75;
         }
-
 
         .hero-line {
             width: 86px;
@@ -391,7 +374,6 @@
                 0 0 22px
                 rgba(101,255,131,.4);
         }
-
 
         .hero-orb {
             position: absolute;
@@ -430,7 +412,6 @@
                 rgba(4,15,9,.84);
         }
 
-
         .private-card-tag {
             color: #65ff83;
 
@@ -440,7 +421,6 @@
             letter-spacing: 2.7px;
         }
 
-
         .private-card h2 {
             margin-top: 18px;
 
@@ -448,7 +428,6 @@
 
             line-height: 1.05;
         }
-
 
         .private-card p {
             margin-top: 15px;
@@ -459,7 +438,6 @@
 
             line-height: 1.7;
         }
-
 
         .private-id-box {
             margin-top: 24px;
@@ -476,7 +454,6 @@
                 rgba(101,255,131,.03);
         }
 
-
         .private-id-box small {
             display: block;
 
@@ -488,7 +465,6 @@
             letter-spacing: 1.7px;
         }
 
-
         .private-id-box strong {
             display: block;
 
@@ -497,6 +473,113 @@
             color: #65ff83;
 
             font-size: 12px;
+        }
+
+
+        /* =====================================================
+           CONTEST OPEN BUTTON
+        ===================================================== */
+
+        .contest-open-button {
+            width: 100%;
+
+            min-height: 66px;
+
+            margin-top: 18px;
+
+            padding:
+                0
+                18px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            gap: 14px;
+
+            border:
+                1px solid
+                rgba(101,255,131,.38);
+
+            border-radius: 15px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(101,255,131,.07),
+                    rgba(2,10,6,.7)
+                );
+
+            color: #eef5f0;
+
+            box-shadow:
+                0 0 18px
+                rgba(101,255,131,.06);
+
+            transition:
+                border-color .2s ease,
+                background .2s ease,
+                box-shadow .2s ease,
+                transform .2s ease;
+        }
+
+        .contest-open-button:hover {
+            border-color:
+                rgba(101,255,131,.72);
+
+            background:
+                rgba(101,255,131,.09);
+
+            box-shadow:
+                0 0 24px
+                rgba(101,255,131,.11);
+        }
+
+        .contest-open-button:active {
+            transform: scale(.99);
+        }
+
+        .contest-open-left {
+            display: flex;
+            align-items: center;
+
+            gap: 13px;
+
+            text-align: left;
+        }
+
+        .contest-open-icon {
+            font-size: 26px;
+        }
+
+        .contest-open-copy {
+            display: flex;
+            flex-direction: column;
+
+            gap: 4px;
+        }
+
+        .contest-open-copy strong {
+            color: #f4f7f5;
+
+            font-size: 12px;
+            font-weight: 900;
+
+            letter-spacing: .5px;
+        }
+
+        .contest-open-copy span {
+            color: #718078;
+
+            font-size: 9px;
+
+            line-height: 1.4;
+        }
+
+        .contest-open-arrow {
+            color: #65ff83;
+
+            font-size: 20px;
         }
 
 
@@ -527,14 +610,12 @@
             line-height: 1.65;
         }
 
-
         .admin-message.success {
             border-color:
                 rgba(101,255,131,.18);
 
             color: #65ff83;
         }
-
 
         .admin-message.error {
             border-color:
@@ -552,8 +633,621 @@
             margin-top: 24px;
         }
 
-
         .admin-dashboard[hidden] {
+            display: none;
+        }
+
+
+        /* =====================================================
+           CONTEST PANEL
+        ===================================================== */
+
+        .contest-panel {
+            margin-bottom: 22px;
+
+            border:
+                1px solid
+                rgba(101,255,131,.15);
+
+            border-radius: 24px;
+
+            overflow: hidden;
+
+            background:
+                rgba(4,12,8,.84);
+
+            box-shadow:
+                0 0 30px
+                rgba(101,255,131,.03);
+        }
+
+        .contest-panel[hidden] {
+            display: none;
+        }
+
+        .contest-panel-header {
+            min-height: 72px;
+
+            padding:
+                18px
+                22px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            gap: 16px;
+
+            border-bottom:
+                1px solid
+                rgba(255,255,255,.05);
+        }
+
+        .contest-panel-title {
+            display: flex;
+            align-items: center;
+
+            gap: 13px;
+        }
+
+        .contest-title-icon {
+            font-size: 27px;
+        }
+
+        .contest-title-copy span {
+            display: block;
+
+            color: #65ff83;
+
+            font-size: 8px;
+            font-weight: 900;
+
+            letter-spacing: 2px;
+        }
+
+        .contest-title-copy h2 {
+            margin-top: 4px;
+
+            font-size: 23px;
+        }
+
+        .contest-close-button {
+            min-height: 38px;
+
+            padding:
+                0
+                14px;
+
+            border:
+                1px solid
+                rgba(255,255,255,.08);
+
+            border-radius: 10px;
+
+            background:
+                rgba(255,255,255,.025);
+
+            color: #849188;
+
+            font-size: 9px;
+            font-weight: 900;
+
+            letter-spacing: 1px;
+        }
+
+        .contest-close-button:hover {
+            border-color:
+                rgba(101,255,131,.22);
+
+            color: #65ff83;
+        }
+
+
+        /* =====================================================
+           CONTEST STATS
+        ===================================================== */
+
+        .contest-stats {
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, minmax(0, 1fr));
+
+            gap: 14px;
+
+            padding:
+                20px
+                22px
+                0;
+        }
+
+        .contest-stat-card {
+            padding: 18px;
+
+            border:
+                1px solid
+                rgba(101,255,131,.09);
+
+            border-radius: 15px;
+
+            background:
+                rgba(101,255,131,.025);
+        }
+
+        .contest-stat-card span {
+            display: block;
+
+            color: #68766d;
+
+            font-size: 8px;
+            font-weight: 900;
+
+            letter-spacing: 1.5px;
+        }
+
+        .contest-stat-card strong {
+            display: block;
+
+            margin-top: 8px;
+
+            color: #f4f7f5;
+
+            font-size: 28px;
+        }
+
+        .contest-stat-card small {
+            display: block;
+
+            margin-top: 5px;
+
+            color: #65ff83;
+
+            font-size: 8px;
+            font-weight: 900;
+        }
+
+
+        /* =====================================================
+           CONTEST BODY
+        ===================================================== */
+
+        .contest-body {
+            padding: 22px;
+
+            display: grid;
+
+            grid-template-columns:
+                minmax(280px, .36fr)
+                minmax(0, .64fr);
+
+            gap: 18px;
+        }
+
+
+        /* =====================================================
+           CONTEST FORM
+        ===================================================== */
+
+        .contest-form-card,
+        .contest-list-card {
+            border:
+                1px solid
+                rgba(101,255,131,.09);
+
+            border-radius: 18px;
+
+            background:
+                rgba(0,8,5,.42);
+        }
+
+        .contest-form-card {
+            padding: 20px;
+        }
+
+        .contest-form-title {
+            color: #65ff83;
+
+            font-size: 9px;
+            font-weight: 900;
+
+            letter-spacing: 1.6px;
+        }
+
+        .contest-form {
+            margin-top: 18px;
+
+            display: grid;
+
+            gap: 10px;
+        }
+
+        .contest-form label {
+            margin-top: 5px;
+
+            color: #69766e;
+
+            font-size: 8px;
+            font-weight: 900;
+
+            letter-spacing: 1.4px;
+        }
+
+        .contest-form input {
+            width: 100%;
+
+            min-height: 44px;
+
+            padding:
+                0
+                13px;
+
+            border:
+                1px solid
+                rgba(101,255,131,.11);
+
+            border-radius: 11px;
+
+            outline: none;
+
+            background:
+                rgba(0,5,3,.7);
+
+            color: #eef4f0;
+
+            font-size: 11px;
+        }
+
+        .contest-form input:focus {
+            border-color:
+                rgba(101,255,131,.42);
+
+            box-shadow:
+                0 0 0 3px
+                rgba(101,255,131,.045);
+        }
+
+        .contest-requirements {
+            display: grid;
+
+            grid-template-columns:
+                1fr
+                1fr;
+
+            gap: 8px;
+        }
+
+        .contest-rule-button {
+            min-height: 42px;
+
+            border-radius: 11px;
+
+            font-size: 9px;
+            font-weight: 900;
+
+            letter-spacing: 1px;
+        }
+
+        .contest-rule-button.yes {
+            border:
+                1px solid
+                rgba(101,255,131,.22);
+
+            background:
+                rgba(101,255,131,.05);
+
+            color: #65ff83;
+        }
+
+        .contest-rule-button.no {
+            border:
+                1px solid
+                rgba(255,89,100,.22);
+
+            background:
+                rgba(255,89,100,.04);
+
+            color: #ff717b;
+        }
+
+        .contest-rule-button.active.yes {
+            background:
+                rgba(101,255,131,.13);
+
+            border-color:
+                rgba(101,255,131,.55);
+        }
+
+        .contest-rule-button.active.no {
+            background:
+                rgba(255,89,100,.11);
+
+            border-color:
+                rgba(255,89,100,.5);
+        }
+
+        .contest-submit-button {
+            min-height: 46px;
+
+            margin-top: 8px;
+
+            border:
+                1px solid
+                rgba(101,255,131,.42);
+
+            border-radius: 12px;
+
+            background:
+                rgba(101,255,131,.08);
+
+            color: #65ff83;
+
+            font-size: 9px;
+            font-weight: 900;
+
+            letter-spacing: 1.2px;
+        }
+
+        .contest-submit-button:hover {
+            background:
+                rgba(101,255,131,.13);
+        }
+
+        .contest-cancel-edit {
+            min-height: 40px;
+
+            border:
+                1px solid
+                rgba(255,255,255,.08);
+
+            border-radius: 11px;
+
+            background:
+                rgba(255,255,255,.025);
+
+            color: #87938b;
+
+            font-size: 8px;
+            font-weight: 900;
+
+            letter-spacing: 1px;
+        }
+
+        .contest-cancel-edit[hidden] {
+            display: none;
+        }
+
+        .contest-form-message {
+            min-height: 18px;
+
+            margin-top: 8px;
+
+            color: #78857d;
+
+            font-size: 9px;
+
+            line-height: 1.5;
+        }
+
+        .contest-form-message.success {
+            color: #65ff83;
+        }
+
+        .contest-form-message.error {
+            color: #ff717b;
+        }
+
+
+        /* =====================================================
+           CONTEST TABLE
+        ===================================================== */
+
+        .contest-list-card {
+            overflow: hidden;
+        }
+
+        .contest-list-top {
+            padding:
+                17px
+                18px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            gap: 12px;
+
+            border-bottom:
+                1px solid
+                rgba(255,255,255,.05);
+        }
+
+        .contest-list-top strong {
+            color: #f4f7f5;
+
+            font-size: 11px;
+        }
+
+        .contest-list-top span {
+            color: #657269;
+
+            font-size: 8px;
+            font-weight: 900;
+
+            letter-spacing: 1px;
+        }
+
+        .contest-table-wrap {
+            width: 100%;
+
+            overflow-x: auto;
+        }
+
+        .contest-table {
+            width: 100%;
+
+            min-width: 780px;
+
+            border-collapse: collapse;
+        }
+
+        .contest-table th {
+            padding:
+                13px
+                14px;
+
+            text-align: left;
+
+            color: #657269;
+
+            background:
+                rgba(255,255,255,.015);
+
+            font-size: 7px;
+            font-weight: 900;
+
+            letter-spacing: 1.2px;
+
+            white-space: nowrap;
+        }
+
+        .contest-table td {
+            padding:
+                14px;
+
+            border-top:
+                1px solid
+                rgba(255,255,255,.04);
+
+            color: #cbd5cf;
+
+            font-size: 10px;
+
+            vertical-align: middle;
+        }
+
+        .contest-participant {
+            color: #65ff83;
+
+            font-weight: 800;
+        }
+
+        .contest-link {
+            display: inline-flex;
+            align-items: center;
+
+            gap: 5px;
+
+            color: #d7dfda;
+        }
+
+        .contest-link:hover {
+            color: #65ff83;
+        }
+
+        .contest-points {
+            color: #65ff83;
+
+            font-weight: 900;
+        }
+
+        .contest-rule-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            min-width: 48px;
+
+            padding:
+                6px
+                9px;
+
+            border-radius: 999px;
+
+            font-size: 7px;
+            font-weight: 900;
+
+            letter-spacing: .8px;
+        }
+
+        .contest-rule-badge.yes {
+            border:
+                1px solid
+                rgba(101,255,131,.24);
+
+            background:
+                rgba(101,255,131,.07);
+
+            color: #65ff83;
+        }
+
+        .contest-rule-badge.no {
+            border:
+                1px solid
+                rgba(255,89,100,.24);
+
+            background:
+                rgba(255,89,100,.06);
+
+            color: #ff717b;
+        }
+
+        .contest-actions {
+            display: flex;
+            align-items: center;
+
+            gap: 6px;
+        }
+
+        .contest-action-button {
+            min-height: 30px;
+
+            padding:
+                0
+                9px;
+
+            border-radius: 8px;
+
+            font-size: 7px;
+            font-weight: 900;
+
+            letter-spacing: .7px;
+        }
+
+        .contest-action-button.edit {
+            border:
+                1px solid
+                rgba(101,255,131,.18);
+
+            background:
+                rgba(101,255,131,.04);
+
+            color: #65ff83;
+        }
+
+        .contest-action-button.delete {
+            border:
+                1px solid
+                rgba(255,89,100,.18);
+
+            background:
+                rgba(255,89,100,.04);
+
+            color: #ff717b;
+        }
+
+        .contest-empty {
+            padding:
+                40px
+                20px;
+
+            text-align: center;
+
+            color: #657269;
+
+            font-size: 10px;
+        }
+
+        .contest-empty[hidden] {
             display: none;
         }
 
@@ -571,7 +1265,6 @@
             gap: 14px;
         }
 
-
         .stat-card {
             min-height: 130px;
 
@@ -587,7 +1280,6 @@
                 rgba(5,15,10,.72);
         }
 
-
         .stat-card span {
             display: block;
 
@@ -599,7 +1291,6 @@
             letter-spacing: 1.8px;
         }
 
-
         .stat-card strong {
             display: block;
 
@@ -610,7 +1301,6 @@
             font-size: 34px;
         }
 
-
         .stat-card small {
             display: block;
 
@@ -619,7 +1309,6 @@
             color: #65ff83;
 
             font-size: 9px;
-
             font-weight: 800;
 
             letter-spacing: .4px;
@@ -645,7 +1334,6 @@
                 rgba(4,12,8,.78);
         }
 
-
         .members-panel-top {
             display: flex;
             align-items: center;
@@ -655,7 +1343,6 @@
 
             padding: 22px;
         }
-
 
         .members-panel-title span {
             display: block;
@@ -668,13 +1355,11 @@
             letter-spacing: 2px;
         }
 
-
         .members-panel-title h2 {
             margin-top: 5px;
 
             font-size: 24px;
         }
-
 
         .members-tools {
             display: flex;
@@ -682,7 +1367,6 @@
 
             gap: 10px;
         }
-
 
         .member-search {
             width: 320px;
@@ -710,11 +1394,9 @@
             font-size: 12px;
         }
 
-
         .member-search::placeholder {
             color: #59665e;
         }
-
 
         .member-search:focus {
             border-color:
@@ -724,7 +1406,6 @@
                 0 0 0 3px
                 rgba(101,255,131,.05);
         }
-
 
         .refresh-button {
             min-height: 43px;
@@ -748,13 +1429,7 @@
             font-weight: 900;
 
             letter-spacing: 1.2px;
-
-            transition:
-                border-color .2s ease,
-                background .2s ease,
-                opacity .2s ease;
         }
-
 
         .refresh-button:hover {
             border-color:
@@ -764,7 +1439,6 @@
                 rgba(101,255,131,.075);
         }
 
-
         .refresh-button:disabled {
             opacity: .45;
 
@@ -773,7 +1447,7 @@
 
 
         /* =====================================================
-           TABLE
+           MEMBERS TABLE
         ===================================================== */
 
         .members-table-wrap {
@@ -786,7 +1460,6 @@
                 rgba(255,255,255,.05);
         }
 
-
         .members-table {
             width: 100%;
 
@@ -794,7 +1467,6 @@
 
             border-collapse: collapse;
         }
-
 
         .members-table th {
             padding:
@@ -816,7 +1488,6 @@
             white-space: nowrap;
         }
 
-
         .members-table td {
             padding:
                 17px
@@ -833,22 +1504,10 @@
             vertical-align: middle;
         }
 
-
-        .members-table tbody tr {
-            transition:
-                background .2s ease;
-        }
-
-
         .members-table tr:hover td {
             background:
                 rgba(101,255,131,.018);
         }
-
-
-        /* =====================================================
-           MEMBER VALUES
-        ===================================================== */
 
         .telegram-name {
             color: #f4f7f5;
@@ -856,17 +1515,14 @@
             font-weight: 800;
         }
 
-
         .telegram-username,
         .x-username {
             color: #65ff83;
         }
 
-
         .empty-value {
             color: #59665e;
         }
-
 
         .wallet-cell {
             display: flex;
@@ -874,7 +1530,6 @@
 
             gap: 8px;
         }
-
 
         .wallet-address {
             max-width: 220px;
@@ -887,11 +1542,6 @@
 
             color: #aab6ae;
         }
-
-
-        /* =====================================================
-           COPY BUTTON
-        ===================================================== */
 
         .copy-button {
             flex: 0 0 auto;
@@ -915,12 +1565,7 @@
             font-weight: 900;
 
             letter-spacing: .8px;
-
-            transition:
-                border-color .2s ease,
-                background .2s ease;
         }
-
 
         .copy-button:hover {
             border-color:
@@ -929,11 +1574,6 @@
             background:
                 rgba(101,255,131,.07);
         }
-
-
-        /* =====================================================
-           TELEGRAM BADGES
-        ===================================================== */
 
         .telegram-group-badge {
             display: inline-flex;
@@ -955,7 +1595,6 @@
             white-space: nowrap;
         }
 
-
         .telegram-group-badge.member {
             border:
                 1px solid
@@ -966,7 +1605,6 @@
 
             color: #65ff83;
         }
-
 
         .telegram-group-badge.not-member {
             border:
@@ -979,7 +1617,6 @@
             color: #ff717b;
         }
 
-
         .telegram-group-badge.unknown {
             border:
                 1px solid
@@ -991,21 +1628,11 @@
             color: #ffd35c;
         }
 
-
-        /* =====================================================
-           DATES
-        ===================================================== */
-
         .date-value {
             color: #75837a;
 
             white-space: nowrap;
         }
-
-
-        /* =====================================================
-           EMPTY TABLE
-        ===================================================== */
 
         .members-empty {
             padding:
@@ -1019,45 +1646,7 @@
             font-size: 12px;
         }
 
-
-        /* =====================================================
-           TABLE SCROLLBAR
-        ===================================================== */
-
-        .members-table-wrap::-webkit-scrollbar {
-            height: 8px;
-        }
-
-
-        .members-table-wrap::-webkit-scrollbar-track {
-            background:
-                rgba(255,255,255,.02);
-        }
-
-
-        .members-table-wrap::-webkit-scrollbar-thumb {
-            border-radius: 999px;
-
-            background:
-                rgba(101,255,131,.16);
-        }
-
-
-        .members-table-wrap::-webkit-scrollbar-thumb:hover {
-            background:
-                rgba(101,255,131,.26);
-        }
-
-
-        /* =====================================================
-           TABLE GROUP HEADERS
-        ===================================================== */
-
-        .chat-header {
-            color: #65ff83 !important;
-        }
-
-
+        .chat-header,
         .announcements-header {
             color: #65ff83 !important;
         }
@@ -1074,14 +1663,17 @@
                     repeat(2, minmax(0, 1fr));
             }
 
+            .contest-body {
+                grid-template-columns: 1fr;
+            }
+
         }
 
 
         @media (max-width: 1000px) {
 
             .admin-hero {
-                grid-template-columns:
-                    1fr;
+                grid-template-columns: 1fr;
             }
 
         }
@@ -1099,13 +1691,11 @@
                 padding-top: 12px;
             }
 
-
             .admin-header {
                 align-items: flex-start;
 
                 flex-direction: column;
             }
-
 
             .admin-header-right {
                 width: 100%;
@@ -1113,18 +1703,15 @@
                 flex-wrap: wrap;
             }
 
-
             .admin-hero-main {
                 padding:
                     28px
                     22px;
             }
 
-
             .admin-hero-main h1 {
                 letter-spacing: -2px;
             }
-
 
             .private-card {
                 padding:
@@ -1132,31 +1719,16 @@
                     20px;
             }
 
-
             .stats-grid {
                 grid-template-columns:
                     repeat(2, minmax(0, 1fr));
             }
-
-
-            .stat-card {
-                min-height: 115px;
-
-                padding: 18px;
-            }
-
-
-            .stat-card strong {
-                font-size: 30px;
-            }
-
 
             .members-panel-top {
                 align-items: stretch;
 
                 flex-direction: column;
             }
-
 
             .members-tools {
                 width: 100%;
@@ -1166,13 +1738,25 @@
                 align-items: stretch;
             }
 
-
             .member-search {
                 width: 100%;
             }
 
-
             .refresh-button {
+                width: 100%;
+            }
+
+            .contest-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .contest-panel-header {
+                align-items: flex-start;
+
+                flex-direction: column;
+            }
+
+            .contest-close-button {
                 width: 100%;
             }
 
@@ -1186,40 +1770,22 @@
                     calc(100% - 16px);
             }
 
-
             .admin-header {
                 border-radius: 17px;
 
                 padding: 13px;
             }
 
-
             .admin-brand img {
                 width: 46px;
                 height: 46px;
             }
-
-
-            .admin-status {
-                padding:
-                    9px
-                    11px;
-            }
-
-
-            .back-site-button {
-                padding:
-                    10px
-                    13px;
-            }
-
 
             .admin-hero {
                 margin-top: 14px;
 
                 gap: 14px;
             }
-
 
             .admin-hero-main {
                 min-height: 0;
@@ -1231,36 +1797,33 @@
                 border-radius: 20px;
             }
 
-
             .admin-hero-main h1 {
                 font-size: 39px;
 
                 letter-spacing: -2px;
             }
 
-
             .admin-hero-main p {
                 font-size: 12px;
             }
-
 
             .private-card {
                 border-radius: 20px;
             }
 
+            .contest-open-button {
+                min-height: 72px;
+            }
 
             .admin-message {
                 margin-top: 14px;
 
-                padding:
-                    16px;
+                padding: 16px;
             }
-
 
             .admin-dashboard {
                 margin-top: 14px;
             }
-
 
             .stats-grid {
                 grid-template-columns: 1fr;
@@ -1268,11 +1831,9 @@
                 gap: 10px;
             }
 
-
             .stat-card {
                 min-height: 0;
             }
-
 
             .members-panel {
                 margin-top: 14px;
@@ -1280,9 +1841,23 @@
                 border-radius: 20px;
             }
 
-
             .members-panel-top {
                 padding: 18px;
+            }
+
+            .contest-body {
+                padding: 14px;
+            }
+
+            .contest-stats {
+                padding:
+                    14px
+                    14px
+                    0;
+            }
+
+            .contest-panel-header {
+                padding: 16px;
             }
 
         }
@@ -1423,7 +1998,9 @@
             </div>
 
 
-            <!-- PRIVATE ACCESS -->
+            <!-- =================================================
+                 PRIVATE ACCESS
+            ================================================== -->
 
             <aside class="private-card">
 
@@ -1459,6 +2036,44 @@
                 </div>
 
 
+                <!-- CONTEST OPEN BUTTON -->
+
+                <button
+                    type="button"
+                    class="contest-open-button"
+                    id="openContestPanel"
+                >
+
+                    <span class="contest-open-left">
+
+                        <span class="contest-open-icon">
+                            🏆
+                        </span>
+
+                        <span class="contest-open-copy">
+
+                            <strong>
+                                OPEN CONTEST PARTICIPANTS
+                            </strong>
+
+                            <span>
+                                Manage meme entries,
+                                points and requirements
+                            </span>
+
+                        </span>
+
+                    </span>
+
+
+                    <span class="contest-open-arrow">
+                        ›
+                    </span>
+
+
+                </button>
+
+
             </aside>
 
 
@@ -1489,13 +2104,335 @@
 
 
             <!-- =================================================
-                 STATS
+                 CONTEST PANEL
+            ================================================== -->
+
+            <section
+                class="contest-panel"
+                id="contestPanel"
+                hidden
+            >
+
+
+                <!-- HEADER -->
+
+                <div class="contest-panel-header">
+
+
+                    <div class="contest-panel-title">
+
+                        <span class="contest-title-icon">
+                            🏆
+                        </span>
+
+
+                        <div class="contest-title-copy">
+
+                            <span>
+                                MEME CONTEST
+                            </span>
+
+                            <h2>
+                                Contest Participants
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        class="contest-close-button"
+                        id="closeContestPanel"
+                    >
+                        CLOSE
+                    </button>
+
+
+                </div>
+
+
+                <!-- STATS -->
+
+                <div class="contest-stats">
+
+
+                    <article class="contest-stat-card">
+
+                        <span>
+                            TOTAL ENTRIES
+                        </span>
+
+                        <strong id="contestTotalEntries">
+                            0
+                        </strong>
+
+                        <small>
+                            PARTICIPANTS
+                        </small>
+
+                    </article>
+
+
+                    <article class="contest-stat-card">
+
+                        <span>
+                            RULES VERIFIED
+                        </span>
+
+                        <strong id="contestVerifiedEntries">
+                            0
+                        </strong>
+
+                        <small>
+                            REQUIREMENTS = YES
+                        </small>
+
+                    </article>
+
+
+                </div>
+
+
+                <!-- BODY -->
+
+                <div class="contest-body">
+
+
+                    <!-- =================================================
+                         ADD / EDIT FORM
+                    ================================================== -->
+
+                    <section class="contest-form-card">
+
+
+                        <p class="contest-form-title">
+                            ADD NEW ENTRY
+                        </p>
+
+
+                        <form
+                            class="contest-form"
+                            id="contestEntryForm"
+                        >
+
+
+                            <input
+                                type="hidden"
+                                id="contestEntryId"
+                                value=""
+                            >
+
+
+                            <label for="contestParticipant">
+                                PARTICIPANT / NAME
+                            </label>
+
+
+                            <input
+                                type="text"
+                                id="contestParticipant"
+                                placeholder="@username or name"
+                                maxlength="80"
+                                autocomplete="off"
+                                required
+                            >
+
+
+                            <label for="contestMemeUrl">
+                                MEME LINK
+                            </label>
+
+
+                            <input
+                                type="url"
+                                id="contestMemeUrl"
+                                placeholder="https://x.com/username/status/..."
+                                autocomplete="off"
+                                required
+                            >
+
+
+                            <label for="contestPoints">
+                                POINTS
+                            </label>
+
+
+                            <input
+                                type="number"
+                                id="contestPoints"
+                                min="0"
+                                max="100000"
+                                value="0"
+                                required
+                            >
+
+
+                            <label>
+                                MEETS ALL REQUIREMENTS?
+                            </label>
+
+
+                            <div class="contest-requirements">
+
+
+                                <button
+                                    type="button"
+                                    class="contest-rule-button yes"
+                                    id="contestRequirementsYes"
+                                >
+                                    YES
+                                </button>
+
+
+                                <button
+                                    type="button"
+                                    class="contest-rule-button no active"
+                                    id="contestRequirementsNo"
+                                >
+                                    NO
+                                </button>
+
+
+                            </div>
+
+
+                            <input
+                                type="hidden"
+                                id="contestRequirementsValue"
+                                value="false"
+                            >
+
+
+                            <button
+                                type="submit"
+                                class="contest-submit-button"
+                                id="contestSubmitButton"
+                            >
+                                + ADD PARTICIPANT
+                            </button>
+
+
+                            <button
+                                type="button"
+                                class="contest-cancel-edit"
+                                id="contestCancelEdit"
+                                hidden
+                            >
+                                CANCEL EDIT
+                            </button>
+
+
+                            <p
+                                class="contest-form-message"
+                                id="contestFormMessage"
+                            ></p>
+
+
+                        </form>
+
+
+                    </section>
+
+
+                    <!-- =================================================
+                         PARTICIPANTS LIST
+                    ================================================== -->
+
+                    <section class="contest-list-card">
+
+
+                        <div class="contest-list-top">
+
+
+                            <strong>
+                                ALL CONTEST ENTRIES
+                            </strong>
+
+
+                            <span id="contestEntriesLabel">
+                                0 ENTRIES
+                            </span>
+
+
+                        </div>
+
+
+                        <div class="contest-table-wrap">
+
+
+                            <table class="contest-table">
+
+
+                                <thead>
+
+
+                                    <tr>
+
+                                        <th>
+                                            PARTICIPANT
+                                        </th>
+
+                                        <th>
+                                            MEME
+                                        </th>
+
+                                        <th>
+                                            POINTS
+                                        </th>
+
+                                        <th>
+                                            RULES OK?
+                                        </th>
+
+                                        <th>
+                                            ADDED
+                                        </th>
+
+                                        <th>
+                                            ACTIONS
+                                        </th>
+
+                                    </tr>
+
+
+                                </thead>
+
+
+                                <tbody id="contestTableBody">
+                                </tbody>
+
+
+                            </table>
+
+
+                            <div
+                                class="contest-empty"
+                                id="contestEmpty"
+                            >
+                                NO CONTEST ENTRIES YET.
+                            </div>
+
+
+                        </div>
+
+
+                    </section>
+
+
+                </div>
+
+
+            </section>
+
+
+            <!-- =================================================
+                 MEMBER STATS
             ================================================== -->
 
             <div class="stats-grid">
 
-
-                <!-- TOTAL MEMBERS -->
 
                 <article class="stat-card">
 
@@ -1514,8 +2451,6 @@
                 </article>
 
 
-                <!-- COMPLETE PROFILES -->
-
                 <article class="stat-card">
 
                     <span>
@@ -1533,8 +2468,6 @@
                 </article>
 
 
-                <!-- GREMBLE CHAT -->
-
                 <article class="stat-card">
 
                     <span>
@@ -1551,8 +2484,6 @@
 
                 </article>
 
-
-                <!-- GREMBLE ANNOUNCEMENTS -->
 
                 <article class="stat-card">
 
@@ -1580,8 +2511,6 @@
 
             <section class="members-panel">
 
-
-                <!-- PANEL TOP -->
 
                 <div class="members-panel-top">
 
@@ -1625,8 +2554,6 @@
 
                 </div>
 
-
-                <!-- TABLE -->
 
                 <div class="members-table-wrap">
 
@@ -1715,10 +2642,10 @@
 
 
     <!-- =====================================================
-         ADMIN SCRIPT
+         SCRIPT
     ====================================================== -->
 
-    <script src="admin.js?v=102"></script>
+    <script src="admin.js?v=103"></script>
 
 
 </body>
