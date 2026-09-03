@@ -3442,3 +3442,177 @@ footer p {
             24px 17px;
     }
 }
+/* =====================================================
+   LIVE MEME CONTEST
+===================================================== */
+
+.live-contest-card {
+    position: relative;
+    margin-top: 16px;
+    padding: 18px;
+    overflow: hidden;
+    border: 1px solid rgba(101, 255, 131, .55);
+    border-radius: 16px;
+    background:
+        radial-gradient(
+            circle at top right,
+            rgba(101, 255, 131, .08),
+            transparent 45%
+        ),
+        rgba(0, 10, 6, .72);
+    box-shadow:
+        0 0 0 1px rgba(101, 255, 131, .03),
+        0 0 24px rgba(101, 255, 131, .06);
+}
+
+.live-contest-card::before {
+    content: "";
+    position: absolute;
+    width: 140px;
+    height: 140px;
+    top: -80px;
+    right: -50px;
+    border-radius: 50%;
+    background: rgba(101, 255, 131, .09);
+    filter: blur(35px);
+    pointer-events: none;
+}
+
+.live-contest-top {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.live-contest-dot {
+    width: 7px;
+    height: 7px;
+    flex: 0 0 7px;
+    border-radius: 50%;
+    background: #65ff83;
+    box-shadow: 0 0 12px rgba(101, 255, 131, .9);
+}
+
+.live-contest-status {
+    color: #65ff83;
+    font-size: 8px;
+    font-weight: 900;
+    letter-spacing: 1.8px;
+}
+
+.live-contest-card h3 {
+    position: relative;
+    margin: 0;
+    color: #f1f5f2;
+    font-size: 19px;
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: -.5px;
+}
+
+.live-contest-card h3 span {
+    color: #65ff83;
+}
+
+.live-contest-card > p {
+    position: relative;
+    margin-top: 8px;
+    color: #8c9992;
+    font-size: 11px;
+    line-height: 1.55;
+}
+
+.live-contest-bottom {
+    position: relative;
+    margin-top: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.live-contest-date {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    color: #65ff83;
+    font-size: 8px;
+    font-weight: 900;
+    letter-spacing: .5px;
+    white-space: nowrap;
+}
+
+.live-contest-date span {
+    font-size: 13px;
+}
+
+.live-contest-button {
+    min-height: 34px;
+    padding: 0 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    flex-shrink: 0;
+    border: 1px solid rgba(101, 255, 131, .48);
+    border-radius: 18px;
+    background: rgba(101, 255, 131, .035);
+    color: #65ff83;
+    text-decoration: none;
+    font-size: 8px;
+    font-weight: 900;
+    letter-spacing: .8px;
+    transition:
+        background .2s ease,
+        border-color .2s ease,
+        transform .2s ease,
+        box-shadow .2s ease;
+}
+
+.live-contest-button:hover {
+    border-color: #65ff83;
+    background: rgba(101, 255, 131, .09);
+    box-shadow: 0 0 16px rgba(101, 255, 131, .08);
+}
+
+.live-contest-button:active {
+    transform: scale(.98);
+}
+
+.live-contest-button span {
+    font-size: 12px;
+}
+
+
+/* =====================================================
+   LIVE CONTEST — MOBILE
+===================================================== */
+
+@media (max-width: 560px) {
+
+    .live-contest-card {
+        padding: 16px;
+    }
+
+    .live-contest-card h3 {
+        font-size: 17px;
+    }
+
+    .live-contest-bottom {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .live-contest-date {
+        white-space: normal;
+        line-height: 1.5;
+    }
+
+    .live-contest-button {
+        width: 100%;
+        min-height: 42px;
+    }
+
+}
