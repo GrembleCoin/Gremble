@@ -37,7 +37,6 @@ const adminDashboard =
 const adminIdentity =
     document.getElementById("adminIdentity");
 
-
 const statTotalMembers =
     document.getElementById("statTotalMembers");
 
@@ -51,7 +50,6 @@ const statTelegramAnnouncementsMembers =
     document.getElementById(
         "statTelegramAnnouncementsMembers"
     );
-
 
 const memberSearch =
     document.getElementById("memberSearch");
@@ -79,7 +77,6 @@ const closeContestPanel =
 const contestPanel =
     document.getElementById("contestPanel");
 
-
 const contestTotalEntries =
     document.getElementById("contestTotalEntries");
 
@@ -88,7 +85,6 @@ const contestVerifiedEntries =
 
 const contestEntriesLabel =
     document.getElementById("contestEntriesLabel");
-
 
 const contestEntryForm =
     document.getElementById("contestEntryForm");
@@ -133,11 +129,14 @@ const contestEmpty =
 
 
 /* =====================================================
-   CONTEST SEARCH + PAGINATION
+   CONTEST SEARCH + SORT + PAGINATION
 ===================================================== */
 
 const contestSearch =
     document.getElementById("contestSearch");
+
+const contestSort =
+    document.getElementById("contestSort");
 
 const contestPagination =
     document.getElementById("contestPagination");
@@ -222,9 +221,7 @@ function setAdminMessage(
 }
 
 
-function setAdminIdentity(
-    message
-) {
+function setAdminIdentity(message) {
 
     if (!adminIdentity) {
         return;
@@ -265,9 +262,7 @@ function getSessionExpiry() {
     const expiry =
         Number(raw);
 
-    if (
-        !Number.isFinite(expiry)
-    ) {
+    if (!Number.isFinite(expiry)) {
         return null;
     }
 
@@ -356,9 +351,7 @@ function shortWallet(value) {
         return "";
     }
 
-    if (
-        wallet.length <= 14
-    ) {
+    if (wallet.length <= 14) {
         return wallet;
     }
 
@@ -430,9 +423,7 @@ async function copyText(
    TELEGRAM STATUS
 ===================================================== */
 
-function normalizeTelegramStatus(
-    value
-) {
+function normalizeTelegramStatus(value) {
 
     const status =
         cleanText(value)
@@ -506,9 +497,7 @@ function createTelegramBadge(
         "telegram-group-badge";
 
 
-    if (
-        normalized === "member"
-    ) {
+    if (normalized === "member") {
 
         badge.classList.add(
             "member"
@@ -564,7 +553,6 @@ function updateStats(
             allMembers.length
         );
 
-
     const completedProfiles =
         numberOrZero(
             stats.completed_profiles ??
@@ -580,7 +568,6 @@ function updateStats(
             ).length
         );
 
-
     const chatMembers =
         numberOrZero(
             stats.telegram_chat_members ??
@@ -592,7 +579,6 @@ function updateStats(
                     "member"
             ).length
         );
-
 
     const announcementsMembers =
         numberOrZero(
@@ -613,26 +599,19 @@ function updateStats(
 
     }
 
-
     if (statCompletedProfiles) {
 
         statCompletedProfiles.textContent =
-            String(
-                completedProfiles
-            );
+            String(completedProfiles);
 
     }
-
 
     if (statTelegramChatMembers) {
 
         statTelegramChatMembers.textContent =
-            String(
-                chatMembers
-            );
+            String(chatMembers);
 
     }
-
 
     if (
         statTelegramAnnouncementsMembers
@@ -652,9 +631,7 @@ function updateStats(
    CREATE MEMBER ROW
 ===================================================== */
 
-function createMemberRow(
-    member
-) {
+function createMemberRow(member) {
 
     const row =
         document.createElement(
@@ -1070,9 +1047,7 @@ function createMemberRow(
    RENDER MEMBERS
 ===================================================== */
 
-function renderMembers(
-    members
-) {
+function renderMembers(members) {
 
     if (!membersTableBody) {
         return;
@@ -1081,16 +1056,12 @@ function renderMembers(
     membersTableBody.innerHTML =
         "";
 
-
     const list =
         Array.isArray(members)
             ? members
             : [];
 
-
-    if (
-        list.length === 0
-    ) {
+    if (list.length === 0) {
 
         if (membersEmpty) {
 
@@ -1103,7 +1074,6 @@ function renderMembers(
 
     }
 
-
     if (membersEmpty) {
 
         membersEmpty.hidden =
@@ -1111,10 +1081,8 @@ function renderMembers(
 
     }
 
-
     const fragment =
         document.createDocumentFragment();
-
 
     list.forEach(
         member => {
@@ -1127,7 +1095,6 @@ function renderMembers(
 
         }
     );
-
 
     membersTableBody.appendChild(
         fragment
@@ -1147,7 +1114,6 @@ function filterMembers() {
             memberSearch?.value
         ).toLowerCase();
 
-
     if (!search) {
 
         renderMembers(
@@ -1157,7 +1123,6 @@ function filterMembers() {
         return;
 
     }
-
 
     const filtered =
         allMembers.filter(
@@ -1173,37 +1138,26 @@ function filterMembers() {
                         member
                     );
 
-
                 const values = [
 
                     member.telegram_name,
-
                     member.telegram_username,
-
                     member.x_username,
-
                     member.solana_address,
-
                     chatStatus,
-
                     announcementsStatus
 
                 ];
 
-
                 return values.some(
                     value =>
-
                         cleanText(value)
                             .toLowerCase()
-                            .includes(
-                                search
-                            )
+                            .includes(search)
                 );
 
             }
         );
-
 
     renderMembers(
         filtered
@@ -1228,7 +1182,6 @@ function showAccessError(
 
     }
 
-
     if (openContestPanel) {
 
         openContestPanel.disabled =
@@ -1236,10 +1189,7 @@ function showAccessError(
 
     }
 
-
-    if (
-        status === 401
-    ) {
+    if (status === 401) {
 
         setAdminIdentity(
             "LOGIN REQUIRED"
@@ -1254,10 +1204,7 @@ function showAccessError(
 
     }
 
-
-    if (
-        status === 403
-    ) {
+    if (status === 403) {
 
         setAdminIdentity(
             "ACCESS DENIED"
@@ -1271,7 +1218,6 @@ function showAccessError(
         return;
 
     }
-
 
     setAdminIdentity(
         "ERROR"
@@ -1295,7 +1241,6 @@ async function loadAdminData() {
     const token =
         getSessionToken();
 
-
     if (!token) {
 
         showAccessError(
@@ -1306,10 +1251,7 @@ async function loadAdminData() {
 
     }
 
-
-    if (
-        sessionIsExpired()
-    ) {
+    if (sessionIsExpired()) {
 
         clearLocalSession();
 
@@ -1321,7 +1263,6 @@ async function loadAdminData() {
 
     }
 
-
     setAdminIdentity(
         "VERIFYING..."
     );
@@ -1330,14 +1271,12 @@ async function loadAdminData() {
         "VERIFYING YOUR TELEGRAM ID AND LOADING GREMBLE MEMBERS..."
     );
 
-
     if (openContestPanel) {
 
         openContestPanel.disabled =
             true;
 
     }
-
 
     if (refreshMembers) {
 
@@ -1348,7 +1287,6 @@ async function loadAdminData() {
             "LOADING...";
 
     }
-
 
     try {
 
@@ -1365,10 +1303,8 @@ async function loadAdminData() {
                 }
             );
 
-
         let result =
             null;
-
 
         try {
 
@@ -1383,10 +1319,7 @@ async function loadAdminData() {
 
         }
 
-
-        if (
-            response.status === 401
-        ) {
+        if (response.status === 401) {
 
             clearLocalSession();
 
@@ -1398,10 +1331,7 @@ async function loadAdminData() {
 
         }
 
-
-        if (
-            response.status === 403
-        ) {
+        if (response.status === 403) {
 
             showAccessError(
                 403
@@ -1410,7 +1340,6 @@ async function loadAdminData() {
             return;
 
         }
-
 
         if (
             !response.ok ||
@@ -1424,7 +1353,6 @@ async function loadAdminData() {
 
         }
 
-
         allMembers =
             Array.isArray(
                 result.members
@@ -1432,16 +1360,13 @@ async function loadAdminData() {
                 ? result.members
                 : [];
 
-
         updateStats(
             result.stats || {}
         );
 
-
         renderMembers(
             allMembers
         );
-
 
         if (adminDashboard) {
 
@@ -1450,7 +1375,6 @@ async function loadAdminData() {
 
         }
 
-
         if (openContestPanel) {
 
             openContestPanel.disabled =
@@ -1458,11 +1382,9 @@ async function loadAdminData() {
 
         }
 
-
         setAdminIdentity(
             "VERIFIED ADMIN"
         );
-
 
         setAdminMessage(
             `ACCESS GRANTED — ${allMembers.length} GREMBLE MEMBER${allMembers.length === 1 ? "" : "S"} LOADED.`,
@@ -1476,7 +1398,6 @@ async function loadAdminData() {
             "Admin panel error:",
             error
         );
-
 
         showAccessError(
             500,
@@ -1515,16 +1436,13 @@ function setContestMessage(
         return;
     }
 
-
     contestFormMessage.textContent =
         message;
-
 
     contestFormMessage.classList.remove(
         "success",
         "error"
     );
-
 
     if (type) {
 
@@ -1554,7 +1472,6 @@ function setContestRequirements(
 
     }
 
-
     if (contestRequirementsYes) {
 
         contestRequirementsYes.classList.toggle(
@@ -1563,7 +1480,6 @@ function setContestRequirements(
         );
 
     }
-
 
     if (contestRequirementsNo) {
 
@@ -1578,14 +1494,13 @@ function setContestRequirements(
 
 
 /* =====================================================
-   CONTEST TOTAL STATS
+   CONTEST STATS
 ===================================================== */
 
 function updateContestStats() {
 
     const total =
         allContestEntries.length;
-
 
     const verified =
         allContestEntries.filter(
@@ -1594,14 +1509,12 @@ function updateContestStats() {
                 true
         ).length;
 
-
     if (contestTotalEntries) {
 
         contestTotalEntries.textContent =
             String(total);
 
     }
-
 
     if (contestVerifiedEntries) {
 
@@ -1614,7 +1527,7 @@ function updateContestStats() {
 
 
 /* =====================================================
-   FILTER CONTEST ENTRIES
+   FILTER CONTEST
 ===================================================== */
 
 function getFilteredContestEntries() {
@@ -1624,7 +1537,6 @@ function getFilteredContestEntries() {
             contestSearch?.value
         ).toLowerCase();
 
-
     if (!search) {
 
         return [
@@ -1633,7 +1545,6 @@ function getFilteredContestEntries() {
 
     }
 
-
     return allContestEntries.filter(
         entry => {
 
@@ -1641,7 +1552,6 @@ function getFilteredContestEntries() {
                 cleanText(
                     entry.participant
                 ).toLowerCase();
-
 
             return participant.includes(
                 search
@@ -1654,33 +1564,157 @@ function getFilteredContestEntries() {
 
 
 /* =====================================================
-   SORT CONTEST ENTRIES
+   SORT CONTEST
 ===================================================== */
 
-function sortContestEntries(
-    entries
-) {
+function sortContestEntries(entries) {
 
-    return [
-        ...entries
-    ].sort(
+    const sortMode =
+        cleanText(
+            contestSort?.value
+        ) || "newest";
+
+    const sorted =
+        [...entries];
+
+    sorted.sort(
         (a, b) => {
 
             const dateA =
                 new Date(
                     a.created_at
-                ).getTime();
+                ).getTime() || 0;
 
             const dateB =
                 new Date(
                     b.created_at
-                ).getTime();
+                ).getTime() || 0;
+
+            const pointsA =
+                numberOrZero(
+                    a.points
+                );
+
+            const pointsB =
+                numberOrZero(
+                    b.points
+                );
+
+            const rulesA =
+                a.requirements_ok === true
+                    ? 1
+                    : 0;
+
+            const rulesB =
+                b.requirements_ok === true
+                    ? 1
+                    : 0;
+
+
+            /* NEWEST */
+
+            if (
+                sortMode === "newest"
+            ) {
+
+                return dateB - dateA;
+
+            }
+
+
+            /* OLDEST */
+
+            if (
+                sortMode === "oldest"
+            ) {
+
+                return dateA - dateB;
+
+            }
+
+
+            /* POINTS HIGH -> LOW */
+
+            if (
+                sortMode === "points-high"
+            ) {
+
+                if (
+                    pointsB !== pointsA
+                ) {
+
+                    return pointsB - pointsA;
+
+                }
+
+                return dateB - dateA;
+
+            }
+
+
+            /* POINTS LOW -> HIGH */
+
+            if (
+                sortMode === "points-low"
+            ) {
+
+                if (
+                    pointsA !== pointsB
+                ) {
+
+                    return pointsA - pointsB;
+
+                }
+
+                return dateB - dateA;
+
+            }
+
+
+            /* RULES YES FIRST */
+
+            if (
+                sortMode === "rules-yes"
+            ) {
+
+                if (
+                    rulesB !== rulesA
+                ) {
+
+                    return rulesB - rulesA;
+
+                }
+
+                return dateB - dateA;
+
+            }
+
+
+            /* RULES NO FIRST */
+
+            if (
+                sortMode === "rules-no"
+            ) {
+
+                if (
+                    rulesA !== rulesB
+                ) {
+
+                    return rulesA - rulesB;
+
+                }
+
+                return dateB - dateA;
+
+            }
 
 
             return dateB - dateA;
 
         }
     );
+
+    return sorted;
 
 }
 
@@ -1689,9 +1723,7 @@ function sortContestEntries(
    CREATE CONTEST ROW
 ===================================================== */
 
-function createContestRow(
-    entry
-) {
+function createContestRow(entry) {
 
     const row =
         document.createElement(
@@ -1735,7 +1767,6 @@ function createContestRow(
         cleanText(
             entry.meme_url
         );
-
 
     if (memeUrl) {
 
@@ -1806,18 +1837,15 @@ function createContestRow(
         entry.requirements_ok ===
         true;
 
-
     rulesBadge.className =
         requirementsOk
             ? "contest-rule-badge yes"
             : "contest-rule-badge no";
 
-
     rulesBadge.textContent =
         requirementsOk
             ? "YES"
             : "NO";
-
 
     rulesCell.appendChild(
         rulesBadge
@@ -1870,7 +1898,6 @@ function createContestRow(
     editButton.textContent =
         "EDIT";
 
-
     editButton.addEventListener(
         "click",
         () => {
@@ -1896,7 +1923,6 @@ function createContestRow(
 
     deleteButton.textContent =
         "DELETE";
-
 
     deleteButton.addEventListener(
         "click",
@@ -1954,7 +1980,7 @@ function createContestRow(
 
 
 /* =====================================================
-   RENDER CONTEST ENTRIES
+   RENDER CONTEST
 ===================================================== */
 
 function renderContestEntries() {
@@ -1963,16 +1989,16 @@ function renderContestEntries() {
         return;
     }
 
-
     const filtered =
+        getFilteredContestEntries();
+
+    const sorted =
         sortContestEntries(
-            getFilteredContestEntries()
+            filtered
         );
 
-
     const totalFiltered =
-        filtered.length;
-
+        sorted.length;
 
     const totalPages =
         Math.max(
@@ -1982,7 +2008,6 @@ function renderContestEntries() {
                 CONTEST_ITEMS_PER_PAGE
             )
         );
-
 
     if (
         contestCurrentPage >
@@ -1994,7 +2019,6 @@ function renderContestEntries() {
 
     }
 
-
     if (
         contestCurrentPage < 1
     ) {
@@ -2004,33 +2028,27 @@ function renderContestEntries() {
 
     }
 
-
     const startIndex =
         (
             contestCurrentPage - 1
         ) *
         CONTEST_ITEMS_PER_PAGE;
 
-
     const endIndex =
         startIndex +
         CONTEST_ITEMS_PER_PAGE;
 
-
     const pageEntries =
-        filtered.slice(
+        sorted.slice(
             startIndex,
             endIndex
         );
 
-
     contestTableBody.innerHTML =
         "";
 
-
     const fragment =
         document.createDocumentFragment();
-
 
     pageEntries.forEach(
         entry => {
@@ -2044,15 +2062,12 @@ function renderContestEntries() {
         }
     );
 
-
     contestTableBody.appendChild(
         fragment
     );
 
 
-    /* ==========================================
-       LABEL
-    ========================================== */
+    /* LABEL */
 
     if (contestEntriesLabel) {
 
@@ -2060,7 +2075,6 @@ function renderContestEntries() {
             !!cleanText(
                 contestSearch?.value
             );
-
 
         if (hasSearch) {
 
@@ -2078,51 +2092,33 @@ function renderContestEntries() {
     }
 
 
-    /* ==========================================
-       EMPTY
-    ========================================== */
+    /* EMPTY */
 
     if (contestEmpty) {
 
         contestEmpty.hidden =
             totalFiltered > 0;
 
-
         if (
             totalFiltered === 0
         ) {
 
-            if (
+            contestEmpty.textContent =
                 cleanText(
                     contestSearch?.value
                 )
-            ) {
-
-                contestEmpty.textContent =
-                    "NO MATCHING PARTICIPANT.";
-
-            }
-            else {
-
-                contestEmpty.textContent =
-                    "NO CONTEST ENTRIES YET.";
-
-            }
+                    ? "NO MATCHING PARTICIPANT."
+                    : "NO CONTEST ENTRIES YET.";
 
         }
 
     }
 
 
-    /* ==========================================
-       PAGINATION
-    ========================================== */
-
     updateContestPagination(
         totalFiltered,
         totalPages
     );
-
 
     updateContestStats();
 
@@ -2130,7 +2126,7 @@ function renderContestEntries() {
 
 
 /* =====================================================
-   UPDATE CONTEST PAGINATION
+   PAGINATION
 ===================================================== */
 
 function updateContestPagination(
@@ -2142,16 +2138,9 @@ function updateContestPagination(
         return;
     }
 
-
-    /*
-       Pagination only needs to show
-       when there are more than 5 results.
-    */
-
     contestPagination.hidden =
         totalFiltered <=
         CONTEST_ITEMS_PER_PAGE;
-
 
     if (contestPageInfo) {
 
@@ -2160,14 +2149,12 @@ function updateContestPagination(
 
     }
 
-
     if (contestPrevPage) {
 
         contestPrevPage.disabled =
             contestCurrentPage <= 1;
 
     }
-
 
     if (contestNextPage) {
 
@@ -2180,10 +2167,6 @@ function updateContestPagination(
 }
 
 
-/* =====================================================
-   GO TO PREVIOUS CONTEST PAGE
-===================================================== */
-
 function goToPreviousContestPage() {
 
     if (
@@ -2192,24 +2175,17 @@ function goToPreviousContestPage() {
         return;
     }
 
-
     contestCurrentPage--;
-
 
     renderContestEntries();
 
 }
 
 
-/* =====================================================
-   GO TO NEXT CONTEST PAGE
-===================================================== */
-
 function goToNextContestPage() {
 
     const filtered =
         getFilteredContestEntries();
-
 
     const totalPages =
         Math.max(
@@ -2220,7 +2196,6 @@ function goToNextContestPage() {
             )
         );
 
-
     if (
         contestCurrentPage >=
         totalPages
@@ -2228,9 +2203,7 @@ function goToNextContestPage() {
         return;
     }
 
-
     contestCurrentPage++;
-
 
     renderContestEntries();
 
@@ -2246,6 +2219,19 @@ function filterContestEntries() {
     contestCurrentPage =
         1;
 
+    renderContestEntries();
+
+}
+
+
+/* =====================================================
+   CONTEST SORT CHANGE
+===================================================== */
+
+function changeContestSort() {
+
+    contestCurrentPage =
+        1;
 
     renderContestEntries();
 
@@ -2265,14 +2251,12 @@ function resetContestForm() {
 
     }
 
-
     if (contestParticipant) {
 
         contestParticipant.value =
             "";
 
     }
-
 
     if (contestMemeUrl) {
 
@@ -2281,7 +2265,6 @@ function resetContestForm() {
 
     }
 
-
     if (contestPoints) {
 
         contestPoints.value =
@@ -2289,11 +2272,9 @@ function resetContestForm() {
 
     }
 
-
     setContestRequirements(
         false
     );
-
 
     if (contestSubmitButton) {
 
@@ -2302,7 +2283,6 @@ function resetContestForm() {
 
     }
 
-
     if (contestCancelEdit) {
 
         contestCancelEdit.hidden =
@@ -2310,12 +2290,10 @@ function resetContestForm() {
 
     }
 
-
     const title =
         document.querySelector(
             ".contest-form-title"
         );
-
 
     if (title) {
 
@@ -2323,7 +2301,6 @@ function resetContestForm() {
             "ADD NEW ENTRY";
 
     }
-
 
     setContestMessage(
         ""
@@ -2336,14 +2313,11 @@ function resetContestForm() {
    START CONTEST EDIT
 ===================================================== */
 
-function startContestEdit(
-    entry
-) {
+function startContestEdit(entry) {
 
     if (!entry) {
         return;
     }
-
 
     if (contestEntryId) {
 
@@ -2354,7 +2328,6 @@ function startContestEdit(
 
     }
 
-
     if (contestParticipant) {
 
         contestParticipant.value =
@@ -2364,7 +2337,6 @@ function startContestEdit(
 
     }
 
-
     if (contestMemeUrl) {
 
         contestMemeUrl.value =
@@ -2373,7 +2345,6 @@ function startContestEdit(
             );
 
     }
-
 
     if (contestPoints) {
 
@@ -2386,12 +2357,10 @@ function startContestEdit(
 
     }
 
-
     setContestRequirements(
         entry.requirements_ok ===
         true
     );
-
 
     if (contestSubmitButton) {
 
@@ -2400,7 +2369,6 @@ function startContestEdit(
 
     }
 
-
     if (contestCancelEdit) {
 
         contestCancelEdit.hidden =
@@ -2408,12 +2376,10 @@ function startContestEdit(
 
     }
 
-
     const title =
         document.querySelector(
             ".contest-form-title"
         );
-
 
     if (title) {
 
@@ -2422,11 +2388,9 @@ function startContestEdit(
 
     }
 
-
     setContestMessage(
         `EDITING ${cleanText(entry.participant) || "PARTICIPANT"}`
     );
-
 
     contestParticipant?.focus();
 
@@ -2445,7 +2409,6 @@ async function contestRequest(
     const token =
         getSessionToken();
 
-
     if (!token) {
 
         throw new Error(
@@ -2454,10 +2417,7 @@ async function contestRequest(
 
     }
 
-
-    if (
-        sessionIsExpired()
-    ) {
+    if (sessionIsExpired()) {
 
         clearLocalSession();
 
@@ -2466,7 +2426,6 @@ async function contestRequest(
         );
 
     }
-
 
     const options = {
 
@@ -2478,7 +2437,6 @@ async function contestRequest(
         }
 
     };
-
 
     if (body !== null) {
 
@@ -2494,17 +2452,14 @@ async function contestRequest(
 
     }
 
-
     const response =
         await fetch(
             ADMIN_CONTEST_ENDPOINT,
             options
         );
 
-
     let result =
         null;
-
 
     try {
 
@@ -2519,10 +2474,7 @@ async function contestRequest(
 
     }
 
-
-    if (
-        response.status === 401
-    ) {
+    if (response.status === 401) {
 
         clearLocalSession();
 
@@ -2532,17 +2484,13 @@ async function contestRequest(
 
     }
 
-
-    if (
-        response.status === 403
-    ) {
+    if (response.status === 403) {
 
         throw new Error(
             "ADMIN ACCESS DENIED."
         );
 
     }
-
 
     if (
         !response.ok ||
@@ -2555,7 +2503,6 @@ async function contestRequest(
         );
 
     }
-
 
     return result;
 
@@ -2570,12 +2517,9 @@ async function loadContestEntries(
     force = false
 ) {
 
-    if (
-        contestLoading
-    ) {
+    if (contestLoading) {
         return;
     }
-
 
     if (
         contestLoaded &&
@@ -2584,15 +2528,12 @@ async function loadContestEntries(
         return;
     }
 
-
     contestLoading =
         true;
-
 
     setContestMessage(
         "LOADING CONTEST ENTRIES..."
     );
-
 
     try {
 
@@ -2601,7 +2542,6 @@ async function loadContestEntries(
                 "GET"
             );
 
-
         allContestEntries =
             Array.isArray(
                 result.entries
@@ -2609,17 +2549,13 @@ async function loadContestEntries(
                 ? result.entries
                 : [];
 
-
         contestLoaded =
             true;
-
 
         contestCurrentPage =
             1;
 
-
         renderContestEntries();
-
 
         setContestMessage(
             `${allContestEntries.length} CONTEST ${allContestEntries.length === 1 ? "ENTRY" : "ENTRIES"} LOADED.`,
@@ -2633,7 +2569,6 @@ async function loadContestEntries(
             "Contest load error:",
             error
         );
-
 
         setContestMessage(
             error?.message ||
@@ -2662,13 +2597,9 @@ async function saveContestEntry(
 
     event.preventDefault();
 
-
-    if (
-        contestSaving
-    ) {
+    if (contestSaving) {
         return;
     }
-
 
     const participant =
         cleanText(
@@ -2694,7 +2625,6 @@ async function saveContestEntry(
             contestEntryId?.value
         );
 
-
     if (!participant) {
 
         setContestMessage(
@@ -2708,7 +2638,6 @@ async function saveContestEntry(
 
     }
 
-
     if (!memeUrl) {
 
         setContestMessage(
@@ -2721,7 +2650,6 @@ async function saveContestEntry(
         return;
 
     }
-
 
     try {
 
@@ -2751,7 +2679,6 @@ async function saveContestEntry(
 
     }
 
-
     if (
         !Number.isInteger(points) ||
         points < 0 ||
@@ -2769,17 +2696,14 @@ async function saveContestEntry(
 
     }
 
-
     const isEditing =
         Number.isSafeInteger(
             editingId
         ) &&
         editingId > 0;
 
-
     contestSaving =
         true;
-
 
     if (contestSubmitButton) {
 
@@ -2793,13 +2717,11 @@ async function saveContestEntry(
 
     }
 
-
     setContestMessage(
         isEditing
             ? "SAVING CHANGES..."
             : "ADDING PARTICIPANT..."
     );
-
 
     try {
 
@@ -2817,14 +2739,12 @@ async function saveContestEntry(
 
         };
 
-
         if (isEditing) {
 
             payload.id =
                 editingId;
 
         }
-
 
         await contestRequest(
             isEditing
@@ -2833,26 +2753,14 @@ async function saveContestEntry(
             payload
         );
 
-
         resetContestForm();
-
-
-        if (contestSearch) {
-
-            contestSearch.value =
-                "";
-
-        }
-
 
         contestLoaded =
             false;
 
-
         await loadContestEntries(
             true
         );
-
 
         setContestMessage(
             isEditing
@@ -2869,7 +2777,6 @@ async function saveContestEntry(
             error
         );
 
-
         setContestMessage(
             error?.message ||
             "COULD NOT SAVE PARTICIPANT.",
@@ -2882,18 +2789,15 @@ async function saveContestEntry(
         contestSaving =
             false;
 
-
         if (contestSubmitButton) {
 
             contestSubmitButton.disabled =
                 false;
 
-
             const stillEditing =
                 Number(
                     contestEntryId?.value
                 ) > 0;
-
 
             contestSubmitButton.textContent =
                 stillEditing
@@ -2911,14 +2815,11 @@ async function saveContestEntry(
    DELETE CONTEST ENTRY
 ===================================================== */
 
-async function deleteContestEntry(
-    entry
-) {
+async function deleteContestEntry(entry) {
 
     if (!entry) {
         return;
     }
-
 
     const participant =
         cleanText(
@@ -2926,24 +2827,20 @@ async function deleteContestEntry(
         ) ||
         "THIS PARTICIPANT";
 
-
     const confirmed =
         window.confirm(
             `Delete ${participant} from the contest?`
         );
 
-
     if (!confirmed) {
         return;
     }
-
 
     try {
 
         setContestMessage(
             `DELETING ${participant}...`
         );
-
 
         await contestRequest(
             "DELETE",
@@ -2954,7 +2851,6 @@ async function deleteContestEntry(
                     )
             }
         );
-
 
         if (
             Number(
@@ -2969,15 +2865,12 @@ async function deleteContestEntry(
 
         }
 
-
         contestLoaded =
             false;
-
 
         await loadContestEntries(
             true
         );
-
 
         setContestMessage(
             `${participant} DELETED.`,
@@ -2991,7 +2884,6 @@ async function deleteContestEntry(
             "Contest delete error:",
             error
         );
-
 
         setContestMessage(
             error?.message ||
@@ -3014,13 +2906,10 @@ async function openContest() {
         return;
     }
 
-
     contestPanel.hidden =
         false;
 
-
     await loadContestEntries();
-
 
     contestPanel.scrollIntoView({
         behavior: "smooth",
@@ -3040,10 +2929,8 @@ function closeContest() {
         return;
     }
 
-
     contestPanel.hidden =
         true;
-
 
     resetContestForm();
 
@@ -3051,7 +2938,7 @@ function closeContest() {
 
 
 /* =====================================================
-   EVENTS - MEMBER SEARCH
+   EVENTS
 ===================================================== */
 
 if (memberSearch) {
@@ -3063,10 +2950,6 @@ if (memberSearch) {
 
 }
 
-
-/* =====================================================
-   EVENTS - MEMBER REFRESH
-===================================================== */
 
 if (refreshMembers) {
 
@@ -3081,7 +2964,6 @@ if (refreshMembers) {
 
             }
 
-
             await loadAdminData();
 
         }
@@ -3090,15 +2972,10 @@ if (refreshMembers) {
 }
 
 
-/* =====================================================
-   EVENTS - OPEN CONTEST
-===================================================== */
-
 if (openContestPanel) {
 
     openContestPanel.disabled =
         true;
-
 
     openContestPanel.addEventListener(
         "click",
@@ -3107,10 +2984,6 @@ if (openContestPanel) {
 
 }
 
-
-/* =====================================================
-   EVENTS - CLOSE CONTEST
-===================================================== */
 
 if (closeContestPanel) {
 
@@ -3122,10 +2995,6 @@ if (closeContestPanel) {
 }
 
 
-/* =====================================================
-   EVENTS - CONTEST SEARCH
-===================================================== */
-
 if (contestSearch) {
 
     contestSearch.addEventListener(
@@ -3136,9 +3005,17 @@ if (contestSearch) {
 }
 
 
-/* =====================================================
-   EVENTS - PREVIOUS PAGE
-===================================================== */
+/* NEW SORT EVENT */
+
+if (contestSort) {
+
+    contestSort.addEventListener(
+        "change",
+        changeContestSort
+    );
+
+}
+
 
 if (contestPrevPage) {
 
@@ -3150,10 +3027,6 @@ if (contestPrevPage) {
 }
 
 
-/* =====================================================
-   EVENTS - NEXT PAGE
-===================================================== */
-
 if (contestNextPage) {
 
     contestNextPage.addEventListener(
@@ -3163,10 +3036,6 @@ if (contestNextPage) {
 
 }
 
-
-/* =====================================================
-   EVENTS - REQUIREMENTS YES
-===================================================== */
 
 if (contestRequirementsYes) {
 
@@ -3184,10 +3053,6 @@ if (contestRequirementsYes) {
 }
 
 
-/* =====================================================
-   EVENTS - REQUIREMENTS NO
-===================================================== */
-
 if (contestRequirementsNo) {
 
     contestRequirementsNo.addEventListener(
@@ -3204,10 +3069,6 @@ if (contestRequirementsNo) {
 }
 
 
-/* =====================================================
-   EVENTS - FORM
-===================================================== */
-
 if (contestEntryForm) {
 
     contestEntryForm.addEventListener(
@@ -3217,10 +3078,6 @@ if (contestEntryForm) {
 
 }
 
-
-/* =====================================================
-   EVENTS - CANCEL EDIT
-===================================================== */
 
 if (contestCancelEdit) {
 
@@ -3237,7 +3094,7 @@ if (contestCancelEdit) {
 
 
 /* =====================================================
-   START ADMIN PANEL
+   START
 ===================================================== */
 
 document.addEventListener(
@@ -3245,6 +3102,13 @@ document.addEventListener(
     () => {
 
         resetContestForm();
+
+        if (contestSort) {
+
+            contestSort.value =
+                "newest";
+
+        }
 
         loadAdminData();
 

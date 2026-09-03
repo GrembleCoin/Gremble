@@ -59,11 +59,13 @@
         }
 
         button,
-        input {
+        input,
+        select {
             font: inherit;
         }
 
-        button {
+        button,
+        select {
             cursor: pointer;
         }
 
@@ -589,7 +591,7 @@
 
 
         /* =====================================================
-           STATUS MESSAGE
+           MESSAGE
         ===================================================== */
 
         .admin-message {
@@ -1098,11 +1100,26 @@
 
 
         /* =====================================================
+           CONTEST TOOLS
+        ===================================================== */
+
+        .contest-tools {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+
+            gap: 9px;
+
+            flex: 1;
+        }
+
+
+        /* =====================================================
            CONTEST SEARCH
         ===================================================== */
 
         .contest-search-wrap {
-            width: min(320px, 100%);
+            width: min(280px, 100%);
 
             position: relative;
         }
@@ -1163,6 +1180,84 @@
             color: #65ff83;
 
             font-size: 13px;
+
+            pointer-events: none;
+        }
+
+
+        /* =====================================================
+           CONTEST SORT
+        ===================================================== */
+
+        .contest-sort-wrap {
+            position: relative;
+
+            min-width: 190px;
+        }
+
+        .contest-sort {
+            width: 100%;
+
+            min-height: 42px;
+
+            padding:
+                0
+                36px
+                0
+                13px;
+
+            border:
+                1px solid
+                rgba(101,255,131,.13);
+
+            border-radius: 12px;
+
+            outline: none;
+
+            background:
+                rgba(0,5,3,.74);
+
+            color: #65ff83;
+
+            font-size: 9px;
+            font-weight: 900;
+
+            letter-spacing: .4px;
+
+            appearance: none;
+            -webkit-appearance: none;
+
+            transition:
+                border-color .2s ease,
+                box-shadow .2s ease;
+        }
+
+        .contest-sort:focus {
+            border-color:
+                rgba(101,255,131,.48);
+
+            box-shadow:
+                0 0 0 3px
+                rgba(101,255,131,.05);
+        }
+
+        .contest-sort option {
+            background: #06100a;
+            color: #eef5f0;
+        }
+
+        .contest-sort-arrow {
+            position: absolute;
+
+            right: 13px;
+            top: 50%;
+
+            transform:
+                translateY(-50%);
+
+            color: #65ff83;
+
+            font-size: 10px;
 
             pointer-events: none;
         }
@@ -1422,7 +1517,6 @@
 
         .contest-page-button:disabled {
             opacity: .25;
-
             cursor: not-allowed;
         }
 
@@ -1629,7 +1723,6 @@
 
         .refresh-button:disabled {
             opacity: .45;
-
             cursor: not-allowed;
         }
 
@@ -1699,7 +1792,6 @@
 
         .telegram-name {
             color: #f4f7f5;
-
             font-weight: 800;
         }
 
@@ -1818,7 +1910,6 @@
 
         .date-value {
             color: #75837a;
-
             white-space: nowrap;
         }
 
@@ -1843,6 +1934,26 @@
         /* =====================================================
            RESPONSIVE
         ===================================================== */
+
+        @media (max-width: 1200px) {
+
+            .contest-list-top {
+                align-items: stretch;
+                flex-direction: column;
+            }
+
+            .contest-tools {
+                width: 100%;
+                justify-content: flex-start;
+            }
+
+            .contest-search-wrap {
+                flex: 1;
+                width: auto;
+            }
+
+        }
+
 
         @media (max-width: 1100px) {
 
@@ -1881,13 +1992,11 @@
 
             .admin-header {
                 align-items: flex-start;
-
                 flex-direction: column;
             }
 
             .admin-header-right {
                 width: 100%;
-
                 flex-wrap: wrap;
             }
 
@@ -1914,7 +2023,6 @@
 
             .members-panel-top {
                 align-items: stretch;
-
                 flex-direction: column;
             }
 
@@ -1922,7 +2030,6 @@
                 width: 100%;
 
                 flex-direction: column;
-
                 align-items: stretch;
             }
 
@@ -1940,7 +2047,6 @@
 
             .contest-panel-header {
                 align-items: flex-start;
-
                 flex-direction: column;
             }
 
@@ -1948,13 +2054,16 @@
                 width: 100%;
             }
 
-            .contest-list-top {
-                align-items: stretch;
-
+            .contest-tools {
                 flex-direction: column;
+                align-items: stretch;
             }
 
             .contest-search-wrap {
+                width: 100%;
+            }
+
+            .contest-sort-wrap {
                 width: 100%;
             }
 
@@ -1970,7 +2079,6 @@
 
             .admin-header {
                 border-radius: 17px;
-
                 padding: 13px;
             }
 
@@ -1981,7 +2089,6 @@
 
             .admin-hero {
                 margin-top: 14px;
-
                 gap: 14px;
             }
 
@@ -1997,7 +2104,6 @@
 
             .admin-hero-main h1 {
                 font-size: 39px;
-
                 letter-spacing: -2px;
             }
 
@@ -2015,7 +2121,6 @@
 
             .admin-message {
                 margin-top: 14px;
-
                 padding: 16px;
             }
 
@@ -2025,7 +2130,6 @@
 
             .stats-grid {
                 grid-template-columns: 1fr;
-
                 gap: 10px;
             }
 
@@ -2035,7 +2139,6 @@
 
             .members-panel {
                 margin-top: 14px;
-
                 border-radius: 20px;
             }
 
@@ -2084,10 +2187,6 @@
 <body>
 
 
-    <!-- =====================================================
-         BACKGROUND
-    ====================================================== -->
-
     <div
         class="admin-background"
         aria-hidden="true"
@@ -2103,10 +2202,6 @@
 
     </div>
 
-
-    <!-- =====================================================
-         MAIN
-    ====================================================== -->
 
     <main class="admin-shell">
 
@@ -2125,7 +2220,6 @@
                     alt="Gremble"
                 >
 
-
                 <div class="admin-brand-copy">
 
                     <strong>
@@ -2142,7 +2236,6 @@
 
 
             <div class="admin-header-right">
-
 
                 <div class="admin-status">
 
@@ -2162,7 +2255,6 @@
                     ← BACK TO WEBSITE
                 </a>
 
-
             </div>
 
 
@@ -2178,17 +2270,14 @@
 
             <div class="admin-hero-main">
 
-
                 <div
                     class="hero-orb"
                     aria-hidden="true"
                 ></div>
 
-
                 <p class="hero-mini-tag">
                     GREMBLE // FOUNDER MODE
                 </p>
-
 
                 <h1>
                     ROBÍŠ TO,<br>
@@ -2196,9 +2285,7 @@
                     <span>LEPŠÍ AKO ONI.</span>
                 </h1>
 
-
                 <div class="hero-line"></div>
-
 
                 <p>
                     Build quietly. Watch everything.
@@ -2207,7 +2294,6 @@
                     view of the people joining Gremble
                     while you build it from the beginning.
                 </p>
-
 
             </div>
 
@@ -2218,24 +2304,20 @@
 
             <aside class="private-card">
 
-
                 <p class="private-card-tag">
                     PRIVATE ACCESS
                 </p>
-
 
                 <h2>
                     YOUR GREMBLE
                     CONTROL ROOM.
                 </h2>
 
-
                 <p>
                     Member details are loaded through
                     the secure admin backend. Access is
                     verified against your Telegram ID.
                 </p>
-
 
                 <div class="private-id-box">
 
@@ -2249,8 +2331,6 @@
 
                 </div>
 
-
-                <!-- CONTEST OPEN BUTTON -->
 
                 <button
                     type="button"
@@ -2279,14 +2359,11 @@
 
                     </span>
 
-
                     <span class="contest-open-arrow">
                         ›
                     </span>
 
-
                 </button>
-
 
             </aside>
 
@@ -2328,17 +2405,13 @@
             >
 
 
-                <!-- HEADER -->
-
                 <div class="contest-panel-header">
-
 
                     <div class="contest-panel-title">
 
                         <span class="contest-title-icon">
                             🏆
                         </span>
-
 
                         <div class="contest-title-copy">
 
@@ -2363,11 +2436,12 @@
                         CLOSE
                     </button>
 
-
                 </div>
 
 
-                <!-- STATS -->
+                <!-- =================================================
+                     CONTEST STATS
+                ================================================== -->
 
                 <div class="contest-stats">
 
@@ -2409,7 +2483,9 @@
                 </div>
 
 
-                <!-- BODY -->
+                <!-- =================================================
+                     CONTEST BODY
+                ================================================== -->
 
                 <div class="contest-body">
 
@@ -2419,7 +2495,6 @@
                     ================================================== -->
 
                     <section class="contest-form-card">
-
 
                         <p class="contest-form-title">
                             ADD NEW ENTRY
@@ -2431,7 +2506,6 @@
                             id="contestEntryForm"
                         >
 
-
                             <input
                                 type="hidden"
                                 id="contestEntryId"
@@ -2442,7 +2516,6 @@
                             <label for="contestParticipant">
                                 PARTICIPANT / X USERNAME
                             </label>
-
 
                             <input
                                 type="text"
@@ -2458,7 +2531,6 @@
                                 MEME LINK
                             </label>
 
-
                             <input
                                 type="url"
                                 id="contestMemeUrl"
@@ -2471,7 +2543,6 @@
                             <label for="contestPoints">
                                 POINTS
                             </label>
-
 
                             <input
                                 type="number"
@@ -2490,7 +2561,6 @@
 
                             <div class="contest-requirements">
 
-
                                 <button
                                     type="button"
                                     class="contest-rule-button yes"
@@ -2499,7 +2569,6 @@
                                     YES
                                 </button>
 
-
                                 <button
                                     type="button"
                                     class="contest-rule-button no active"
@@ -2507,7 +2576,6 @@
                                 >
                                     NO
                                 </button>
-
 
                             </div>
 
@@ -2546,7 +2614,6 @@
 
                         </form>
 
-
                     </section>
 
 
@@ -2557,7 +2624,9 @@
                     <section class="contest-list-card">
 
 
-                        <!-- SEARCH / TITLE -->
+                        <!-- =================================================
+                             SEARCH + SORT
+                        ================================================== -->
 
                         <div class="contest-list-top">
 
@@ -2575,23 +2644,77 @@
                             </div>
 
 
-                            <div class="contest-search-wrap">
+                            <div class="contest-tools">
 
-                                <span
-                                    class="contest-search-icon"
-                                    aria-hidden="true"
-                                >
-                                    ⌕
-                                </span>
 
-                                <input
-                                    type="search"
-                                    class="contest-search"
-                                    id="contestSearch"
-                                    placeholder="Search X username..."
-                                    autocomplete="off"
-                                    spellcheck="false"
-                                >
+                                <!-- SEARCH -->
+
+                                <div class="contest-search-wrap">
+
+                                    <span
+                                        class="contest-search-icon"
+                                        aria-hidden="true"
+                                    >
+                                        ⌕
+                                    </span>
+
+                                    <input
+                                        type="search"
+                                        class="contest-search"
+                                        id="contestSearch"
+                                        placeholder="Search X username..."
+                                        autocomplete="off"
+                                        spellcheck="false"
+                                    >
+
+                                </div>
+
+
+                                <!-- SORT -->
+
+                                <div class="contest-sort-wrap">
+
+                                    <select
+                                        class="contest-sort"
+                                        id="contestSort"
+                                        aria-label="Sort contest entries"
+                                    >
+
+                                        <option value="newest">
+                                            NEWEST
+                                        </option>
+
+                                        <option value="oldest">
+                                            OLDEST
+                                        </option>
+
+                                        <option value="points-high">
+                                            POINTS: HIGH → LOW
+                                        </option>
+
+                                        <option value="points-low">
+                                            POINTS: LOW → HIGH
+                                        </option>
+
+                                        <option value="rules-yes">
+                                            RULES: YES FIRST
+                                        </option>
+
+                                        <option value="rules-no">
+                                            RULES: NO FIRST
+                                        </option>
+
+                                    </select>
+
+                                    <span
+                                        class="contest-sort-arrow"
+                                        aria-hidden="true"
+                                    >
+                                        ▼
+                                    </span>
+
+                                </div>
+
 
                             </div>
 
@@ -2599,7 +2722,9 @@
                         </div>
 
 
-                        <!-- TABLE -->
+                        <!-- =================================================
+                             TABLE
+                        ================================================== -->
 
                         <div class="contest-table-wrap">
 
@@ -2608,7 +2733,6 @@
 
 
                                 <thead>
-
 
                                     <tr>
 
@@ -2638,7 +2762,6 @@
 
                                     </tr>
 
-
                                 </thead>
 
 
@@ -2660,14 +2783,15 @@
                         </div>
 
 
-                        <!-- PAGINATION -->
+                        <!-- =================================================
+                             PAGINATION
+                        ================================================== -->
 
                         <div
                             class="contest-pagination"
                             id="contestPagination"
                             hidden
                         >
-
 
                             <button
                                 type="button"
@@ -2693,7 +2817,6 @@
                             >
                                 NEXT ›
                             </button>
-
 
                         </div>
 
@@ -2843,52 +2966,41 @@
 
                         <thead>
 
-
                             <tr>
-
 
                                 <th>
                                     TELEGRAM NAME
                                 </th>
 
-
                                 <th>
                                     TELEGRAM USERNAME
                                 </th>
-
 
                                 <th class="chat-header">
                                     GREMBLE CHAT
                                 </th>
 
-
                                 <th class="announcements-header">
                                     GREMBLE ANNOUNCEMENTS
                                 </th>
-
 
                                 <th>
                                     X USERNAME
                                 </th>
 
-
                                 <th>
                                     SOLANA ADDRESS
                                 </th>
-
 
                                 <th>
                                     JOINED
                                 </th>
 
-
                                 <th>
                                     UPDATED
                                 </th>
 
-
                             </tr>
-
 
                         </thead>
 
@@ -2925,7 +3037,7 @@
          SCRIPT
     ====================================================== -->
 
-    <script src="admin.js?v=104"></script>
+    <script src="admin.js?v=105"></script>
 
 
 </body>
