@@ -1,162 +1,1726 @@
-<!-- STATS -->
+<!DOCTYPE html>
+<html lang="en">
 
-<div class="stats-grid">
+<head>
 
-    <article class="stat-card">
-        <span>TOTAL MEMBERS</span>
+    <meta charset="UTF-8">
 
-        <strong id="statTotalMembers">
-            0
-        </strong>
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-        <small>
-            REGISTERED MEMBERS
-        </small>
-    </article>
+    <meta
+        name="robots"
+        content="noindex,nofollow"
+    >
 
-
-    <article class="stat-card">
-        <span>COMPLETE PROFILES</span>
-
-        <strong id="statCompletedProfiles">
-            0
-        </strong>
-
-        <small>
-            X + SOLANA
-        </small>
-    </article>
+    <title>Gremble Admin</title>
 
 
-    <article class="stat-card">
-        <span>IN TELEGRAM</span>
+    <style>
 
-        <strong id="statTelegramChatMembers">
-            0
-        </strong>
+        /* =====================================================
+           RESET
+        ===================================================== */
 
-        <small>
-            GREMBLE CHAT
-        </small>
-    </article>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
+        html {
+            scroll-behavior: smooth;
+        }
 
-    <article class="stat-card">
-        <span>IN TELEGRAM</span>
+        body {
+            min-height: 100vh;
 
-        <strong id="statTelegramAnnouncementsMembers">
-            0
-        </strong>
+            background:
+                radial-gradient(
+                    circle at top right,
+                    rgba(79,255,127,.08),
+                    transparent 34%
+                ),
+                radial-gradient(
+                    circle at bottom left,
+                    rgba(32,153,87,.08),
+                    transparent 34%
+                ),
+                #020706;
 
-        <small>
-            GREMBLE ANNOUNCEMENTS
-        </small>
-    </article>
+            color: #eef5f0;
 
-</div>
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+        }
 
+        button,
+        input {
+            font: inherit;
+        }
 
-<!-- MEMBERS -->
+        button {
+            cursor: pointer;
+        }
 
-<section class="members-panel">
-
-    <div class="members-panel-top">
-
-        <div class="members-panel-title">
-
-            <span>
-                GREMBLE MEMBERS
-            </span>
-
-            <h2>
-                Registered people
-            </h2>
-
-        </div>
-
-
-        <div class="members-tools">
-
-            <input
-                type="search"
-                class="member-search"
-                id="memberSearch"
-                placeholder="Search Telegram, X, wallet or group status..."
-                autocomplete="off"
-            >
-
-            <button
-                type="button"
-                class="refresh-button"
-                id="refreshMembers"
-            >
-                REFRESH
-            </button>
-
-        </div>
-
-    </div>
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
 
 
-    <div class="members-table-wrap">
+        /* =====================================================
+           BACKGROUND
+        ===================================================== */
 
-        <table class="members-table">
+        .admin-background {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            overflow: hidden;
+            pointer-events: none;
+        }
 
-            <thead>
+        .admin-glow {
+            position: absolute;
 
-                <tr>
+            width: 500px;
+            height: 500px;
 
-                    <th>
-                        TELEGRAM NAME
-                    </th>
+            border-radius: 50%;
 
-                    <th>
-                        TELEGRAM USERNAME
-                    </th>
+            filter: blur(110px);
 
-                    <th>
-                        GREMBLE CHAT
-                    </th>
+            opacity: .12;
+        }
 
-                    <th>
-                        GREMBLE ANNOUNCEMENTS
-                    </th>
+        .glow-one {
+            top: -220px;
+            right: -120px;
 
-                    <th>
-                        X USERNAME
-                    </th>
+            background: #4cff7c;
+        }
 
-                    <th>
-                        SOLANA ADDRESS
-                    </th>
+        .glow-two {
+            bottom: -280px;
+            left: -150px;
 
-                    <th>
-                        JOINED
-                    </th>
-
-                    <th>
-                        UPDATED
-                    </th>
-
-                </tr>
-
-            </thead>
+            background: #14854d;
+        }
 
 
-            <tbody id="membersTableBody">
-            </tbody>
+        /* =====================================================
+           WRAPPER
+        ===================================================== */
 
-        </table>
+        .admin-shell {
+            width: min(
+                1500px,
+                calc(100% - 40px)
+            );
 
+            margin: 0 auto;
+
+            padding:
+                28px
+                0
+                50px;
+        }
+
+
+        /* =====================================================
+           HEADER
+        ===================================================== */
+
+        .admin-header {
+            min-height: 78px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            gap: 20px;
+
+            padding:
+                14px
+                20px;
+
+            border:
+                1px solid
+                rgba(103,255,134,.11);
+
+            border-radius: 22px;
+
+            background:
+                rgba(4,13,9,.72);
+
+            backdrop-filter:
+                blur(18px);
+        }
+
+
+        .admin-brand {
+            display: flex;
+            align-items: center;
+
+            gap: 14px;
+        }
+
+
+        .admin-brand img {
+            width: 54px;
+            height: 54px;
+
+            object-fit: contain;
+        }
+
+
+        .admin-brand-copy {
+            display: flex;
+            flex-direction: column;
+
+            gap: 3px;
+        }
+
+
+        .admin-brand-copy strong {
+            font-size: 18px;
+
+            letter-spacing: 1px;
+        }
+
+
+        .admin-brand-copy span {
+            color: #65ff83;
+
+            font-size: 9px;
+            font-weight: 900;
+
+            letter-spacing: 2.4px;
+        }
+
+
+        .admin-header-right {
+            display: flex;
+            align-items: center;
+
+            gap: 10px;
+        }
+
+
+        .admin-status {
+            display: flex;
+            align-items: center;
+
+            gap: 8px;
+
+            padding:
+                10px
+                14px;
+
+            border:
+                1px solid
+                rgba(101,255,131,.13);
+
+            border-radius: 999px;
+
+            background:
+                rgba(54,255,108,.035);
+
+            color: #9ca9a1;
+
+            font-size: 9px;
+            font-weight: 900;
+
+            letter-spacing: 1.2px;
+        }
+
+
+        .admin-status-dot {
+            width: 8px;
+            height: 8px;
+
+            border-radius: 50%;
+
+            background: #65ff83;
+
+            box-shadow:
+                0 0 12px
+                rgba(101,255,131,.75);
+        }
+
+
+        .back-site-button {
+            padding:
+                11px
+                16px;
+
+            border:
+                1px solid
+                rgba(255,255,255,.08);
+
+            border-radius: 999px;
+
+            background:
+                rgba(255,255,255,.035);
+
+            color: #dce5df;
+
+            font-size: 9px;
+            font-weight: 900;
+
+            letter-spacing: 1.2px;
+
+            transition:
+                border-color .2s ease,
+                background .2s ease;
+        }
+
+
+        .back-site-button:hover {
+            border-color:
+                rgba(101,255,131,.25);
+
+            background:
+                rgba(101,255,131,.055);
+        }
+
+
+        /* =====================================================
+           HERO
+        ===================================================== */
+
+        .admin-hero {
+            margin-top: 24px;
+
+            display: grid;
+
+            grid-template-columns:
+                minmax(0, 1.25fr)
+                minmax(280px, .75fr);
+
+            gap: 22px;
+        }
+
+
+        .admin-hero-main {
+            position: relative;
+
+            min-height: 300px;
+
+            padding: 38px;
+
+            overflow: hidden;
+
+            border:
+                1px solid
+                rgba(101,255,131,.13);
+
+            border-radius: 26px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(8,24,14,.95),
+                    rgba(2,9,6,.96)
+                );
+        }
+
+
+        .hero-mini-tag {
+            margin-bottom: 18px;
+
+            color: #65ff83;
+
+            font-size: 9px;
+            font-weight: 900;
+
+            letter-spacing: 3px;
+        }
+
+
+        .admin-hero-main h1 {
+            max-width: 850px;
+
+            font-size:
+                clamp(
+                    40px,
+                    5vw,
+                    78px
+                );
+
+            line-height: .94;
+
+            letter-spacing: -3px;
+        }
+
+
+        .admin-hero-main h1 span {
+            color: #65ff83;
+        }
+
+
+        .admin-hero-main p {
+            max-width: 650px;
+
+            margin-top: 22px;
+
+            color: #8e9b93;
+
+            font-size: 14px;
+
+            line-height: 1.75;
+        }
+
+
+        .hero-line {
+            width: 86px;
+            height: 3px;
+
+            margin-top: 26px;
+
+            border-radius: 99px;
+
+            background: #65ff83;
+
+            box-shadow:
+                0 0 22px
+                rgba(101,255,131,.4);
+        }
+
+
+        .hero-orb {
+            position: absolute;
+
+            width: 260px;
+            height: 260px;
+
+            right: -80px;
+            top: -80px;
+
+            border-radius: 50%;
+
+            background:
+                rgba(91,255,132,.12);
+
+            filter: blur(40px);
+
+            pointer-events: none;
+        }
+
+
+        /* =====================================================
+           PRIVATE CARD
+        ===================================================== */
+
+        .private-card {
+            padding: 28px;
+
+            border:
+                1px solid
+                rgba(101,255,131,.13);
+
+            border-radius: 26px;
+
+            background:
+                rgba(4,15,9,.84);
+        }
+
+
+        .private-card-tag {
+            color: #65ff83;
+
+            font-size: 9px;
+            font-weight: 900;
+
+            letter-spacing: 2.7px;
+        }
+
+
+        .private-card h2 {
+            margin-top: 18px;
+
+            font-size: 28px;
+
+            line-height: 1.05;
+        }
+
+
+        .private-card p {
+            margin-top: 15px;
+
+            color: #7f8e85;
+
+            font-size: 12px;
+
+            line-height: 1.7;
+        }
+
+
+        .private-id-box {
+            margin-top: 24px;
+
+            padding: 16px;
+
+            border:
+                1px solid
+                rgba(101,255,131,.12);
+
+            border-radius: 15px;
+
+            background:
+                rgba(101,255,131,.03);
+        }
+
+
+        .private-id-box small {
+            display: block;
+
+            color: #657269;
+
+            font-size: 8px;
+            font-weight: 900;
+
+            letter-spacing: 1.7px;
+        }
+
+
+        .private-id-box strong {
+            display: block;
+
+            margin-top: 7px;
+
+            color: #65ff83;
+
+            font-size: 12px;
+        }
+
+
+        /* =====================================================
+           STATUS MESSAGE
+        ===================================================== */
+
+        .admin-message {
+            margin-top: 22px;
+
+            padding:
+                20px
+                22px;
+
+            border:
+                1px solid
+                rgba(255,255,255,.07);
+
+            border-radius: 18px;
+
+            background:
+                rgba(255,255,255,.025);
+
+            color: #99a59e;
+
+            font-size: 12px;
+
+            line-height: 1.65;
+        }
+
+
+        .admin-message.success {
+            border-color:
+                rgba(101,255,131,.18);
+
+            color: #65ff83;
+        }
+
+
+        .admin-message.error {
+            border-color:
+                rgba(255,89,100,.2);
+
+            color: #ff717b;
+        }
+
+
+        /* =====================================================
+           DASHBOARD
+        ===================================================== */
+
+        .admin-dashboard {
+            margin-top: 24px;
+        }
+
+
+        .admin-dashboard[hidden] {
+            display: none;
+        }
+
+
+        /* =====================================================
+           STATS
+        ===================================================== */
+
+        .stats-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, minmax(0, 1fr));
+
+            gap: 14px;
+        }
+
+
+        .stat-card {
+            min-height: 130px;
+
+            padding: 22px;
+
+            border:
+                1px solid
+                rgba(101,255,131,.09);
+
+            border-radius: 20px;
+
+            background:
+                rgba(5,15,10,.72);
+        }
+
+
+        .stat-card span {
+            display: block;
+
+            color: #68766d;
+
+            font-size: 8px;
+            font-weight: 900;
+
+            letter-spacing: 1.8px;
+        }
+
+
+        .stat-card strong {
+            display: block;
+
+            margin-top: 10px;
+
+            color: #f4f7f5;
+
+            font-size: 34px;
+        }
+
+
+        .stat-card small {
+            display: block;
+
+            margin-top: 7px;
+
+            color: #65ff83;
+
+            font-size: 9px;
+
+            font-weight: 800;
+
+            letter-spacing: .4px;
+        }
+
+
+        /* =====================================================
+           MEMBERS PANEL
+        ===================================================== */
+
+        .members-panel {
+            margin-top: 22px;
+
+            border:
+                1px solid
+                rgba(101,255,131,.1);
+
+            border-radius: 24px;
+
+            overflow: hidden;
+
+            background:
+                rgba(4,12,8,.78);
+        }
+
+
+        .members-panel-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            gap: 18px;
+
+            padding: 22px;
+        }
+
+
+        .members-panel-title span {
+            display: block;
+
+            color: #65ff83;
+
+            font-size: 8px;
+            font-weight: 900;
+
+            letter-spacing: 2px;
+        }
+
+
+        .members-panel-title h2 {
+            margin-top: 5px;
+
+            font-size: 24px;
+        }
+
+
+        .members-tools {
+            display: flex;
+            align-items: center;
+
+            gap: 10px;
+        }
+
+
+        .member-search {
+            width: 320px;
+            max-width: 100%;
+
+            min-height: 43px;
+
+            padding:
+                0
+                14px;
+
+            border:
+                1px solid
+                rgba(101,255,131,.12);
+
+            border-radius: 12px;
+
+            outline: none;
+
+            background:
+                rgba(0,5,3,.65);
+
+            color: #eef4f0;
+
+            font-size: 12px;
+        }
+
+
+        .member-search::placeholder {
+            color: #59665e;
+        }
+
+
+        .member-search:focus {
+            border-color:
+                rgba(101,255,131,.42);
+
+            box-shadow:
+                0 0 0 3px
+                rgba(101,255,131,.05);
+        }
+
+
+        .refresh-button {
+            min-height: 43px;
+
+            padding:
+                0
+                15px;
+
+            border:
+                1px solid
+                rgba(101,255,131,.13);
+
+            border-radius: 12px;
+
+            background:
+                rgba(101,255,131,.04);
+
+            color: #65ff83;
+
+            font-size: 9px;
+            font-weight: 900;
+
+            letter-spacing: 1.2px;
+
+            transition:
+                border-color .2s ease,
+                background .2s ease,
+                opacity .2s ease;
+        }
+
+
+        .refresh-button:hover {
+            border-color:
+                rgba(101,255,131,.35);
+
+            background:
+                rgba(101,255,131,.075);
+        }
+
+
+        .refresh-button:disabled {
+            opacity: .45;
+
+            cursor: not-allowed;
+        }
+
+
+        /* =====================================================
+           TABLE
+        ===================================================== */
+
+        .members-table-wrap {
+            width: 100%;
+
+            overflow-x: auto;
+
+            border-top:
+                1px solid
+                rgba(255,255,255,.05);
+        }
+
+
+        .members-table {
+            width: 100%;
+
+            min-width: 1380px;
+
+            border-collapse: collapse;
+        }
+
+
+        .members-table th {
+            padding:
+                15px
+                18px;
+
+            text-align: left;
+
+            color: #657269;
+
+            background:
+                rgba(255,255,255,.018);
+
+            font-size: 8px;
+            font-weight: 900;
+
+            letter-spacing: 1.4px;
+
+            white-space: nowrap;
+        }
+
+
+        .members-table td {
+            padding:
+                17px
+                18px;
+
+            border-top:
+                1px solid
+                rgba(255,255,255,.045);
+
+            color: #cbd5cf;
+
+            font-size: 11px;
+
+            vertical-align: middle;
+        }
+
+
+        .members-table tbody tr {
+            transition:
+                background .2s ease;
+        }
+
+
+        .members-table tr:hover td {
+            background:
+                rgba(101,255,131,.018);
+        }
+
+
+        /* =====================================================
+           MEMBER VALUES
+        ===================================================== */
+
+        .telegram-name {
+            color: #f4f7f5;
+
+            font-weight: 800;
+        }
+
+
+        .telegram-username,
+        .x-username {
+            color: #65ff83;
+        }
+
+
+        .empty-value {
+            color: #59665e;
+        }
+
+
+        .wallet-cell {
+            display: flex;
+            align-items: center;
+
+            gap: 8px;
+        }
+
+
+        .wallet-address {
+            max-width: 220px;
+
+            overflow: hidden;
+
+            white-space: nowrap;
+
+            text-overflow: ellipsis;
+
+            color: #aab6ae;
+        }
+
+
+        /* =====================================================
+           COPY BUTTON
+        ===================================================== */
+
+        .copy-button {
+            flex: 0 0 auto;
+
+            padding:
+                7px
+                9px;
+
+            border:
+                1px solid
+                rgba(101,255,131,.11);
+
+            border-radius: 8px;
+
+            background:
+                rgba(101,255,131,.035);
+
+            color: #65ff83;
+
+            font-size: 7px;
+            font-weight: 900;
+
+            letter-spacing: .8px;
+
+            transition:
+                border-color .2s ease,
+                background .2s ease;
+        }
+
+
+        .copy-button:hover {
+            border-color:
+                rgba(101,255,131,.3);
+
+            background:
+                rgba(101,255,131,.07);
+        }
+
+
+        /* =====================================================
+           TELEGRAM BADGES
+        ===================================================== */
+
+        .telegram-group-badge {
+            display: inline-flex;
+            align-items: center;
+
+            gap: 7px;
+
+            padding:
+                7px
+                10px;
+
+            border-radius: 999px;
+
+            font-size: 8px;
+            font-weight: 900;
+
+            letter-spacing: .7px;
+
+            white-space: nowrap;
+        }
+
+
+        .telegram-group-badge.member {
+            border:
+                1px solid
+                rgba(101,255,131,.25);
+
+            background:
+                rgba(101,255,131,.07);
+
+            color: #65ff83;
+        }
+
+
+        .telegram-group-badge.not-member {
+            border:
+                1px solid
+                rgba(255,89,100,.24);
+
+            background:
+                rgba(255,89,100,.06);
+
+            color: #ff717b;
+        }
+
+
+        .telegram-group-badge.unknown {
+            border:
+                1px solid
+                rgba(255,211,92,.22);
+
+            background:
+                rgba(255,211,92,.05);
+
+            color: #ffd35c;
+        }
+
+
+        /* =====================================================
+           DATES
+        ===================================================== */
+
+        .date-value {
+            color: #75837a;
+
+            white-space: nowrap;
+        }
+
+
+        /* =====================================================
+           EMPTY TABLE
+        ===================================================== */
+
+        .members-empty {
+            padding:
+                50px
+                20px;
+
+            text-align: center;
+
+            color: #68766d;
+
+            font-size: 12px;
+        }
+
+
+        /* =====================================================
+           TABLE SCROLLBAR
+        ===================================================== */
+
+        .members-table-wrap::-webkit-scrollbar {
+            height: 8px;
+        }
+
+
+        .members-table-wrap::-webkit-scrollbar-track {
+            background:
+                rgba(255,255,255,.02);
+        }
+
+
+        .members-table-wrap::-webkit-scrollbar-thumb {
+            border-radius: 999px;
+
+            background:
+                rgba(101,255,131,.16);
+        }
+
+
+        .members-table-wrap::-webkit-scrollbar-thumb:hover {
+            background:
+                rgba(101,255,131,.26);
+        }
+
+
+        /* =====================================================
+           TABLE GROUP HEADERS
+        ===================================================== */
+
+        .chat-header {
+            color: #65ff83 !important;
+        }
+
+
+        .announcements-header {
+            color: #65ff83 !important;
+        }
+
+
+        /* =====================================================
+           RESPONSIVE
+        ===================================================== */
+
+        @media (max-width: 1100px) {
+
+            .stats-grid {
+                grid-template-columns:
+                    repeat(2, minmax(0, 1fr));
+            }
+
+        }
+
+
+        @media (max-width: 1000px) {
+
+            .admin-hero {
+                grid-template-columns:
+                    1fr;
+            }
+
+        }
+
+
+        @media (max-width: 700px) {
+
+            .admin-shell {
+                width:
+                    min(
+                        calc(100% - 22px),
+                        1500px
+                    );
+
+                padding-top: 12px;
+            }
+
+
+            .admin-header {
+                align-items: flex-start;
+
+                flex-direction: column;
+            }
+
+
+            .admin-header-right {
+                width: 100%;
+
+                flex-wrap: wrap;
+            }
+
+
+            .admin-hero-main {
+                padding:
+                    28px
+                    22px;
+            }
+
+
+            .admin-hero-main h1 {
+                letter-spacing: -2px;
+            }
+
+
+            .private-card {
+                padding:
+                    24px
+                    20px;
+            }
+
+
+            .stats-grid {
+                grid-template-columns:
+                    repeat(2, minmax(0, 1fr));
+            }
+
+
+            .stat-card {
+                min-height: 115px;
+
+                padding: 18px;
+            }
+
+
+            .stat-card strong {
+                font-size: 30px;
+            }
+
+
+            .members-panel-top {
+                align-items: stretch;
+
+                flex-direction: column;
+            }
+
+
+            .members-tools {
+                width: 100%;
+
+                flex-direction: column;
+
+                align-items: stretch;
+            }
+
+
+            .member-search {
+                width: 100%;
+            }
+
+
+            .refresh-button {
+                width: 100%;
+            }
+
+        }
+
+
+        @media (max-width: 480px) {
+
+            .admin-shell {
+                width:
+                    calc(100% - 16px);
+            }
+
+
+            .admin-header {
+                border-radius: 17px;
+
+                padding: 13px;
+            }
+
+
+            .admin-brand img {
+                width: 46px;
+                height: 46px;
+            }
+
+
+            .admin-status {
+                padding:
+                    9px
+                    11px;
+            }
+
+
+            .back-site-button {
+                padding:
+                    10px
+                    13px;
+            }
+
+
+            .admin-hero {
+                margin-top: 14px;
+
+                gap: 14px;
+            }
+
+
+            .admin-hero-main {
+                min-height: 0;
+
+                padding:
+                    26px
+                    19px;
+
+                border-radius: 20px;
+            }
+
+
+            .admin-hero-main h1 {
+                font-size: 39px;
+
+                letter-spacing: -2px;
+            }
+
+
+            .admin-hero-main p {
+                font-size: 12px;
+            }
+
+
+            .private-card {
+                border-radius: 20px;
+            }
+
+
+            .admin-message {
+                margin-top: 14px;
+
+                padding:
+                    16px;
+            }
+
+
+            .admin-dashboard {
+                margin-top: 14px;
+            }
+
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+
+                gap: 10px;
+            }
+
+
+            .stat-card {
+                min-height: 0;
+            }
+
+
+            .members-panel {
+                margin-top: 14px;
+
+                border-radius: 20px;
+            }
+
+
+            .members-panel-top {
+                padding: 18px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =====================================================
+         BACKGROUND
+    ====================================================== -->
+
+    <div
+        class="admin-background"
+        aria-hidden="true"
+    >
 
         <div
-            class="members-empty"
-            id="membersEmpty"
-            hidden
-        >
-            NO MEMBERS FOUND.
-        </div>
+            class="admin-glow glow-one"
+        ></div>
+
+        <div
+            class="admin-glow glow-two"
+        ></div>
 
     </div>
 
-</section>
+
+    <!-- =====================================================
+         MAIN
+    ====================================================== -->
+
+    <main class="admin-shell">
+
+
+        <!-- =================================================
+             HEADER
+        ================================================== -->
+
+        <header class="admin-header">
+
+
+            <div class="admin-brand">
+
+                <img
+                    src="gremble.png"
+                    alt="Gremble"
+                >
+
+
+                <div class="admin-brand-copy">
+
+                    <strong>
+                        GREMBLE
+                    </strong>
+
+                    <span>
+                        PRIVATE CONTROL ROOM
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="admin-header-right">
+
+
+                <div class="admin-status">
+
+                    <span
+                        class="admin-status-dot"
+                    ></span>
+
+                    ADMIN ACCESS
+
+                </div>
+
+
+                <a
+                    href="index.html"
+                    class="back-site-button"
+                >
+                    ← BACK TO WEBSITE
+                </a>
+
+
+            </div>
+
+
+        </header>
+
+
+        <!-- =================================================
+             HERO
+        ================================================== -->
+
+        <section class="admin-hero">
+
+
+            <div class="admin-hero-main">
+
+
+                <div
+                    class="hero-orb"
+                    aria-hidden="true"
+                ></div>
+
+
+                <p class="hero-mini-tag">
+                    GREMBLE // FOUNDER MODE
+                </p>
+
+
+                <h1>
+                    ROBÍŠ TO,<br>
+                    ABY SI BOL<br>
+                    <span>LEPŠÍ AKO ONI.</span>
+                </h1>
+
+
+                <div class="hero-line"></div>
+
+
+                <p>
+                    Build quietly. Watch everything.
+                    Keep moving. This dashboard exists
+                    for one reason — to give you a clear
+                    view of the people joining Gremble
+                    while you build it from the beginning.
+                </p>
+
+
+            </div>
+
+
+            <!-- PRIVATE ACCESS -->
+
+            <aside class="private-card">
+
+
+                <p class="private-card-tag">
+                    PRIVATE ACCESS
+                </p>
+
+
+                <h2>
+                    YOUR GREMBLE
+                    CONTROL ROOM.
+                </h2>
+
+
+                <p>
+                    Member details are loaded through
+                    the secure admin backend. Access is
+                    verified against your Telegram ID.
+                </p>
+
+
+                <div class="private-id-box">
+
+                    <small>
+                        CURRENT ACCESS
+                    </small>
+
+                    <strong id="adminIdentity">
+                        CHECKING...
+                    </strong>
+
+                </div>
+
+
+            </aside>
+
+
+        </section>
+
+
+        <!-- =================================================
+             MESSAGE
+        ================================================== -->
+
+        <div
+            class="admin-message"
+            id="adminMessage"
+        >
+            CHECKING ADMIN ACCESS...
+        </div>
+
+
+        <!-- =================================================
+             DASHBOARD
+        ================================================== -->
+
+        <section
+            class="admin-dashboard"
+            id="adminDashboard"
+            hidden
+        >
+
+
+            <!-- =================================================
+                 STATS
+            ================================================== -->
+
+            <div class="stats-grid">
+
+
+                <!-- TOTAL MEMBERS -->
+
+                <article class="stat-card">
+
+                    <span>
+                        TOTAL MEMBERS
+                    </span>
+
+                    <strong id="statTotalMembers">
+                        0
+                    </strong>
+
+                    <small>
+                        REGISTERED MEMBERS
+                    </small>
+
+                </article>
+
+
+                <!-- COMPLETE PROFILES -->
+
+                <article class="stat-card">
+
+                    <span>
+                        COMPLETE PROFILES
+                    </span>
+
+                    <strong id="statCompletedProfiles">
+                        0
+                    </strong>
+
+                    <small>
+                        X + SOLANA
+                    </small>
+
+                </article>
+
+
+                <!-- GREMBLE CHAT -->
+
+                <article class="stat-card">
+
+                    <span>
+                        IN TELEGRAM
+                    </span>
+
+                    <strong id="statTelegramChatMembers">
+                        0
+                    </strong>
+
+                    <small>
+                        GREMBLE CHAT
+                    </small>
+
+                </article>
+
+
+                <!-- GREMBLE ANNOUNCEMENTS -->
+
+                <article class="stat-card">
+
+                    <span>
+                        IN TELEGRAM
+                    </span>
+
+                    <strong id="statTelegramAnnouncementsMembers">
+                        0
+                    </strong>
+
+                    <small>
+                        GREMBLE ANNOUNCEMENTS
+                    </small>
+
+                </article>
+
+
+            </div>
+
+
+            <!-- =================================================
+                 MEMBERS
+            ================================================== -->
+
+            <section class="members-panel">
+
+
+                <!-- PANEL TOP -->
+
+                <div class="members-panel-top">
+
+
+                    <div class="members-panel-title">
+
+                        <span>
+                            GREMBLE MEMBERS
+                        </span>
+
+                        <h2>
+                            Registered people
+                        </h2>
+
+                    </div>
+
+
+                    <div class="members-tools">
+
+
+                        <input
+                            type="search"
+                            class="member-search"
+                            id="memberSearch"
+                            placeholder="Search Telegram, X, wallet or group status..."
+                            autocomplete="off"
+                        >
+
+
+                        <button
+                            type="button"
+                            class="refresh-button"
+                            id="refreshMembers"
+                        >
+                            REFRESH
+                        </button>
+
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- TABLE -->
+
+                <div class="members-table-wrap">
+
+
+                    <table class="members-table">
+
+
+                        <thead>
+
+
+                            <tr>
+
+
+                                <th>
+                                    TELEGRAM NAME
+                                </th>
+
+
+                                <th>
+                                    TELEGRAM USERNAME
+                                </th>
+
+
+                                <th class="chat-header">
+                                    GREMBLE CHAT
+                                </th>
+
+
+                                <th class="announcements-header">
+                                    GREMBLE ANNOUNCEMENTS
+                                </th>
+
+
+                                <th>
+                                    X USERNAME
+                                </th>
+
+
+                                <th>
+                                    SOLANA ADDRESS
+                                </th>
+
+
+                                <th>
+                                    JOINED
+                                </th>
+
+
+                                <th>
+                                    UPDATED
+                                </th>
+
+
+                            </tr>
+
+
+                        </thead>
+
+
+                        <tbody id="membersTableBody">
+                        </tbody>
+
+
+                    </table>
+
+
+                    <div
+                        class="members-empty"
+                        id="membersEmpty"
+                        hidden
+                    >
+                        NO MEMBERS FOUND.
+                    </div>
+
+
+                </div>
+
+
+            </section>
+
+
+        </section>
+
+
+    </main>
+
+
+    <!-- =====================================================
+         ADMIN SCRIPT
+    ====================================================== -->
+
+    <script src="admin.js?v=102"></script>
+
+
+</body>
+
+</html>
