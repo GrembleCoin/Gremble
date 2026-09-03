@@ -20,6 +20,9 @@ const GREMBLE_SESSION_KEY =
 const GREMBLE_SESSION_EXPIRY_KEY =
     "gremble_session_expires_at";
 
+const CONTEST_ITEMS_PER_PAGE =
+    5;
+
 
 /* =====================================================
    MEMBER ELEMENTS
@@ -130,6 +133,26 @@ const contestEmpty =
 
 
 /* =====================================================
+   CONTEST SEARCH + PAGINATION
+===================================================== */
+
+const contestSearch =
+    document.getElementById("contestSearch");
+
+const contestPagination =
+    document.getElementById("contestPagination");
+
+const contestPrevPage =
+    document.getElementById("contestPrevPage");
+
+const contestNextPage =
+    document.getElementById("contestNextPage");
+
+const contestPageInfo =
+    document.getElementById("contestPageInfo");
+
+
+/* =====================================================
    DATA
 ===================================================== */
 
@@ -142,6 +165,8 @@ let contestLoaded = false;
 let contestLoading = false;
 
 let contestSaving = false;
+
+let contestCurrentPage = 1;
 
 
 /* =====================================================
@@ -268,11 +293,6 @@ function sessionIsExpired() {
 
     const expiry =
         getSessionExpiry();
-
-    /*
-       If expiry is not stored locally,
-       let the secure backend verify it.
-    */
 
     if (!expiry) {
         return false;
@@ -407,7 +427,7 @@ async function copyText(
 
 
 /* =====================================================
-   MEMBER STATUS NORMALIZATION
+   TELEGRAM STATUS
 ===================================================== */
 
 function normalizeTelegramStatus(
@@ -445,10 +465,6 @@ function normalizeTelegramStatus(
 }
 
 
-/* =====================================================
-   GET TELEGRAM CHAT STATUS
-===================================================== */
-
 function getChatStatus(member) {
 
     return normalizeTelegramStatus(
@@ -460,10 +476,6 @@ function getChatStatus(member) {
 }
 
 
-/* =====================================================
-   GET TELEGRAM ANNOUNCEMENTS STATUS
-===================================================== */
-
 function getAnnouncementsStatus(member) {
 
     return normalizeTelegramStatus(
@@ -474,10 +486,6 @@ function getAnnouncementsStatus(member) {
 
 }
 
-
-/* =====================================================
-   TELEGRAM BADGE
-===================================================== */
 
 function createTelegramBadge(
     status,
@@ -675,9 +683,7 @@ function createMemberRow(
         );
 
 
-    /* ==========================================
-       TELEGRAM NAME
-    ========================================== */
+    /* TELEGRAM NAME */
 
     const telegramNameCell =
         document.createElement(
@@ -722,9 +728,7 @@ function createMemberRow(
     }
 
 
-    /* ==========================================
-       TELEGRAM USERNAME
-    ========================================== */
+    /* TELEGRAM USERNAME */
 
     const telegramUsernameCell =
         document.createElement(
@@ -771,9 +775,7 @@ function createMemberRow(
     }
 
 
-    /* ==========================================
-       GREMBLE CHAT
-    ========================================== */
+    /* GREMBLE CHAT */
 
     const chatCell =
         document.createElement(
@@ -788,9 +790,7 @@ function createMemberRow(
     );
 
 
-    /* ==========================================
-       GREMBLE ANNOUNCEMENTS
-    ========================================== */
+    /* ANNOUNCEMENTS */
 
     const announcementsCell =
         document.createElement(
@@ -807,9 +807,7 @@ function createMemberRow(
     );
 
 
-    /* ==========================================
-       X USERNAME
-    ========================================== */
+    /* X USERNAME */
 
     const xUsernameCell =
         document.createElement(
@@ -902,9 +900,7 @@ function createMemberRow(
     }
 
 
-    /* ==========================================
-       SOLANA ADDRESS
-    ========================================== */
+    /* SOLANA */
 
     const solanaCell =
         document.createElement(
@@ -1000,9 +996,7 @@ function createMemberRow(
     }
 
 
-    /* ==========================================
-       JOINED
-    ========================================== */
+    /* JOINED */
 
     const joinedCell =
         document.createElement(
@@ -1018,9 +1012,7 @@ function createMemberRow(
         );
 
 
-    /* ==========================================
-       UPDATED
-    ========================================== */
+    /* UPDATED */
 
     const updatedCell =
         document.createElement(
@@ -1035,10 +1027,6 @@ function createMemberRow(
             member.updated_at
         );
 
-
-    /* ==========================================
-       BUILD ROW
-    ========================================== */
 
     row.appendChild(
         telegramNameCell
@@ -1198,23 +1186,7 @@ function filterMembers() {
 
                     chatStatus,
 
-                    announcementsStatus,
-
-                    chatStatus === "member"
-                        ? "in chat"
-                        : "",
-
-                    chatStatus === "not_member"
-                        ? "not in chat"
-                        : "",
-
-                    announcementsStatus === "member"
-                        ? "in announcements"
-                        : "",
-
-                    announcementsStatus === "not_member"
-                        ? "not in announcements"
-                        : ""
+                    announcementsStatus
 
                 ];
 
@@ -1315,7 +1287,7 @@ function showAccessError(
 
 
 /* =====================================================
-   LOAD ADMIN MEMBERS
+   LOAD ADMIN DATA
 ===================================================== */
 
 async function loadAdminData() {
@@ -1323,10 +1295,6 @@ async function loadAdminData() {
     const token =
         getSessionToken();
 
-
-    /* ==========================================
-       NO LOGIN
-    ========================================== */
 
     if (!token) {
 
@@ -1338,10 +1306,6 @@ async function loadAdminData() {
 
     }
 
-
-    /* ==========================================
-       LOCAL EXPIRY
-    ========================================== */
 
     if (
         sessionIsExpired()
@@ -1357,10 +1321,6 @@ async function loadAdminData() {
 
     }
 
-
-    /* ==========================================
-       LOADING
-    ========================================== */
 
     setAdminIdentity(
         "VERIFYING..."
@@ -1424,10 +1384,6 @@ async function loadAdminData() {
         }
 
 
-        /* ==========================================
-           UNAUTHORIZED
-        ========================================== */
-
         if (
             response.status === 401
         ) {
@@ -1443,10 +1399,6 @@ async function loadAdminData() {
         }
 
 
-        /* ==========================================
-           NOT ADMIN
-        ========================================== */
-
         if (
             response.status === 403
         ) {
@@ -1460,10 +1412,6 @@ async function loadAdminData() {
         }
 
 
-        /* ==========================================
-           ERROR
-        ========================================== */
-
         if (
             !response.ok ||
             !result?.success
@@ -1476,10 +1424,6 @@ async function loadAdminData() {
 
         }
 
-
-        /* ==========================================
-           SUCCESS
-        ========================================== */
 
         allMembers =
             Array.isArray(
@@ -1521,7 +1465,7 @@ async function loadAdminData() {
 
 
         setAdminMessage(
-            `ACCESS GRANTED — ${allMembers.length} GREMBLE MEMBER${allMembers.length === 1 ? "" : "S"} LOADED. TELEGRAM CHAT AND ANNOUNCEMENTS CHECKED.`,
+            `ACCESS GRANTED — ${allMembers.length} GREMBLE MEMBER${allMembers.length === 1 ? "" : "S"} LOADED.`,
             "success"
         );
 
@@ -1571,13 +1515,16 @@ function setContestMessage(
         return;
     }
 
+
     contestFormMessage.textContent =
         message;
+
 
     contestFormMessage.classList.remove(
         "success",
         "error"
     );
+
 
     if (type) {
 
@@ -1631,13 +1578,14 @@ function setContestRequirements(
 
 
 /* =====================================================
-   CONTEST STATS
+   CONTEST TOTAL STATS
 ===================================================== */
 
 function updateContestStats() {
 
     const total =
         allContestEntries.length;
+
 
     const verified =
         allContestEntries.filter(
@@ -1662,29 +1610,77 @@ function updateContestStats() {
 
     }
 
+}
 
-    if (contestEntriesLabel) {
 
-        contestEntriesLabel.textContent =
-            `${total} ${total === 1 ? "ENTRY" : "ENTRIES"}`;
+/* =====================================================
+   FILTER CONTEST ENTRIES
+===================================================== */
+
+function getFilteredContestEntries() {
+
+    const search =
+        cleanText(
+            contestSearch?.value
+        ).toLowerCase();
+
+
+    if (!search) {
+
+        return [
+            ...allContestEntries
+        ];
 
     }
+
+
+    return allContestEntries.filter(
+        entry => {
+
+            const participant =
+                cleanText(
+                    entry.participant
+                ).toLowerCase();
+
+
+            return participant.includes(
+                search
+            );
+
+        }
+    );
 
 }
 
 
 /* =====================================================
-   CONTEST EMPTY STATE
+   SORT CONTEST ENTRIES
 ===================================================== */
 
-function updateContestEmptyState() {
+function sortContestEntries(
+    entries
+) {
 
-    if (!contestEmpty) {
-        return;
-    }
+    return [
+        ...entries
+    ].sort(
+        (a, b) => {
 
-    contestEmpty.hidden =
-        allContestEntries.length > 0;
+            const dateA =
+                new Date(
+                    a.created_at
+                ).getTime();
+
+            const dateB =
+                new Date(
+                    b.created_at
+                ).getTime();
+
+
+            return dateB - dateA;
+
+        }
+    );
 
 }
 
@@ -1703,9 +1699,7 @@ function createContestRow(
         );
 
 
-    /* ==========================================
-       PARTICIPANT
-    ========================================== */
+    /* PARTICIPANT */
 
     const participantCell =
         document.createElement(
@@ -1730,9 +1724,7 @@ function createContestRow(
     );
 
 
-    /* ==========================================
-       MEME LINK
-    ========================================== */
+    /* MEME */
 
     const memeCell =
         document.createElement(
@@ -1743,6 +1735,7 @@ function createContestRow(
         cleanText(
             entry.meme_url
         );
+
 
     if (memeUrl) {
 
@@ -1779,9 +1772,7 @@ function createContestRow(
     }
 
 
-    /* ==========================================
-       POINTS
-    ========================================== */
+    /* POINTS */
 
     const pointsCell =
         document.createElement(
@@ -1799,9 +1790,7 @@ function createContestRow(
         );
 
 
-    /* ==========================================
-       RULES
-    ========================================== */
+    /* RULES */
 
     const rulesCell =
         document.createElement(
@@ -1817,24 +1806,25 @@ function createContestRow(
         entry.requirements_ok ===
         true;
 
+
     rulesBadge.className =
         requirementsOk
             ? "contest-rule-badge yes"
             : "contest-rule-badge no";
+
 
     rulesBadge.textContent =
         requirementsOk
             ? "YES"
             : "NO";
 
+
     rulesCell.appendChild(
         rulesBadge
     );
 
 
-    /* ==========================================
-       ADDED
-    ========================================== */
+    /* ADDED */
 
     const addedCell =
         document.createElement(
@@ -1850,9 +1840,7 @@ function createContestRow(
         );
 
 
-    /* ==========================================
-       ACTIONS
-    ========================================== */
+    /* ACTIONS */
 
     const actionsCell =
         document.createElement(
@@ -1935,10 +1923,6 @@ function createContestRow(
     );
 
 
-    /* ==========================================
-       BUILD
-    ========================================== */
-
     row.appendChild(
         participantCell
     );
@@ -1970,7 +1954,7 @@ function createContestRow(
 
 
 /* =====================================================
-   RENDER CONTEST
+   RENDER CONTEST ENTRIES
 ===================================================== */
 
 function renderContestEntries() {
@@ -1980,47 +1964,75 @@ function renderContestEntries() {
     }
 
 
+    const filtered =
+        sortContestEntries(
+            getFilteredContestEntries()
+        );
+
+
+    const totalFiltered =
+        filtered.length;
+
+
+    const totalPages =
+        Math.max(
+            1,
+            Math.ceil(
+                totalFiltered /
+                CONTEST_ITEMS_PER_PAGE
+            )
+        );
+
+
+    if (
+        contestCurrentPage >
+        totalPages
+    ) {
+
+        contestCurrentPage =
+            totalPages;
+
+    }
+
+
+    if (
+        contestCurrentPage < 1
+    ) {
+
+        contestCurrentPage =
+            1;
+
+    }
+
+
+    const startIndex =
+        (
+            contestCurrentPage - 1
+        ) *
+        CONTEST_ITEMS_PER_PAGE;
+
+
+    const endIndex =
+        startIndex +
+        CONTEST_ITEMS_PER_PAGE;
+
+
+    const pageEntries =
+        filtered.slice(
+            startIndex,
+            endIndex
+        );
+
+
     contestTableBody.innerHTML =
         "";
-
-
-    const sorted =
-        [...allContestEntries]
-            .sort(
-                (a, b) => {
-
-                    const pointsDifference =
-                        numberOrZero(
-                            b.points
-                        ) -
-                        numberOrZero(
-                            a.points
-                        );
-
-                    if (
-                        pointsDifference !== 0
-                    ) {
-                        return pointsDifference;
-                    }
-
-                    return (
-                        new Date(
-                            b.created_at
-                        ).getTime() -
-                        new Date(
-                            a.created_at
-                        ).getTime()
-                    );
-
-                }
-            );
 
 
     const fragment =
         document.createDocumentFragment();
 
 
-    sorted.forEach(
+    pageEntries.forEach(
         entry => {
 
             fragment.appendChild(
@@ -2038,9 +2050,204 @@ function renderContestEntries() {
     );
 
 
+    /* ==========================================
+       LABEL
+    ========================================== */
+
+    if (contestEntriesLabel) {
+
+        const hasSearch =
+            !!cleanText(
+                contestSearch?.value
+            );
+
+
+        if (hasSearch) {
+
+            contestEntriesLabel.textContent =
+                `${totalFiltered} ${totalFiltered === 1 ? "MATCH" : "MATCHES"}`;
+
+        }
+        else {
+
+            contestEntriesLabel.textContent =
+                `${allContestEntries.length} ${allContestEntries.length === 1 ? "ENTRY" : "ENTRIES"}`;
+
+        }
+
+    }
+
+
+    /* ==========================================
+       EMPTY
+    ========================================== */
+
+    if (contestEmpty) {
+
+        contestEmpty.hidden =
+            totalFiltered > 0;
+
+
+        if (
+            totalFiltered === 0
+        ) {
+
+            if (
+                cleanText(
+                    contestSearch?.value
+                )
+            ) {
+
+                contestEmpty.textContent =
+                    "NO MATCHING PARTICIPANT.";
+
+            }
+            else {
+
+                contestEmpty.textContent =
+                    "NO CONTEST ENTRIES YET.";
+
+            }
+
+        }
+
+    }
+
+
+    /* ==========================================
+       PAGINATION
+    ========================================== */
+
+    updateContestPagination(
+        totalFiltered,
+        totalPages
+    );
+
+
     updateContestStats();
 
-    updateContestEmptyState();
+}
+
+
+/* =====================================================
+   UPDATE CONTEST PAGINATION
+===================================================== */
+
+function updateContestPagination(
+    totalFiltered,
+    totalPages
+) {
+
+    if (!contestPagination) {
+        return;
+    }
+
+
+    /*
+       Pagination only needs to show
+       when there are more than 5 results.
+    */
+
+    contestPagination.hidden =
+        totalFiltered <=
+        CONTEST_ITEMS_PER_PAGE;
+
+
+    if (contestPageInfo) {
+
+        contestPageInfo.textContent =
+            `${contestCurrentPage} OF ${totalPages}`;
+
+    }
+
+
+    if (contestPrevPage) {
+
+        contestPrevPage.disabled =
+            contestCurrentPage <= 1;
+
+    }
+
+
+    if (contestNextPage) {
+
+        contestNextPage.disabled =
+            contestCurrentPage >=
+            totalPages;
+
+    }
+
+}
+
+
+/* =====================================================
+   GO TO PREVIOUS CONTEST PAGE
+===================================================== */
+
+function goToPreviousContestPage() {
+
+    if (
+        contestCurrentPage <= 1
+    ) {
+        return;
+    }
+
+
+    contestCurrentPage--;
+
+
+    renderContestEntries();
+
+}
+
+
+/* =====================================================
+   GO TO NEXT CONTEST PAGE
+===================================================== */
+
+function goToNextContestPage() {
+
+    const filtered =
+        getFilteredContestEntries();
+
+
+    const totalPages =
+        Math.max(
+            1,
+            Math.ceil(
+                filtered.length /
+                CONTEST_ITEMS_PER_PAGE
+            )
+        );
+
+
+    if (
+        contestCurrentPage >=
+        totalPages
+    ) {
+        return;
+    }
+
+
+    contestCurrentPage++;
+
+
+    renderContestEntries();
+
+}
+
+
+/* =====================================================
+   CONTEST SEARCH
+===================================================== */
+
+function filterContestEntries() {
+
+    contestCurrentPage =
+        1;
+
+
+    renderContestEntries();
 
 }
 
@@ -2108,6 +2315,7 @@ function resetContestForm() {
         document.querySelector(
             ".contest-form-title"
         );
+
 
     if (title) {
 
@@ -2206,6 +2414,7 @@ function startContestEdit(
             ".contest-form-title"
         );
 
+
     if (title) {
 
         title.textContent =
@@ -2220,12 +2429,6 @@ function startContestEdit(
 
 
     contestParticipant?.focus();
-
-
-    contestPanel?.scrollIntoView({
-        behavior: "smooth",
-        block: "start"
-    });
 
 }
 
@@ -2411,6 +2614,10 @@ async function loadContestEntries(
             true;
 
 
+        contestCurrentPage =
+            1;
+
+
         renderContestEntries();
 
 
@@ -2488,14 +2695,10 @@ async function saveContestEntry(
         );
 
 
-    /* ==========================================
-       VALIDATION
-    ========================================== */
-
     if (!participant) {
 
         setContestMessage(
-            "ENTER PARTICIPANT NAME OR USERNAME.",
+            "ENTER PARTICIPANT X USERNAME.",
             "error"
         );
 
@@ -2632,6 +2835,14 @@ async function saveContestEntry(
 
 
         resetContestForm();
+
+
+        if (contestSearch) {
+
+            contestSearch.value =
+                "";
+
+        }
 
 
         contestLoaded =
@@ -2794,15 +3005,10 @@ async function deleteContestEntry(
 
 
 /* =====================================================
-   OPEN CONTEST PANEL
+   OPEN CONTEST
 ===================================================== */
 
 async function openContest() {
-
-    /*
-       The button is only enabled after
-       admin-members has verified this user.
-    */
 
     if (!contestPanel) {
         return;
@@ -2813,19 +3019,19 @@ async function openContest() {
         false;
 
 
+    await loadContestEntries();
+
+
     contestPanel.scrollIntoView({
         behavior: "smooth",
         block: "start"
     });
 
-
-    await loadContestEntries();
-
 }
 
 
 /* =====================================================
-   CLOSE CONTEST PANEL
+   CLOSE CONTEST
 ===================================================== */
 
 function closeContest() {
@@ -2845,7 +3051,7 @@ function closeContest() {
 
 
 /* =====================================================
-   MEMBER SEARCH EVENT
+   EVENTS - MEMBER SEARCH
 ===================================================== */
 
 if (memberSearch) {
@@ -2859,7 +3065,7 @@ if (memberSearch) {
 
 
 /* =====================================================
-   MEMBER REFRESH EVENT
+   EVENTS - MEMBER REFRESH
 ===================================================== */
 
 if (refreshMembers) {
@@ -2885,16 +3091,10 @@ if (refreshMembers) {
 
 
 /* =====================================================
-   OPEN CONTEST EVENT
+   EVENTS - OPEN CONTEST
 ===================================================== */
 
 if (openContestPanel) {
-
-    /*
-       Disabled immediately.
-       It becomes enabled only after
-       secure admin verification succeeds.
-    */
 
     openContestPanel.disabled =
         true;
@@ -2909,7 +3109,7 @@ if (openContestPanel) {
 
 
 /* =====================================================
-   CLOSE CONTEST EVENT
+   EVENTS - CLOSE CONTEST
 ===================================================== */
 
 if (closeContestPanel) {
@@ -2923,7 +3123,49 @@ if (closeContestPanel) {
 
 
 /* =====================================================
-   CONTEST YES
+   EVENTS - CONTEST SEARCH
+===================================================== */
+
+if (contestSearch) {
+
+    contestSearch.addEventListener(
+        "input",
+        filterContestEntries
+    );
+
+}
+
+
+/* =====================================================
+   EVENTS - PREVIOUS PAGE
+===================================================== */
+
+if (contestPrevPage) {
+
+    contestPrevPage.addEventListener(
+        "click",
+        goToPreviousContestPage
+    );
+
+}
+
+
+/* =====================================================
+   EVENTS - NEXT PAGE
+===================================================== */
+
+if (contestNextPage) {
+
+    contestNextPage.addEventListener(
+        "click",
+        goToNextContestPage
+    );
+
+}
+
+
+/* =====================================================
+   EVENTS - REQUIREMENTS YES
 ===================================================== */
 
 if (contestRequirementsYes) {
@@ -2943,7 +3185,7 @@ if (contestRequirementsYes) {
 
 
 /* =====================================================
-   CONTEST NO
+   EVENTS - REQUIREMENTS NO
 ===================================================== */
 
 if (contestRequirementsNo) {
@@ -2963,7 +3205,7 @@ if (contestRequirementsNo) {
 
 
 /* =====================================================
-   CONTEST FORM
+   EVENTS - FORM
 ===================================================== */
 
 if (contestEntryForm) {
@@ -2977,7 +3219,7 @@ if (contestEntryForm) {
 
 
 /* =====================================================
-   CANCEL CONTEST EDIT
+   EVENTS - CANCEL EDIT
 ===================================================== */
 
 if (contestCancelEdit) {
