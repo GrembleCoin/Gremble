@@ -17,12 +17,7 @@
 
     <title>Gremble Admin</title>
 
-
     <style>
-
-        /* =====================================================
-           RESET
-        ===================================================== */
 
         * {
             margin: 0;
@@ -74,11 +69,6 @@
             text-decoration: none;
         }
 
-
-        /* =====================================================
-           BACKGROUND
-        ===================================================== */
-
         .admin-background {
             position: fixed;
             inset: 0;
@@ -102,21 +92,14 @@
         .glow-one {
             top: -220px;
             right: -120px;
-
             background: #4cff7c;
         }
 
         .glow-two {
             bottom: -280px;
             left: -150px;
-
             background: #14854d;
         }
-
-
-        /* =====================================================
-           WRAPPER
-        ===================================================== */
 
         .admin-shell {
             width: min(
@@ -131,11 +114,6 @@
                 0
                 50px;
         }
-
-
-        /* =====================================================
-           HEADER
-        ===================================================== */
 
         .admin-header {
             min-height: 78px;
@@ -166,27 +144,23 @@
         .admin-brand {
             display: flex;
             align-items: center;
-
             gap: 14px;
         }
 
         .admin-brand img {
             width: 54px;
             height: 54px;
-
             object-fit: contain;
         }
 
         .admin-brand-copy {
             display: flex;
             flex-direction: column;
-
             gap: 3px;
         }
 
         .admin-brand-copy strong {
             font-size: 18px;
-
             letter-spacing: 1px;
         }
 
@@ -202,7 +176,6 @@
         .admin-header-right {
             display: flex;
             align-items: center;
-
             gap: 10px;
         }
 
@@ -266,10 +239,6 @@
             font-weight: 900;
 
             letter-spacing: 1.2px;
-
-            transition:
-                border-color .2s ease,
-                background .2s ease;
         }
 
         .back-site-button:hover {
@@ -279,11 +248,6 @@
             background:
                 rgba(101,255,131,.055);
         }
-
-
-        /* =====================================================
-           HERO
-        ===================================================== */
 
         .admin-hero {
             margin-top: 24px;
@@ -396,11 +360,6 @@
             pointer-events: none;
         }
 
-
-        /* =====================================================
-           PRIVATE CARD
-        ===================================================== */
-
         .private-card {
             padding: 28px;
 
@@ -477,11 +436,6 @@
             font-size: 12px;
         }
 
-
-        /* =====================================================
-           CONTEST OPEN BUTTON
-        ===================================================== */
-
         .contest-open-button {
             width: 100%;
 
@@ -513,16 +467,6 @@
                 );
 
             color: #eef5f0;
-
-            box-shadow:
-                0 0 18px
-                rgba(101,255,131,.06);
-
-            transition:
-                border-color .2s ease,
-                background .2s ease,
-                box-shadow .2s ease,
-                transform .2s ease;
         }
 
         .contest-open-button:hover {
@@ -531,14 +475,6 @@
 
             background:
                 rgba(101,255,131,.09);
-
-            box-shadow:
-                0 0 24px
-                rgba(101,255,131,.11);
-        }
-
-        .contest-open-button:active {
-            transform: scale(.99);
         }
 
         .contest-open-button:disabled {
@@ -562,7 +498,6 @@
         .contest-open-copy {
             display: flex;
             flex-direction: column;
-
             gap: 4px;
         }
 
@@ -571,28 +506,18 @@
 
             font-size: 12px;
             font-weight: 900;
-
-            letter-spacing: .5px;
         }
 
         .contest-open-copy span {
             color: #718078;
 
             font-size: 9px;
-
-            line-height: 1.4;
         }
 
         .contest-open-arrow {
             color: #65ff83;
-
             font-size: 20px;
         }
-
-
-        /* =====================================================
-           MESSAGE
-        ===================================================== */
 
         .admin-message {
             margin-top: 22px;
@@ -613,8 +538,6 @@
             color: #99a59e;
 
             font-size: 12px;
-
-            line-height: 1.65;
         }
 
         .admin-message.success {
@@ -631,11 +554,6 @@
             color: #ff717b;
         }
 
-
-        /* =====================================================
-           DASHBOARD
-        ===================================================== */
-
         .admin-dashboard {
             margin-top: 24px;
         }
@@ -643,11 +561,6 @@
         .admin-dashboard[hidden] {
             display: none;
         }
-
-
-        /* =====================================================
-           CONTEST PANEL
-        ===================================================== */
 
         .contest-panel {
             margin-bottom: 22px;
@@ -662,10 +575,6 @@
 
             background:
                 rgba(4,12,8,.84);
-
-            box-shadow:
-                0 0 30px
-                rgba(101,255,131,.03);
         }
 
         .contest-panel[hidden] {
@@ -693,7 +602,6 @@
         .contest-panel-title {
             display: flex;
             align-items: center;
-
             gap: 13px;
         }
 
@@ -714,7 +622,6 @@
 
         .contest-title-copy h2 {
             margin-top: 4px;
-
             font-size: 23px;
         }
 
@@ -738,21 +645,7 @@
 
             font-size: 9px;
             font-weight: 900;
-
-            letter-spacing: 1px;
         }
-
-        .contest-close-button:hover {
-            border-color:
-                rgba(101,255,131,.22);
-
-            color: #65ff83;
-        }
-
-
-        /* =====================================================
-           CONTEST STATS
-        ===================================================== */
 
         .contest-stats {
             display: grid;
@@ -813,11 +706,6 @@
             font-weight: 900;
         }
 
-
-        /* =====================================================
-           CONTEST BODY
-        ===================================================== */
-
         .contest-body {
             padding: 22px;
 
@@ -829,11 +717,6 @@
 
             gap: 18px;
         }
-
-
-        /* =====================================================
-           CONTEST FORM
-        ===================================================== */
 
         .contest-form-card,
         .contest-list-card {
@@ -907,10 +790,6 @@
         .contest-form input:focus {
             border-color:
                 rgba(101,255,131,.42);
-
-            box-shadow:
-                0 0 0 3px
-                rgba(101,255,131,.045);
         }
 
         .contest-requirements {
@@ -930,8 +809,6 @@
 
             font-size: 9px;
             font-weight: 900;
-
-            letter-spacing: 1px;
         }
 
         .contest-rule-button.yes {
@@ -990,18 +867,6 @@
 
             font-size: 9px;
             font-weight: 900;
-
-            letter-spacing: 1.2px;
-        }
-
-        .contest-submit-button:hover {
-            background:
-                rgba(101,255,131,.13);
-        }
-
-        .contest-submit-button:disabled {
-            opacity: .4;
-            cursor: not-allowed;
         }
 
         .contest-cancel-edit {
@@ -1020,8 +885,6 @@
 
             font-size: 8px;
             font-weight: 900;
-
-            letter-spacing: 1px;
         }
 
         .contest-cancel-edit[hidden] {
@@ -1036,8 +899,6 @@
             color: #78857d;
 
             font-size: 9px;
-
-            line-height: 1.5;
         }
 
         .contest-form-message.success {
@@ -1047,11 +908,6 @@
         .contest-form-message.error {
             color: #ff717b;
         }
-
-
-        /* =====================================================
-           CONTEST LIST
-        ===================================================== */
 
         .contest-list-card {
             overflow: hidden;
@@ -1094,14 +950,7 @@
 
             font-size: 8px;
             font-weight: 900;
-
-            letter-spacing: 1px;
         }
-
-
-        /* =====================================================
-           CONTEST TOOLS
-        ===================================================== */
 
         .contest-tools {
             display: flex;
@@ -1112,11 +961,6 @@
 
             flex: 1;
         }
-
-
-        /* =====================================================
-           CONTEST SEARCH
-        ===================================================== */
 
         .contest-search-wrap {
             width: min(280px, 100%);
@@ -1149,23 +993,6 @@
             color: #eef4f0;
 
             font-size: 10px;
-
-            transition:
-                border-color .2s ease,
-                box-shadow .2s ease;
-        }
-
-        .contest-search::placeholder {
-            color: #59665e;
-        }
-
-        .contest-search:focus {
-            border-color:
-                rgba(101,255,131,.48);
-
-            box-shadow:
-                0 0 0 3px
-                rgba(101,255,131,.05);
         }
 
         .contest-search-icon {
@@ -1180,18 +1007,10 @@
             color: #65ff83;
 
             font-size: 13px;
-
-            pointer-events: none;
         }
-
-
-        /* =====================================================
-           CONTEST SORT
-        ===================================================== */
 
         .contest-sort-wrap {
             position: relative;
-
             min-width: 190px;
         }
 
@@ -1222,23 +1041,8 @@
             font-size: 9px;
             font-weight: 900;
 
-            letter-spacing: .4px;
-
             appearance: none;
             -webkit-appearance: none;
-
-            transition:
-                border-color .2s ease,
-                box-shadow .2s ease;
-        }
-
-        .contest-sort:focus {
-            border-color:
-                rgba(101,255,131,.48);
-
-            box-shadow:
-                0 0 0 3px
-                rgba(101,255,131,.05);
         }
 
         .contest-sort option {
@@ -1262,21 +1066,15 @@
             pointer-events: none;
         }
 
-
-        /* =====================================================
-           CONTEST TABLE
-        ===================================================== */
-
         .contest-table-wrap {
             width: 100%;
-
             overflow-x: auto;
         }
 
         .contest-table {
             width: 100%;
 
-            min-width: 780px;
+            min-width: 880px;
 
             border-collapse: collapse;
         }
@@ -1302,8 +1100,7 @@
         }
 
         .contest-table td {
-            padding:
-                14px;
+            padding: 14px;
 
             border-top:
                 1px solid
@@ -1316,24 +1113,9 @@
             vertical-align: middle;
         }
 
-        .contest-table tbody tr:hover td {
-            background:
-                rgba(101,255,131,.015);
-        }
-
         .contest-participant {
             color: #65ff83;
-
             font-weight: 800;
-        }
-
-        .contest-link {
-            display: inline-flex;
-            align-items: center;
-
-            gap: 5px;
-
-            color: #d7dfda;
         }
 
         .contest-link:hover {
@@ -1342,7 +1124,6 @@
 
         .contest-points {
             color: #65ff83;
-
             font-weight: 900;
         }
 
@@ -1361,8 +1142,6 @@
 
             font-size: 7px;
             font-weight: 900;
-
-            letter-spacing: .8px;
         }
 
         .contest-rule-badge.yes {
@@ -1390,7 +1169,6 @@
         .contest-actions {
             display: flex;
             align-items: center;
-
             gap: 6px;
         }
 
@@ -1405,8 +1183,6 @@
 
             font-size: 7px;
             font-weight: 900;
-
-            letter-spacing: .7px;
         }
 
         .contest-action-button.edit {
@@ -1431,6 +1207,145 @@
             color: #ff717b;
         }
 
+
+        /* =====================================================
+           NEW CONTEST MEMBER STATUS
+        ===================================================== */
+
+        .contest-member-status-cell {
+            text-align: center;
+        }
+
+        .contest-member-status {
+            position: relative;
+
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            width: 22px;
+            height: 22px;
+
+            border-radius: 50%;
+        }
+
+        .contest-member-status-dot {
+            width: 10px;
+            height: 10px;
+
+            border-radius: 50%;
+        }
+
+        .contest-member-status.verified {
+            background:
+                rgba(101,255,131,.07);
+
+            border:
+                1px solid
+                rgba(101,255,131,.18);
+        }
+
+        .contest-member-status.verified
+        .contest-member-status-dot {
+            background: #65ff83;
+
+            box-shadow:
+                0 0 12px
+                rgba(101,255,131,.85);
+        }
+
+        .contest-member-status.registered {
+            background:
+                rgba(255,174,66,.07);
+
+            border:
+                1px solid
+                rgba(255,174,66,.22);
+        }
+
+        .contest-member-status.registered
+        .contest-member-status-dot {
+            background: #ffae42;
+
+            box-shadow:
+                0 0 12px
+                rgba(255,174,66,.75);
+        }
+
+        .contest-member-status.not-found {
+            background:
+                rgba(255,89,100,.07);
+
+            border:
+                1px solid
+                rgba(255,89,100,.22);
+        }
+
+        .contest-member-status.not-found
+        .contest-member-status-dot {
+            background: #ff5964;
+
+            box-shadow:
+                0 0 12px
+                rgba(255,89,100,.75);
+        }
+
+        .contest-member-status::after {
+            content: attr(data-tooltip);
+
+            position: absolute;
+
+            right: 0;
+            bottom: calc(100% + 9px);
+
+            min-width: 165px;
+
+            padding:
+                8px
+                10px;
+
+            border:
+                1px solid
+                rgba(101,255,131,.12);
+
+            border-radius: 9px;
+
+            background: #06100a;
+
+            color: #dce5df;
+
+            font-size: 7px;
+            font-weight: 900;
+
+            letter-spacing: .5px;
+
+            white-space: nowrap;
+
+            opacity: 0;
+            visibility: hidden;
+
+            transform:
+                translateY(4px);
+
+            transition:
+                opacity .15s ease,
+                transform .15s ease,
+                visibility .15s ease;
+
+            pointer-events: none;
+
+            z-index: 20;
+        }
+
+        .contest-member-status:hover::after {
+            opacity: 1;
+            visibility: visible;
+
+            transform:
+                translateY(0);
+        }
+
+
         .contest-empty {
             padding:
                 40px
@@ -1446,11 +1361,6 @@
         .contest-empty[hidden] {
             display: none;
         }
-
-
-        /* =====================================================
-           CONTEST PAGINATION
-        ===================================================== */
 
         .contest-pagination {
             min-height: 58px;
@@ -1468,9 +1378,6 @@
             border-top:
                 1px solid
                 rgba(255,255,255,.05);
-
-            background:
-                rgba(255,255,255,.01);
         }
 
         .contest-pagination[hidden] {
@@ -1498,21 +1405,6 @@
 
             font-size: 7px;
             font-weight: 900;
-
-            letter-spacing: .9px;
-
-            transition:
-                border-color .2s ease,
-                background .2s ease,
-                opacity .2s ease;
-        }
-
-        .contest-page-button:hover:not(:disabled) {
-            border-color:
-                rgba(101,255,131,.35);
-
-            background:
-                rgba(101,255,131,.075);
         }
 
         .contest-page-button:disabled {
@@ -1529,14 +1421,7 @@
 
             font-size: 8px;
             font-weight: 900;
-
-            letter-spacing: 1px;
         }
-
-
-        /* =====================================================
-           MEMBER STATS
-        ===================================================== */
 
         .stats-grid {
             display: grid;
@@ -1569,8 +1454,6 @@
 
             font-size: 8px;
             font-weight: 900;
-
-            letter-spacing: 1.8px;
         }
 
         .stat-card strong {
@@ -1592,14 +1475,7 @@
 
             font-size: 9px;
             font-weight: 800;
-
-            letter-spacing: .4px;
         }
-
-
-        /* =====================================================
-           MEMBERS PANEL
-        ===================================================== */
 
         .members-panel {
             margin-top: 22px;
@@ -1633,20 +1509,16 @@
 
             font-size: 8px;
             font-weight: 900;
-
-            letter-spacing: 2px;
         }
 
         .members-panel-title h2 {
             margin-top: 5px;
-
             font-size: 24px;
         }
 
         .members-tools {
             display: flex;
             align-items: center;
-
             gap: 10px;
         }
 
@@ -1676,19 +1548,6 @@
             font-size: 12px;
         }
 
-        .member-search::placeholder {
-            color: #59665e;
-        }
-
-        .member-search:focus {
-            border-color:
-                rgba(101,255,131,.42);
-
-            box-shadow:
-                0 0 0 3px
-                rgba(101,255,131,.05);
-        }
-
         .refresh-button {
             min-height: 43px;
 
@@ -1709,27 +1568,7 @@
 
             font-size: 9px;
             font-weight: 900;
-
-            letter-spacing: 1.2px;
         }
-
-        .refresh-button:hover {
-            border-color:
-                rgba(101,255,131,.35);
-
-            background:
-                rgba(101,255,131,.075);
-        }
-
-        .refresh-button:disabled {
-            opacity: .45;
-            cursor: not-allowed;
-        }
-
-
-        /* =====================================================
-           MEMBERS TABLE
-        ===================================================== */
 
         .members-table-wrap {
             width: 100%;
@@ -1764,8 +1603,6 @@
             font-size: 8px;
             font-weight: 900;
 
-            letter-spacing: 1.4px;
-
             white-space: nowrap;
         }
 
@@ -1781,13 +1618,6 @@
             color: #cbd5cf;
 
             font-size: 11px;
-
-            vertical-align: middle;
-        }
-
-        .members-table tr:hover td {
-            background:
-                rgba(101,255,131,.018);
         }
 
         .telegram-name {
@@ -1807,7 +1637,6 @@
         .wallet-cell {
             display: flex;
             align-items: center;
-
             gap: 8px;
         }
 
@@ -1815,17 +1644,13 @@
             max-width: 220px;
 
             overflow: hidden;
-
             white-space: nowrap;
-
             text-overflow: ellipsis;
 
             color: #aab6ae;
         }
 
         .copy-button {
-            flex: 0 0 auto;
-
             padding:
                 7px
                 9px;
@@ -1843,23 +1668,11 @@
 
             font-size: 7px;
             font-weight: 900;
-
-            letter-spacing: .8px;
-        }
-
-        .copy-button:hover {
-            border-color:
-                rgba(101,255,131,.3);
-
-            background:
-                rgba(101,255,131,.07);
         }
 
         .telegram-group-badge {
             display: inline-flex;
             align-items: center;
-
-            gap: 7px;
 
             padding:
                 7px
@@ -1869,8 +1682,6 @@
 
             font-size: 8px;
             font-weight: 900;
-
-            letter-spacing: .7px;
 
             white-space: nowrap;
         }
@@ -1930,11 +1741,6 @@
             color: #65ff83 !important;
         }
 
-
-        /* =====================================================
-           RESPONSIVE
-        ===================================================== */
-
         @media (max-width: 1200px) {
 
             .contest-list-top {
@@ -1954,7 +1760,6 @@
 
         }
 
-
         @media (max-width: 1100px) {
 
             .stats-grid {
@@ -1968,7 +1773,6 @@
 
         }
 
-
         @media (max-width: 1000px) {
 
             .admin-hero {
@@ -1976,7 +1780,6 @@
             }
 
         }
-
 
         @media (max-width: 700px) {
 
@@ -2000,44 +1803,24 @@
                 flex-wrap: wrap;
             }
 
-            .admin-hero-main {
-                padding:
-                    28px
-                    22px;
-            }
-
-            .admin-hero-main h1 {
-                letter-spacing: -2px;
-            }
-
-            .private-card {
-                padding:
-                    24px
-                    20px;
-            }
-
             .stats-grid {
                 grid-template-columns:
                     repeat(2, minmax(0, 1fr));
             }
 
-            .members-panel-top {
-                align-items: stretch;
-                flex-direction: column;
-            }
-
-            .members-tools {
-                width: 100%;
-
+            .members-panel-top,
+            .members-tools,
+            .contest-panel-header,
+            .contest-tools {
                 flex-direction: column;
                 align-items: stretch;
             }
 
-            .member-search {
-                width: 100%;
-            }
-
-            .refresh-button {
+            .member-search,
+            .refresh-button,
+            .contest-search-wrap,
+            .contest-sort-wrap,
+            .contest-close-button {
                 width: 100%;
             }
 
@@ -2045,30 +1828,7 @@
                 grid-template-columns: 1fr;
             }
 
-            .contest-panel-header {
-                align-items: flex-start;
-                flex-direction: column;
-            }
-
-            .contest-close-button {
-                width: 100%;
-            }
-
-            .contest-tools {
-                flex-direction: column;
-                align-items: stretch;
-            }
-
-            .contest-search-wrap {
-                width: 100%;
-            }
-
-            .contest-sort-wrap {
-                width: 100%;
-            }
-
         }
-
 
         @media (max-width: 480px) {
 
@@ -2077,104 +1837,16 @@
                     calc(100% - 16px);
             }
 
-            .admin-header {
-                border-radius: 17px;
-                padding: 13px;
-            }
-
-            .admin-brand img {
-                width: 46px;
-                height: 46px;
-            }
-
-            .admin-hero {
-                margin-top: 14px;
-                gap: 14px;
-            }
-
-            .admin-hero-main {
-                min-height: 0;
-
-                padding:
-                    26px
-                    19px;
-
-                border-radius: 20px;
-            }
-
             .admin-hero-main h1 {
                 font-size: 39px;
-                letter-spacing: -2px;
-            }
-
-            .admin-hero-main p {
-                font-size: 12px;
-            }
-
-            .private-card {
-                border-radius: 20px;
-            }
-
-            .contest-open-button {
-                min-height: 72px;
-            }
-
-            .admin-message {
-                margin-top: 14px;
-                padding: 16px;
-            }
-
-            .admin-dashboard {
-                margin-top: 14px;
             }
 
             .stats-grid {
                 grid-template-columns: 1fr;
-                gap: 10px;
-            }
-
-            .stat-card {
-                min-height: 0;
-            }
-
-            .members-panel {
-                margin-top: 14px;
-                border-radius: 20px;
-            }
-
-            .members-panel-top {
-                padding: 18px;
             }
 
             .contest-body {
                 padding: 14px;
-            }
-
-            .contest-stats {
-                padding:
-                    14px
-                    14px
-                    0;
-            }
-
-            .contest-panel-header {
-                padding: 16px;
-            }
-
-            .contest-pagination {
-                gap: 7px;
-            }
-
-            .contest-page-button {
-                min-width: 76px;
-
-                padding:
-                    0
-                    8px;
-            }
-
-            .contest-page-info {
-                min-width: 62px;
             }
 
         }
@@ -2185,7 +1857,6 @@
 
 
 <body>
-
 
     <div
         class="admin-background"
@@ -2206,12 +1877,7 @@
     <main class="admin-shell">
 
 
-        <!-- =================================================
-             HEADER
-        ================================================== -->
-
         <header class="admin-header">
-
 
             <div class="admin-brand">
 
@@ -2247,7 +1913,6 @@
 
                 </div>
 
-
                 <a
                     href="index.html"
                     class="back-site-button"
@@ -2257,16 +1922,10 @@
 
             </div>
 
-
         </header>
 
 
-        <!-- =================================================
-             HERO
-        ================================================== -->
-
         <section class="admin-hero">
-
 
             <div class="admin-hero-main">
 
@@ -2297,10 +1956,6 @@
 
             </div>
 
-
-            <!-- =================================================
-                 PRIVATE ACCESS
-            ================================================== -->
 
             <aside class="private-card">
 
@@ -2367,13 +2022,8 @@
 
             </aside>
 
-
         </section>
 
-
-        <!-- =================================================
-             MESSAGE
-        ================================================== -->
 
         <div
             class="admin-message"
@@ -2383,10 +2033,6 @@
         </div>
 
 
-        <!-- =================================================
-             DASHBOARD
-        ================================================== -->
-
         <section
             class="admin-dashboard"
             id="adminDashboard"
@@ -2394,16 +2040,11 @@
         >
 
 
-            <!-- =================================================
-                 CONTEST PANEL
-            ================================================== -->
-
             <section
                 class="contest-panel"
                 id="contestPanel"
                 hidden
             >
-
 
                 <div class="contest-panel-header">
 
@@ -2439,12 +2080,7 @@
                 </div>
 
 
-                <!-- =================================================
-                     CONTEST STATS
-                ================================================== -->
-
                 <div class="contest-stats">
-
 
                     <article class="contest-stat-card">
 
@@ -2479,20 +2115,11 @@
 
                     </article>
 
-
                 </div>
 
 
-                <!-- =================================================
-                     CONTEST BODY
-                ================================================== -->
-
                 <div class="contest-body">
 
-
-                    <!-- =================================================
-                         ADD / EDIT FORM
-                    ================================================== -->
 
                     <section class="contest-form-card">
 
@@ -2611,25 +2238,14 @@
                                 id="contestFormMessage"
                             ></p>
 
-
                         </form>
 
                     </section>
 
 
-                    <!-- =================================================
-                         PARTICIPANTS LIST
-                    ================================================== -->
-
                     <section class="contest-list-card">
 
-
-                        <!-- =================================================
-                             SEARCH + SORT
-                        ================================================== -->
-
                         <div class="contest-list-top">
-
 
                             <div class="contest-list-title">
 
@@ -2645,9 +2261,6 @@
 
 
                             <div class="contest-tools">
-
-
-                                <!-- SEARCH -->
 
                                 <div class="contest-search-wrap">
 
@@ -2669,8 +2282,6 @@
 
                                 </div>
 
-
-                                <!-- SORT -->
 
                                 <div class="contest-sort-wrap">
 
@@ -2715,22 +2326,14 @@
 
                                 </div>
 
-
                             </div>
-
 
                         </div>
 
 
-                        <!-- =================================================
-                             TABLE
-                        ================================================== -->
-
                         <div class="contest-table-wrap">
 
-
                             <table class="contest-table">
-
 
                                 <thead>
 
@@ -2760,6 +2363,10 @@
                                             ACTIONS
                                         </th>
 
+                                        <th>
+                                            STATUS
+                                        </th>
+
                                     </tr>
 
                                 </thead>
@@ -2767,7 +2374,6 @@
 
                                 <tbody id="contestTableBody">
                                 </tbody>
-
 
                             </table>
 
@@ -2779,13 +2385,8 @@
                                 NO CONTEST ENTRIES YET.
                             </div>
 
-
                         </div>
 
-
-                        <!-- =================================================
-                             PAGINATION
-                        ================================================== -->
 
                         <div
                             class="contest-pagination"
@@ -2820,22 +2421,14 @@
 
                         </div>
 
-
                     </section>
 
-
                 </div>
-
 
             </section>
 
 
-            <!-- =================================================
-                 MEMBER STATS
-            ================================================== -->
-
             <div class="stats-grid">
-
 
                 <article class="stat-card">
 
@@ -2904,19 +2497,12 @@
 
                 </article>
 
-
             </div>
 
 
-            <!-- =================================================
-                 MEMBERS
-            ================================================== -->
-
             <section class="members-panel">
 
-
                 <div class="members-panel-top">
-
 
                     <div class="members-panel-title">
 
@@ -2932,7 +2518,6 @@
 
 
                     <div class="members-tools">
-
 
                         <input
                             type="search"
@@ -2951,18 +2536,14 @@
                             REFRESH
                         </button>
 
-
                     </div>
-
 
                 </div>
 
 
                 <div class="members-table-wrap">
 
-
                     <table class="members-table">
-
 
                         <thead>
 
@@ -3008,7 +2589,6 @@
                         <tbody id="membersTableBody">
                         </tbody>
 
-
                     </table>
 
 
@@ -3020,9 +2600,7 @@
                         NO MEMBERS FOUND.
                     </div>
 
-
                 </div>
-
 
             </section>
 
@@ -3033,12 +2611,7 @@
     </main>
 
 
-    <!-- =====================================================
-         SCRIPT
-    ====================================================== -->
-
-    <script src="admin.js?v=105"></script>
-
+    <script src="admin.js?v=106"></script>
 
 </body>
 
