@@ -35,12 +35,12 @@
             background:
                 radial-gradient(
                     circle at top right,
-                    rgba(79, 255, 127, .08),
+                    rgba(79,255,127,.08),
                     transparent 34%
                 ),
                 radial-gradient(
                     circle at bottom left,
-                    rgba(32, 153, 87, .08),
+                    rgba(32,153,87,.08),
                     transparent 34%
                 ),
                 #020706;
@@ -69,10 +69,18 @@
             text-decoration: none;
         }
 
+        button {
+            outline: none;
+        }
+
+
+        /* =====================================================
+           BACKGROUND
+        ===================================================== */
+
         .admin-background {
             position: fixed;
             inset: 0;
-
             z-index: -1;
 
             overflow: hidden;
@@ -107,11 +115,17 @@
             background: #14854d;
         }
 
+
+        /* =====================================================
+           SHELL
+        ===================================================== */
+
         .admin-shell {
-            width: min(
-                1500px,
-                calc(100% - 40px)
-            );
+            width:
+                min(
+                    1500px,
+                    calc(100% - 40px)
+                );
 
             margin: 0 auto;
 
@@ -141,12 +155,12 @@
 
             border:
                 1px solid
-                rgba(103, 255, 134, .11);
+                rgba(103,255,134,.11);
 
             border-radius: 22px;
 
             background:
-                rgba(4, 13, 9, .72);
+                rgba(4,13,9,.72);
 
             backdrop-filter:
                 blur(18px);
@@ -175,7 +189,6 @@
 
         .admin-brand-copy strong {
             font-size: 18px;
-
             letter-spacing: 1px;
         }
 
@@ -207,12 +220,12 @@
 
             border:
                 1px solid
-                rgba(101, 255, 131, .13);
+                rgba(101,255,131,.13);
 
             border-radius: 999px;
 
             background:
-                rgba(54, 255, 108, .035);
+                rgba(54,255,108,.035);
 
             color: #9ca9a1;
 
@@ -232,7 +245,7 @@
 
             box-shadow:
                 0 0 12px
-                rgba(101, 255, 131, .75);
+                rgba(101,255,131,.75);
         }
 
         .back-site-button {
@@ -242,12 +255,12 @@
 
             border:
                 1px solid
-                rgba(255, 255, 255, .08);
+                rgba(255,255,255,.08);
 
             border-radius: 999px;
 
             background:
-                rgba(255, 255, 255, .035);
+                rgba(255,255,255,.035);
 
             color: #dce5df;
 
@@ -259,10 +272,10 @@
 
         .back-site-button:hover {
             border-color:
-                rgba(101, 255, 131, .25);
+                rgba(101,255,131,.25);
 
             background:
-                rgba(101, 255, 131, .055);
+                rgba(101,255,131,.055);
         }
 
 
@@ -276,8 +289,8 @@
             display: grid;
 
             grid-template-columns:
-                minmax(0, 1.25fr)
-                minmax(280px, .75fr);
+                minmax(0,1.25fr)
+                minmax(280px,.75fr);
 
             gap: 22px;
         }
@@ -293,15 +306,15 @@
 
             border:
                 1px solid
-                rgba(101, 255, 131, .13);
+                rgba(101,255,131,.13);
 
             border-radius: 26px;
 
             background:
                 linear-gradient(
                     145deg,
-                    rgba(8, 24, 14, .95),
-                    rgba(2, 9, 6, .96)
+                    rgba(8,24,14,.95),
+                    rgba(2,9,6,.96)
                 );
         }
 
@@ -359,7 +372,7 @@
 
             box-shadow:
                 0 0 22px
-                rgba(101, 255, 131, .4);
+                rgba(101,255,131,.4);
         }
 
         .hero-orb {
@@ -374,7 +387,7 @@
             border-radius: 50%;
 
             background:
-                rgba(91, 255, 132, .12);
+                rgba(91,255,132,.12);
 
             filter: blur(40px);
 
@@ -391,12 +404,12 @@
 
             border:
                 1px solid
-                rgba(101, 255, 131, .13);
+                rgba(101,255,131,.13);
 
             border-radius: 26px;
 
             background:
-                rgba(4, 15, 9, .84);
+                rgba(4,15,9,.84);
         }
 
         .private-card-tag {
@@ -433,12 +446,12 @@
 
             border:
                 1px solid
-                rgba(101, 255, 131, .12);
+                rgba(101,255,131,.12);
 
             border-radius: 15px;
 
             background:
-                rgba(101, 255, 131, .03);
+                rgba(101,255,131,.03);
         }
 
         .private-id-box small {
@@ -462,9 +475,13 @@
             font-size: 12px;
         }
 
+
+        /* =====================================================
+           CONTEST OPEN BUTTON
+        ===================================================== */
+
         .contest-open-button {
             width: 100%;
-
             min-height: 66px;
 
             margin-top: 18px;
@@ -481,15 +498,15 @@
 
             border:
                 1px solid
-                rgba(101, 255, 131, .38);
+                rgba(101,255,131,.38);
 
             border-radius: 15px;
 
             background:
                 linear-gradient(
                     135deg,
-                    rgba(101, 255, 131, .07),
-                    rgba(2, 10, 6, .7)
+                    rgba(101,255,131,.07),
+                    rgba(2,10,6,.7)
                 );
 
             color: #eef5f0;
@@ -497,10 +514,10 @@
 
         .contest-open-button:hover {
             border-color:
-                rgba(101, 255, 131, .72);
+                rgba(101,255,131,.72);
 
             background:
-                rgba(101, 255, 131, .09);
+                rgba(101,255,131,.09);
         }
 
         .contest-open-button:disabled {
@@ -562,12 +579,12 @@
 
             border:
                 1px solid
-                rgba(255, 255, 255, .07);
+                rgba(255,255,255,.07);
 
             border-radius: 18px;
 
             background:
-                rgba(255, 255, 255, .025);
+                rgba(255,255,255,.025);
 
             color: #99a59e;
 
@@ -576,17 +593,22 @@
 
         .admin-message.success {
             border-color:
-                rgba(101, 255, 131, .18);
+                rgba(101,255,131,.18);
 
             color: #65ff83;
         }
 
         .admin-message.error {
             border-color:
-                rgba(255, 89, 100, .2);
+                rgba(255,89,100,.2);
 
             color: #ff717b;
         }
+
+
+        /* =====================================================
+           DASHBOARD
+        ===================================================== */
 
         .admin-dashboard {
             margin-top: 24px;
@@ -606,14 +628,14 @@
 
             border:
                 1px solid
-                rgba(101, 255, 131, .15);
+                rgba(101,255,131,.15);
 
             border-radius: 24px;
 
             overflow: hidden;
 
             background:
-                rgba(4, 12, 8, .84);
+                rgba(4,12,8,.84);
         }
 
         .contest-panel[hidden] {
@@ -635,7 +657,7 @@
 
             border-bottom:
                 1px solid
-                rgba(255, 255, 255, .05);
+                rgba(255,255,255,.05);
         }
 
         .contest-panel-title {
@@ -675,12 +697,12 @@
 
             border:
                 1px solid
-                rgba(255, 255, 255, .08);
+                rgba(255,255,255,.08);
 
             border-radius: 10px;
 
             background:
-                rgba(255, 255, 255, .025);
+                rgba(255,255,255,.025);
 
             color: #849188;
 
@@ -688,11 +710,16 @@
             font-weight: 900;
         }
 
+
+        /* =====================================================
+           CONTEST STATS
+        ===================================================== */
+
         .contest-stats {
             display: grid;
 
             grid-template-columns:
-                repeat(2, minmax(0, 1fr));
+                repeat(2,minmax(0,1fr));
 
             gap: 14px;
 
@@ -707,12 +734,12 @@
 
             border:
                 1px solid
-                rgba(101, 255, 131, .09);
+                rgba(101,255,131,.09);
 
             border-radius: 15px;
 
             background:
-                rgba(101, 255, 131, .025);
+                rgba(101,255,131,.025);
         }
 
         .contest-stat-card span {
@@ -747,14 +774,19 @@
             font-weight: 900;
         }
 
+
+        /* =====================================================
+           CONTEST BODY
+        ===================================================== */
+
         .contest-body {
             padding: 22px;
 
             display: grid;
 
             grid-template-columns:
-                minmax(280px, .36fr)
-                minmax(0, .64fr);
+                minmax(280px,.36fr)
+                minmax(0,.64fr);
 
             gap: 18px;
         }
@@ -763,12 +795,12 @@
         .contest-list-card {
             border:
                 1px solid
-                rgba(101, 255, 131, .09);
+                rgba(101,255,131,.09);
 
             border-radius: 18px;
 
             background:
-                rgba(0, 8, 5, .42);
+                rgba(0,8,5,.42);
         }
 
         .contest-form-card {
@@ -805,7 +837,6 @@
 
         .contest-form input {
             width: 100%;
-
             min-height: 44px;
 
             padding:
@@ -814,14 +845,14 @@
 
             border:
                 1px solid
-                rgba(101, 255, 131, .11);
+                rgba(101,255,131,.11);
 
             border-radius: 11px;
 
             outline: none;
 
             background:
-                rgba(0, 5, 3, .7);
+                rgba(0,5,3,.7);
 
             color: #eef4f0;
 
@@ -830,7 +861,7 @@
 
         .contest-form input:focus {
             border-color:
-                rgba(101, 255, 131, .42);
+                rgba(101,255,131,.42);
         }
 
         .contest-requirements {
@@ -855,10 +886,10 @@
         .contest-rule-button.yes {
             border:
                 1px solid
-                rgba(101, 255, 131, .22);
+                rgba(101,255,131,.22);
 
             background:
-                rgba(101, 255, 131, .05);
+                rgba(101,255,131,.05);
 
             color: #65ff83;
         }
@@ -866,28 +897,28 @@
         .contest-rule-button.no {
             border:
                 1px solid
-                rgba(255, 89, 100, .22);
+                rgba(255,89,100,.22);
 
             background:
-                rgba(255, 89, 100, .04);
+                rgba(255,89,100,.04);
 
             color: #ff717b;
         }
 
         .contest-rule-button.active.yes {
             background:
-                rgba(101, 255, 131, .13);
+                rgba(101,255,131,.13);
 
             border-color:
-                rgba(101, 255, 131, .55);
+                rgba(101,255,131,.55);
         }
 
         .contest-rule-button.active.no {
             background:
-                rgba(255, 89, 100, .11);
+                rgba(255,89,100,.11);
 
             border-color:
-                rgba(255, 89, 100, .5);
+                rgba(255,89,100,.5);
         }
 
         .contest-submit-button {
@@ -897,12 +928,12 @@
 
             border:
                 1px solid
-                rgba(101, 255, 131, .42);
+                rgba(101,255,131,.42);
 
             border-radius: 12px;
 
             background:
-                rgba(101, 255, 131, .08);
+                rgba(101,255,131,.08);
 
             color: #65ff83;
 
@@ -915,12 +946,12 @@
 
             border:
                 1px solid
-                rgba(255, 255, 255, .08);
+                rgba(255,255,255,.08);
 
             border-radius: 11px;
 
             background:
-                rgba(255, 255, 255, .025);
+                rgba(255,255,255,.025);
 
             color: #87938b;
 
@@ -950,6 +981,11 @@
             color: #ff717b;
         }
 
+
+        /* =====================================================
+           CONTEST LIST
+        ===================================================== */
+
         .contest-list-card {
             overflow: hidden;
         }
@@ -967,7 +1003,7 @@
 
             border-bottom:
                 1px solid
-                rgba(255, 255, 255, .05);
+                rgba(255,255,255,.05);
         }
 
         .contest-list-title {
@@ -1004,14 +1040,17 @@
         }
 
         .contest-search-wrap {
-            width: min(280px, 100%);
+            width:
+                min(
+                    280px,
+                    100%
+                );
 
             position: relative;
         }
 
         .contest-search {
             width: 100%;
-
             min-height: 42px;
 
             padding:
@@ -1022,14 +1061,14 @@
 
             border:
                 1px solid
-                rgba(101, 255, 131, .13);
+                rgba(101,255,131,.13);
 
             border-radius: 12px;
 
             outline: none;
 
             background:
-                rgba(0, 5, 3, .74);
+                rgba(0,5,3,.74);
 
             color: #eef4f0;
 
@@ -1058,7 +1097,6 @@
 
         .contest-sort {
             width: 100%;
-
             min-height: 42px;
 
             padding:
@@ -1069,14 +1107,14 @@
 
             border:
                 1px solid
-                rgba(101, 255, 131, .13);
+                rgba(101,255,131,.13);
 
             border-radius: 12px;
 
             outline: none;
 
             background:
-                rgba(0, 5, 3, .74);
+                rgba(0,5,3,.74);
 
             color: #65ff83;
 
@@ -1109,6 +1147,11 @@
             pointer-events: none;
         }
 
+
+        /* =====================================================
+           CONTEST TABLE
+        ===================================================== */
+
         .contest-table-wrap {
             width: 100%;
 
@@ -1133,7 +1176,7 @@
             color: #657269;
 
             background:
-                rgba(255, 255, 255, .015);
+                rgba(255,255,255,.015);
 
             font-size: 7px;
             font-weight: 900;
@@ -1148,7 +1191,7 @@
 
             border-top:
                 1px solid
-                rgba(255, 255, 255, .04);
+                rgba(255,255,255,.04);
 
             color: #cbd5cf;
 
@@ -1193,10 +1236,10 @@
         .contest-rule-badge.yes {
             border:
                 1px solid
-                rgba(101, 255, 131, .24);
+                rgba(101,255,131,.24);
 
             background:
-                rgba(101, 255, 131, .07);
+                rgba(101,255,131,.07);
 
             color: #65ff83;
         }
@@ -1204,10 +1247,10 @@
         .contest-rule-badge.no {
             border:
                 1px solid
-                rgba(255, 89, 100, .24);
+                rgba(255,89,100,.24);
 
             background:
-                rgba(255, 89, 100, .06);
+                rgba(255,89,100,.06);
 
             color: #ff717b;
         }
@@ -1235,10 +1278,10 @@
         .contest-action-button.edit {
             border:
                 1px solid
-                rgba(101, 255, 131, .18);
+                rgba(101,255,131,.18);
 
             background:
-                rgba(101, 255, 131, .04);
+                rgba(101,255,131,.04);
 
             color: #65ff83;
         }
@@ -1246,13 +1289,18 @@
         .contest-action-button.delete {
             border:
                 1px solid
-                rgba(255, 89, 100, .18);
+                rgba(255,89,100,.18);
 
             background:
-                rgba(255, 89, 100, .04);
+                rgba(255,89,100,.04);
 
             color: #ff717b;
         }
+
+
+        /* =====================================================
+           CONTEST MEMBER STATUS
+        ===================================================== */
 
         .contest-member-status-cell {
             text-align: center;
@@ -1280,11 +1328,11 @@
 
         .contest-member-status.verified {
             background:
-                rgba(101, 255, 131, .07);
+                rgba(101,255,131,.07);
 
             border:
                 1px solid
-                rgba(101, 255, 131, .18);
+                rgba(101,255,131,.18);
         }
 
         .contest-member-status.verified
@@ -1293,16 +1341,16 @@
 
             box-shadow:
                 0 0 12px
-                rgba(101, 255, 131, .85);
+                rgba(101,255,131,.85);
         }
 
         .contest-member-status.registered {
             background:
-                rgba(255, 174, 66, .07);
+                rgba(255,174,66,.07);
 
             border:
                 1px solid
-                rgba(255, 174, 66, .22);
+                rgba(255,174,66,.22);
         }
 
         .contest-member-status.registered
@@ -1311,16 +1359,16 @@
 
             box-shadow:
                 0 0 12px
-                rgba(255, 174, 66, .75);
+                rgba(255,174,66,.75);
         }
 
         .contest-member-status.not-found {
             background:
-                rgba(255, 89, 100, .07);
+                rgba(255,89,100,.07);
 
             border:
                 1px solid
-                rgba(255, 89, 100, .22);
+                rgba(255,89,100,.22);
         }
 
         .contest-member-status.not-found
@@ -1329,16 +1377,22 @@
 
             box-shadow:
                 0 0 12px
-                rgba(255, 89, 100, .75);
+                rgba(255,89,100,.75);
         }
 
         .contest-member-status::after {
-            content: attr(data-tooltip);
+            content:
+                attr(
+                    data-tooltip
+                );
 
             position: absolute;
 
             right: 0;
-            bottom: calc(100% + 9px);
+            bottom:
+                calc(
+                    100% + 9px
+                );
 
             min-width: 165px;
 
@@ -1348,7 +1402,7 @@
 
             border:
                 1px solid
-                rgba(101, 255, 131, .12);
+                rgba(101,255,131,.12);
 
             border-radius: 9px;
 
@@ -1381,11 +1435,17 @@
 
         .contest-member-status:hover::after {
             opacity: 1;
+
             visibility: visible;
 
             transform:
                 translateY(0);
         }
+
+
+        /* =====================================================
+           EMPTY / PAGINATION
+        ===================================================== */
 
         .contest-empty {
             padding:
@@ -1403,13 +1463,7 @@
             display: none;
         }
 
-
-        /* =====================================================
-           PAGINATION
-        ===================================================== */
-
-        .contest-pagination,
-        .members-pagination {
+        .contest-pagination {
             min-height: 58px;
 
             padding:
@@ -1424,16 +1478,14 @@
 
             border-top:
                 1px solid
-                rgba(255, 255, 255, .05);
+                rgba(255,255,255,.05);
         }
 
-        .contest-pagination[hidden],
-        .members-pagination[hidden] {
+        .contest-pagination[hidden] {
             display: none;
         }
 
-        .contest-page-button,
-        .members-page-button {
+        .contest-page-button {
             min-width: 92px;
             min-height: 34px;
 
@@ -1443,12 +1495,12 @@
 
             border:
                 1px solid
-                rgba(101, 255, 131, .13);
+                rgba(101,255,131,.13);
 
             border-radius: 9px;
 
             background:
-                rgba(101, 255, 131, .035);
+                rgba(101,255,131,.035);
 
             color: #65ff83;
 
@@ -1456,15 +1508,13 @@
             font-weight: 900;
         }
 
-        .contest-page-button:disabled,
-        .members-page-button:disabled {
+        .contest-page-button:disabled {
             opacity: .25;
 
             cursor: not-allowed;
         }
 
-        .contest-page-info,
-        .members-page-info {
+        .contest-page-info {
             min-width: 85px;
 
             text-align: center;
@@ -1477,14 +1527,17 @@
 
 
         /* =====================================================
-           STATS
+           MAIN STATS
         ===================================================== */
 
         .stats-grid {
             display: grid;
 
             grid-template-columns:
-                repeat(5, minmax(0, 1fr));
+                repeat(
+                    5,
+                    minmax(0,1fr)
+                );
 
             gap: 14px;
         }
@@ -1496,12 +1549,12 @@
 
             border:
                 1px solid
-                rgba(101, 255, 131, .09);
+                rgba(101,255,131,.09);
 
             border-radius: 20px;
 
             background:
-                rgba(5, 15, 10, .72);
+                rgba(5,15,10,.72);
         }
 
         .stat-card span {
@@ -1536,7 +1589,7 @@
 
 
         /* =====================================================
-           MEMBERS
+           MEMBERS PANEL
         ===================================================== */
 
         .members-panel {
@@ -1544,14 +1597,20 @@
 
             border:
                 1px solid
-                rgba(101, 255, 131, .1);
+                rgba(101,255,131,.1);
 
             border-radius: 24px;
 
+            /*
+                IMPORTANT:
+                We keep the rounded outer panel,
+                but the members table itself does not
+                create a horizontal desktop scrollbar.
+            */
             overflow: hidden;
 
             background:
-                rgba(4, 12, 8, .78);
+                rgba(4,12,8,.78);
         }
 
         .members-panel-top {
@@ -1587,7 +1646,7 @@
         }
 
         .member-search {
-            width: 360px;
+            width: 370px;
             max-width: 100%;
 
             min-height: 43px;
@@ -1598,23 +1657,18 @@
 
             border:
                 1px solid
-                rgba(101, 255, 131, .12);
+                rgba(101,255,131,.12);
 
             border-radius: 12px;
 
             outline: none;
 
             background:
-                rgba(0, 5, 3, .65);
+                rgba(0,5,3,.65);
 
             color: #eef4f0;
 
             font-size: 12px;
-        }
-
-        .member-search:focus {
-            border-color:
-                rgba(101, 255, 131, .4);
         }
 
         .refresh-button {
@@ -1626,12 +1680,12 @@
 
             border:
                 1px solid
-                rgba(101, 255, 131, .13);
+                rgba(101,255,131,.13);
 
             border-radius: 12px;
 
             background:
-                rgba(101, 255, 131, .04);
+                rgba(101,255,131,.04);
 
             color: #65ff83;
 
@@ -1639,59 +1693,173 @@
             font-weight: 900;
         }
 
+
+        /* =====================================================
+           MEMBERS TABLE
+           DESKTOP = NO HORIZONTAL BAR
+        ===================================================== */
+
         .members-table-wrap {
             width: 100%;
+            max-width: 100%;
 
-            overflow-x: auto;
+            /*
+                This removes the grey horizontal bar
+                on normal desktop screens.
+            */
+            overflow-x: hidden;
 
             border-top:
                 1px solid
-                rgba(255, 255, 255, .05);
+                rgba(255,255,255,.05);
         }
 
         .members-table {
             width: 100%;
 
-            min-width: 1580px;
+            /*
+                No forced 1380 / 1580px width anymore.
+            */
+            min-width: 0;
+
+            table-layout: fixed;
 
             border-collapse: collapse;
         }
 
         .members-table th {
             padding:
-                15px
-                18px;
+                13px
+                7px;
 
             text-align: left;
 
             color: #657269;
 
             background:
-                rgba(255, 255, 255, .018);
+                rgba(255,255,255,.018);
 
-            font-size: 8px;
+            font-size: 7px;
             font-weight: 900;
 
-            white-space: nowrap;
+            line-height: 1.25;
+
+            letter-spacing: .15px;
+
+            white-space: normal;
+
+            overflow-wrap: anywhere;
         }
 
         .members-table td {
+            min-width: 0;
+
             padding:
-                17px
-                18px;
+                15px
+                7px;
 
             border-top:
                 1px solid
-                rgba(255, 255, 255, .045);
+                rgba(255,255,255,.045);
 
             color: #cbd5cf;
 
-            font-size: 11px;
+            font-size: 9px;
+
+            line-height: 1.3;
 
             vertical-align: middle;
+
+            overflow: hidden;
         }
 
+        .members-table tr:hover td {
+            background:
+                rgba(101,255,131,.018);
+        }
+
+
+        /*
+            COLUMN WIDTHS
+
+            1  Telegram name
+            2  Telegram username
+            3  Chat
+            4  Announcements
+            5  X
+            6  Solana
+            7  Joined
+            8  Updated
+            9  Country
+            10 Wallet
+        */
+
+        .members-table th:nth-child(1),
+        .members-table td:nth-child(1) {
+            width: 11%;
+        }
+
+        .members-table th:nth-child(2),
+        .members-table td:nth-child(2) {
+            width: 10%;
+        }
+
+        .members-table th:nth-child(3),
+        .members-table td:nth-child(3) {
+            width: 10%;
+        }
+
+        .members-table th:nth-child(4),
+        .members-table td:nth-child(4) {
+            width: 14%;
+        }
+
+        .members-table th:nth-child(5),
+        .members-table td:nth-child(5) {
+            width: 9%;
+        }
+
+        .members-table th:nth-child(6),
+        .members-table td:nth-child(6) {
+            width: 12%;
+        }
+
+        .members-table th:nth-child(7),
+        .members-table td:nth-child(7) {
+            width: 9%;
+        }
+
+        .members-table th:nth-child(8),
+        .members-table td:nth-child(8) {
+            width: 9%;
+        }
+
+        .members-table th:nth-child(9),
+        .members-table td:nth-child(9) {
+            width: 7%;
+        }
+
+        .members-table th:nth-child(10),
+        .members-table td:nth-child(10) {
+            width: 9%;
+        }
+
+
+        /* =====================================================
+           MEMBER VALUES
+        ===================================================== */
+
         .telegram-name {
+            display: block;
+
+            max-width: 100%;
+
+            overflow: hidden;
+
+            white-space: nowrap;
+
+            text-overflow: ellipsis;
+
             color: #f4f7f5;
 
             font-weight: 800;
@@ -1699,6 +1867,16 @@
 
         .telegram-username,
         .x-username {
+            display: block;
+
+            max-width: 100%;
+
+            overflow: hidden;
+
+            white-space: nowrap;
+
+            text-overflow: ellipsis;
+
             color: #65ff83;
         }
 
@@ -1708,18 +1886,24 @@
 
 
         /* =====================================================
-           SOLANA ADDRESS
+           ADDRESS + COPY
         ===================================================== */
 
         .wallet-cell {
+            width: 100%;
+            min-width: 0;
+
             display: flex;
             align-items: center;
 
-            gap: 8px;
+            gap: 5px;
         }
 
         .wallet-address {
-            max-width: 220px;
+            min-width: 0;
+            max-width: 100%;
+
+            flex: 1;
 
             overflow: hidden;
 
@@ -1731,149 +1915,99 @@
         }
 
         .copy-button {
+            flex:
+                0
+                0
+                auto;
+
             padding:
-                7px
-                9px;
+                6px
+                7px;
 
             border:
                 1px solid
-                rgba(101, 255, 131, .11);
+                rgba(101,255,131,.11);
 
             border-radius: 8px;
 
             background:
-                rgba(101, 255, 131, .035);
+                rgba(101,255,131,.035);
 
             color: #65ff83;
 
-            font-size: 7px;
-            font-weight: 900;
-        }
-
-
-        /* =====================================================
-           TELEGRAM STATUS
-        ===================================================== */
-
-        .telegram-group-badge {
-            display: inline-flex;
-            align-items: center;
-
-            padding:
-                7px
-                10px;
-
-            border-radius: 999px;
-
-            font-size: 8px;
+            font-size: 6px;
             font-weight: 900;
 
-            white-space: nowrap;
+            letter-spacing: .3px;
         }
 
-        .telegram-group-badge.member {
-            border:
-                1px solid
-                rgba(101, 255, 131, .25);
-
-            background:
-                rgba(101, 255, 131, .07);
-
-            color: #65ff83;
-        }
-
-        .telegram-group-badge.not-member {
-            border:
-                1px solid
-                rgba(255, 89, 100, .24);
-
-            background:
-                rgba(255, 89, 100, .06);
-
-            color: #ff717b;
-        }
-
-        .telegram-group-badge.unknown {
-            border:
-                1px solid
-                rgba(255, 211, 92, .22);
-
-            background:
-                rgba(255, 211, 92, .05);
-
-            color: #ffd35c;
-        }
-
-        .chat-header,
-        .announcements-header {
-            color: #65ff83 !important;
+        .copy-button:hover {
+            border-color:
+                rgba(101,255,131,.3);
         }
 
 
         /* =====================================================
-           DATE
-        ===================================================== */
-
-        .date-value {
-            color: #75837a;
-
-            white-space: nowrap;
-        }
-
-
-        /* =====================================================
-           NEW: COUNTRY
+           COUNTRY
         ===================================================== */
 
         .country-cell {
             display: inline-flex;
             align-items: center;
 
-            gap: 8px;
+            gap: 5px;
+
+            max-width: 100%;
+
+            color: #cbd5cf;
+
+            font-weight: 900;
 
             white-space: nowrap;
         }
 
         .country-flag {
-            font-size: 16px;
+            flex:
+                0
+                0
+                auto;
+
+            font-size: 13px;
 
             line-height: 1;
         }
 
         .country-name {
-            color: #aab6ae;
+            min-width: 0;
 
-            font-size: 10px;
-            font-weight: 800;
-        }
+            overflow: hidden;
 
-        .country-code {
-            color: #65ff83;
+            white-space: nowrap;
 
-            font-size: 8px;
-            font-weight: 900;
+            text-overflow: ellipsis;
         }
 
 
         /* =====================================================
-           NEW: VERIFIED WALLET YES / NO
+           VERIFIED WALLET YES / NO
         ===================================================== */
 
         .wallet-status-badge {
             display: inline-flex;
             align-items: center;
+            justify-content: center;
 
-            gap: 7px;
+            gap: 5px;
 
-            min-width: 68px;
+            min-width: 56px;
 
             padding:
                 7px
-                10px;
+                8px;
 
             border-radius: 999px;
 
-            font-size: 8px;
+            font-size: 7px;
             font-weight: 900;
 
             white-space: nowrap;
@@ -1883,7 +2017,10 @@
             width: 8px;
             height: 8px;
 
-            flex: 0 0 auto;
+            flex:
+                0
+                0
+                auto;
 
             border-radius: 50%;
         }
@@ -1891,10 +2028,10 @@
         .wallet-status-badge.yes {
             border:
                 1px solid
-                rgba(101, 255, 131, .25);
+                rgba(101,255,131,.25);
 
             background:
-                rgba(101, 255, 131, .07);
+                rgba(101,255,131,.07);
 
             color: #65ff83;
         }
@@ -1904,17 +2041,17 @@
             background: #65ff83;
 
             box-shadow:
-                0 0 12px
-                rgba(101, 255, 131, .8);
+                0 0 10px
+                rgba(101,255,131,.75);
         }
 
         .wallet-status-badge.no {
             border:
                 1px solid
-                rgba(255, 89, 100, .24);
+                rgba(255,89,100,.24);
 
             background:
-                rgba(255, 89, 100, .06);
+                rgba(255,89,100,.06);
 
             color: #ff717b;
         }
@@ -1924,13 +2061,99 @@
             background: #ff5964;
 
             box-shadow:
-                0 0 12px
-                rgba(255, 89, 100, .75);
+                0 0 10px
+                rgba(255,89,100,.65);
         }
 
 
         /* =====================================================
-           EMPTY
+           TELEGRAM GROUP BADGES
+        ===================================================== */
+
+        .telegram-group-badge {
+            display: inline-flex;
+            align-items: center;
+
+            max-width: 100%;
+
+            padding:
+                7px
+                8px;
+
+            border-radius: 999px;
+
+            font-size: 7px;
+            font-weight: 900;
+
+            line-height: 1.15;
+
+            white-space: normal;
+
+            text-align: center;
+        }
+
+        .telegram-group-badge.member {
+            border:
+                1px solid
+                rgba(101,255,131,.25);
+
+            background:
+                rgba(101,255,131,.07);
+
+            color: #65ff83;
+        }
+
+        .telegram-group-badge.not-member {
+            border:
+                1px solid
+                rgba(255,89,100,.24);
+
+            background:
+                rgba(255,89,100,.06);
+
+            color: #ff717b;
+        }
+
+        .telegram-group-badge.unknown {
+            border:
+                1px solid
+                rgba(255,211,92,.22);
+
+            background:
+                rgba(255,211,92,.05);
+
+            color: #ffd35c;
+        }
+
+        .chat-header,
+        .announcements-header {
+            color:
+                #65ff83
+                !important;
+        }
+
+
+        /* =====================================================
+           DATE
+        ===================================================== */
+
+        .date-value {
+            display: block;
+
+            max-width: 100%;
+
+            color: #75837a;
+
+            font-size: 8px;
+
+            line-height: 1.4;
+
+            white-space: nowrap;
+        }
+
+
+        /* =====================================================
+           MEMBERS EMPTY
         ===================================================== */
 
         .members-empty {
@@ -1951,19 +2174,111 @@
 
 
         /* =====================================================
+           MEMBERS PAGINATION
+        ===================================================== */
+
+        .members-pagination {
+            min-height: 62px;
+
+            padding:
+                13px
+                18px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            gap: 12px;
+
+            border-top:
+                1px solid
+                rgba(255,255,255,.05);
+
+            background:
+                rgba(255,255,255,.01);
+        }
+
+        .members-pagination[hidden] {
+            display: none;
+        }
+
+        .members-page-button {
+            min-width: 94px;
+            min-height: 36px;
+
+            padding:
+                0
+                12px;
+
+            border:
+                1px solid
+                rgba(101,255,131,.13);
+
+            border-radius: 9px;
+
+            background:
+                rgba(101,255,131,.035);
+
+            color: #65ff83;
+
+            font-size: 7px;
+            font-weight: 900;
+
+            letter-spacing: .8px;
+
+            transition:
+                border-color .2s ease,
+                background .2s ease,
+                opacity .2s ease;
+        }
+
+        .members-page-button:hover:not(:disabled) {
+            border-color:
+                rgba(101,255,131,.35);
+
+            background:
+                rgba(101,255,131,.075);
+        }
+
+        .members-page-button:disabled {
+            opacity: .25;
+
+            cursor: not-allowed;
+        }
+
+        .members-page-info {
+            min-width: 86px;
+
+            text-align: center;
+
+            color: #8c9991;
+
+            font-size: 8px;
+            font-weight: 900;
+
+            letter-spacing: 1px;
+        }
+
+
+        /* =====================================================
            RESPONSIVE
         ===================================================== */
 
-        @media (max-width: 1250px) {
+        @media (max-width: 1200px) {
 
-            .stats-grid {
-                grid-template-columns:
-                    repeat(3, minmax(0, 1fr));
+            /*
+                On smaller screens horizontal scroll is allowed
+                because ten columns physically cannot stay readable.
+                On normal desktop it does NOT appear.
+            */
+
+            .members-table-wrap {
+                overflow-x: auto;
             }
 
-        }
-
-        @media (max-width: 1200px) {
+            .members-table {
+                min-width: 1180px;
+            }
 
             .contest-list-top {
                 align-items: stretch;
@@ -1985,26 +2300,34 @@
 
         }
 
+
         @media (max-width: 1100px) {
 
             .stats-grid {
                 grid-template-columns:
-                    repeat(2, minmax(0, 1fr));
+                    repeat(
+                        2,
+                        minmax(0,1fr)
+                    );
             }
 
             .contest-body {
-                grid-template-columns: 1fr;
+                grid-template-columns:
+                    1fr;
             }
 
         }
+
 
         @media (max-width: 1000px) {
 
             .admin-hero {
-                grid-template-columns: 1fr;
+                grid-template-columns:
+                    1fr;
             }
 
         }
+
 
         @media (max-width: 700px) {
 
@@ -2030,9 +2353,18 @@
                 flex-wrap: wrap;
             }
 
+            .admin-hero-main {
+                padding:
+                    28px
+                    22px;
+            }
+
             .stats-grid {
                 grid-template-columns:
-                    repeat(2, minmax(0, 1fr));
+                    repeat(
+                        2,
+                        minmax(0,1fr)
+                    );
             }
 
             .members-panel-top,
@@ -2053,10 +2385,12 @@
             }
 
             .contest-stats {
-                grid-template-columns: 1fr;
+                grid-template-columns:
+                    1fr;
             }
 
         }
+
 
         @media (max-width: 480px) {
 
@@ -2065,16 +2399,13 @@
                     calc(100% - 16px);
             }
 
-            .admin-hero-main {
-                padding: 26px;
-            }
-
             .admin-hero-main h1 {
                 font-size: 39px;
             }
 
             .stats-grid {
-                grid-template-columns: 1fr;
+                grid-template-columns:
+                    1fr;
             }
 
             .contest-body {
@@ -2110,7 +2441,6 @@
 
 <body>
 
-
     <div
         class="admin-background"
         aria-hidden="true"
@@ -2130,9 +2460,9 @@
     <main class="admin-shell">
 
 
-        <!-- =====================================================
+        <!-- =================================================
              HEADER
-        ====================================================== -->
+        ================================================== -->
 
         <header class="admin-header">
 
@@ -2183,9 +2513,9 @@
         </header>
 
 
-        <!-- =====================================================
+        <!-- =================================================
              HERO
-        ====================================================== -->
+        ================================================== -->
 
         <section class="admin-hero">
 
@@ -2196,20 +2526,36 @@
                     aria-hidden="true"
                 ></div>
 
+
                 <p class="hero-mini-tag">
-                    GREMBLE ADMIN PANEL
+                    GREMBLE // FOUNDER MODE
                 </p>
 
+
                 <h1>
-                    I will be<br>
-                    better<br>
-                    <span>than, them.</span>
+
+                    ROBÍŠ TO,<br>
+
+                    ABY SI BOL<br>
+
+                    <span>
+                        LEPŠÍ AKO ONI.
+                    </span>
+
                 </h1>
+
 
                 <div class="hero-line"></div>
 
+
                 <p>
-                    Gremble is the future
+
+                    Build quietly. Watch everything.
+                    Keep moving. This dashboard exists
+                    for one reason — to give you a clear
+                    view of the people joining Gremble
+                    while you build it from the beginning.
+
                 </p>
 
             </div>
@@ -2221,16 +2567,23 @@
                     PRIVATE ACCESS
                 </p>
 
+
                 <h2>
+
                     YOUR GREMBLE
                     CONTROL ROOM.
+
                 </h2>
 
+
                 <p>
+
                     Member details are loaded through
                     the secure admin backend. Access is
                     verified against your Telegram ID.
+
                 </p>
+
 
                 <div class="private-id-box">
 
@@ -2272,6 +2625,7 @@
 
                     </span>
 
+
                     <span class="contest-open-arrow">
                         ›
                     </span>
@@ -2283,9 +2637,9 @@
         </section>
 
 
-        <!-- =====================================================
-             ADMIN STATUS MESSAGE
-        ====================================================== -->
+        <!-- =================================================
+             MESSAGE
+        ================================================== -->
 
         <div
             class="admin-message"
@@ -2295,9 +2649,9 @@
         </div>
 
 
-        <!-- =====================================================
+        <!-- =================================================
              DASHBOARD
-        ====================================================== -->
+        ================================================== -->
 
         <section
             class="admin-dashboard"
@@ -2307,7 +2661,7 @@
 
 
             <!-- =================================================
-                 CONTEST PANEL
+                 CONTEST
             ================================================== -->
 
             <section
@@ -2323,6 +2677,7 @@
                         <span class="contest-title-icon">
                             🏆
                         </span>
+
 
                         <div class="contest-title-copy">
 
@@ -2349,6 +2704,8 @@
 
                 </div>
 
+
+                <!-- CONTEST STATS -->
 
                 <div class="contest-stats">
 
@@ -2388,12 +2745,12 @@
                 </div>
 
 
+                <!-- CONTEST BODY -->
+
                 <div class="contest-body">
 
 
-                    <!-- =============================================
-                         CONTEST FORM
-                    ============================================== -->
+                    <!-- FORM -->
 
                     <section class="contest-form-card">
 
@@ -2470,6 +2827,7 @@
                                     YES
                                 </button>
 
+
                                 <button
                                     type="button"
                                     class="contest-rule-button no active"
@@ -2517,13 +2875,12 @@
                     </section>
 
 
-                    <!-- =============================================
-                         CONTEST LIST
-                    ============================================== -->
+                    <!-- CONTEST LIST -->
 
                     <section class="contest-list-card">
 
                         <div class="contest-list-top">
+
 
                             <div class="contest-list-title">
 
@@ -2540,6 +2897,7 @@
 
                             <div class="contest-tools">
 
+
                                 <div class="contest-search-wrap">
 
                                     <span
@@ -2548,6 +2906,7 @@
                                     >
                                         ⌕
                                     </span>
+
 
                                     <input
                                         type="search"
@@ -2594,6 +2953,7 @@
                                         </option>
 
                                     </select>
+
 
                                     <span
                                         class="contest-sort-arrow"
@@ -2707,7 +3067,7 @@
 
 
             <!-- =================================================
-                 MEMBER STATISTICS
+                 MAIN STATS
             ================================================== -->
 
             <div class="stats-grid">
@@ -2797,17 +3157,18 @@
 
                 </article>
 
-
             </div>
 
 
             <!-- =================================================
-                 REGISTERED MEMBERS
+                 MEMBERS
             ================================================== -->
 
             <section class="members-panel">
 
+
                 <div class="members-panel-top">
+
 
                     <div class="members-panel-title">
 
@@ -2845,6 +3206,8 @@
 
                 </div>
 
+
+                <!-- MEMBERS TABLE -->
 
                 <div class="members-table-wrap">
 
@@ -2916,9 +3279,7 @@
                 </div>
 
 
-                <!-- =============================================
-                     MEMBERS PAGINATION
-                ============================================== -->
+                <!-- PAGINATION -->
 
                 <div
                     class="members-pagination"
@@ -2953,18 +3314,14 @@
 
                 </div>
 
-
             </section>
 
-
         </section>
-
 
     </main>
 
 
-    <script src="admin.js?v=107"></script>
-
+    <script src="admin.js?v=108"></script>
 
 </body>
 

@@ -21,7 +21,6 @@ const GREMBLE_SESSION_EXPIRY_KEY =
     "gremble_session_expires_at";
 
 const CONTEST_ITEMS_PER_PAGE = 5;
-
 const MEMBERS_ITEMS_PER_PAGE = 10;
 
 
@@ -45,9 +44,7 @@ const statCompletedProfiles =
     document.getElementById("statCompletedProfiles");
 
 const statTelegramChatMembers =
-    document.getElementById(
-        "statTelegramChatMembers"
-    );
+    document.getElementById("statTelegramChatMembers");
 
 const statTelegramAnnouncementsMembers =
     document.getElementById(
@@ -60,44 +57,28 @@ const statMembersWithWallet =
     );
 
 const memberSearch =
-    document.getElementById(
-        "memberSearch"
-    );
+    document.getElementById("memberSearch");
 
 const refreshMembers =
-    document.getElementById(
-        "refreshMembers"
-    );
+    document.getElementById("refreshMembers");
 
 const membersTableBody =
-    document.getElementById(
-        "membersTableBody"
-    );
+    document.getElementById("membersTableBody");
 
 const membersEmpty =
-    document.getElementById(
-        "membersEmpty"
-    );
+    document.getElementById("membersEmpty");
 
 const membersPagination =
-    document.getElementById(
-        "membersPagination"
-    );
+    document.getElementById("membersPagination");
 
 const membersPrevPage =
-    document.getElementById(
-        "membersPrevPage"
-    );
+    document.getElementById("membersPrevPage");
 
 const membersNextPage =
-    document.getElementById(
-        "membersNextPage"
-    );
+    document.getElementById("membersNextPage");
 
 const membersPageInfo =
-    document.getElementById(
-        "membersPageInfo"
-    );
+    document.getElementById("membersPageInfo");
 
 
 /* =====================================================
@@ -105,59 +86,37 @@ const membersPageInfo =
 ===================================================== */
 
 const openContestPanel =
-    document.getElementById(
-        "openContestPanel"
-    );
+    document.getElementById("openContestPanel");
 
 const closeContestPanel =
-    document.getElementById(
-        "closeContestPanel"
-    );
+    document.getElementById("closeContestPanel");
 
 const contestPanel =
-    document.getElementById(
-        "contestPanel"
-    );
+    document.getElementById("contestPanel");
 
 const contestTotalEntries =
-    document.getElementById(
-        "contestTotalEntries"
-    );
+    document.getElementById("contestTotalEntries");
 
 const contestVerifiedEntries =
-    document.getElementById(
-        "contestVerifiedEntries"
-    );
+    document.getElementById("contestVerifiedEntries");
 
 const contestEntriesLabel =
-    document.getElementById(
-        "contestEntriesLabel"
-    );
+    document.getElementById("contestEntriesLabel");
 
 const contestEntryForm =
-    document.getElementById(
-        "contestEntryForm"
-    );
+    document.getElementById("contestEntryForm");
 
 const contestEntryId =
-    document.getElementById(
-        "contestEntryId"
-    );
+    document.getElementById("contestEntryId");
 
 const contestParticipant =
-    document.getElementById(
-        "contestParticipant"
-    );
+    document.getElementById("contestParticipant");
 
 const contestMemeUrl =
-    document.getElementById(
-        "contestMemeUrl"
-    );
+    document.getElementById("contestMemeUrl");
 
 const contestPoints =
-    document.getElementById(
-        "contestPoints"
-    );
+    document.getElementById("contestPoints");
 
 const contestRequirementsYes =
     document.getElementById(
@@ -235,17 +194,13 @@ const contestPageInfo =
 ===================================================== */
 
 let allMembers = [];
-
 let allContestEntries = [];
 
 let contestLoaded = false;
-
 let contestLoading = false;
-
 let contestSaving = false;
 
 let contestCurrentPage = 1;
-
 let membersCurrentPage = 1;
 
 
@@ -258,17 +213,18 @@ function cleanText(value) {
     return typeof value === "string"
         ? value.trim()
         : "";
+
 }
 
 
 function numberOrZero(value) {
 
-    const number =
-        Number(value);
+    const number = Number(value);
 
     return Number.isFinite(number)
         ? number
         : 0;
+
 }
 
 
@@ -298,13 +254,13 @@ function setAdminMessage(
         adminMessage.classList.add(
             type
         );
+
     }
+
 }
 
 
-function setAdminIdentity(
-    message
-) {
+function setAdminIdentity(message) {
 
     if (!adminIdentity) {
         return;
@@ -312,36 +268,38 @@ function setAdminIdentity(
 
     adminIdentity.textContent =
         message;
+
 }
 
 
 /* =====================================================
-   CONTEST MESSAGE
+   NORMALIZE X USERNAME
 ===================================================== */
 
-function setContestMessage(
-    message,
-    type = ""
-) {
+function normalizeXUsername(value) {
 
-    if (!contestFormMessage) {
-        return;
+    let username =
+        cleanText(value)
+            .toLowerCase();
+
+    if (!username) {
+        return "";
     }
 
-    contestFormMessage.textContent =
-        message;
+    while (
+        username.startsWith("@")
+    ) {
 
-    contestFormMessage.classList.remove(
-        "success",
-        "error"
+        username =
+            username.slice(1);
+
+    }
+
+    return username.replace(
+        /\s+/g,
+        ""
     );
 
-    if (type) {
-
-        contestFormMessage.classList.add(
-            type
-        );
-    }
 }
 
 
@@ -356,6 +314,7 @@ function getSessionToken() {
             GREMBLE_SESSION_KEY
         )
     );
+
 }
 
 
@@ -373,34 +332,10 @@ function getSessionExpiry() {
     const expiry =
         Number(raw);
 
-    if (
-        !Number.isFinite(
-            expiry
-        )
-    ) {
+    return Number.isFinite(expiry)
+        ? expiry
+        : null;
 
-        return null;
-    }
-
-    return expiry;
-}
-
-
-function sessionIsExpired() {
-
-    const expiry =
-        getSessionExpiry();
-
-    if (!expiry) {
-        return false;
-    }
-
-    const now =
-        Math.floor(
-            Date.now() / 1000
-        );
-
-    return expiry <= now;
 }
 
 
@@ -413,11 +348,31 @@ function clearLocalSession() {
     localStorage.removeItem(
         GREMBLE_SESSION_EXPIRY_KEY
     );
+
+}
+
+
+function sessionIsExpired() {
+
+    const expiry =
+        getSessionExpiry();
+
+    if (!expiry) {
+        return false;
+    }
+
+    const nowSeconds =
+        Math.floor(
+            Date.now() / 1000
+        );
+
+    return expiry <= nowSeconds;
+
 }
 
 
 /* =====================================================
-   DATE
+   DATE FORMAT
 ===================================================== */
 
 function formatDate(value) {
@@ -434,34 +389,25 @@ function formatDate(value) {
             date.getTime()
         )
     ) {
-
         return "—";
     }
 
     return new Intl.DateTimeFormat(
         "sk-SK",
         {
-            day:
-                "2-digit",
-
-            month:
-                "2-digit",
-
-            year:
-                "numeric",
-
-            hour:
-                "2-digit",
-
-            minute:
-                "2-digit"
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit"
         }
     ).format(date);
+
 }
 
 
 /* =====================================================
-   WALLET FORMAT
+   SHORT ADDRESS
 ===================================================== */
 
 function shortWallet(value) {
@@ -473,23 +419,16 @@ function shortWallet(value) {
         return "";
     }
 
-    if (
-        wallet.length <= 14
-    ) {
-
+    if (wallet.length <= 14) {
         return wallet;
     }
 
     return (
-        wallet.slice(
-            0,
-            6
-        ) +
+        wallet.slice(0, 6) +
         "..." +
-        wallet.slice(
-            -5
-        )
+        wallet.slice(-5)
     );
+
 }
 
 
@@ -511,11 +450,9 @@ async function copyText(
 
     try {
 
-        await navigator
-            .clipboard
-            .writeText(
-                text
-            );
+        await navigator.clipboard.writeText(
+            text
+        );
 
         if (button) {
 
@@ -534,6 +471,7 @@ async function copyText(
                 },
                 1200
             );
+
         }
 
     }
@@ -543,39 +481,130 @@ async function copyText(
             "Copy failed:",
             error
         );
+
     }
+
 }
 
 
 /* =====================================================
-   X USERNAME
+   TELEGRAM STATUS
 ===================================================== */
 
-function normalizeXUsername(
-    value
-) {
+function normalizeTelegramStatus(value) {
 
-    let username =
+    const status =
         cleanText(value)
             .toLowerCase();
 
-    if (!username) {
-        return "";
+    if (
+        status === "member" ||
+        status === "administrator" ||
+        status === "creator" ||
+        status === "in_group" ||
+        status === "in_chat" ||
+        status === "yes"
+    ) {
+        return "member";
     }
 
-    username =
-        username.replace(
-            /^@+/,
-            ""
+    if (
+        status === "not_member" ||
+        status === "left" ||
+        status === "kicked" ||
+        status === "no" ||
+        status === "not_in_group" ||
+        status === "not_in_chat"
+    ) {
+        return "not_member";
+    }
+
+    return "unknown";
+
+}
+
+
+function getChatStatus(member) {
+
+    return normalizeTelegramStatus(
+        member.telegram_chat_status ??
+        member.telegram_group_status ??
+        member.chat_status
+    );
+
+}
+
+
+function getAnnouncementsStatus(member) {
+
+    return normalizeTelegramStatus(
+        member.telegram_announcements_status ??
+        member.telegram_announcement_status ??
+        member.announcements_status
+    );
+
+}
+
+
+function createTelegramBadge(
+    status,
+    type
+) {
+
+    const normalized =
+        normalizeTelegramStatus(
+            status
         );
 
-    username =
-        username.replace(
-            /\s+/g,
-            ""
+    const badge =
+        document.createElement(
+            "span"
         );
 
-    return username;
+    badge.className =
+        "telegram-group-badge";
+
+    if (
+        normalized === "member"
+    ) {
+
+        badge.classList.add(
+            "member"
+        );
+
+        badge.textContent =
+            type === "announcements"
+                ? "✓ IN ANNOUNCEMENTS"
+                : "✓ IN CHAT";
+
+    }
+    else if (
+        normalized === "not_member"
+    ) {
+
+        badge.classList.add(
+            "not-member"
+        );
+
+        badge.textContent =
+            type === "announcements"
+                ? "× NOT IN ANNOUNCEMENTS"
+                : "× NOT IN CHAT";
+
+    }
+    else {
+
+        badge.classList.add(
+            "unknown"
+        );
+
+        badge.textContent =
+            "UNKNOWN";
+
+    }
+
+    return badge;
+
 }
 
 
@@ -583,42 +612,38 @@ function normalizeXUsername(
    COUNTRY FLAG
 ===================================================== */
 
-function countryCodeToFlag(
-    value
-) {
+function countryCodeToFlag(code) {
 
-    const code =
-        cleanText(value)
+    const normalized =
+        cleanText(code)
             .toUpperCase();
 
     if (
         !/^[A-Z]{2}$/.test(
-            code
+            normalized
         )
     ) {
-
         return "";
     }
 
     return String.fromCodePoint(
-        ...code
+        ...normalized
             .split("")
             .map(
-                letter =>
+                character =>
                     127397 +
-                    letter.charCodeAt(0)
+                    character.charCodeAt(0)
             )
     );
+
 }
 
 
 /* =====================================================
-   CREATE COUNTRY CELL
+   COUNTRY CELL
 ===================================================== */
 
-function createCountryCell(
-    member
-) {
+function createCountryCell(member) {
 
     const cell =
         document.createElement(
@@ -634,7 +659,6 @@ function createCountryCell(
         cleanText(
             member.country_name
         );
-
 
     if (
         !countryCode &&
@@ -657,8 +681,8 @@ function createCountryCell(
         );
 
         return cell;
-    }
 
+    }
 
     const wrapper =
         document.createElement(
@@ -668,12 +692,10 @@ function createCountryCell(
     wrapper.className =
         "country-cell";
 
-
     const flag =
         countryCodeToFlag(
             countryCode
         );
-
 
     if (flag) {
 
@@ -691,54 +713,35 @@ function createCountryCell(
         wrapper.appendChild(
             flagElement
         );
+
     }
 
-
-    const countryNameElement =
+    const name =
         document.createElement(
             "span"
         );
 
-    countryNameElement.className =
+    name.className =
         "country-name";
 
-    countryNameElement.textContent =
+    name.textContent =
         countryName ||
-        countryCode ||
-        "UNKNOWN";
+        countryCode;
+
+    name.title =
+        countryName ||
+        countryCode;
 
     wrapper.appendChild(
-        countryNameElement
+        name
     );
-
-
-    if (
-        countryCode &&
-        countryName
-    ) {
-
-        const codeElement =
-            document.createElement(
-                "span"
-            );
-
-        codeElement.className =
-            "country-code";
-
-        codeElement.textContent =
-            countryCode;
-
-        wrapper.appendChild(
-            codeElement
-        );
-    }
-
 
     cell.appendChild(
         wrapper
     );
 
     return cell;
+
 }
 
 
@@ -746,33 +749,22 @@ function createCountryCell(
    VERIFIED WALLET CELL
 ===================================================== */
 
-function createVerifiedWalletCell(
-    member
-) {
+function createVerifiedWalletCell(member) {
 
     const cell =
         document.createElement(
             "td"
         );
 
-    const hasWallet =
-        Boolean(
-            cleanText(
-                member.wallet_address
-            )
+    const walletAddress =
+        cleanText(
+            member.wallet_address
         );
-
 
     const badge =
         document.createElement(
             "span"
         );
-
-    badge.className =
-        hasWallet
-            ? "wallet-status-badge yes"
-            : "wallet-status-badge no";
-
 
     const dot =
         document.createElement(
@@ -782,168 +774,48 @@ function createVerifiedWalletCell(
     dot.className =
         "wallet-status-dot";
 
+    if (walletAddress) {
 
-    const label =
-        document.createElement(
-            "span"
+        badge.className =
+            "wallet-status-badge yes";
+
+        badge.title =
+            walletAddress;
+
+        badge.appendChild(
+            dot
         );
 
-    label.textContent =
-        hasWallet
-            ? "YES"
-            : "NO";
+        badge.appendChild(
+            document.createTextNode(
+                "YES"
+            )
+        );
 
+    }
+    else {
 
-    badge.appendChild(
-        dot
-    );
+        badge.className =
+            "wallet-status-badge no";
 
-    badge.appendChild(
-        label
-    );
+        badge.appendChild(
+            dot
+        );
+
+        badge.appendChild(
+            document.createTextNode(
+                "NO"
+            )
+        );
+
+    }
 
     cell.appendChild(
         badge
     );
 
     return cell;
-}
 
-
-/* =====================================================
-   TELEGRAM STATUS
-===================================================== */
-
-function normalizeTelegramStatus(
-    value
-) {
-
-    const status =
-        cleanText(value)
-            .toLowerCase();
-
-
-    if (
-        status === "member" ||
-        status === "administrator" ||
-        status === "creator" ||
-        status === "in_group" ||
-        status === "in_chat" ||
-        status === "yes"
-    ) {
-
-        return "member";
-    }
-
-
-    if (
-        status === "not_member" ||
-        status === "left" ||
-        status === "kicked" ||
-        status === "no" ||
-        status === "not_in_group" ||
-        status === "not_in_chat"
-    ) {
-
-        return "not_member";
-    }
-
-
-    return "unknown";
-}
-
-
-function getChatStatus(
-    member
-) {
-
-    return normalizeTelegramStatus(
-        member.telegram_chat_status ??
-        member.telegram_group_status ??
-        member.chat_status
-    );
-}
-
-
-function getAnnouncementsStatus(
-    member
-) {
-
-    return normalizeTelegramStatus(
-        member.telegram_announcements_status ??
-        member.telegram_announcement_status ??
-        member.announcements_status
-    );
-}
-
-
-/* =====================================================
-   TELEGRAM BADGE
-===================================================== */
-
-function createTelegramBadge(
-    status,
-    type
-) {
-
-    const normalized =
-        normalizeTelegramStatus(
-            status
-        );
-
-    const badge =
-        document.createElement(
-            "span"
-        );
-
-    badge.className =
-        "telegram-group-badge";
-
-
-    if (
-        normalized ===
-        "member"
-    ) {
-
-        badge.classList.add(
-            "member"
-        );
-
-        badge.textContent =
-            type ===
-            "announcements"
-                ? "✓ IN ANNOUNCEMENTS"
-                : "✓ IN CHAT";
-    }
-
-    else if (
-        normalized ===
-        "not_member"
-    ) {
-
-        badge.classList.add(
-            "not-member"
-        );
-
-        badge.textContent =
-            type ===
-            "announcements"
-                ? "× NOT IN ANNOUNCEMENTS"
-                : "× NOT IN CHAT";
-    }
-
-    else {
-
-        badge.classList.add(
-            "unknown"
-        );
-
-        badge.textContent =
-            "UNKNOWN";
-    }
-
-
-    return badge;
 }
 
 
@@ -961,7 +833,6 @@ function updateStats(
             allMembers.length
         );
 
-
     const completedProfiles =
         numberOrZero(
             stats.completed_profiles ??
@@ -977,7 +848,6 @@ function updateStats(
             ).length
         );
 
-
     const chatMembers =
         numberOrZero(
             stats.telegram_chat_members ??
@@ -987,11 +857,9 @@ function updateStats(
                 member =>
                     getChatStatus(
                         member
-                    ) ===
-                    "member"
+                    ) === "member"
             ).length
         );
-
 
     const announcementsMembers =
         numberOrZero(
@@ -1001,34 +869,28 @@ function updateStats(
                 member =>
                     getAnnouncementsStatus(
                         member
-                    ) ===
-                    "member"
+                    ) === "member"
             ).length
         );
-
 
     const membersWithWallet =
         numberOrZero(
             stats.members_with_wallet ??
+            stats.wallet_connected ??
             allMembers.filter(
                 member =>
-                    Boolean(
-                        cleanText(
-                            member.wallet_address
-                        )
+                    !!cleanText(
+                        member.wallet_address
                     )
             ).length
         );
 
-
     if (statTotalMembers) {
 
         statTotalMembers.textContent =
-            String(
-                totalMembers
-            );
-    }
+            String(totalMembers);
 
+    }
 
     if (statCompletedProfiles) {
 
@@ -1036,19 +898,17 @@ function updateStats(
             String(
                 completedProfiles
             );
+
     }
 
-
-    if (
-        statTelegramChatMembers
-    ) {
+    if (statTelegramChatMembers) {
 
         statTelegramChatMembers.textContent =
             String(
                 chatMembers
             );
-    }
 
+    }
 
     if (
         statTelegramAnnouncementsMembers
@@ -1058,18 +918,51 @@ function updateStats(
             String(
                 announcementsMembers
             );
+
     }
 
-
-    if (
-        statMembersWithWallet
-    ) {
+    if (statMembersWithWallet) {
 
         statMembersWithWallet.textContent =
             String(
                 membersWithWallet
             );
+
     }
+
+}
+
+
+/* =====================================================
+   CREATE TEXT CELL
+===================================================== */
+
+function createEmptyCell(
+    message = "—"
+) {
+
+    const cell =
+        document.createElement(
+            "td"
+        );
+
+    const value =
+        document.createElement(
+            "span"
+        );
+
+    value.className =
+        "empty-value";
+
+    value.textContent =
+        message;
+
+    cell.appendChild(
+        value
+    );
+
+    return cell;
+
 }
 
 
@@ -1077,15 +970,12 @@ function updateStats(
    CREATE MEMBER ROW
 ===================================================== */
 
-function createMemberRow(
-    member
-) {
+function createMemberRow(member) {
 
     const row =
         document.createElement(
             "tr"
         );
-
 
     const telegramName =
         cleanText(
@@ -1128,11 +1018,14 @@ function createMemberRow(
         value.textContent =
             telegramName;
 
+        value.title =
+            telegramName;
+
         telegramNameCell.appendChild(
             value
         );
-    }
 
+    }
     else {
 
         const empty =
@@ -1149,6 +1042,7 @@ function createMemberRow(
         telegramNameCell.appendChild(
             empty
         );
+
     }
 
 
@@ -1170,17 +1064,18 @@ function createMemberRow(
             "telegram-username";
 
         value.textContent =
-            telegramUsername.startsWith(
-                "@"
-            )
+            telegramUsername.startsWith("@")
                 ? telegramUsername
                 : `@${telegramUsername}`;
+
+        value.title =
+            value.textContent;
 
         telegramUsernameCell.appendChild(
             value
         );
-    }
 
+    }
     else {
 
         const empty =
@@ -1197,6 +1092,7 @@ function createMemberRow(
         telegramUsernameCell.appendChild(
             empty
         );
+
     }
 
 
@@ -1209,9 +1105,7 @@ function createMemberRow(
 
     chatCell.appendChild(
         createTelegramBadge(
-            getChatStatus(
-                member
-            ),
+            getChatStatus(member),
             "chat"
         )
     );
@@ -1251,7 +1145,6 @@ function createMemberRow(
         wrapper.className =
             "wallet-cell";
 
-
         const value =
             document.createElement(
                 "span"
@@ -1261,12 +1154,12 @@ function createMemberRow(
             "x-username";
 
         value.textContent =
-            xUsername.startsWith(
-                "@"
-            )
+            xUsername.startsWith("@")
                 ? xUsername
                 : `@${xUsername}`;
 
+        value.title =
+            value.textContent;
 
         const copyButton =
             document.createElement(
@@ -1282,7 +1175,6 @@ function createMemberRow(
         copyButton.textContent =
             "COPY";
 
-
         copyButton.addEventListener(
             "click",
             () => {
@@ -1291,9 +1183,9 @@ function createMemberRow(
                     xUsername,
                     copyButton
                 );
+
             }
         );
-
 
         wrapper.appendChild(
             value
@@ -1306,8 +1198,8 @@ function createMemberRow(
         xUsernameCell.appendChild(
             wrapper
         );
-    }
 
+    }
     else {
 
         const empty =
@@ -1324,10 +1216,11 @@ function createMemberRow(
         xUsernameCell.appendChild(
             empty
         );
+
     }
 
 
-    /* MANUAL SOLANA ADDRESS */
+    /* SOLANA ADDRESS */
 
     const solanaCell =
         document.createElement(
@@ -1343,7 +1236,6 @@ function createMemberRow(
 
         walletWrap.className =
             "wallet-cell";
-
 
         const address =
             document.createElement(
@@ -1361,7 +1253,6 @@ function createMemberRow(
         address.title =
             solanaAddress;
 
-
         const copyButton =
             document.createElement(
                 "button"
@@ -1376,7 +1267,6 @@ function createMemberRow(
         copyButton.textContent =
             "COPY";
 
-
         copyButton.addEventListener(
             "click",
             () => {
@@ -1385,9 +1275,9 @@ function createMemberRow(
                     solanaAddress,
                     copyButton
                 );
+
             }
         );
-
 
         walletWrap.appendChild(
             address
@@ -1400,8 +1290,8 @@ function createMemberRow(
         solanaCell.appendChild(
             walletWrap
         );
-    }
 
+    }
     else {
 
         const empty =
@@ -1418,6 +1308,7 @@ function createMemberRow(
         solanaCell.appendChild(
             empty
         );
+
     }
 
 
@@ -1469,6 +1360,8 @@ function createMemberRow(
         );
 
 
+    /* APPEND IN EXACT TABLE ORDER */
+
     row.appendChild(
         telegramNameCell
     );
@@ -1509,8 +1402,8 @@ function createMemberRow(
         verifiedWalletCell
     );
 
-
     return row;
+
 }
 
 
@@ -1525,14 +1418,13 @@ function getFilteredMembers() {
             memberSearch?.value
         ).toLowerCase();
 
-
     if (!search) {
 
         return [
             ...allMembers
         ];
-    }
 
+    }
 
     return allMembers.filter(
         member => {
@@ -1547,53 +1439,48 @@ function getFilteredMembers() {
                     member
                 );
 
-            const hasVerifiedWallet =
-                Boolean(
-                    cleanText(
-                        member.wallet_address
-                    )
+            const walletAddress =
+                cleanText(
+                    member.wallet_address
                 );
 
+            const hasWallet =
+                walletAddress
+                    ? "yes wallet connected verified"
+                    : "no wallet";
 
             const values = [
 
                 member.telegram_name,
-
                 member.telegram_username,
-
                 member.x_username,
-
                 member.solana_address,
 
                 member.country_code,
-
                 member.country_name,
 
                 member.wallet_address,
-
-                hasVerifiedWallet
-                    ? "wallet yes verified connected"
-                    : "wallet no not connected",
+                member.wallet_provider,
 
                 chatStatus,
+                announcementsStatus,
 
-                announcementsStatus
+                hasWallet
 
             ];
 
-
             return values.some(
                 value =>
-                    cleanText(
-                        value
-                    )
+                    cleanText(value)
                         .toLowerCase()
                         .includes(
                             search
                         )
             );
+
         }
     );
+
 }
 
 
@@ -1607,14 +1494,11 @@ function renderMembers() {
         return;
     }
 
-
     const filteredMembers =
         getFilteredMembers();
 
-
     const totalFiltered =
         filteredMembers.length;
-
 
     const totalPages =
         Math.max(
@@ -1625,7 +1509,6 @@ function renderMembers() {
             )
         );
 
-
     if (
         membersCurrentPage >
         totalPages
@@ -1633,8 +1516,8 @@ function renderMembers() {
 
         membersCurrentPage =
             totalPages;
-    }
 
+    }
 
     if (
         membersCurrentPage < 1
@@ -1642,21 +1525,18 @@ function renderMembers() {
 
         membersCurrentPage =
             1;
-    }
 
+    }
 
     const startIndex =
         (
-            membersCurrentPage -
-            1
+            membersCurrentPage - 1
         ) *
         MEMBERS_ITEMS_PER_PAGE;
-
 
     const endIndex =
         startIndex +
         MEMBERS_ITEMS_PER_PAGE;
-
 
     const pageMembers =
         filteredMembers.slice(
@@ -1664,10 +1544,8 @@ function renderMembers() {
             endIndex
         );
 
-
     membersTableBody.innerHTML =
         "";
-
 
     if (
         totalFiltered === 0
@@ -1684,21 +1562,21 @@ function renderMembers() {
                 )
                     ? "NO MATCHING MEMBERS FOUND."
                     : "NO MEMBERS FOUND.";
-        }
-    }
 
+        }
+
+    }
     else {
 
         if (membersEmpty) {
 
             membersEmpty.hidden =
                 true;
-        }
 
+        }
 
         const fragment =
             document.createDocumentFragment();
-
 
         pageMembers.forEach(
             member => {
@@ -1708,25 +1586,26 @@ function renderMembers() {
                         member
                     )
                 );
+
             }
         );
-
 
         membersTableBody.appendChild(
             fragment
         );
-    }
 
+    }
 
     updateMembersPagination(
         totalFiltered,
         totalPages
     );
+
 }
 
 
 /* =====================================================
-   MEMBERS PAGINATION
+   MEMBER PAGINATION
 ===================================================== */
 
 function updateMembersPagination(
@@ -1738,33 +1617,32 @@ function updateMembersPagination(
         return;
     }
 
-
     membersPagination.hidden =
         totalFiltered <=
         MEMBERS_ITEMS_PER_PAGE;
-
 
     if (membersPageInfo) {
 
         membersPageInfo.textContent =
             `${membersCurrentPage} OF ${totalPages}`;
-    }
 
+    }
 
     if (membersPrevPage) {
 
         membersPrevPage.disabled =
-            membersCurrentPage <=
-            1;
-    }
+            membersCurrentPage <= 1;
 
+    }
 
     if (membersNextPage) {
 
         membersNextPage.disabled =
             membersCurrentPage >=
             totalPages;
+
     }
+
 }
 
 
@@ -1773,15 +1651,13 @@ function goToPreviousMembersPage() {
     if (
         membersCurrentPage <= 1
     ) {
-
         return;
     }
 
-
     membersCurrentPage--;
 
-
     renderMembers();
+
 }
 
 
@@ -1789,7 +1665,6 @@ function goToNextMembersPage() {
 
     const filteredMembers =
         getFilteredMembers();
-
 
     const totalPages =
         Math.max(
@@ -1800,29 +1675,26 @@ function goToNextMembersPage() {
             )
         );
 
-
     if (
         membersCurrentPage >=
         totalPages
     ) {
-
         return;
     }
 
-
     membersCurrentPage++;
 
-
     renderMembers();
+
 }
 
 
 function filterMembers() {
 
-    membersCurrentPage =
-        1;
+    membersCurrentPage = 1;
 
     renderMembers();
+
 }
 
 
@@ -1839,19 +1711,17 @@ function showAccessError(
 
         adminDashboard.hidden =
             true;
-    }
 
+    }
 
     if (openContestPanel) {
 
         openContestPanel.disabled =
             true;
+
     }
 
-
-    if (
-        status === 401
-    ) {
+    if (status === 401) {
 
         setAdminIdentity(
             "LOGIN REQUIRED"
@@ -1863,12 +1733,10 @@ function showAccessError(
         );
 
         return;
+
     }
 
-
-    if (
-        status === 403
-    ) {
+    if (status === 403) {
 
         setAdminIdentity(
             "ACCESS DENIED"
@@ -1880,8 +1748,8 @@ function showAccessError(
         );
 
         return;
-    }
 
+    }
 
     setAdminIdentity(
         "ERROR"
@@ -1892,6 +1760,7 @@ function showAccessError(
         "COULD NOT LOAD THE ADMIN PANEL.",
         "error"
     );
+
 }
 
 
@@ -1904,7 +1773,6 @@ async function loadAdminData() {
     const token =
         getSessionToken();
 
-
     if (!token) {
 
         showAccessError(
@@ -1912,8 +1780,8 @@ async function loadAdminData() {
         );
 
         return;
-    }
 
+    }
 
     if (
         sessionIsExpired()
@@ -1926,25 +1794,23 @@ async function loadAdminData() {
         );
 
         return;
-    }
 
+    }
 
     setAdminIdentity(
         "VERIFYING..."
     );
 
-
     setAdminMessage(
         "VERIFYING YOUR TELEGRAM ID AND LOADING GREMBLE MEMBERS..."
     );
-
 
     if (openContestPanel) {
 
         openContestPanel.disabled =
             true;
-    }
 
+    }
 
     if (refreshMembers) {
 
@@ -1953,8 +1819,8 @@ async function loadAdminData() {
 
         refreshMembers.textContent =
             "LOADING...";
-    }
 
+    }
 
     try {
 
@@ -1962,34 +1828,31 @@ async function loadAdminData() {
             await fetch(
                 ADMIN_MEMBERS_ENDPOINT,
                 {
-                    method:
-                        "GET",
+                    method: "GET",
 
                     headers: {
-
                         "Authorization":
                             `Bearer ${token}`
-                    }
+                    },
+
+                    cache:
+                        "no-store"
                 }
             );
 
-
-        let result =
-            null;
-
+        let result = null;
 
         try {
 
             result =
                 await response.json();
-        }
 
+        }
         catch {
 
-            result =
-                null;
-        }
+            result = null;
 
+        }
 
         if (
             response.status === 401
@@ -2002,8 +1865,8 @@ async function loadAdminData() {
             );
 
             return;
-        }
 
+        }
 
         if (
             response.status === 403
@@ -2014,8 +1877,8 @@ async function loadAdminData() {
             );
 
             return;
-        }
 
+        }
 
         if (
             !response.ok ||
@@ -2026,8 +1889,8 @@ async function loadAdminData() {
                 result?.error ||
                 "Could not load admin data."
             );
-        }
 
+        }
 
         allMembers =
             Array.isArray(
@@ -2036,49 +1899,39 @@ async function loadAdminData() {
                 ? result.members
                 : [];
 
-
-        membersCurrentPage =
-            1;
-
+        membersCurrentPage = 1;
 
         updateStats(
             result.stats || {}
         );
 
-
         renderMembers();
-
 
         if (
             contestLoaded
         ) {
 
             renderContestEntries();
+
         }
 
-
-        if (
-            adminDashboard
-        ) {
+        if (adminDashboard) {
 
             adminDashboard.hidden =
                 false;
+
         }
 
-
-        if (
-            openContestPanel
-        ) {
+        if (openContestPanel) {
 
             openContestPanel.disabled =
                 false;
-        }
 
+        }
 
         setAdminIdentity(
             "VERIFIED ADMIN"
         );
-
 
         setAdminMessage(
             `ACCESS GRANTED — ${allMembers.length} GREMBLE MEMBER${allMembers.length === 1 ? "" : "S"} LOADED.`,
@@ -2086,7 +1939,6 @@ async function loadAdminData() {
         );
 
     }
-
     catch (error) {
 
         console.error(
@@ -2094,14 +1946,13 @@ async function loadAdminData() {
             error
         );
 
-
         showAccessError(
             500,
             error?.message ||
             "Could not load admin data."
         );
-    }
 
+    }
     finally {
 
         if (refreshMembers) {
@@ -2111,49 +1962,50 @@ async function loadAdminData() {
 
             refreshMembers.textContent =
                 "REFRESH";
+
         }
+
     }
+
 }
 
 
 /* =====================================================
-   FIND MEMBER FOR CONTEST
+   CONTEST MEMBER MATCH
 ===================================================== */
 
 function findMemberByContestUsername(
     participant
 ) {
 
-    const username =
+    const contestUsername =
         normalizeXUsername(
             participant
         );
 
-
-    if (!username) {
-
+    if (!contestUsername) {
         return null;
     }
-
 
     return (
         allMembers.find(
             member => {
 
-                const memberUsername =
+                const memberXUsername =
                     normalizeXUsername(
                         member.x_username
                     );
 
-
                 return (
-                    memberUsername &&
-                    memberUsername ===
-                    username
+                    memberXUsername &&
+                    memberXUsername ===
+                    contestUsername
                 );
+
             }
         ) || null
     );
+
 }
 
 
@@ -2161,154 +2013,155 @@ function findMemberByContestUsername(
    CONTEST MEMBER STATUS
 ===================================================== */
 
-function getContestMemberStatus(
-    entry
-) {
+function getContestMemberStatus(entry) {
 
     const member =
         findMemberByContestUsername(
             entry.participant
         );
 
-
     if (!member) {
 
         return {
-            type:
-                "not-found",
-
+            type: "not-found",
             tooltip:
                 "X USERNAME NOT FOUND"
         };
+
     }
 
-
     const chatStatus =
-        getChatStatus(
-            member
-        );
-
+        getChatStatus(member);
 
     const announcementsStatus =
         getAnnouncementsStatus(
             member
         );
 
+    const isInChat =
+        chatStatus === "member";
 
-    const inChat =
-        chatStatus ===
-        "member";
-
-
-    const inAnnouncements =
+    const isInAnnouncements =
         announcementsStatus ===
         "member";
 
-
     if (
-        inChat ||
-        inAnnouncements
+        isInChat ||
+        isInAnnouncements
     ) {
 
         let tooltip =
             "VERIFIED + TELEGRAM";
 
-
         if (
-            inChat &&
-            inAnnouncements
+            isInChat &&
+            isInAnnouncements
         ) {
 
             tooltip =
                 "IN CHAT + ANNOUNCEMENTS";
-        }
 
-        else if (inChat) {
+        }
+        else if (isInChat) {
 
             tooltip =
                 "IN GREMBLE CHAT";
-        }
 
+        }
         else {
 
             tooltip =
                 "IN GREMBLE ANNOUNCEMENTS";
+
         }
 
-
         return {
-
-            type:
-                "verified",
-
+            type: "verified",
             tooltip
         };
+
     }
 
-
     return {
-
-        type:
-            "registered",
-
+        type: "registered",
         tooltip:
             "X FOUND / NOT IN TELEGRAM"
     };
+
 }
 
 
-/* =====================================================
-   CREATE CONTEST STATUS
-===================================================== */
-
-function createContestMemberStatus(
-    entry
-) {
+function createContestMemberStatus(entry) {
 
     const status =
         getContestMemberStatus(
             entry
         );
 
-
     const wrapper =
         document.createElement(
             "span"
         );
 
-
     wrapper.className =
         `contest-member-status ${status.type}`;
-
 
     wrapper.setAttribute(
         "data-tooltip",
         status.tooltip
     );
 
-
     wrapper.setAttribute(
         "aria-label",
         status.tooltip
     );
-
 
     const dot =
         document.createElement(
             "span"
         );
 
-
     dot.className =
         "contest-member-status-dot";
-
 
     wrapper.appendChild(
         dot
     );
 
-
     return wrapper;
+
+}
+
+
+/* =====================================================
+   CONTEST MESSAGE
+===================================================== */
+
+function setContestMessage(
+    message,
+    type = ""
+) {
+
+    if (!contestFormMessage) {
+        return;
+    }
+
+    contestFormMessage.textContent =
+        message;
+
+    contestFormMessage.classList.remove(
+        "success",
+        "error"
+    );
+
+    if (type) {
+
+        contestFormMessage.classList.add(
+            type
+        );
+
+    }
+
 }
 
 
@@ -2320,37 +2173,33 @@ function setContestRequirements(
     isVerified
 ) {
 
-    if (
-        contestRequirementsValue
-    ) {
+    if (contestRequirementsValue) {
 
         contestRequirementsValue.value =
             isVerified
                 ? "true"
                 : "false";
+
     }
 
-
-    if (
-        contestRequirementsYes
-    ) {
+    if (contestRequirementsYes) {
 
         contestRequirementsYes.classList.toggle(
             "active",
             isVerified
         );
+
     }
 
-
-    if (
-        contestRequirementsNo
-    ) {
+    if (contestRequirementsNo) {
 
         contestRequirementsNo.classList.toggle(
             "active",
             !isVerified
         );
+
     }
+
 }
 
 
@@ -2363,7 +2212,6 @@ function updateContestStats() {
     const total =
         allContestEntries.length;
 
-
     const verified =
         allContestEntries.filter(
             entry =>
@@ -2371,27 +2219,20 @@ function updateContestStats() {
                 true
         ).length;
 
-
-    if (
-        contestTotalEntries
-    ) {
+    if (contestTotalEntries) {
 
         contestTotalEntries.textContent =
-            String(
-                total
-            );
+            String(total);
+
     }
 
-
-    if (
-        contestVerifiedEntries
-    ) {
+    if (contestVerifiedEntries) {
 
         contestVerifiedEntries.textContent =
-            String(
-                verified
-            );
+            String(verified);
+
     }
+
 }
 
 
@@ -2406,20 +2247,18 @@ function getFilteredContestEntries() {
             contestSearch?.value
         ).toLowerCase();
 
-
     if (!search) {
 
         return [
             ...allContestEntries
         ];
-    }
 
+    }
 
     const normalizedSearch =
         normalizeXUsername(
             search
         );
-
 
     return allContestEntries.filter(
         entry => {
@@ -2429,12 +2268,13 @@ function getFilteredContestEntries() {
                     entry.participant
                 );
 
-
             return participant.includes(
                 normalizedSearch
             );
+
         }
     );
+
 }
 
 
@@ -2442,144 +2282,132 @@ function getFilteredContestEntries() {
    SORT CONTEST
 ===================================================== */
 
-function sortContestEntries(
-    entries
-) {
+function sortContestEntries(entries) {
 
     const sortMode =
         cleanText(
             contestSort?.value
-        ) ||
-        "newest";
-
+        ) || "newest";
 
     const sorted =
-        [
-            ...entries
-        ];
-
+        [...entries];
 
     sorted.sort(
-        (
-            a,
-            b
-        ) => {
+        (a, b) => {
 
             const dateA =
                 new Date(
                     a.created_at
                 ).getTime() || 0;
 
-
             const dateB =
                 new Date(
                     b.created_at
                 ).getTime() || 0;
-
 
             const pointsA =
                 numberOrZero(
                     a.points
                 );
 
-
             const pointsB =
                 numberOrZero(
                     b.points
                 );
 
-
             const rulesA =
-                a.requirements_ok ===
-                true
+                a.requirements_ok === true
                     ? 1
                     : 0;
-
 
             const rulesB =
-                b.requirements_ok ===
-                true
+                b.requirements_ok === true
                     ? 1
                     : 0;
 
-
             if (
-                sortMode ===
-                "oldest"
+                sortMode === "oldest"
             ) {
 
-                return (
-                    dateA -
-                    dateB
-                );
-            }
+                return dateA - dateB;
 
+            }
 
             if (
                 sortMode ===
                 "points-high"
             ) {
 
-                return (
-                    pointsB -
-                    pointsA ||
-                    dateB -
-                    dateA
-                );
-            }
+                if (
+                    pointsB !== pointsA
+                ) {
 
+                    return pointsB - pointsA;
+
+                }
+
+                return dateB - dateA;
+
+            }
 
             if (
                 sortMode ===
                 "points-low"
             ) {
 
-                return (
-                    pointsA -
-                    pointsB ||
-                    dateB -
-                    dateA
-                );
-            }
+                if (
+                    pointsA !== pointsB
+                ) {
 
+                    return pointsA - pointsB;
+
+                }
+
+                return dateB - dateA;
+
+            }
 
             if (
                 sortMode ===
                 "rules-yes"
             ) {
 
-                return (
-                    rulesB -
-                    rulesA ||
-                    dateB -
-                    dateA
-                );
-            }
+                if (
+                    rulesB !== rulesA
+                ) {
 
+                    return rulesB - rulesA;
+
+                }
+
+                return dateB - dateA;
+
+            }
 
             if (
                 sortMode ===
                 "rules-no"
             ) {
 
-                return (
-                    rulesA -
-                    rulesB ||
-                    dateB -
-                    dateA
-                );
+                if (
+                    rulesA !== rulesB
+                ) {
+
+                    return rulesA - rulesB;
+
+                }
+
+                return dateB - dateA;
+
             }
 
+            return dateB - dateA;
 
-            return (
-                dateB -
-                dateA
-            );
         }
     );
 
-
     return sorted;
+
 }
 
 
@@ -2587,9 +2415,7 @@ function sortContestEntries(
    CREATE CONTEST ROW
 ===================================================== */
 
-function createContestRow(
-    entry
-) {
+function createContestRow(entry) {
 
     const row =
         document.createElement(
@@ -2604,23 +2430,18 @@ function createContestRow(
             "td"
         );
 
-
     const participant =
         document.createElement(
             "span"
         );
 
-
     participant.className =
         "contest-participant";
-
 
     participant.textContent =
         cleanText(
             entry.participant
-        ) ||
-        "—";
-
+        ) || "—";
 
     participantCell.appendChild(
         participant
@@ -2634,50 +2455,43 @@ function createContestRow(
             "td"
         );
 
-
     const memeUrl =
         cleanText(
             entry.meme_url
         );
 
-
     if (memeUrl) {
 
-        const link =
+        const memeLink =
             document.createElement(
                 "a"
             );
 
-
-        link.className =
+        memeLink.className =
             "contest-link";
 
-
-        link.href =
+        memeLink.href =
             memeUrl;
 
-
-        link.target =
+        memeLink.target =
             "_blank";
 
-
-        link.rel =
+        memeLink.rel =
             "noopener noreferrer";
 
-
-        link.textContent =
+        memeLink.textContent =
             "OPEN MEME ↗";
 
-
         memeCell.appendChild(
-            link
+            memeLink
         );
-    }
 
+    }
     else {
 
         memeCell.textContent =
             "—";
+
     }
 
 
@@ -2688,10 +2502,8 @@ function createContestRow(
             "td"
         );
 
-
     pointsCell.className =
         "contest-points";
-
 
     pointsCell.textContent =
         String(
@@ -2708,29 +2520,24 @@ function createContestRow(
             "td"
         );
 
-
     const rulesBadge =
         document.createElement(
             "span"
         );
 
-
     const requirementsOk =
         entry.requirements_ok ===
         true;
-
 
     rulesBadge.className =
         requirementsOk
             ? "contest-rule-badge yes"
             : "contest-rule-badge no";
 
-
     rulesBadge.textContent =
         requirementsOk
             ? "YES"
             : "NO";
-
 
     rulesCell.appendChild(
         rulesBadge
@@ -2744,10 +2551,8 @@ function createContestRow(
             "td"
         );
 
-
     addedCell.className =
         "date-value";
-
 
     addedCell.textContent =
         formatDate(
@@ -2762,12 +2567,10 @@ function createContestRow(
             "td"
         );
 
-
     const actions =
         document.createElement(
             "div"
         );
-
 
     actions.className =
         "contest-actions";
@@ -2778,18 +2581,14 @@ function createContestRow(
             "button"
         );
 
-
     editButton.type =
         "button";
-
 
     editButton.className =
         "contest-action-button edit";
 
-
     editButton.textContent =
         "EDIT";
-
 
     editButton.addEventListener(
         "click",
@@ -2798,6 +2597,7 @@ function createContestRow(
             startContestEdit(
                 entry
             );
+
         }
     );
 
@@ -2807,18 +2607,14 @@ function createContestRow(
             "button"
         );
 
-
     deleteButton.type =
         "button";
-
 
     deleteButton.className =
         "contest-action-button delete";
 
-
     deleteButton.textContent =
         "DELETE";
-
 
     deleteButton.addEventListener(
         "click",
@@ -2827,6 +2623,7 @@ function createContestRow(
             deleteContestEntry(
                 entry
             );
+
         }
     );
 
@@ -2835,11 +2632,9 @@ function createContestRow(
         editButton
     );
 
-
     actions.appendChild(
         deleteButton
     );
-
 
     actionsCell.appendChild(
         actions
@@ -2853,10 +2648,8 @@ function createContestRow(
             "td"
         );
 
-
     statusCell.className =
         "contest-member-status-cell";
-
 
     statusCell.appendChild(
         createContestMemberStatus(
@@ -2893,8 +2686,8 @@ function createContestRow(
         statusCell
     );
 
-
     return row;
+
 }
 
 
@@ -2904,27 +2697,20 @@ function createContestRow(
 
 function renderContestEntries() {
 
-    if (
-        !contestTableBody
-    ) {
-
+    if (!contestTableBody) {
         return;
     }
 
-
     const filtered =
         getFilteredContestEntries();
-
 
     const sorted =
         sortContestEntries(
             filtered
         );
 
-
     const totalFiltered =
         sorted.length;
-
 
     const totalPages =
         Math.max(
@@ -2935,7 +2721,6 @@ function renderContestEntries() {
             )
         );
 
-
     if (
         contestCurrentPage >
         totalPages
@@ -2943,45 +2728,35 @@ function renderContestEntries() {
 
         contestCurrentPage =
             totalPages;
-    }
 
+    }
 
     if (
         contestCurrentPage < 1
     ) {
 
-        contestCurrentPage =
-            1;
-    }
+        contestCurrentPage = 1;
 
+    }
 
     const startIndex =
         (
-            contestCurrentPage -
-            1
+            contestCurrentPage - 1
         ) *
         CONTEST_ITEMS_PER_PAGE;
-
-
-    const endIndex =
-        startIndex +
-        CONTEST_ITEMS_PER_PAGE;
-
 
     const pageEntries =
         sorted.slice(
             startIndex,
-            endIndex
+            startIndex +
+            CONTEST_ITEMS_PER_PAGE
         );
-
 
     contestTableBody.innerHTML =
         "";
 
-
     const fragment =
         document.createDocumentFragment();
-
 
     pageEntries.forEach(
         entry => {
@@ -2991,56 +2766,40 @@ function renderContestEntries() {
                     entry
                 )
             );
+
         }
     );
-
 
     contestTableBody.appendChild(
         fragment
     );
 
-
-    if (
-        contestEntriesLabel
-    ) {
+    if (contestEntriesLabel) {
 
         const hasSearch =
-            Boolean(
-                cleanText(
-                    contestSearch?.value
-                )
+            !!cleanText(
+                contestSearch?.value
             );
-
 
         if (hasSearch) {
 
             contestEntriesLabel.textContent =
-                `${totalFiltered} ${
-                    totalFiltered === 1
-                        ? "MATCH"
-                        : "MATCHES"
-                }`;
-        }
+                `${totalFiltered} ${totalFiltered === 1 ? "MATCH" : "MATCHES"}`;
 
+        }
         else {
 
             contestEntriesLabel.textContent =
-                `${allContestEntries.length} ${
-                    allContestEntries.length === 1
-                        ? "ENTRY"
-                        : "ENTRIES"
-                }`;
+                `${allContestEntries.length} ${allContestEntries.length === 1 ? "ENTRY" : "ENTRIES"}`;
+
         }
+
     }
 
-
-    if (
-        contestEmpty
-    ) {
+    if (contestEmpty) {
 
         contestEmpty.hidden =
             totalFiltered > 0;
-
 
         if (
             totalFiltered === 0
@@ -3052,17 +2811,18 @@ function renderContestEntries() {
                 )
                     ? "NO MATCHING PARTICIPANT."
                     : "NO CONTEST ENTRIES YET.";
-        }
-    }
 
+        }
+
+    }
 
     updateContestPagination(
         totalFiltered,
         totalPages
     );
 
-
     updateContestStats();
+
 }
 
 
@@ -3075,46 +2835,36 @@ function updateContestPagination(
     totalPages
 ) {
 
-    if (
-        !contestPagination
-    ) {
-
+    if (!contestPagination) {
         return;
     }
-
 
     contestPagination.hidden =
         totalFiltered <=
         CONTEST_ITEMS_PER_PAGE;
 
-
-    if (
-        contestPageInfo
-    ) {
+    if (contestPageInfo) {
 
         contestPageInfo.textContent =
             `${contestCurrentPage} OF ${totalPages}`;
+
     }
 
-
-    if (
-        contestPrevPage
-    ) {
+    if (contestPrevPage) {
 
         contestPrevPage.disabled =
-            contestCurrentPage <=
-            1;
+            contestCurrentPage <= 1;
+
     }
 
-
-    if (
-        contestNextPage
-    ) {
+    if (contestNextPage) {
 
         contestNextPage.disabled =
             contestCurrentPage >=
             totalPages;
+
     }
+
 }
 
 
@@ -3123,15 +2873,13 @@ function goToPreviousContestPage() {
     if (
         contestCurrentPage <= 1
     ) {
-
         return;
     }
 
-
     contestCurrentPage--;
 
-
     renderContestEntries();
+
 }
 
 
@@ -3139,7 +2887,6 @@ function goToNextContestPage() {
 
     const filtered =
         getFilteredContestEntries();
-
 
     const totalPages =
         Math.max(
@@ -3150,38 +2897,35 @@ function goToNextContestPage() {
             )
         );
 
-
     if (
         contestCurrentPage >=
         totalPages
     ) {
-
         return;
     }
 
-
     contestCurrentPage++;
 
-
     renderContestEntries();
+
 }
 
 
 function filterContestEntries() {
 
-    contestCurrentPage =
-        1;
+    contestCurrentPage = 1;
 
     renderContestEntries();
+
 }
 
 
 function changeContestSort() {
 
-    contestCurrentPage =
-        1;
+    contestCurrentPage = 1;
 
     renderContestEntries();
+
 }
 
 
@@ -3195,69 +2939,64 @@ function resetContestForm() {
 
         contestEntryId.value =
             "";
-    }
 
+    }
 
     if (contestParticipant) {
 
         contestParticipant.value =
             "";
-    }
 
+    }
 
     if (contestMemeUrl) {
 
         contestMemeUrl.value =
             "";
-    }
 
+    }
 
     if (contestPoints) {
 
         contestPoints.value =
             "0";
-    }
 
+    }
 
     setContestRequirements(
         false
     );
 
-
-    if (
-        contestSubmitButton
-    ) {
+    if (contestSubmitButton) {
 
         contestSubmitButton.textContent =
             "+ ADD PARTICIPANT";
+
     }
 
-
-    if (
-        contestCancelEdit
-    ) {
+    if (contestCancelEdit) {
 
         contestCancelEdit.hidden =
             true;
-    }
 
+    }
 
     const title =
         document.querySelector(
             ".contest-form-title"
         );
 
-
     if (title) {
 
         title.textContent =
             "ADD NEW ENTRY";
-    }
 
+    }
 
     setContestMessage(
         ""
     );
+
 }
 
 
@@ -3265,14 +3004,11 @@ function resetContestForm() {
    START CONTEST EDIT
 ===================================================== */
 
-function startContestEdit(
-    entry
-) {
+function startContestEdit(entry) {
 
     if (!entry) {
         return;
     }
-
 
     if (contestEntryId) {
 
@@ -3280,8 +3016,8 @@ function startContestEdit(
             String(
                 entry.id
             );
-    }
 
+    }
 
     if (contestParticipant) {
 
@@ -3289,8 +3025,8 @@ function startContestEdit(
             cleanText(
                 entry.participant
             );
-    }
 
+    }
 
     if (contestMemeUrl) {
 
@@ -3298,8 +3034,8 @@ function startContestEdit(
             cleanText(
                 entry.meme_url
             );
-    }
 
+    }
 
     if (contestPoints) {
 
@@ -3309,57 +3045,46 @@ function startContestEdit(
                     entry.points
                 )
             );
-    }
 
+    }
 
     setContestRequirements(
         entry.requirements_ok ===
         true
     );
 
-
-    if (
-        contestSubmitButton
-    ) {
+    if (contestSubmitButton) {
 
         contestSubmitButton.textContent =
             "SAVE CHANGES";
+
     }
 
-
-    if (
-        contestCancelEdit
-    ) {
+    if (contestCancelEdit) {
 
         contestCancelEdit.hidden =
             false;
-    }
 
+    }
 
     const title =
         document.querySelector(
             ".contest-form-title"
         );
 
-
     if (title) {
 
         title.textContent =
             "EDIT ENTRY";
+
     }
 
-
     setContestMessage(
-        `EDITING ${
-            cleanText(
-                entry.participant
-            ) ||
-            "PARTICIPANT"
-        }`
+        `EDITING ${cleanText(entry.participant) || "PARTICIPANT"}`
     );
 
-
     contestParticipant?.focus();
+
 }
 
 
@@ -3375,14 +3100,13 @@ async function contestRequest(
     const token =
         getSessionToken();
 
-
     if (!token) {
 
         throw new Error(
             "LOGIN REQUIRED."
         );
-    }
 
+    }
 
     if (
         sessionIsExpired()
@@ -3393,37 +3117,36 @@ async function contestRequest(
         throw new Error(
             "YOUR SESSION HAS EXPIRED. LOG IN AGAIN."
         );
-    }
 
+    }
 
     const options = {
 
         method,
 
         headers: {
-
             "Authorization":
                 `Bearer ${token}`
-        }
+        },
+
+        cache:
+            "no-store"
+
     };
 
-
-    if (
-        body !== null
-    ) {
+    if (body !== null) {
 
         options.headers[
             "Content-Type"
         ] =
             "application/json";
 
-
         options.body =
             JSON.stringify(
                 body
             );
-    }
 
+    }
 
     const response =
         await fetch(
@@ -3431,27 +3154,22 @@ async function contestRequest(
             options
         );
 
-
-    let result =
-        null;
-
+    let result = null;
 
     try {
 
         result =
             await response.json();
-    }
 
+    }
     catch {
 
-        result =
-            null;
+        result = null;
+
     }
 
-
     if (
-        response.status ===
-        401
+        response.status === 401
     ) {
 
         clearLocalSession();
@@ -3459,19 +3177,18 @@ async function contestRequest(
         throw new Error(
             "YOUR SESSION HAS EXPIRED. LOG IN AGAIN."
         );
+
     }
 
-
     if (
-        response.status ===
-        403
+        response.status === 403
     ) {
 
         throw new Error(
             "ADMIN ACCESS DENIED."
         );
-    }
 
+    }
 
     if (
         !response.ok ||
@@ -3482,10 +3199,11 @@ async function contestRequest(
             result?.error ||
             "CONTEST REQUEST FAILED."
         );
+
     }
 
-
     return result;
+
 }
 
 
@@ -3497,31 +3215,22 @@ async function loadContestEntries(
     force = false
 ) {
 
-    if (
-        contestLoading
-    ) {
-
+    if (contestLoading) {
         return;
     }
-
 
     if (
         contestLoaded &&
         !force
     ) {
-
         return;
     }
 
-
-    contestLoading =
-        true;
-
+    contestLoading = true;
 
     setContestMessage(
         "LOADING CONTEST ENTRIES..."
     );
-
 
     try {
 
@@ -3530,7 +3239,6 @@ async function loadContestEntries(
                 "GET"
             );
 
-
         allContestEntries =
             Array.isArray(
                 result.entries
@@ -3538,29 +3246,18 @@ async function loadContestEntries(
                 ? result.entries
                 : [];
 
+        contestLoaded = true;
 
-        contestLoaded =
-            true;
-
-
-        contestCurrentPage =
-            1;
-
+        contestCurrentPage = 1;
 
         renderContestEntries();
 
-
         setContestMessage(
-            `${allContestEntries.length} CONTEST ${
-                allContestEntries.length === 1
-                    ? "ENTRY"
-                    : "ENTRIES"
-            } LOADED.`,
+            `${allContestEntries.length} CONTEST ${allContestEntries.length === 1 ? "ENTRY" : "ENTRIES"} LOADED.`,
             "success"
         );
 
     }
-
     catch (error) {
 
         console.error(
@@ -3568,19 +3265,19 @@ async function loadContestEntries(
             error
         );
 
-
         setContestMessage(
             error?.message ||
             "COULD NOT LOAD CONTEST ENTRIES.",
             "error"
         );
-    }
 
+    }
     finally {
 
-        contestLoading =
-            false;
+        contestLoading = false;
+
     }
+
 }
 
 
@@ -3594,44 +3291,33 @@ async function saveContestEntry(
 
     event.preventDefault();
 
-
-    if (
-        contestSaving
-    ) {
-
+    if (contestSaving) {
         return;
     }
-
 
     const participant =
         cleanText(
             contestParticipant?.value
         );
 
-
     const memeUrl =
         cleanText(
             contestMemeUrl?.value
         );
-
 
     const points =
         Number(
             contestPoints?.value
         );
 
-
     const requirementsOk =
-        contestRequirementsValue
-            ?.value ===
+        contestRequirementsValue?.value ===
         "true";
-
 
     const editingId =
         Number(
             contestEntryId?.value
         );
-
 
     if (!participant) {
 
@@ -3643,8 +3329,8 @@ async function saveContestEntry(
         contestParticipant?.focus();
 
         return;
-    }
 
+    }
 
     if (!memeUrl) {
 
@@ -3656,8 +3342,8 @@ async function saveContestEntry(
         contestMemeUrl?.focus();
 
         return;
-    }
 
+    }
 
     try {
 
@@ -3666,18 +3352,16 @@ async function saveContestEntry(
                 memeUrl
             );
 
-
         if (
-            parsedUrl.protocol !==
-                "https:" &&
-            parsedUrl.protocol !==
-                "http:"
+            parsedUrl.protocol !== "https:" &&
+            parsedUrl.protocol !== "http:"
         ) {
 
             throw new Error();
-        }
-    }
 
+        }
+
+    }
     catch {
 
         setContestMessage(
@@ -3688,13 +3372,11 @@ async function saveContestEntry(
         contestMemeUrl?.focus();
 
         return;
+
     }
 
-
     if (
-        !Number.isInteger(
-            points
-        ) ||
+        !Number.isInteger(points) ||
         points < 0 ||
         points > 100000
     ) {
@@ -3707,8 +3389,8 @@ async function saveContestEntry(
         contestPoints?.focus();
 
         return;
-    }
 
+    }
 
     const isEditing =
         Number.isSafeInteger(
@@ -3716,32 +3398,25 @@ async function saveContestEntry(
         ) &&
         editingId > 0;
 
+    contestSaving = true;
 
-    contestSaving =
-        true;
-
-
-    if (
-        contestSubmitButton
-    ) {
+    if (contestSubmitButton) {
 
         contestSubmitButton.disabled =
             true;
-
 
         contestSubmitButton.textContent =
             isEditing
                 ? "SAVING..."
                 : "ADDING...";
-    }
 
+    }
 
     setContestMessage(
         isEditing
             ? "SAVING CHANGES..."
             : "ADDING PARTICIPANT..."
     );
-
 
     try {
 
@@ -3756,36 +3431,30 @@ async function saveContestEntry(
 
             requirements_ok:
                 requirementsOk
-        };
 
+        };
 
         if (isEditing) {
 
             payload.id =
                 editingId;
-        }
 
+        }
 
         await contestRequest(
             isEditing
                 ? "PUT"
                 : "POST",
-
             payload
         );
 
-
         resetContestForm();
 
-
-        contestLoaded =
-            false;
-
+        contestLoaded = false;
 
         await loadContestEntries(
             true
         );
-
 
         setContestMessage(
             isEditing
@@ -3795,7 +3464,6 @@ async function saveContestEntry(
         );
 
     }
-
     catch (error) {
 
         console.error(
@@ -3803,40 +3471,36 @@ async function saveContestEntry(
             error
         );
 
-
         setContestMessage(
             error?.message ||
             "COULD NOT SAVE PARTICIPANT.",
             "error"
         );
-    }
 
+    }
     finally {
 
-        contestSaving =
-            false;
+        contestSaving = false;
 
-
-        if (
-            contestSubmitButton
-        ) {
+        if (contestSubmitButton) {
 
             contestSubmitButton.disabled =
                 false;
-
 
             const stillEditing =
                 Number(
                     contestEntryId?.value
                 ) > 0;
 
-
             contestSubmitButton.textContent =
                 stillEditing
                     ? "SAVE CHANGES"
                     : "+ ADD PARTICIPANT";
+
         }
+
     }
+
 }
 
 
@@ -3844,14 +3508,11 @@ async function saveContestEntry(
    DELETE CONTEST ENTRY
 ===================================================== */
 
-async function deleteContestEntry(
-    entry
-) {
+async function deleteContestEntry(entry) {
 
     if (!entry) {
         return;
     }
-
 
     const participant =
         cleanText(
@@ -3859,25 +3520,20 @@ async function deleteContestEntry(
         ) ||
         "THIS PARTICIPANT";
 
-
     const confirmed =
         window.confirm(
             `Delete ${participant} from the contest?`
         );
 
-
     if (!confirmed) {
-
         return;
     }
-
 
     try {
 
         setContestMessage(
             `DELETING ${participant}...`
         );
-
 
         await contestRequest(
             "DELETE",
@@ -3889,7 +3545,6 @@ async function deleteContestEntry(
             }
         );
 
-
         if (
             Number(
                 contestEntryId?.value
@@ -3900,17 +3555,14 @@ async function deleteContestEntry(
         ) {
 
             resetContestForm();
+
         }
 
-
-        contestLoaded =
-            false;
-
+        contestLoaded = false;
 
         await loadContestEntries(
             true
         );
-
 
         setContestMessage(
             `${participant} DELETED.`,
@@ -3918,7 +3570,6 @@ async function deleteContestEntry(
         );
 
     }
-
     catch (error) {
 
         console.error(
@@ -3926,13 +3577,14 @@ async function deleteContestEntry(
             error
         );
 
-
         setContestMessage(
             error?.message ||
             "COULD NOT DELETE PARTICIPANT.",
             "error"
         );
+
     }
+
 }
 
 
@@ -3942,30 +3594,20 @@ async function deleteContestEntry(
 
 async function openContest() {
 
-    if (
-        !contestPanel
-    ) {
-
+    if (!contestPanel) {
         return;
     }
-
 
     contestPanel.hidden =
         false;
 
-
     await loadContestEntries();
 
+    contestPanel.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
 
-    contestPanel.scrollIntoView(
-        {
-            behavior:
-                "smooth",
-
-            block:
-                "start"
-        }
-    );
 }
 
 
@@ -3975,175 +3617,143 @@ async function openContest() {
 
 function closeContest() {
 
-    if (
-        !contestPanel
-    ) {
-
+    if (!contestPanel) {
         return;
     }
-
 
     contestPanel.hidden =
         true;
 
-
     resetContestForm();
+
 }
 
 
 /* =====================================================
-   EVENTS - MEMBERS
+   MEMBER EVENTS
 ===================================================== */
 
-if (
-    memberSearch
-) {
+if (memberSearch) {
 
     memberSearch.addEventListener(
         "input",
         filterMembers
     );
+
 }
 
 
-if (
-    membersPrevPage
-) {
+if (membersPrevPage) {
 
     membersPrevPage.addEventListener(
         "click",
         goToPreviousMembersPage
     );
+
 }
 
 
-if (
-    membersNextPage
-) {
+if (membersNextPage) {
 
     membersNextPage.addEventListener(
         "click",
         goToNextMembersPage
     );
+
 }
 
 
-if (
-    refreshMembers
-) {
+if (refreshMembers) {
 
     refreshMembers.addEventListener(
         "click",
         async () => {
 
-            if (
-                memberSearch
-            ) {
+            if (memberSearch) {
 
                 memberSearch.value =
                     "";
+
             }
 
-
-            membersCurrentPage =
-                1;
-
+            membersCurrentPage = 1;
 
             await loadAdminData();
+
         }
     );
+
 }
 
 
 /* =====================================================
-   EVENTS - CONTEST PANEL
+   CONTEST EVENTS
 ===================================================== */
 
-if (
-    openContestPanel
-) {
+if (openContestPanel) {
 
     openContestPanel.disabled =
         true;
-
 
     openContestPanel.addEventListener(
         "click",
         openContest
     );
+
 }
 
 
-if (
-    closeContestPanel
-) {
+if (closeContestPanel) {
 
     closeContestPanel.addEventListener(
         "click",
         closeContest
     );
+
 }
 
 
-/* =====================================================
-   EVENTS - CONTEST SEARCH
-===================================================== */
-
-if (
-    contestSearch
-) {
+if (contestSearch) {
 
     contestSearch.addEventListener(
         "input",
         filterContestEntries
     );
+
 }
 
 
-if (
-    contestSort
-) {
+if (contestSort) {
 
     contestSort.addEventListener(
         "change",
         changeContestSort
     );
+
 }
 
 
-/* =====================================================
-   EVENTS - CONTEST PAGINATION
-===================================================== */
-
-if (
-    contestPrevPage
-) {
+if (contestPrevPage) {
 
     contestPrevPage.addEventListener(
         "click",
         goToPreviousContestPage
     );
+
 }
 
 
-if (
-    contestNextPage
-) {
+if (contestNextPage) {
 
     contestNextPage.addEventListener(
         "click",
         goToNextContestPage
     );
+
 }
 
 
-/* =====================================================
-   EVENTS - CONTEST RULES
-===================================================== */
-
-if (
-    contestRequirementsYes
-) {
+if (contestRequirementsYes) {
 
     contestRequirementsYes.addEventListener(
         "click",
@@ -4152,14 +3762,14 @@ if (
             setContestRequirements(
                 true
             );
+
         }
     );
+
 }
 
 
-if (
-    contestRequirementsNo
-) {
+if (contestRequirementsNo) {
 
     contestRequirementsNo.addEventListener(
         "click",
@@ -4168,37 +3778,30 @@ if (
             setContestRequirements(
                 false
             );
+
         }
     );
+
 }
 
 
-/* =====================================================
-   EVENTS - CONTEST FORM
-===================================================== */
-
-if (
-    contestEntryForm
-) {
+if (contestEntryForm) {
 
     contestEntryForm.addEventListener(
         "submit",
         saveContestEntry
     );
+
 }
 
 
-if (
-    contestCancelEdit
-) {
+if (contestCancelEdit) {
 
     contestCancelEdit.addEventListener(
         "click",
-        () => {
-
-            resetContestForm();
-        }
+        resetContestForm
     );
+
 }
 
 
@@ -4212,20 +3815,16 @@ document.addEventListener(
 
         resetContestForm();
 
-
-        if (
-            contestSort
-        ) {
+        if (contestSort) {
 
             contestSort.value =
                 "newest";
+
         }
 
-
-        membersCurrentPage =
-            1;
-
+        membersCurrentPage = 1;
 
         loadAdminData();
+
     }
 );
