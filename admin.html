@@ -69,8 +69,8 @@
             text-decoration: none;
         }
 
-        button {
-            outline: none;
+        [hidden] {
+            display: none !important;
         }
 
 
@@ -84,7 +84,6 @@
             z-index: -1;
 
             overflow: hidden;
-
             pointer-events: none;
         }
 
@@ -97,7 +96,6 @@
             border-radius: 50%;
 
             filter: blur(110px);
-
             opacity: .12;
         }
 
@@ -189,6 +187,7 @@
 
         .admin-brand-copy strong {
             font-size: 18px;
+
             letter-spacing: 1px;
         }
 
@@ -340,7 +339,6 @@
                 );
 
             line-height: .94;
-
             letter-spacing: -3px;
         }
 
@@ -477,7 +475,7 @@
 
 
         /* =====================================================
-           CONTEST OPEN BUTTON
+           CONTEST OPEN
         ===================================================== */
 
         .contest-open-button {
@@ -522,7 +520,6 @@
 
         .contest-open-button:disabled {
             opacity: .35;
-
             cursor: not-allowed;
         }
 
@@ -567,7 +564,7 @@
 
 
         /* =====================================================
-           ADMIN MESSAGE
+           MESSAGE
         ===================================================== */
 
         .admin-message {
@@ -614,8 +611,556 @@
             margin-top: 24px;
         }
 
-        .admin-dashboard[hidden] {
-            display: none;
+
+        /* =====================================================
+           STATS
+        ===================================================== */
+
+        .stats-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(
+                    5,
+                    minmax(0,1fr)
+                );
+
+            gap: 14px;
+        }
+
+        .stat-card {
+            min-height: 130px;
+
+            padding: 22px;
+
+            border:
+                1px solid
+                rgba(101,255,131,.09);
+
+            border-radius: 20px;
+
+            background:
+                rgba(5,15,10,.72);
+        }
+
+        .stat-card span {
+            display: block;
+
+            color: #68766d;
+
+            font-size: 8px;
+            font-weight: 900;
+        }
+
+        .stat-card strong {
+            display: block;
+
+            margin-top: 10px;
+
+            color: #f4f7f5;
+
+            font-size: 34px;
+        }
+
+        .stat-card small {
+            display: block;
+
+            margin-top: 7px;
+
+            color: #65ff83;
+
+            font-size: 9px;
+            font-weight: 800;
+        }
+
+
+        /* =====================================================
+           MEMBERS PANEL
+        ===================================================== */
+
+        .members-panel {
+            margin-top: 22px;
+
+            border:
+                1px solid
+                rgba(101,255,131,.1);
+
+            border-radius: 24px;
+
+            overflow: hidden;
+
+            background:
+                rgba(4,12,8,.78);
+        }
+
+        .members-panel-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            gap: 18px;
+
+            padding: 22px;
+        }
+
+        .members-panel-title span {
+            display: block;
+
+            color: #65ff83;
+
+            font-size: 8px;
+            font-weight: 900;
+        }
+
+        .members-panel-title h2 {
+            margin-top: 5px;
+
+            font-size: 24px;
+        }
+
+        .members-tools {
+            display: flex;
+            align-items: center;
+
+            gap: 10px;
+        }
+
+        .member-search {
+            width: 370px;
+            max-width: 100%;
+
+            min-height: 43px;
+
+            padding:
+                0
+                14px;
+
+            border:
+                1px solid
+                rgba(101,255,131,.12);
+
+            border-radius: 12px;
+
+            outline: none;
+
+            background:
+                rgba(0,5,3,.65);
+
+            color: #eef4f0;
+
+            font-size: 12px;
+        }
+
+        .refresh-button {
+            min-height: 43px;
+
+            padding:
+                0
+                15px;
+
+            border:
+                1px solid
+                rgba(101,255,131,.13);
+
+            border-radius: 12px;
+
+            background:
+                rgba(101,255,131,.04);
+
+            color: #65ff83;
+
+            font-size: 9px;
+            font-weight: 900;
+        }
+
+
+        /* =====================================================
+           MEMBERS TABLE
+           HORIZONTAL SCROLL RESTORED
+        ===================================================== */
+
+        .members-table-wrap {
+            width: 100%;
+
+            overflow-x: auto;
+            overflow-y: hidden;
+
+            border-top:
+                1px solid
+                rgba(255,255,255,.05);
+
+            scrollbar-width: auto;
+        }
+
+        .members-table {
+            width: 100%;
+
+            min-width: 1500px;
+
+            border-collapse: collapse;
+
+            table-layout: auto;
+        }
+
+        .members-table th {
+            padding:
+                15px
+                18px;
+
+            text-align: left;
+
+            color: #657269;
+
+            background:
+                rgba(255,255,255,.018);
+
+            font-size: 8px;
+            font-weight: 900;
+
+            white-space: nowrap;
+        }
+
+        .members-table td {
+            padding:
+                17px
+                18px;
+
+            border-top:
+                1px solid
+                rgba(255,255,255,.045);
+
+            color: #cbd5cf;
+
+            font-size: 11px;
+
+            vertical-align: middle;
+
+            white-space: nowrap;
+        }
+
+        .members-table tr:hover td {
+            background:
+                rgba(101,255,131,.018);
+        }
+
+
+        /* =====================================================
+           MEMBER TEXT
+        ===================================================== */
+
+        .telegram-name {
+            color: #f4f7f5;
+
+            font-weight: 800;
+        }
+
+        .telegram-username,
+        .x-username {
+            color: #65ff83;
+        }
+
+        .empty-value {
+            color: #59665e;
+        }
+
+
+        /* =====================================================
+           ADDRESS / COPY
+        ===================================================== */
+
+        .wallet-cell {
+            display: flex;
+            align-items: center;
+
+            gap: 8px;
+        }
+
+        .wallet-address {
+            max-width: 160px;
+
+            overflow: hidden;
+
+            white-space: nowrap;
+
+            text-overflow: ellipsis;
+
+            color: #aab6ae;
+        }
+
+        .copy-button {
+            flex: 0 0 auto;
+
+            padding:
+                7px
+                9px;
+
+            border:
+                1px solid
+                rgba(101,255,131,.11);
+
+            border-radius: 8px;
+
+            background:
+                rgba(101,255,131,.035);
+
+            color: #65ff83;
+
+            font-size: 7px;
+            font-weight: 900;
+        }
+
+
+        /* =====================================================
+           TELEGRAM BADGES
+        ===================================================== */
+
+        .telegram-group-badge {
+            display: inline-flex;
+            align-items: center;
+
+            padding:
+                7px
+                10px;
+
+            border-radius: 999px;
+
+            font-size: 8px;
+            font-weight: 900;
+
+            white-space: nowrap;
+        }
+
+        .telegram-group-badge.member {
+            border:
+                1px solid
+                rgba(101,255,131,.25);
+
+            background:
+                rgba(101,255,131,.07);
+
+            color: #65ff83;
+        }
+
+        .telegram-group-badge.not-member {
+            border:
+                1px solid
+                rgba(255,89,100,.24);
+
+            background:
+                rgba(255,89,100,.06);
+
+            color: #ff717b;
+        }
+
+        .telegram-group-badge.unknown {
+            border:
+                1px solid
+                rgba(255,211,92,.22);
+
+            background:
+                rgba(255,211,92,.05);
+
+            color: #ffd35c;
+        }
+
+        .chat-header,
+        .announcements-header {
+            color: #65ff83 !important;
+        }
+
+
+        /* =====================================================
+           DATE
+        ===================================================== */
+
+        .date-value {
+            color: #75837a;
+
+            white-space: nowrap;
+        }
+
+
+        /* =====================================================
+           COUNTRY
+        ===================================================== */
+
+        .country-cell {
+            display: inline-flex;
+            align-items: center;
+
+            gap: 7px;
+
+            white-space: nowrap;
+        }
+
+        .country-flag {
+            font-size: 14px;
+        }
+
+        .country-name {
+            color: #cbd5cf;
+
+            font-weight: 900;
+        }
+
+
+        /* =====================================================
+           WALLET YES / NO
+        ===================================================== */
+
+        .wallet-status-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            gap: 7px;
+
+            min-width: 68px;
+
+            padding:
+                7px
+                12px;
+
+            border-radius: 999px;
+
+            font-size: 8px;
+            font-weight: 900;
+
+            white-space: nowrap;
+        }
+
+        .wallet-status-dot {
+            width: 8px;
+            height: 8px;
+
+            border-radius: 50%;
+        }
+
+        .wallet-status-badge.yes {
+            border:
+                1px solid
+                rgba(101,255,131,.25);
+
+            background:
+                rgba(101,255,131,.07);
+
+            color: #65ff83;
+        }
+
+        .wallet-status-badge.yes
+        .wallet-status-dot {
+            background: #65ff83;
+
+            box-shadow:
+                0 0 10px
+                rgba(101,255,131,.75);
+        }
+
+        .wallet-status-badge.no {
+            border:
+                1px solid
+                rgba(255,89,100,.24);
+
+            background:
+                rgba(255,89,100,.06);
+
+            color: #ff717b;
+        }
+
+        .wallet-status-badge.no
+        .wallet-status-dot {
+            background: #ff5964;
+
+            box-shadow:
+                0 0 10px
+                rgba(255,89,100,.65);
+        }
+
+
+        /* =====================================================
+           MEMBERS EMPTY
+        ===================================================== */
+
+        .members-empty {
+            padding:
+                50px
+                20px;
+
+            text-align: center;
+
+            color: #68766d;
+
+            font-size: 12px;
+        }
+
+
+        /* =====================================================
+           MEMBERS PAGINATION
+        ===================================================== */
+
+        .members-pagination {
+            min-height: 62px;
+
+            padding:
+                13px
+                18px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            gap: 12px;
+
+            border-top:
+                1px solid
+                rgba(255,255,255,.05);
+
+            background:
+                rgba(255,255,255,.01);
+        }
+
+        .members-page-button {
+            min-width: 94px;
+            min-height: 36px;
+
+            padding:
+                0
+                12px;
+
+            border:
+                1px solid
+                rgba(101,255,131,.13);
+
+            border-radius: 9px;
+
+            background:
+                rgba(101,255,131,.035);
+
+            color: #65ff83;
+
+            font-size: 7px;
+            font-weight: 900;
+
+            letter-spacing: .8px;
+        }
+
+        .members-page-button:disabled {
+            opacity: .25;
+
+            cursor: not-allowed;
+        }
+
+        .members-page-info {
+            min-width: 86px;
+
+            text-align: center;
+
+            color: #8c9991;
+
+            font-size: 8px;
+            font-weight: 900;
+
+            letter-spacing: 1px;
         }
 
 
@@ -636,10 +1181,6 @@
 
             background:
                 rgba(4,12,8,.84);
-        }
-
-        .contest-panel[hidden] {
-            display: none;
         }
 
         .contest-panel-header {
@@ -719,7 +1260,10 @@
             display: grid;
 
             grid-template-columns:
-                repeat(2,minmax(0,1fr));
+                repeat(
+                    2,
+                    minmax(0,1fr)
+                );
 
             gap: 14px;
 
@@ -837,6 +1381,7 @@
 
         .contest-form input {
             width: 100%;
+
             min-height: 44px;
 
             padding:
@@ -857,11 +1402,6 @@
             color: #eef4f0;
 
             font-size: 11px;
-        }
-
-        .contest-form input:focus {
-            border-color:
-                rgba(101,255,131,.42);
         }
 
         .contest-requirements {
@@ -908,17 +1448,11 @@
         .contest-rule-button.active.yes {
             background:
                 rgba(101,255,131,.13);
-
-            border-color:
-                rgba(101,255,131,.55);
         }
 
         .contest-rule-button.active.no {
             background:
                 rgba(255,89,100,.11);
-
-            border-color:
-                rgba(255,89,100,.5);
         }
 
         .contest-submit-button {
@@ -957,10 +1491,6 @@
 
             font-size: 8px;
             font-weight: 900;
-        }
-
-        .contest-cancel-edit[hidden] {
-            display: none;
         }
 
         .contest-form-message {
@@ -1004,10 +1534,6 @@
             border-bottom:
                 1px solid
                 rgba(255,255,255,.05);
-        }
-
-        .contest-list-title {
-            flex: 0 0 auto;
         }
 
         .contest-list-title strong {
@@ -1085,8 +1611,6 @@
                 translateY(-50%);
 
             color: #65ff83;
-
-            font-size: 13px;
         }
 
         .contest-sort-wrap {
@@ -1120,15 +1644,6 @@
 
             font-size: 9px;
             font-weight: 900;
-
-            appearance: none;
-            -webkit-appearance: none;
-        }
-
-        .contest-sort option {
-            background: #06100a;
-
-            color: #eef5f0;
         }
 
         .contest-sort-arrow {
@@ -1140,11 +1655,11 @@
             transform:
                 translateY(-50%);
 
+            pointer-events: none;
+
             color: #65ff83;
 
             font-size: 10px;
-
-            pointer-events: none;
         }
 
 
@@ -1181,8 +1696,6 @@
             font-size: 7px;
             font-weight: 900;
 
-            letter-spacing: 1.2px;
-
             white-space: nowrap;
         }
 
@@ -1200,16 +1713,7 @@
             vertical-align: middle;
         }
 
-        .contest-participant {
-            color: #65ff83;
-
-            font-weight: 800;
-        }
-
-        .contest-link:hover {
-            color: #65ff83;
-        }
-
+        .contest-participant,
         .contest-points {
             color: #65ff83;
 
@@ -1297,11 +1801,6 @@
             color: #ff717b;
         }
 
-
-        /* =====================================================
-           CONTEST MEMBER STATUS
-        ===================================================== */
-
         .contest-member-status-cell {
             text-align: center;
         }
@@ -1326,58 +1825,19 @@
             border-radius: 50%;
         }
 
-        .contest-member-status.verified {
-            background:
-                rgba(101,255,131,.07);
-
-            border:
-                1px solid
-                rgba(101,255,131,.18);
-        }
-
         .contest-member-status.verified
         .contest-member-status-dot {
             background: #65ff83;
-
-            box-shadow:
-                0 0 12px
-                rgba(101,255,131,.85);
-        }
-
-        .contest-member-status.registered {
-            background:
-                rgba(255,174,66,.07);
-
-            border:
-                1px solid
-                rgba(255,174,66,.22);
         }
 
         .contest-member-status.registered
         .contest-member-status-dot {
             background: #ffae42;
-
-            box-shadow:
-                0 0 12px
-                rgba(255,174,66,.75);
-        }
-
-        .contest-member-status.not-found {
-            background:
-                rgba(255,89,100,.07);
-
-            border:
-                1px solid
-                rgba(255,89,100,.22);
         }
 
         .contest-member-status.not-found
         .contest-member-status-dot {
             background: #ff5964;
-
-            box-shadow:
-                0 0 12px
-                rgba(255,89,100,.75);
         }
 
         .contest-member-status::after {
@@ -1390,9 +1850,7 @@
 
             right: 0;
             bottom:
-                calc(
-                    100% + 9px
-                );
+                calc(100% + 9px);
 
             min-width: 165px;
 
@@ -1413,39 +1871,18 @@
             font-size: 7px;
             font-weight: 900;
 
-            letter-spacing: .5px;
-
             white-space: nowrap;
 
             opacity: 0;
             visibility: hidden;
-
-            transform:
-                translateY(4px);
-
-            transition:
-                opacity .15s ease,
-                transform .15s ease,
-                visibility .15s ease;
-
-            pointer-events: none;
 
             z-index: 20;
         }
 
         .contest-member-status:hover::after {
             opacity: 1;
-
             visibility: visible;
-
-            transform:
-                translateY(0);
         }
-
-
-        /* =====================================================
-           EMPTY / PAGINATION
-        ===================================================== */
 
         .contest-empty {
             padding:
@@ -1457,10 +1894,6 @@
             color: #657269;
 
             font-size: 10px;
-        }
-
-        .contest-empty[hidden] {
-            display: none;
         }
 
         .contest-pagination {
@@ -1479,10 +1912,6 @@
             border-top:
                 1px solid
                 rgba(255,255,255,.05);
-        }
-
-        .contest-pagination[hidden] {
-            display: none;
         }
 
         .contest-page-button {
@@ -1510,8 +1939,6 @@
 
         .contest-page-button:disabled {
             opacity: .25;
-
-            cursor: not-allowed;
         }
 
         .contest-page-info {
@@ -1527,779 +1954,8 @@
 
 
         /* =====================================================
-           MAIN STATS
-        ===================================================== */
-
-        .stats-grid {
-            display: grid;
-
-            grid-template-columns:
-                repeat(
-                    5,
-                    minmax(0,1fr)
-                );
-
-            gap: 14px;
-        }
-
-        .stat-card {
-            min-height: 130px;
-
-            padding: 22px;
-
-            border:
-                1px solid
-                rgba(101,255,131,.09);
-
-            border-radius: 20px;
-
-            background:
-                rgba(5,15,10,.72);
-        }
-
-        .stat-card span {
-            display: block;
-
-            color: #68766d;
-
-            font-size: 8px;
-            font-weight: 900;
-        }
-
-        .stat-card strong {
-            display: block;
-
-            margin-top: 10px;
-
-            color: #f4f7f5;
-
-            font-size: 34px;
-        }
-
-        .stat-card small {
-            display: block;
-
-            margin-top: 7px;
-
-            color: #65ff83;
-
-            font-size: 9px;
-            font-weight: 800;
-        }
-
-
-        /* =====================================================
-           MEMBERS PANEL
-        ===================================================== */
-
-        .members-panel {
-            margin-top: 22px;
-
-            border:
-                1px solid
-                rgba(101,255,131,.1);
-
-            border-radius: 24px;
-
-            /*
-                IMPORTANT:
-                We keep the rounded outer panel,
-                but the members table itself does not
-                create a horizontal desktop scrollbar.
-            */
-            overflow: hidden;
-
-            background:
-                rgba(4,12,8,.78);
-        }
-
-        .members-panel-top {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-
-            gap: 18px;
-
-            padding: 22px;
-        }
-
-        .members-panel-title span {
-            display: block;
-
-            color: #65ff83;
-
-            font-size: 8px;
-            font-weight: 900;
-        }
-
-        .members-panel-title h2 {
-            margin-top: 5px;
-
-            font-size: 24px;
-        }
-
-        .members-tools {
-            display: flex;
-            align-items: center;
-
-            gap: 10px;
-        }
-
-        .member-search {
-            width: 370px;
-            max-width: 100%;
-
-            min-height: 43px;
-
-            padding:
-                0
-                14px;
-
-            border:
-                1px solid
-                rgba(101,255,131,.12);
-
-            border-radius: 12px;
-
-            outline: none;
-
-            background:
-                rgba(0,5,3,.65);
-
-            color: #eef4f0;
-
-            font-size: 12px;
-        }
-
-        .refresh-button {
-            min-height: 43px;
-
-            padding:
-                0
-                15px;
-
-            border:
-                1px solid
-                rgba(101,255,131,.13);
-
-            border-radius: 12px;
-
-            background:
-                rgba(101,255,131,.04);
-
-            color: #65ff83;
-
-            font-size: 9px;
-            font-weight: 900;
-        }
-
-
-        /* =====================================================
-           MEMBERS TABLE
-           DESKTOP = NO HORIZONTAL BAR
-        ===================================================== */
-
-        .members-table-wrap {
-            width: 100%;
-            max-width: 100%;
-
-            /*
-                This removes the grey horizontal bar
-                on normal desktop screens.
-            */
-            overflow-x: hidden;
-
-            border-top:
-                1px solid
-                rgba(255,255,255,.05);
-        }
-
-        .members-table {
-            width: 100%;
-
-            /*
-                No forced 1380 / 1580px width anymore.
-            */
-            min-width: 0;
-
-            table-layout: fixed;
-
-            border-collapse: collapse;
-        }
-
-        .members-table th {
-            padding:
-                13px
-                7px;
-
-            text-align: left;
-
-            color: #657269;
-
-            background:
-                rgba(255,255,255,.018);
-
-            font-size: 7px;
-            font-weight: 900;
-
-            line-height: 1.25;
-
-            letter-spacing: .15px;
-
-            white-space: normal;
-
-            overflow-wrap: anywhere;
-        }
-
-        .members-table td {
-            min-width: 0;
-
-            padding:
-                15px
-                7px;
-
-            border-top:
-                1px solid
-                rgba(255,255,255,.045);
-
-            color: #cbd5cf;
-
-            font-size: 9px;
-
-            line-height: 1.3;
-
-            vertical-align: middle;
-
-            overflow: hidden;
-        }
-
-        .members-table tr:hover td {
-            background:
-                rgba(101,255,131,.018);
-        }
-
-
-        /*
-            COLUMN WIDTHS
-
-            1  Telegram name
-            2  Telegram username
-            3  Chat
-            4  Announcements
-            5  X
-            6  Solana
-            7  Joined
-            8  Updated
-            9  Country
-            10 Wallet
-        */
-
-        .members-table th:nth-child(1),
-        .members-table td:nth-child(1) {
-            width: 11%;
-        }
-
-        .members-table th:nth-child(2),
-        .members-table td:nth-child(2) {
-            width: 10%;
-        }
-
-        .members-table th:nth-child(3),
-        .members-table td:nth-child(3) {
-            width: 10%;
-        }
-
-        .members-table th:nth-child(4),
-        .members-table td:nth-child(4) {
-            width: 14%;
-        }
-
-        .members-table th:nth-child(5),
-        .members-table td:nth-child(5) {
-            width: 9%;
-        }
-
-        .members-table th:nth-child(6),
-        .members-table td:nth-child(6) {
-            width: 12%;
-        }
-
-        .members-table th:nth-child(7),
-        .members-table td:nth-child(7) {
-            width: 9%;
-        }
-
-        .members-table th:nth-child(8),
-        .members-table td:nth-child(8) {
-            width: 9%;
-        }
-
-        .members-table th:nth-child(9),
-        .members-table td:nth-child(9) {
-            width: 7%;
-        }
-
-        .members-table th:nth-child(10),
-        .members-table td:nth-child(10) {
-            width: 9%;
-        }
-
-
-        /* =====================================================
-           MEMBER VALUES
-        ===================================================== */
-
-        .telegram-name {
-            display: block;
-
-            max-width: 100%;
-
-            overflow: hidden;
-
-            white-space: nowrap;
-
-            text-overflow: ellipsis;
-
-            color: #f4f7f5;
-
-            font-weight: 800;
-        }
-
-        .telegram-username,
-        .x-username {
-            display: block;
-
-            max-width: 100%;
-
-            overflow: hidden;
-
-            white-space: nowrap;
-
-            text-overflow: ellipsis;
-
-            color: #65ff83;
-        }
-
-        .empty-value {
-            color: #59665e;
-        }
-
-
-        /* =====================================================
-           ADDRESS + COPY
-        ===================================================== */
-
-        .wallet-cell {
-            width: 100%;
-            min-width: 0;
-
-            display: flex;
-            align-items: center;
-
-            gap: 5px;
-        }
-
-        .wallet-address {
-            min-width: 0;
-            max-width: 100%;
-
-            flex: 1;
-
-            overflow: hidden;
-
-            white-space: nowrap;
-
-            text-overflow: ellipsis;
-
-            color: #aab6ae;
-        }
-
-        .copy-button {
-            flex:
-                0
-                0
-                auto;
-
-            padding:
-                6px
-                7px;
-
-            border:
-                1px solid
-                rgba(101,255,131,.11);
-
-            border-radius: 8px;
-
-            background:
-                rgba(101,255,131,.035);
-
-            color: #65ff83;
-
-            font-size: 6px;
-            font-weight: 900;
-
-            letter-spacing: .3px;
-        }
-
-        .copy-button:hover {
-            border-color:
-                rgba(101,255,131,.3);
-        }
-
-
-        /* =====================================================
-           COUNTRY
-        ===================================================== */
-
-        .country-cell {
-            display: inline-flex;
-            align-items: center;
-
-            gap: 5px;
-
-            max-width: 100%;
-
-            color: #cbd5cf;
-
-            font-weight: 900;
-
-            white-space: nowrap;
-        }
-
-        .country-flag {
-            flex:
-                0
-                0
-                auto;
-
-            font-size: 13px;
-
-            line-height: 1;
-        }
-
-        .country-name {
-            min-width: 0;
-
-            overflow: hidden;
-
-            white-space: nowrap;
-
-            text-overflow: ellipsis;
-        }
-
-
-        /* =====================================================
-           VERIFIED WALLET YES / NO
-        ===================================================== */
-
-        .wallet-status-badge {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-
-            gap: 5px;
-
-            min-width: 56px;
-
-            padding:
-                7px
-                8px;
-
-            border-radius: 999px;
-
-            font-size: 7px;
-            font-weight: 900;
-
-            white-space: nowrap;
-        }
-
-        .wallet-status-dot {
-            width: 8px;
-            height: 8px;
-
-            flex:
-                0
-                0
-                auto;
-
-            border-radius: 50%;
-        }
-
-        .wallet-status-badge.yes {
-            border:
-                1px solid
-                rgba(101,255,131,.25);
-
-            background:
-                rgba(101,255,131,.07);
-
-            color: #65ff83;
-        }
-
-        .wallet-status-badge.yes
-        .wallet-status-dot {
-            background: #65ff83;
-
-            box-shadow:
-                0 0 10px
-                rgba(101,255,131,.75);
-        }
-
-        .wallet-status-badge.no {
-            border:
-                1px solid
-                rgba(255,89,100,.24);
-
-            background:
-                rgba(255,89,100,.06);
-
-            color: #ff717b;
-        }
-
-        .wallet-status-badge.no
-        .wallet-status-dot {
-            background: #ff5964;
-
-            box-shadow:
-                0 0 10px
-                rgba(255,89,100,.65);
-        }
-
-
-        /* =====================================================
-           TELEGRAM GROUP BADGES
-        ===================================================== */
-
-        .telegram-group-badge {
-            display: inline-flex;
-            align-items: center;
-
-            max-width: 100%;
-
-            padding:
-                7px
-                8px;
-
-            border-radius: 999px;
-
-            font-size: 7px;
-            font-weight: 900;
-
-            line-height: 1.15;
-
-            white-space: normal;
-
-            text-align: center;
-        }
-
-        .telegram-group-badge.member {
-            border:
-                1px solid
-                rgba(101,255,131,.25);
-
-            background:
-                rgba(101,255,131,.07);
-
-            color: #65ff83;
-        }
-
-        .telegram-group-badge.not-member {
-            border:
-                1px solid
-                rgba(255,89,100,.24);
-
-            background:
-                rgba(255,89,100,.06);
-
-            color: #ff717b;
-        }
-
-        .telegram-group-badge.unknown {
-            border:
-                1px solid
-                rgba(255,211,92,.22);
-
-            background:
-                rgba(255,211,92,.05);
-
-            color: #ffd35c;
-        }
-
-        .chat-header,
-        .announcements-header {
-            color:
-                #65ff83
-                !important;
-        }
-
-
-        /* =====================================================
-           DATE
-        ===================================================== */
-
-        .date-value {
-            display: block;
-
-            max-width: 100%;
-
-            color: #75837a;
-
-            font-size: 8px;
-
-            line-height: 1.4;
-
-            white-space: nowrap;
-        }
-
-
-        /* =====================================================
-           MEMBERS EMPTY
-        ===================================================== */
-
-        .members-empty {
-            padding:
-                50px
-                20px;
-
-            text-align: center;
-
-            color: #68766d;
-
-            font-size: 12px;
-        }
-
-        .members-empty[hidden] {
-            display: none;
-        }
-
-
-        /* =====================================================
-           MEMBERS PAGINATION
-        ===================================================== */
-
-        .members-pagination {
-            min-height: 62px;
-
-            padding:
-                13px
-                18px;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            gap: 12px;
-
-            border-top:
-                1px solid
-                rgba(255,255,255,.05);
-
-            background:
-                rgba(255,255,255,.01);
-        }
-
-        .members-pagination[hidden] {
-            display: none;
-        }
-
-        .members-page-button {
-            min-width: 94px;
-            min-height: 36px;
-
-            padding:
-                0
-                12px;
-
-            border:
-                1px solid
-                rgba(101,255,131,.13);
-
-            border-radius: 9px;
-
-            background:
-                rgba(101,255,131,.035);
-
-            color: #65ff83;
-
-            font-size: 7px;
-            font-weight: 900;
-
-            letter-spacing: .8px;
-
-            transition:
-                border-color .2s ease,
-                background .2s ease,
-                opacity .2s ease;
-        }
-
-        .members-page-button:hover:not(:disabled) {
-            border-color:
-                rgba(101,255,131,.35);
-
-            background:
-                rgba(101,255,131,.075);
-        }
-
-        .members-page-button:disabled {
-            opacity: .25;
-
-            cursor: not-allowed;
-        }
-
-        .members-page-info {
-            min-width: 86px;
-
-            text-align: center;
-
-            color: #8c9991;
-
-            font-size: 8px;
-            font-weight: 900;
-
-            letter-spacing: 1px;
-        }
-
-
-        /* =====================================================
            RESPONSIVE
         ===================================================== */
-
-        @media (max-width: 1200px) {
-
-            /*
-                On smaller screens horizontal scroll is allowed
-                because ten columns physically cannot stay readable.
-                On normal desktop it does NOT appear.
-            */
-
-            .members-table-wrap {
-                overflow-x: auto;
-            }
-
-            .members-table {
-                min-width: 1180px;
-            }
-
-            .contest-list-top {
-                align-items: stretch;
-
-                flex-direction: column;
-            }
-
-            .contest-tools {
-                width: 100%;
-
-                justify-content: flex-start;
-            }
-
-            .contest-search-wrap {
-                flex: 1;
-
-                width: auto;
-            }
-
-        }
-
 
         @media (max-width: 1100px) {
 
@@ -2312,31 +1968,24 @@
             }
 
             .contest-body {
-                grid-template-columns:
-                    1fr;
+                grid-template-columns: 1fr;
             }
 
         }
-
 
         @media (max-width: 1000px) {
 
             .admin-hero {
-                grid-template-columns:
-                    1fr;
+                grid-template-columns: 1fr;
             }
 
         }
-
 
         @media (max-width: 700px) {
 
             .admin-shell {
                 width:
-                    min(
-                        calc(100% - 22px),
-                        1500px
-                    );
+                    calc(100% - 22px);
 
                 padding-top: 12px;
             }
@@ -2359,18 +2008,11 @@
                     22px;
             }
 
-            .stats-grid {
-                grid-template-columns:
-                    repeat(
-                        2,
-                        minmax(0,1fr)
-                    );
-            }
-
             .members-panel-top,
             .members-tools,
             .contest-panel-header,
-            .contest-tools {
+            .contest-tools,
+            .contest-list-top {
                 flex-direction: column;
 
                 align-items: stretch;
@@ -2385,12 +2027,10 @@
             }
 
             .contest-stats {
-                grid-template-columns:
-                    1fr;
+                grid-template-columns: 1fr;
             }
 
         }
-
 
         @media (max-width: 480px) {
 
@@ -2404,32 +2044,11 @@
             }
 
             .stats-grid {
-                grid-template-columns:
-                    1fr;
+                grid-template-columns: 1fr;
             }
 
             .contest-body {
                 padding: 14px;
-            }
-
-            .members-pagination {
-                gap: 7px;
-
-                padding:
-                    11px
-                    8px;
-            }
-
-            .members-page-button {
-                min-width: 76px;
-
-                padding:
-                    0
-                    8px;
-            }
-
-            .members-page-info {
-                min-width: 62px;
             }
 
         }
@@ -2440,6 +2059,7 @@
 
 
 <body>
+
 
     <div
         class="admin-background"
@@ -2460,9 +2080,7 @@
     <main class="admin-shell">
 
 
-        <!-- =================================================
-             HEADER
-        ================================================== -->
+        <!-- HEADER -->
 
         <header class="admin-header">
 
@@ -2513,9 +2131,7 @@
         </header>
 
 
-        <!-- =================================================
-             HERO
-        ================================================== -->
+        <!-- HERO -->
 
         <section class="admin-hero">
 
@@ -2526,11 +2142,9 @@
                     aria-hidden="true"
                 ></div>
 
-
                 <p class="hero-mini-tag">
                     GREMBLE // FOUNDER MODE
                 </p>
-
 
                 <h1>
 
@@ -2544,9 +2158,7 @@
 
                 </h1>
 
-
                 <div class="hero-line"></div>
-
 
                 <p>
 
@@ -2567,14 +2179,10 @@
                     PRIVATE ACCESS
                 </p>
 
-
                 <h2>
-
                     YOUR GREMBLE
                     CONTROL ROOM.
-
                 </h2>
-
 
                 <p>
 
@@ -2583,7 +2191,6 @@
                     verified against your Telegram ID.
 
                 </p>
-
 
                 <div class="private-id-box">
 
@@ -2625,7 +2232,6 @@
 
                     </span>
 
-
                     <span class="contest-open-arrow">
                         ›
                     </span>
@@ -2637,9 +2243,7 @@
         </section>
 
 
-        <!-- =================================================
-             MESSAGE
-        ================================================== -->
+        <!-- MESSAGE -->
 
         <div
             class="admin-message"
@@ -2649,9 +2253,7 @@
         </div>
 
 
-        <!-- =================================================
-             DASHBOARD
-        ================================================== -->
+        <!-- DASHBOARD -->
 
         <section
             class="admin-dashboard"
@@ -2660,9 +2262,7 @@
         >
 
 
-            <!-- =================================================
-                 CONTEST
-            ================================================== -->
+            <!-- CONTEST -->
 
             <section
                 class="contest-panel"
@@ -2677,7 +2277,6 @@
                         <span class="contest-title-icon">
                             🏆
                         </span>
-
 
                         <div class="contest-title-copy">
 
@@ -2704,8 +2303,6 @@
 
                 </div>
 
-
-                <!-- CONTEST STATS -->
 
                 <div class="contest-stats">
 
@@ -2745,12 +2342,8 @@
                 </div>
 
 
-                <!-- CONTEST BODY -->
-
                 <div class="contest-body">
 
-
-                    <!-- FORM -->
 
                     <section class="contest-form-card">
 
@@ -2827,7 +2420,6 @@
                                     YES
                                 </button>
 
-
                                 <button
                                     type="button"
                                     class="contest-rule-button no active"
@@ -2875,12 +2467,9 @@
                     </section>
 
 
-                    <!-- CONTEST LIST -->
-
                     <section class="contest-list-card">
 
                         <div class="contest-list-top">
-
 
                             <div class="contest-list-title">
 
@@ -2897,16 +2486,13 @@
 
                             <div class="contest-tools">
 
-
                                 <div class="contest-search-wrap">
 
                                     <span
                                         class="contest-search-icon"
-                                        aria-hidden="true"
                                     >
                                         ⌕
                                     </span>
-
 
                                     <input
                                         type="search"
@@ -2914,7 +2500,6 @@
                                         id="contestSearch"
                                         placeholder="Search X username..."
                                         autocomplete="off"
-                                        spellcheck="false"
                                     >
 
                                 </div>
@@ -2925,7 +2510,6 @@
                                     <select
                                         class="contest-sort"
                                         id="contestSort"
-                                        aria-label="Sort contest entries"
                                     >
 
                                         <option value="newest">
@@ -2954,11 +2538,7 @@
 
                                     </select>
 
-
-                                    <span
-                                        class="contest-sort-arrow"
-                                        aria-hidden="true"
-                                    >
+                                    <span class="contest-sort-arrow">
                                         ▼
                                     </span>
 
@@ -2977,38 +2557,17 @@
 
                                     <tr>
 
-                                        <th>
-                                            PARTICIPANT
-                                        </th>
-
-                                        <th>
-                                            MEME
-                                        </th>
-
-                                        <th>
-                                            POINTS
-                                        </th>
-
-                                        <th>
-                                            RULES OK?
-                                        </th>
-
-                                        <th>
-                                            ADDED
-                                        </th>
-
-                                        <th>
-                                            ACTIONS
-                                        </th>
-
-                                        <th>
-                                            STATUS
-                                        </th>
+                                        <th>PARTICIPANT</th>
+                                        <th>MEME</th>
+                                        <th>POINTS</th>
+                                        <th>RULES OK?</th>
+                                        <th>ADDED</th>
+                                        <th>ACTIONS</th>
+                                        <th>STATUS</th>
 
                                     </tr>
 
                                 </thead>
-
 
                                 <tbody id="contestTableBody">
                                 </tbody>
@@ -3040,14 +2599,12 @@
                                 ‹ PREVIOUS
                             </button>
 
-
                             <span
                                 class="contest-page-info"
                                 id="contestPageInfo"
                             >
                                 1 OF 1
                             </span>
-
 
                             <button
                                 type="button"
@@ -3066,12 +2623,9 @@
             </section>
 
 
-            <!-- =================================================
-                 MAIN STATS
-            ================================================== -->
+            <!-- STATS -->
 
             <div class="stats-grid">
-
 
                 <article class="stat-card">
 
@@ -3160,15 +2714,12 @@
             </div>
 
 
-            <!-- =================================================
-                 MEMBERS
-            ================================================== -->
+            <!-- MEMBERS -->
 
             <section class="members-panel">
 
 
                 <div class="members-panel-top">
-
 
                     <div class="members-panel-title">
 
@@ -3193,7 +2744,6 @@
                             autocomplete="off"
                         >
 
-
                         <button
                             type="button"
                             class="refresh-button"
@@ -3206,8 +2756,6 @@
 
                 </div>
 
-
-                <!-- MEMBERS TABLE -->
 
                 <div class="members-table-wrap">
 
@@ -3261,7 +2809,6 @@
 
                         </thead>
 
-
                         <tbody id="membersTableBody">
                         </tbody>
 
@@ -3279,8 +2826,6 @@
                 </div>
 
 
-                <!-- PAGINATION -->
-
                 <div
                     class="members-pagination"
                     id="membersPagination"
@@ -3295,14 +2840,12 @@
                         ‹ PREVIOUS
                     </button>
 
-
                     <span
                         class="members-page-info"
                         id="membersPageInfo"
                     >
                         1 OF 1
                     </span>
-
 
                     <button
                         type="button"
@@ -3321,7 +2864,7 @@
     </main>
 
 
-    <script src="admin.js?v=108"></script>
+    <script src="admin.js?v=109"></script>
 
 </body>
 
