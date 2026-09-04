@@ -1207,11 +1207,6 @@
             color: #ff717b;
         }
 
-
-        /* =====================================================
-           NEW CONTEST MEMBER STATUS
-        ===================================================== */
-
         .contest-member-status-cell {
             text-align: center;
         }
@@ -1344,7 +1339,6 @@
             transform:
                 translateY(0);
         }
-
 
         .contest-empty {
             padding:
@@ -1736,10 +1730,101 @@
             font-size: 12px;
         }
 
+        .members-empty[hidden] {
+            display: none;
+        }
+
         .chat-header,
         .announcements-header {
             color: #65ff83 !important;
         }
+
+
+        /* =====================================================
+           NEW: REGISTERED PEOPLE PAGINATION
+        ===================================================== */
+
+        .members-pagination {
+            min-height: 62px;
+
+            padding:
+                13px
+                18px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            gap: 12px;
+
+            border-top:
+                1px solid
+                rgba(255,255,255,.05);
+
+            background:
+                rgba(255,255,255,.01);
+        }
+
+        .members-pagination[hidden] {
+            display: none;
+        }
+
+        .members-page-button {
+            min-width: 94px;
+            min-height: 36px;
+
+            padding:
+                0
+                12px;
+
+            border:
+                1px solid
+                rgba(101,255,131,.13);
+
+            border-radius: 9px;
+
+            background:
+                rgba(101,255,131,.035);
+
+            color: #65ff83;
+
+            font-size: 7px;
+            font-weight: 900;
+
+            letter-spacing: .8px;
+
+            transition:
+                border-color .2s ease,
+                background .2s ease,
+                opacity .2s ease;
+        }
+
+        .members-page-button:hover:not(:disabled) {
+            border-color:
+                rgba(101,255,131,.35);
+
+            background:
+                rgba(101,255,131,.075);
+        }
+
+        .members-page-button:disabled {
+            opacity: .25;
+            cursor: not-allowed;
+        }
+
+        .members-page-info {
+            min-width: 86px;
+
+            text-align: center;
+
+            color: #8c9991;
+
+            font-size: 8px;
+            font-weight: 900;
+
+            letter-spacing: 1px;
+        }
+
 
         @media (max-width: 1200px) {
 
@@ -1847,6 +1932,26 @@
 
             .contest-body {
                 padding: 14px;
+            }
+
+            .members-pagination {
+                gap: 7px;
+
+                padding:
+                    11px
+                    8px;
+            }
+
+            .members-page-button {
+                min-width: 76px;
+
+                padding:
+                    0
+                    8px;
+            }
+
+            .members-page-info {
+                min-width: 62px;
             }
 
         }
@@ -2602,6 +2707,45 @@
 
                 </div>
 
+
+                <!-- =================================================
+                     NEW: REGISTERED PEOPLE PAGINATION
+                ================================================== -->
+
+                <div
+                    class="members-pagination"
+                    id="membersPagination"
+                    hidden
+                >
+
+                    <button
+                        type="button"
+                        class="members-page-button"
+                        id="membersPrevPage"
+                    >
+                        ‹ PREVIOUS
+                    </button>
+
+
+                    <span
+                        class="members-page-info"
+                        id="membersPageInfo"
+                    >
+                        1 OF 1
+                    </span>
+
+
+                    <button
+                        type="button"
+                        class="members-page-button"
+                        id="membersNextPage"
+                    >
+                        NEXT ›
+                    </button>
+
+                </div>
+
+
             </section>
 
 
@@ -2611,7 +2755,7 @@
     </main>
 
 
-    <script src="admin.js?v=106"></script>
+    <script src="admin.js?v=107"></script>
 
 </body>
 
