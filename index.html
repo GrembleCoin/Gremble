@@ -13,7 +13,7 @@
 
     <link
         rel="stylesheet"
-        href="style.css?v=103"
+        href="style.css?v=104"
     >
 </head>
 
@@ -395,7 +395,7 @@
 
 
         <!-- =================================================
-             TELEGRAM MEMBER LOGIN
+             TELEGRAM + MEMBER PROFILE
         ================================================== -->
 
         <div class="hero-telegram">
@@ -416,20 +416,29 @@
                 </p>
 
 
-                <h2>
+                <!--
+                    THIS INTRO IS ONLY FOR USERS
+                    WHO ARE NOT LOGGED IN.
+                -->
 
-                    CONNECT YOUR<br>
-                    <span>TELEGRAM.</span>
+                <div id="telegramLoginIntro">
 
-                </h2>
+                    <h2>
+
+                        CONNECT YOUR<br>
+                        <span>TELEGRAM.</span>
+
+                    </h2>
 
 
-                <p class="telegram-card-text">
+                    <p class="telegram-card-text">
 
-                    Log in with Telegram to create your private Gremble profile.
-                    Your Telegram, X and Solana details are not shown to other users.
+                        Log in with Telegram to create your private Gremble profile.
+                        Your Telegram, X and Solana details are not shown to other users.
 
-                </p>
+                    </p>
+
+                </div>
 
 
 
@@ -454,7 +463,7 @@
 
 
 
-                <!-- STATUS -->
+                <!-- TELEGRAM STATUS -->
 
                 <div
                     class="telegram-login-status"
@@ -475,7 +484,7 @@
                 >
 
 
-                    <!-- CONNECTED TELEGRAM -->
+                    <!-- TELEGRAM ACCOUNT -->
 
                     <div class="member-connected">
 
@@ -487,7 +496,7 @@
                         <div>
 
                             <small>
-                                CONNECTED WITH TELEGRAM
+                                TELEGRAM CONNECTED
                             </small>
 
 
@@ -509,6 +518,8 @@
                     <div class="member-profile-fields">
 
 
+                        <!-- X USERNAME -->
+
                         <label for="memberXUsername">
                             X USERNAME
                         </label>
@@ -523,6 +534,8 @@
 
 
 
+                        <!-- MANUAL SOLANA ADDRESS -->
+
                         <label for="memberSolanaAddress">
                             SOLANA ADDRESS
                         </label>
@@ -536,47 +549,175 @@
                             spellcheck="false"
                         >
 
+
+
+                        <!-- =================================================
+                             VERIFIED WALLET
+                        ================================================== -->
+
+                        <div class="member-wallet-section">
+
+
+                            <div class="member-wallet-heading">
+
+                                <label>
+                                    WALLET
+                                </label>
+
+                            </div>
+
+
+
+                            <!-- CONNECT WALLET -->
+
+                            <button
+                                type="button"
+                                class="wallet-connect-button"
+                                id="walletConnectButton"
+                            >
+
+                                <span class="wallet-button-icon">
+                                    ◇
+                                </span>
+
+                                <span>
+                                    CONNECT WALLET
+                                </span>
+
+                                <span class="wallet-button-arrow">
+                                    →
+                                </span>
+
+                            </button>
+
+
+
+                            <!-- CONNECTED WALLET -->
+
+                            <div
+                                class="wallet-connected-box"
+                                id="walletConnectedBox"
+                                hidden
+                            >
+
+                                <div class="wallet-connected-info">
+
+                                    <span
+                                        class="wallet-connected-dot"
+                                    ></span>
+
+
+                                    <div>
+
+                                        <small>
+                                            WALLET VERIFIED
+                                        </small>
+
+                                        <strong
+                                            id="walletConnectedProvider"
+                                        >
+                                            Wallet
+                                        </strong>
+
+                                        <span
+                                            id="walletConnectedAddress"
+                                        ></span>
+
+                                    </div>
+
+                                </div>
+
+
+                                <button
+                                    type="button"
+                                    class="wallet-disconnect-button"
+                                    id="walletDisconnectButton"
+                                    hidden
+                                >
+                                    DISCONNECT
+                                </button>
+
+                            </div>
+
+
+
+                            <!-- WALLET STATUS -->
+
+                            <div
+                                class="wallet-status"
+                                id="walletStatus"
+                                aria-live="polite"
+                            ></div>
+
+
+                            <p class="wallet-note">
+                                Connect and verify your wallet with a message signature.
+                                No transaction or access to your funds.
+                            </p>
+
+                        </div>
+
+
+
+                        <!-- =================================================
+                             LIVE CONTEST
+                        ================================================== -->
+
                         <div class="live-contest-card">
 
-    <div class="live-contest-top">
+                            <div class="live-contest-top">
 
-        <span class="live-contest-dot"></span>
+                                <span class="live-contest-dot"></span>
 
-        <span class="live-contest-status">
-            LIVE NOW
-        </span>
+                                <span class="live-contest-status">
+                                    LIVE NOW
+                                </span>
 
-    </div>
+                            </div>
 
-    <h3>
-        GREMBLE MEME CONTEST IS
-        <span>LIVE!</span>
-    </h3>
 
-    <p>
-        Create one funny Gremble meme and join the contest.
-    </p>
+                            <h3>
+                                GREMBLE MEME CONTEST IS
+                                <span>LIVE!</span>
+                            </h3>
 
-    <div class="live-contest-bottom">
 
-        <div class="live-contest-date">
-            <span>🏆</span>
-            ENDS 11.09.2026 — 00:00 UTC
-        </div>
+                            <p>
+                                Create one funny Gremble meme and join the contest.
+                            </p>
 
-        <a
-            href="https://x.com/GrembleCoin/status/2095461555919856005?s=20"
-            class="live-contest-button"
-            target="_blank"
-            rel="noopener noreferrer"
-        >
-            VIEW CONTEST ON X
-            <span>↗</span>
-        </a>
 
-    </div>
+                            <div class="live-contest-bottom">
 
-</div>
+                                <div class="live-contest-date">
+
+                                    <span>🏆</span>
+
+                                    ENDS 11.09.2026 — 00:00 UTC
+
+                                </div>
+
+
+                                <a
+                                    href="https://x.com/GrembleCoin/status/2095461555919856005?s=20"
+                                    class="live-contest-button"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+
+                                    VIEW CONTEST ON X
+
+                                    <span>
+                                        ↗
+                                    </span>
+
+                                </a>
+
+                            </div>
+
+                        </div>
+
+
 
                         <!-- SAVE PROFILE -->
 
@@ -600,14 +741,6 @@
                             LOG OUT
                         </button>
 
-
-
-                        <p class="member-save-note">
-
-                            Your profile stays saved even if you log out.
-                            Logging out only disconnects this browser.
-
-                        </p>
 
                     </div>
 
@@ -932,9 +1065,7 @@
             <div class="game-grid">
 
 
-                <!-- =================================================
-                     COIN CATCH
-                ================================================== -->
+                <!-- COIN CATCH -->
 
                 <button
                     type="button"
@@ -993,9 +1124,7 @@
 
 
 
-                <!-- =================================================
-                     SURVIVAL
-                ================================================== -->
+                <!-- SURVIVAL -->
 
                 <button
                     type="button"
@@ -1124,8 +1253,6 @@
             <div class="game-wrapper">
 
 
-                <!-- TOPBAR -->
-
                 <div class="game-topbar">
 
                     <div class="game-stat">
@@ -1171,8 +1298,6 @@
 
 
 
-                <!-- MESSAGE -->
-
                 <div
                     id="gameMessage"
                     class="game-message"
@@ -1186,8 +1311,6 @@
 
 
 
-                <!-- CANVAS -->
-
                 <div class="canvas-wrapper">
 
                     <canvas
@@ -1199,8 +1322,6 @@
                 </div>
 
 
-
-                <!-- MOBILE CONTROLS -->
 
                 <div class="mobile-controls">
 
@@ -1224,8 +1345,6 @@
                 </div>
 
 
-
-                <!-- BOTTOM -->
 
                 <div class="game-bottom">
 
@@ -1315,8 +1434,6 @@
             <div class="survival-wrapper">
 
 
-                <!-- SURVIVAL TOPBAR -->
-
                 <div class="survival-topbar">
 
                     <div class="survival-stat">
@@ -1388,8 +1505,6 @@
 
 
 
-                <!-- SURVIVAL MESSAGE -->
-
                 <div class="survival-subbar">
 
                     <span id="survivalMessage">
@@ -1405,8 +1520,6 @@
 
 
 
-                <!-- SURVIVAL CANVAS -->
-
                 <div class="survival-canvas-wrap">
 
                     <canvas
@@ -1416,8 +1529,6 @@
                     ></canvas>
 
 
-
-                    <!-- UPGRADE OVERLAY -->
 
                     <div
                         id="upgradeOverlay"
@@ -1448,8 +1559,6 @@
                 </div>
 
 
-
-                <!-- SURVIVAL BOTTOM -->
 
                 <div class="survival-bottom">
 
@@ -1727,8 +1836,6 @@
         <div class="buy-platforms">
 
 
-            <!-- PUMPFUN -->
-
             <a
                 href="#"
                 id="pumpfunBuyLink"
@@ -1748,8 +1855,6 @@
             </a>
 
 
-
-            <!-- FOMO -->
 
             <a
                 href="#"
@@ -1790,6 +1895,17 @@
 ===================================================== -->
 
 <script src="telegram.js?v=103"></script>
+
+
+
+<!-- =====================================================
+     WALLET CONNECTION
+===================================================== -->
+
+<script
+    type="module"
+    src="wallet.js?v=100"
+></script>
 
 
 
@@ -1856,10 +1972,6 @@ const arcadeSection =
 
 
 
-/* =====================================================
-   HIDE GAME SCREENS
-===================================================== */
-
 function hideArcadeScreens() {
 
     arcadeSelect.style.display =
@@ -1874,14 +1986,9 @@ function hideArcadeScreens() {
     survivalScreen.classList.remove(
         "active-game-screen"
     );
-
 }
 
 
-
-/* =====================================================
-   OPEN COIN CATCH
-===================================================== */
 
 function openCoinCatch() {
 
@@ -1902,14 +2009,9 @@ function openCoinCatch() {
             "start"
 
     });
-
 }
 
 
-
-/* =====================================================
-   OPEN SURVIVAL
-===================================================== */
 
 function openSurvival() {
 
@@ -1930,14 +2032,9 @@ function openSurvival() {
             "start"
 
     });
-
 }
 
 
-
-/* =====================================================
-   RETURN TO ARCADE MENU
-===================================================== */
 
 function showArcadeMenu() {
 
@@ -1964,33 +2061,20 @@ function showArcadeMenu() {
             "start"
 
     });
-
 }
 
 
 
-/* =====================================================
-   ARCADE EVENTS
-===================================================== */
-
 chooseCoinCatch.addEventListener(
-
     "click",
-
     openCoinCatch
-
 );
-
 
 
 chooseSurvival.addEventListener(
-
     "click",
-
     openSurvival
-
 );
-
 
 
 backButtons.forEach(
@@ -1998,24 +2082,16 @@ backButtons.forEach(
     button => {
 
         button.addEventListener(
-
             "click",
-
             showArcadeMenu
-
         );
-
     }
-
 );
 
 
 
 /* =====================================================
    BUY GREMBLE
-
-   WHEN GREMBLE LAUNCHES,
-   CHANGE ONLY THESE TWO LINKS.
 ===================================================== */
 
 const GREMBLE_BUY_LINKS = {
@@ -2029,28 +2105,6 @@ const GREMBLE_BUY_LINKS = {
 };
 
 
-
-/*
-
-AFTER LAUNCH:
-
-const GREMBLE_BUY_LINKS = {
-
-    pumpfun:
-        "https://pump.fun/YOUR-LINK",
-
-    fomo:
-        "https://YOUR-FOMO-LINK"
-
-};
-
-*/
-
-
-
-/* =====================================================
-   BUY ELEMENTS
-===================================================== */
 
 const openBuyModalButton =
     document.getElementById(
@@ -2095,18 +2149,11 @@ const buyComingSoon =
 
 
 
-/* =====================================================
-   SET BUY LINKS
-===================================================== */
-
 function setupBuyLinks() {
 
     let activeLinks =
         0;
 
-
-
-    /* PUMPFUN */
 
     if (
         GREMBLE_BUY_LINKS.pumpfun
@@ -2134,12 +2181,9 @@ function setupBuyLinks() {
         pumpfunBuyLink.classList.add(
             "disabled-buy-link"
         );
-
     }
 
 
-
-    /* FOMO */
 
     if (
         GREMBLE_BUY_LINKS.fomo
@@ -2167,12 +2211,9 @@ function setupBuyLinks() {
         fomoBuyLink.classList.add(
             "disabled-buy-link"
         );
-
     }
 
 
-
-    /* STATUS TEXT */
 
     if (
         activeLinks > 0
@@ -2187,16 +2228,10 @@ function setupBuyLinks() {
 
         buyComingSoon.textContent =
             "TRADING LINKS COMING AT LAUNCH";
-
     }
-
 }
 
 
-
-/* =====================================================
-   OPEN BUY MODAL
-===================================================== */
 
 function openBuyModal() {
 
@@ -2220,14 +2255,9 @@ function openBuyModal() {
 
 
     closeBuyModalButton.focus();
-
 }
 
 
-
-/* =====================================================
-   CLOSE BUY MODAL
-===================================================== */
 
 function closeBuyModal() {
 
@@ -2245,43 +2275,26 @@ function closeBuyModal() {
     document.body.classList.remove(
         "buy-modal-open"
     );
-
 }
 
 
 
-/* =====================================================
-   BUY EVENTS
-===================================================== */
-
 openBuyModalButton.addEventListener(
-
     "click",
-
     openBuyModal
-
 );
-
 
 
 closeBuyModalButton.addEventListener(
-
     "click",
-
     closeBuyModal
-
 );
-
 
 
 buyModalBackdrop.addEventListener(
-
     "click",
-
     closeBuyModal
-
 );
-
 
 
 document.addEventListener(
@@ -2291,29 +2304,18 @@ document.addEventListener(
     event => {
 
         if (
-
-            event.key ===
-                "Escape" &&
-
+            event.key === "Escape" &&
             buyModal.classList.contains(
                 "active"
             )
-
         ) {
 
             closeBuyModal();
-
         }
-
     }
-
 );
 
 
-
-/* =====================================================
-   BLOCK EMPTY BUY LINKS
-===================================================== */
 
 [
     pumpfunBuyLink,
@@ -2330,30 +2332,19 @@ document.addEventListener(
             event => {
 
                 if (
-
                     link.classList.contains(
                         "disabled-buy-link"
                     )
-
                 ) {
 
                     event.preventDefault();
-
                 }
-
             }
-
         );
-
     }
-
 );
 
 
-
-/* =====================================================
-   INITIAL BUY SETUP
-===================================================== */
 
 setupBuyLinks();
 
