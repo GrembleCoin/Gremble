@@ -215,6 +215,17 @@ let localWalletProvider =
 
 
 /*
+   Active Solana provider in THIS browser.
+
+   Reown exposes it through subscribeProvider()
+   and getWalletProvider().
+*/
+
+let activeSolanaProvider =
+    null;
+
+
+/*
    Last VERIFIED wallet saved in Supabase.
 */
 
@@ -265,7 +276,6 @@ function sleep(ms) {
 function getSessionToken() {
 
     return cleanText(
-
         localStorage.getItem(
             GREMBLE_SESSION_KEY
         )
@@ -435,29 +445,43 @@ function setWalletStatus(
 
 function getSolanaProvider() {
 
+    if (
+        activeSolanaProvider
+    ) {
+
+        return activeSolanaProvider;
+    }
+
+
     try {
 
-        const providers =
+        const provider =
             grembleWalletModal
-                .getProviders();
+                .getWalletProvider();
 
 
-        return (
-            providers?.["solana"] ||
-            null
-        );
+        if (
+            provider
+        ) {
+
+            activeSolanaProvider =
+                provider;
+
+
+            return provider;
+        }
 
     }
     catch (error) {
 
         console.warn(
-            "Could not read Solana provider:",
+            "Could not read active Solana provider:",
             error
         );
-
-
-        return null;
     }
+
+
+    return null;
 }
 
 
@@ -483,13 +507,6 @@ function getModalAddress() {
 
 
 function getConnectedWalletAddress() {
-
-    /*
-       AppKit getAddress() is preferred.
-
-       localWalletAddress is a fallback populated
-       by subscribeProvider().
-    */
 
     return (
         getModalAddress() ||
@@ -532,7 +549,7 @@ function getConnectedWalletName() {
 
     }
     catch {
-        // fallback below
+
     }
 
 
@@ -563,11 +580,6 @@ function hideConnectButton() {
         true;
 
 
-    /*
-       CSS can override [hidden] if it has display:grid,
-       therefore force display:none here too.
-    */
-
     walletConnectButton.style.display =
         "none";
 
@@ -583,10 +595,6 @@ function hideConnectButton() {
 
 function showConnectButton() {
 
-    /*
-       Never show CONNECT if a verified wallet exists.
-    */
-
     if (
         savedWalletAddress
     ) {
@@ -596,11 +604,6 @@ function showConnectButton() {
         return;
     }
 
-
-    /*
-       Never show CONNECT if a wallet is currently
-       connected locally.
-    */
 
     if (
         localWalletAddress
@@ -822,10 +825,6 @@ function renderWalletUi() {
         getSessionToken();
 
 
-    /*
-       User must first be logged in through Telegram.
-    */
-
     if (
         !sessionToken
     ) {
@@ -850,11 +849,6 @@ function renderWalletUi() {
     }
 
 
-    /*
-       PRIORITY 1:
-       Verified wallet from Supabase.
-    */
-
     if (
         savedWalletAddress
     ) {
@@ -865,13 +859,6 @@ function renderWalletUi() {
     }
 
 
-    /*
-       PRIORITY 2:
-       Locally connected wallet.
-
-       THIS is the part missing in the previous script.
-    */
-
     if (
         localWalletAddress
     ) {
@@ -881,14 +868,6 @@ function renderWalletUi() {
         return;
     }
 
-
-    /*
-       PRIORITY 3:
-       Member profile is still loading.
-
-       Hide CONNECT temporarily to prevent flashing
-       a wrong state.
-    */
 
     if (
         profileLoading ||
@@ -914,14 +893,6 @@ function renderWalletUi() {
         return;
     }
 
-
-    /*
-       Profile loaded.
-       No saved wallet.
-       No local wallet.
-
-       User can connect one.
-    */
 
     showConnectButton();
 }
@@ -1520,11 +1491,6 @@ async function verifyConnectedWallet(
         );
 
 
-        /*
-           MESSAGE SIGNATURE ONLY.
-           THIS IS NOT A TRANSACTION.
-        */
-
         const signatureResult =
             await provider
                 .signMessage(
@@ -1603,16 +1569,10 @@ async function verifyConnectedWallet(
         }
 
 
-        /*
-           Do not require verified:true.
-
-           Some wallet-verify versions return
-           only success:true.
-        */
-
         if (
             !response.ok ||
-            result?.success === false
+            result?.success !== true ||
+            result?.verified !== true
         ) {
 
             throw new Error(
@@ -1621,10 +1581,6 @@ async function verifyConnectedWallet(
             );
         }
 
-
-        /*
-           Immediately switch UI to VERIFIED.
-        */
 
         savedWalletAddress =
             walletAddress;
@@ -1637,6 +1593,9 @@ async function verifyConnectedWallet(
         savedWalletVerifiedAt =
             cleanText(
                 result?.wallet_verified_at
+            ) ||
+            cleanText(
+                result?.wallet?.verified_at
             ) ||
             new Date()
                 .toISOString();
@@ -1666,10 +1625,6 @@ async function verifyConnectedWallet(
             ""
         );
 
-
-        /*
-           Confirm saved wallet against member-profile.
-        */
 
         await loadSavedWalletFromProfile(
             true
@@ -1753,11 +1708,6 @@ async function connectAndVerifyWallet() {
             getSolanaProvider();
 
 
-        /*
-           Open Reown if we do not yet have
-           both Solana address and provider.
-        */
-
         if (
             !address ||
             !provider
@@ -1792,15 +1742,6 @@ async function connectAndVerifyWallet() {
         }
 
 
-        /*
-           VERY IMPORTANT:
-
-           The second we know the wallet address,
-           CONNECT WALLET disappears.
-
-           User now sees WALLET CONNECTED.
-        */
-
         localWalletAddress =
             address;
 
@@ -1818,10 +1759,6 @@ async function connectAndVerifyWallet() {
         );
 
 
-        /*
-           Now ask for message signature.
-        */
-
         await verifyConnectedWallet(
             provider,
             address
@@ -1835,7 +1772,7 @@ async function connectAndVerifyWallet() {
 
         }
         catch {
-            // nothing needed
+
         }
 
     }
@@ -1917,14 +1854,9 @@ async function disconnectLocalWallet() {
             "";
 
 
-        /*
-           IMPORTANT:
+        activeSolanaProvider =
+            null;
 
-           savedWalletAddress is NOT removed.
-
-           If wallet was verified, it remains
-           visible as WALLET VERIFIED + CHANGE.
-        */
 
         renderWalletUi();
 
@@ -2005,10 +1937,9 @@ async function changeWallet() {
         "";
 
 
-    /*
-       Keep old VERIFIED wallet visible until
-       replacement is successfully verified.
-    */
+    activeSolanaProvider =
+        null;
+
 
     renderWalletUi();
 
@@ -2032,11 +1963,6 @@ async function walletAction() {
         getConnectedWalletAddress();
 
 
-    /*
-       Verified wallet actively connected
-       in this browser.
-    */
-
     if (
         savedWalletAddress &&
         currentAddress ===
@@ -2049,10 +1975,6 @@ async function walletAction() {
     }
 
 
-    /*
-       Unverified wallet connected locally.
-    */
-
     if (
         !savedWalletAddress &&
         currentAddress
@@ -2063,10 +1985,6 @@ async function walletAction() {
         return;
     }
 
-
-    /*
-       Saved wallet from another device/browser.
-    */
 
     if (
         savedWalletAddress
@@ -2115,12 +2033,6 @@ async function restoreWalletUi() {
             "";
 
 
-        /*
-           Still detect a local Reown wallet,
-           but it will not be considered verified
-           without Telegram identity.
-        */
-
         localWalletAddress =
             getModalAddress();
 
@@ -2132,21 +2044,10 @@ async function restoreWalletUi() {
     }
 
 
-    /*
-       Load database FIRST.
-
-       This gives us the cross-device wallet.
-    */
-
     await loadSavedWalletFromProfile(
         true
     );
 
-
-    /*
-       Then give AppKit time to restore
-       browser-local wallet state.
-    */
 
     for (
         let i = 0;
@@ -2199,10 +2100,6 @@ async function watchTelegramSession() {
     const currentToken =
         getSessionToken();
 
-
-    /*
-       Telegram session changed.
-    */
 
     if (
         currentToken !==
@@ -2260,7 +2157,17 @@ try {
             providers => {
 
                 const provider =
-                    providers?.["solana"];
+                    providers?.["solana"] ||
+                    null;
+
+
+                if (
+                    provider
+                ) {
+
+                    activeSolanaProvider =
+                        provider;
+                }
 
 
                 const address =
@@ -2280,13 +2187,6 @@ try {
                         getConnectedWalletName();
 
 
-                    /*
-                       THIS IS THE IMPORTANT FIX.
-
-                       Immediately render WALLET CONNECTED
-                       even before Supabase verification.
-                    */
-
                     renderWalletUi();
 
                 }
@@ -2300,6 +2200,10 @@ try {
 
                     localWalletProvider =
                         "";
+
+
+                    activeSolanaProvider =
+                        null;
 
 
                     renderWalletUi();
@@ -2334,15 +2238,18 @@ try {
 
 
                 if (
+                    state?.provider
+                ) {
+
+                    activeSolanaProvider =
+                        state.provider;
+                }
+
+
+                if (
                     state?.isConnected &&
                     address
                 ) {
-
-                    /*
-                       Do not wait for savedWalletAddress.
-
-                       Local wallet is connected NOW.
-                    */
 
                     localWalletAddress =
                         address;
@@ -2355,23 +2262,12 @@ try {
                     renderWalletUi();
 
 
-                    /*
-                       If connection happened outside our
-                       button flow, we can still start
-                       verification automatically.
-
-                       Only do this when:
-                       - Telegram exists
-                       - wallet is not already saved
-                       - no verification is already running
-                       - no connect process is running
-                    */
-
                     const sessionToken =
                         getSessionToken();
 
 
                     const provider =
+                        state?.provider ||
                         getSolanaProvider();
 
 
@@ -2432,13 +2328,9 @@ try {
                         "";
 
 
-                    /*
-                       If saved wallet exists,
-                       renderWalletUi keeps it visible.
+                    activeSolanaProvider =
+                        null;
 
-                       It will show CHANGE instead
-                       of CONNECT WALLET.
-                    */
 
                     renderWalletUi();
                 }
@@ -2516,18 +2408,6 @@ async function startWalletSystem() {
 
     await restoreWalletUi();
 
-
-    /*
-       telegram.js can create the Telegram session
-       after wallet.js has already loaded.
-
-       Check localStorage every second.
-
-       This does NOT make a Supabase request
-       every second.
-
-       It only loads profile when the session changes.
-    */
 
     setInterval(
         watchTelegramSession,
