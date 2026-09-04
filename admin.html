@@ -35,12 +35,12 @@
             background:
                 radial-gradient(
                     circle at top right,
-                    rgba(79,255,127,.08),
+                    rgba(79, 255, 127, .08),
                     transparent 34%
                 ),
                 radial-gradient(
                     circle at bottom left,
-                    rgba(32,153,87,.08),
+                    rgba(32, 153, 87, .08),
                     transparent 34%
                 ),
                 #020706;
@@ -72,13 +72,17 @@
         .admin-background {
             position: fixed;
             inset: 0;
+
             z-index: -1;
+
             overflow: hidden;
+
             pointer-events: none;
         }
 
         .admin-glow {
             position: absolute;
+
             width: 500px;
             height: 500px;
 
@@ -92,12 +96,14 @@
         .glow-one {
             top: -220px;
             right: -120px;
+
             background: #4cff7c;
         }
 
         .glow-two {
             bottom: -280px;
             left: -150px;
+
             background: #14854d;
         }
 
@@ -115,6 +121,11 @@
                 50px;
         }
 
+
+        /* =====================================================
+           HEADER
+        ===================================================== */
+
         .admin-header {
             min-height: 78px;
 
@@ -130,12 +141,12 @@
 
             border:
                 1px solid
-                rgba(103,255,134,.11);
+                rgba(103, 255, 134, .11);
 
             border-radius: 22px;
 
             background:
-                rgba(4,13,9,.72);
+                rgba(4, 13, 9, .72);
 
             backdrop-filter:
                 blur(18px);
@@ -144,23 +155,27 @@
         .admin-brand {
             display: flex;
             align-items: center;
+
             gap: 14px;
         }
 
         .admin-brand img {
             width: 54px;
             height: 54px;
+
             object-fit: contain;
         }
 
         .admin-brand-copy {
             display: flex;
             flex-direction: column;
+
             gap: 3px;
         }
 
         .admin-brand-copy strong {
             font-size: 18px;
+
             letter-spacing: 1px;
         }
 
@@ -176,6 +191,7 @@
         .admin-header-right {
             display: flex;
             align-items: center;
+
             gap: 10px;
         }
 
@@ -191,12 +207,12 @@
 
             border:
                 1px solid
-                rgba(101,255,131,.13);
+                rgba(101, 255, 131, .13);
 
             border-radius: 999px;
 
             background:
-                rgba(54,255,108,.035);
+                rgba(54, 255, 108, .035);
 
             color: #9ca9a1;
 
@@ -216,7 +232,7 @@
 
             box-shadow:
                 0 0 12px
-                rgba(101,255,131,.75);
+                rgba(101, 255, 131, .75);
         }
 
         .back-site-button {
@@ -226,12 +242,12 @@
 
             border:
                 1px solid
-                rgba(255,255,255,.08);
+                rgba(255, 255, 255, .08);
 
             border-radius: 999px;
 
             background:
-                rgba(255,255,255,.035);
+                rgba(255, 255, 255, .035);
 
             color: #dce5df;
 
@@ -243,11 +259,16 @@
 
         .back-site-button:hover {
             border-color:
-                rgba(101,255,131,.25);
+                rgba(101, 255, 131, .25);
 
             background:
-                rgba(101,255,131,.055);
+                rgba(101, 255, 131, .055);
         }
+
+
+        /* =====================================================
+           HERO
+        ===================================================== */
 
         .admin-hero {
             margin-top: 24px;
@@ -272,15 +293,15 @@
 
             border:
                 1px solid
-                rgba(101,255,131,.13);
+                rgba(101, 255, 131, .13);
 
             border-radius: 26px;
 
             background:
                 linear-gradient(
                     145deg,
-                    rgba(8,24,14,.95),
-                    rgba(2,9,6,.96)
+                    rgba(8, 24, 14, .95),
+                    rgba(2, 9, 6, .96)
                 );
         }
 
@@ -338,7 +359,7 @@
 
             box-shadow:
                 0 0 22px
-                rgba(101,255,131,.4);
+                rgba(101, 255, 131, .4);
         }
 
         .hero-orb {
@@ -353,24 +374,29 @@
             border-radius: 50%;
 
             background:
-                rgba(91,255,132,.12);
+                rgba(91, 255, 132, .12);
 
             filter: blur(40px);
 
             pointer-events: none;
         }
 
+
+        /* =====================================================
+           PRIVATE CARD
+        ===================================================== */
+
         .private-card {
             padding: 28px;
 
             border:
                 1px solid
-                rgba(101,255,131,.13);
+                rgba(101, 255, 131, .13);
 
             border-radius: 26px;
 
             background:
-                rgba(4,15,9,.84);
+                rgba(4, 15, 9, .84);
         }
 
         .private-card-tag {
@@ -407,12 +433,12 @@
 
             border:
                 1px solid
-                rgba(101,255,131,.12);
+                rgba(101, 255, 131, .12);
 
             border-radius: 15px;
 
             background:
-                rgba(101,255,131,.03);
+                rgba(101, 255, 131, .03);
         }
 
         .private-id-box small {
@@ -455,15 +481,15 @@
 
             border:
                 1px solid
-                rgba(101,255,131,.38);
+                rgba(101, 255, 131, .38);
 
             border-radius: 15px;
 
             background:
                 linear-gradient(
                     135deg,
-                    rgba(101,255,131,.07),
-                    rgba(2,10,6,.7)
+                    rgba(101, 255, 131, .07),
+                    rgba(2, 10, 6, .7)
                 );
 
             color: #eef5f0;
@@ -471,14 +497,15 @@
 
         .contest-open-button:hover {
             border-color:
-                rgba(101,255,131,.72);
+                rgba(101, 255, 131, .72);
 
             background:
-                rgba(101,255,131,.09);
+                rgba(101, 255, 131, .09);
         }
 
         .contest-open-button:disabled {
             opacity: .35;
+
             cursor: not-allowed;
         }
 
@@ -498,6 +525,7 @@
         .contest-open-copy {
             display: flex;
             flex-direction: column;
+
             gap: 4px;
         }
 
@@ -516,8 +544,14 @@
 
         .contest-open-arrow {
             color: #65ff83;
+
             font-size: 20px;
         }
+
+
+        /* =====================================================
+           ADMIN MESSAGE
+        ===================================================== */
 
         .admin-message {
             margin-top: 22px;
@@ -528,12 +562,12 @@
 
             border:
                 1px solid
-                rgba(255,255,255,.07);
+                rgba(255, 255, 255, .07);
 
             border-radius: 18px;
 
             background:
-                rgba(255,255,255,.025);
+                rgba(255, 255, 255, .025);
 
             color: #99a59e;
 
@@ -542,14 +576,14 @@
 
         .admin-message.success {
             border-color:
-                rgba(101,255,131,.18);
+                rgba(101, 255, 131, .18);
 
             color: #65ff83;
         }
 
         .admin-message.error {
             border-color:
-                rgba(255,89,100,.2);
+                rgba(255, 89, 100, .2);
 
             color: #ff717b;
         }
@@ -562,19 +596,24 @@
             display: none;
         }
 
+
+        /* =====================================================
+           CONTEST PANEL
+        ===================================================== */
+
         .contest-panel {
             margin-bottom: 22px;
 
             border:
                 1px solid
-                rgba(101,255,131,.15);
+                rgba(101, 255, 131, .15);
 
             border-radius: 24px;
 
             overflow: hidden;
 
             background:
-                rgba(4,12,8,.84);
+                rgba(4, 12, 8, .84);
         }
 
         .contest-panel[hidden] {
@@ -596,12 +635,13 @@
 
             border-bottom:
                 1px solid
-                rgba(255,255,255,.05);
+                rgba(255, 255, 255, .05);
         }
 
         .contest-panel-title {
             display: flex;
             align-items: center;
+
             gap: 13px;
         }
 
@@ -622,6 +662,7 @@
 
         .contest-title-copy h2 {
             margin-top: 4px;
+
             font-size: 23px;
         }
 
@@ -634,12 +675,12 @@
 
             border:
                 1px solid
-                rgba(255,255,255,.08);
+                rgba(255, 255, 255, .08);
 
             border-radius: 10px;
 
             background:
-                rgba(255,255,255,.025);
+                rgba(255, 255, 255, .025);
 
             color: #849188;
 
@@ -666,12 +707,12 @@
 
             border:
                 1px solid
-                rgba(101,255,131,.09);
+                rgba(101, 255, 131, .09);
 
             border-radius: 15px;
 
             background:
-                rgba(101,255,131,.025);
+                rgba(101, 255, 131, .025);
         }
 
         .contest-stat-card span {
@@ -722,12 +763,12 @@
         .contest-list-card {
             border:
                 1px solid
-                rgba(101,255,131,.09);
+                rgba(101, 255, 131, .09);
 
             border-radius: 18px;
 
             background:
-                rgba(0,8,5,.42);
+                rgba(0, 8, 5, .42);
         }
 
         .contest-form-card {
@@ -773,14 +814,14 @@
 
             border:
                 1px solid
-                rgba(101,255,131,.11);
+                rgba(101, 255, 131, .11);
 
             border-radius: 11px;
 
             outline: none;
 
             background:
-                rgba(0,5,3,.7);
+                rgba(0, 5, 3, .7);
 
             color: #eef4f0;
 
@@ -789,7 +830,7 @@
 
         .contest-form input:focus {
             border-color:
-                rgba(101,255,131,.42);
+                rgba(101, 255, 131, .42);
         }
 
         .contest-requirements {
@@ -814,10 +855,10 @@
         .contest-rule-button.yes {
             border:
                 1px solid
-                rgba(101,255,131,.22);
+                rgba(101, 255, 131, .22);
 
             background:
-                rgba(101,255,131,.05);
+                rgba(101, 255, 131, .05);
 
             color: #65ff83;
         }
@@ -825,28 +866,28 @@
         .contest-rule-button.no {
             border:
                 1px solid
-                rgba(255,89,100,.22);
+                rgba(255, 89, 100, .22);
 
             background:
-                rgba(255,89,100,.04);
+                rgba(255, 89, 100, .04);
 
             color: #ff717b;
         }
 
         .contest-rule-button.active.yes {
             background:
-                rgba(101,255,131,.13);
+                rgba(101, 255, 131, .13);
 
             border-color:
-                rgba(101,255,131,.55);
+                rgba(101, 255, 131, .55);
         }
 
         .contest-rule-button.active.no {
             background:
-                rgba(255,89,100,.11);
+                rgba(255, 89, 100, .11);
 
             border-color:
-                rgba(255,89,100,.5);
+                rgba(255, 89, 100, .5);
         }
 
         .contest-submit-button {
@@ -856,12 +897,12 @@
 
             border:
                 1px solid
-                rgba(101,255,131,.42);
+                rgba(101, 255, 131, .42);
 
             border-radius: 12px;
 
             background:
-                rgba(101,255,131,.08);
+                rgba(101, 255, 131, .08);
 
             color: #65ff83;
 
@@ -874,12 +915,12 @@
 
             border:
                 1px solid
-                rgba(255,255,255,.08);
+                rgba(255, 255, 255, .08);
 
             border-radius: 11px;
 
             background:
-                rgba(255,255,255,.025);
+                rgba(255, 255, 255, .025);
 
             color: #87938b;
 
@@ -926,7 +967,7 @@
 
             border-bottom:
                 1px solid
-                rgba(255,255,255,.05);
+                rgba(255, 255, 255, .05);
         }
 
         .contest-list-title {
@@ -981,14 +1022,14 @@
 
             border:
                 1px solid
-                rgba(101,255,131,.13);
+                rgba(101, 255, 131, .13);
 
             border-radius: 12px;
 
             outline: none;
 
             background:
-                rgba(0,5,3,.74);
+                rgba(0, 5, 3, .74);
 
             color: #eef4f0;
 
@@ -1011,6 +1052,7 @@
 
         .contest-sort-wrap {
             position: relative;
+
             min-width: 190px;
         }
 
@@ -1027,14 +1069,14 @@
 
             border:
                 1px solid
-                rgba(101,255,131,.13);
+                rgba(101, 255, 131, .13);
 
             border-radius: 12px;
 
             outline: none;
 
             background:
-                rgba(0,5,3,.74);
+                rgba(0, 5, 3, .74);
 
             color: #65ff83;
 
@@ -1047,6 +1089,7 @@
 
         .contest-sort option {
             background: #06100a;
+
             color: #eef5f0;
         }
 
@@ -1068,6 +1111,7 @@
 
         .contest-table-wrap {
             width: 100%;
+
             overflow-x: auto;
         }
 
@@ -1089,7 +1133,7 @@
             color: #657269;
 
             background:
-                rgba(255,255,255,.015);
+                rgba(255, 255, 255, .015);
 
             font-size: 7px;
             font-weight: 900;
@@ -1104,7 +1148,7 @@
 
             border-top:
                 1px solid
-                rgba(255,255,255,.04);
+                rgba(255, 255, 255, .04);
 
             color: #cbd5cf;
 
@@ -1115,6 +1159,7 @@
 
         .contest-participant {
             color: #65ff83;
+
             font-weight: 800;
         }
 
@@ -1124,6 +1169,7 @@
 
         .contest-points {
             color: #65ff83;
+
             font-weight: 900;
         }
 
@@ -1147,10 +1193,10 @@
         .contest-rule-badge.yes {
             border:
                 1px solid
-                rgba(101,255,131,.24);
+                rgba(101, 255, 131, .24);
 
             background:
-                rgba(101,255,131,.07);
+                rgba(101, 255, 131, .07);
 
             color: #65ff83;
         }
@@ -1158,10 +1204,10 @@
         .contest-rule-badge.no {
             border:
                 1px solid
-                rgba(255,89,100,.24);
+                rgba(255, 89, 100, .24);
 
             background:
-                rgba(255,89,100,.06);
+                rgba(255, 89, 100, .06);
 
             color: #ff717b;
         }
@@ -1169,6 +1215,7 @@
         .contest-actions {
             display: flex;
             align-items: center;
+
             gap: 6px;
         }
 
@@ -1188,10 +1235,10 @@
         .contest-action-button.edit {
             border:
                 1px solid
-                rgba(101,255,131,.18);
+                rgba(101, 255, 131, .18);
 
             background:
-                rgba(101,255,131,.04);
+                rgba(101, 255, 131, .04);
 
             color: #65ff83;
         }
@@ -1199,10 +1246,10 @@
         .contest-action-button.delete {
             border:
                 1px solid
-                rgba(255,89,100,.18);
+                rgba(255, 89, 100, .18);
 
             background:
-                rgba(255,89,100,.04);
+                rgba(255, 89, 100, .04);
 
             color: #ff717b;
         }
@@ -1233,11 +1280,11 @@
 
         .contest-member-status.verified {
             background:
-                rgba(101,255,131,.07);
+                rgba(101, 255, 131, .07);
 
             border:
                 1px solid
-                rgba(101,255,131,.18);
+                rgba(101, 255, 131, .18);
         }
 
         .contest-member-status.verified
@@ -1246,16 +1293,16 @@
 
             box-shadow:
                 0 0 12px
-                rgba(101,255,131,.85);
+                rgba(101, 255, 131, .85);
         }
 
         .contest-member-status.registered {
             background:
-                rgba(255,174,66,.07);
+                rgba(255, 174, 66, .07);
 
             border:
                 1px solid
-                rgba(255,174,66,.22);
+                rgba(255, 174, 66, .22);
         }
 
         .contest-member-status.registered
@@ -1264,16 +1311,16 @@
 
             box-shadow:
                 0 0 12px
-                rgba(255,174,66,.75);
+                rgba(255, 174, 66, .75);
         }
 
         .contest-member-status.not-found {
             background:
-                rgba(255,89,100,.07);
+                rgba(255, 89, 100, .07);
 
             border:
                 1px solid
-                rgba(255,89,100,.22);
+                rgba(255, 89, 100, .22);
         }
 
         .contest-member-status.not-found
@@ -1282,7 +1329,7 @@
 
             box-shadow:
                 0 0 12px
-                rgba(255,89,100,.75);
+                rgba(255, 89, 100, .75);
         }
 
         .contest-member-status::after {
@@ -1301,7 +1348,7 @@
 
             border:
                 1px solid
-                rgba(101,255,131,.12);
+                rgba(101, 255, 131, .12);
 
             border-radius: 9px;
 
@@ -1356,7 +1403,13 @@
             display: none;
         }
 
-        .contest-pagination {
+
+        /* =====================================================
+           PAGINATION
+        ===================================================== */
+
+        .contest-pagination,
+        .members-pagination {
             min-height: 58px;
 
             padding:
@@ -1371,14 +1424,16 @@
 
             border-top:
                 1px solid
-                rgba(255,255,255,.05);
+                rgba(255, 255, 255, .05);
         }
 
-        .contest-pagination[hidden] {
+        .contest-pagination[hidden],
+        .members-pagination[hidden] {
             display: none;
         }
 
-        .contest-page-button {
+        .contest-page-button,
+        .members-page-button {
             min-width: 92px;
             min-height: 34px;
 
@@ -1388,12 +1443,12 @@
 
             border:
                 1px solid
-                rgba(101,255,131,.13);
+                rgba(101, 255, 131, .13);
 
             border-radius: 9px;
 
             background:
-                rgba(101,255,131,.035);
+                rgba(101, 255, 131, .035);
 
             color: #65ff83;
 
@@ -1401,12 +1456,15 @@
             font-weight: 900;
         }
 
-        .contest-page-button:disabled {
+        .contest-page-button:disabled,
+        .members-page-button:disabled {
             opacity: .25;
+
             cursor: not-allowed;
         }
 
-        .contest-page-info {
+        .contest-page-info,
+        .members-page-info {
             min-width: 85px;
 
             text-align: center;
@@ -1417,11 +1475,16 @@
             font-weight: 900;
         }
 
+
+        /* =====================================================
+           STATS
+        ===================================================== */
+
         .stats-grid {
             display: grid;
 
             grid-template-columns:
-                repeat(4, minmax(0, 1fr));
+                repeat(5, minmax(0, 1fr));
 
             gap: 14px;
         }
@@ -1433,12 +1496,12 @@
 
             border:
                 1px solid
-                rgba(101,255,131,.09);
+                rgba(101, 255, 131, .09);
 
             border-radius: 20px;
 
             background:
-                rgba(5,15,10,.72);
+                rgba(5, 15, 10, .72);
         }
 
         .stat-card span {
@@ -1471,19 +1534,24 @@
             font-weight: 800;
         }
 
+
+        /* =====================================================
+           MEMBERS
+        ===================================================== */
+
         .members-panel {
             margin-top: 22px;
 
             border:
                 1px solid
-                rgba(101,255,131,.1);
+                rgba(101, 255, 131, .1);
 
             border-radius: 24px;
 
             overflow: hidden;
 
             background:
-                rgba(4,12,8,.78);
+                rgba(4, 12, 8, .78);
         }
 
         .members-panel-top {
@@ -1507,17 +1575,19 @@
 
         .members-panel-title h2 {
             margin-top: 5px;
+
             font-size: 24px;
         }
 
         .members-tools {
             display: flex;
             align-items: center;
+
             gap: 10px;
         }
 
         .member-search {
-            width: 320px;
+            width: 360px;
             max-width: 100%;
 
             min-height: 43px;
@@ -1528,18 +1598,23 @@
 
             border:
                 1px solid
-                rgba(101,255,131,.12);
+                rgba(101, 255, 131, .12);
 
             border-radius: 12px;
 
             outline: none;
 
             background:
-                rgba(0,5,3,.65);
+                rgba(0, 5, 3, .65);
 
             color: #eef4f0;
 
             font-size: 12px;
+        }
+
+        .member-search:focus {
+            border-color:
+                rgba(101, 255, 131, .4);
         }
 
         .refresh-button {
@@ -1551,12 +1626,12 @@
 
             border:
                 1px solid
-                rgba(101,255,131,.13);
+                rgba(101, 255, 131, .13);
 
             border-radius: 12px;
 
             background:
-                rgba(101,255,131,.04);
+                rgba(101, 255, 131, .04);
 
             color: #65ff83;
 
@@ -1571,13 +1646,13 @@
 
             border-top:
                 1px solid
-                rgba(255,255,255,.05);
+                rgba(255, 255, 255, .05);
         }
 
         .members-table {
             width: 100%;
 
-            min-width: 1380px;
+            min-width: 1580px;
 
             border-collapse: collapse;
         }
@@ -1592,7 +1667,7 @@
             color: #657269;
 
             background:
-                rgba(255,255,255,.018);
+                rgba(255, 255, 255, .018);
 
             font-size: 8px;
             font-weight: 900;
@@ -1607,15 +1682,18 @@
 
             border-top:
                 1px solid
-                rgba(255,255,255,.045);
+                rgba(255, 255, 255, .045);
 
             color: #cbd5cf;
 
             font-size: 11px;
+
+            vertical-align: middle;
         }
 
         .telegram-name {
             color: #f4f7f5;
+
             font-weight: 800;
         }
 
@@ -1628,9 +1706,15 @@
             color: #59665e;
         }
 
+
+        /* =====================================================
+           SOLANA ADDRESS
+        ===================================================== */
+
         .wallet-cell {
             display: flex;
             align-items: center;
+
             gap: 8px;
         }
 
@@ -1638,7 +1722,9 @@
             max-width: 220px;
 
             overflow: hidden;
+
             white-space: nowrap;
+
             text-overflow: ellipsis;
 
             color: #aab6ae;
@@ -1651,18 +1737,23 @@
 
             border:
                 1px solid
-                rgba(101,255,131,.11);
+                rgba(101, 255, 131, .11);
 
             border-radius: 8px;
 
             background:
-                rgba(101,255,131,.035);
+                rgba(101, 255, 131, .035);
 
             color: #65ff83;
 
             font-size: 7px;
             font-weight: 900;
         }
+
+
+        /* =====================================================
+           TELEGRAM STATUS
+        ===================================================== */
 
         .telegram-group-badge {
             display: inline-flex;
@@ -1683,10 +1774,10 @@
         .telegram-group-badge.member {
             border:
                 1px solid
-                rgba(101,255,131,.25);
+                rgba(101, 255, 131, .25);
 
             background:
-                rgba(101,255,131,.07);
+                rgba(101, 255, 131, .07);
 
             color: #65ff83;
         }
@@ -1694,10 +1785,10 @@
         .telegram-group-badge.not-member {
             border:
                 1px solid
-                rgba(255,89,100,.24);
+                rgba(255, 89, 100, .24);
 
             background:
-                rgba(255,89,100,.06);
+                rgba(255, 89, 100, .06);
 
             color: #ff717b;
         }
@@ -1705,18 +1796,142 @@
         .telegram-group-badge.unknown {
             border:
                 1px solid
-                rgba(255,211,92,.22);
+                rgba(255, 211, 92, .22);
 
             background:
-                rgba(255,211,92,.05);
+                rgba(255, 211, 92, .05);
 
             color: #ffd35c;
         }
 
+        .chat-header,
+        .announcements-header {
+            color: #65ff83 !important;
+        }
+
+
+        /* =====================================================
+           DATE
+        ===================================================== */
+
         .date-value {
             color: #75837a;
+
             white-space: nowrap;
         }
+
+
+        /* =====================================================
+           NEW: COUNTRY
+        ===================================================== */
+
+        .country-cell {
+            display: inline-flex;
+            align-items: center;
+
+            gap: 8px;
+
+            white-space: nowrap;
+        }
+
+        .country-flag {
+            font-size: 16px;
+
+            line-height: 1;
+        }
+
+        .country-name {
+            color: #aab6ae;
+
+            font-size: 10px;
+            font-weight: 800;
+        }
+
+        .country-code {
+            color: #65ff83;
+
+            font-size: 8px;
+            font-weight: 900;
+        }
+
+
+        /* =====================================================
+           NEW: VERIFIED WALLET YES / NO
+        ===================================================== */
+
+        .wallet-status-badge {
+            display: inline-flex;
+            align-items: center;
+
+            gap: 7px;
+
+            min-width: 68px;
+
+            padding:
+                7px
+                10px;
+
+            border-radius: 999px;
+
+            font-size: 8px;
+            font-weight: 900;
+
+            white-space: nowrap;
+        }
+
+        .wallet-status-dot {
+            width: 8px;
+            height: 8px;
+
+            flex: 0 0 auto;
+
+            border-radius: 50%;
+        }
+
+        .wallet-status-badge.yes {
+            border:
+                1px solid
+                rgba(101, 255, 131, .25);
+
+            background:
+                rgba(101, 255, 131, .07);
+
+            color: #65ff83;
+        }
+
+        .wallet-status-badge.yes
+        .wallet-status-dot {
+            background: #65ff83;
+
+            box-shadow:
+                0 0 12px
+                rgba(101, 255, 131, .8);
+        }
+
+        .wallet-status-badge.no {
+            border:
+                1px solid
+                rgba(255, 89, 100, .24);
+
+            background:
+                rgba(255, 89, 100, .06);
+
+            color: #ff717b;
+        }
+
+        .wallet-status-badge.no
+        .wallet-status-dot {
+            background: #ff5964;
+
+            box-shadow:
+                0 0 12px
+                rgba(255, 89, 100, .75);
+        }
+
+
+        /* =====================================================
+           EMPTY
+        ===================================================== */
 
         .members-empty {
             padding:
@@ -1734,112 +1949,37 @@
             display: none;
         }
 
-        .chat-header,
-        .announcements-header {
-            color: #65ff83 !important;
-        }
-
 
         /* =====================================================
-           NEW: REGISTERED PEOPLE PAGINATION
+           RESPONSIVE
         ===================================================== */
 
-        .members-pagination {
-            min-height: 62px;
+        @media (max-width: 1250px) {
 
-            padding:
-                13px
-                18px;
+            .stats-grid {
+                grid-template-columns:
+                    repeat(3, minmax(0, 1fr));
+            }
 
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            gap: 12px;
-
-            border-top:
-                1px solid
-                rgba(255,255,255,.05);
-
-            background:
-                rgba(255,255,255,.01);
         }
-
-        .members-pagination[hidden] {
-            display: none;
-        }
-
-        .members-page-button {
-            min-width: 94px;
-            min-height: 36px;
-
-            padding:
-                0
-                12px;
-
-            border:
-                1px solid
-                rgba(101,255,131,.13);
-
-            border-radius: 9px;
-
-            background:
-                rgba(101,255,131,.035);
-
-            color: #65ff83;
-
-            font-size: 7px;
-            font-weight: 900;
-
-            letter-spacing: .8px;
-
-            transition:
-                border-color .2s ease,
-                background .2s ease,
-                opacity .2s ease;
-        }
-
-        .members-page-button:hover:not(:disabled) {
-            border-color:
-                rgba(101,255,131,.35);
-
-            background:
-                rgba(101,255,131,.075);
-        }
-
-        .members-page-button:disabled {
-            opacity: .25;
-            cursor: not-allowed;
-        }
-
-        .members-page-info {
-            min-width: 86px;
-
-            text-align: center;
-
-            color: #8c9991;
-
-            font-size: 8px;
-            font-weight: 900;
-
-            letter-spacing: 1px;
-        }
-
 
         @media (max-width: 1200px) {
 
             .contest-list-top {
                 align-items: stretch;
+
                 flex-direction: column;
             }
 
             .contest-tools {
                 width: 100%;
+
                 justify-content: flex-start;
             }
 
             .contest-search-wrap {
                 flex: 1;
+
                 width: auto;
             }
 
@@ -1880,11 +2020,13 @@
 
             .admin-header {
                 align-items: flex-start;
+
                 flex-direction: column;
             }
 
             .admin-header-right {
                 width: 100%;
+
                 flex-wrap: wrap;
             }
 
@@ -1898,6 +2040,7 @@
             .contest-panel-header,
             .contest-tools {
                 flex-direction: column;
+
                 align-items: stretch;
             }
 
@@ -1920,6 +2063,10 @@
             .admin-shell {
                 width:
                     calc(100% - 16px);
+            }
+
+            .admin-hero-main {
+                padding: 26px;
             }
 
             .admin-hero-main h1 {
@@ -1963,6 +2110,7 @@
 
 <body>
 
+
     <div
         class="admin-background"
         aria-hidden="true"
@@ -1981,6 +2129,10 @@
 
     <main class="admin-shell">
 
+
+        <!-- =====================================================
+             HEADER
+        ====================================================== -->
 
         <header class="admin-header">
 
@@ -2018,6 +2170,7 @@
 
                 </div>
 
+
                 <a
                     href="index.html"
                     class="back-site-button"
@@ -2030,6 +2183,10 @@
         </header>
 
 
+        <!-- =====================================================
+             HERO
+        ====================================================== -->
+
         <section class="admin-hero">
 
             <div class="admin-hero-main">
@@ -2040,23 +2197,19 @@
                 ></div>
 
                 <p class="hero-mini-tag">
-                    GREMBLE // FOUNDER MODE
+                    GREMBLE ADMIN PANEL
                 </p>
 
                 <h1>
-                    ROBÍŠ TO,<br>
-                    ABY SI BOL<br>
-                    <span>LEPŠÍ AKO ONI.</span>
+                    I will be<br>
+                    better<br>
+                    <span>than, them.</span>
                 </h1>
 
                 <div class="hero-line"></div>
 
                 <p>
-                    Build quietly. Watch everything.
-                    Keep moving. This dashboard exists
-                    for one reason — to give you a clear
-                    view of the people joining Gremble
-                    while you build it from the beginning.
+                    Gremble is the future
                 </p>
 
             </div>
@@ -2130,6 +2283,10 @@
         </section>
 
 
+        <!-- =====================================================
+             ADMIN STATUS MESSAGE
+        ====================================================== -->
+
         <div
             class="admin-message"
             id="adminMessage"
@@ -2138,12 +2295,20 @@
         </div>
 
 
+        <!-- =====================================================
+             DASHBOARD
+        ====================================================== -->
+
         <section
             class="admin-dashboard"
             id="adminDashboard"
             hidden
         >
 
+
+            <!-- =================================================
+                 CONTEST PANEL
+            ================================================== -->
 
             <section
                 class="contest-panel"
@@ -2225,6 +2390,10 @@
 
                 <div class="contest-body">
 
+
+                    <!-- =============================================
+                         CONTEST FORM
+                    ============================================== -->
 
                     <section class="contest-form-card">
 
@@ -2347,6 +2516,10 @@
 
                     </section>
 
+
+                    <!-- =============================================
+                         CONTEST LIST
+                    ============================================== -->
 
                     <section class="contest-list-card">
 
@@ -2533,7 +2706,12 @@
             </section>
 
 
+            <!-- =================================================
+                 MEMBER STATISTICS
+            ================================================== -->
+
             <div class="stats-grid">
+
 
                 <article class="stat-card">
 
@@ -2602,8 +2780,30 @@
 
                 </article>
 
+
+                <article class="stat-card">
+
+                    <span>
+                        WALLET CONNECTED
+                    </span>
+
+                    <strong id="statMembersWithWallet">
+                        0
+                    </strong>
+
+                    <small>
+                        VERIFIED WALLETS
+                    </small>
+
+                </article>
+
+
             </div>
 
+
+            <!-- =================================================
+                 REGISTERED MEMBERS
+            ================================================== -->
 
             <section class="members-panel">
 
@@ -2628,7 +2828,7 @@
                             type="search"
                             class="member-search"
                             id="memberSearch"
-                            placeholder="Search Telegram, X, wallet or group status..."
+                            placeholder="Search Telegram, X, country, wallet or group status..."
                             autocomplete="off"
                         >
 
@@ -2686,6 +2886,14 @@
                                     UPDATED
                                 </th>
 
+                                <th>
+                                    COUNTRY
+                                </th>
+
+                                <th>
+                                    WALLET
+                                </th>
+
                             </tr>
 
                         </thead>
@@ -2708,9 +2916,9 @@
                 </div>
 
 
-                <!-- =================================================
-                     NEW: REGISTERED PEOPLE PAGINATION
-                ================================================== -->
+                <!-- =============================================
+                     MEMBERS PAGINATION
+                ============================================== -->
 
                 <div
                     class="members-pagination"
@@ -2756,6 +2964,7 @@
 
 
     <script src="admin.js?v=107"></script>
+
 
 </body>
 
