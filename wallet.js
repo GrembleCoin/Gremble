@@ -1,10 +1,10 @@
 /* =====================================================
-   GREMBLE WALLET CONNECTION
+   GREMBLE WALLET
    File: wallet.js
 
-   IMPORTANT:
-   - Wallet connection only
-   - Message signing only
+   - Reown AppKit
+   - Solana wallet connection
+   - Message signature only
    - NO transactions
    - NO access to funds
    - NO seed phrase / private key
@@ -12,10 +12,7 @@
 
 
 /* =====================================================
-   IMPORT REOWN APPKIT
-
-   We use ESM modules directly because the Gremble site
-   is a static GitHub Pages website without npm/Vite.
+   IMPORTS
 ===================================================== */
 
 import {
@@ -53,7 +50,7 @@ const GREMBLE_SESSION_KEY =
 
 
 /* =====================================================
-   WEBSITE METADATA
+   APP METADATA
 ===================================================== */
 
 const metadata = {
@@ -74,21 +71,12 @@ const metadata = {
 
 
 /* =====================================================
-   SOLANA ADAPTER
+   APPKIT
 ===================================================== */
 
 const solanaAdapter =
     new SolanaAdapter();
 
-
-/* =====================================================
-   CREATE REOWN APPKIT
-
-   We only need Solana account verification because
-   GREMBLE will live on Solana.
-
-   Users still see this simply as CONNECT WALLET.
-===================================================== */
 
 const grembleWalletModal =
     createAppKit({
@@ -136,9 +124,7 @@ const grembleWalletModal =
 
 
 /* =====================================================
-   ELEMENTS
-
-   These elements will be added to index.html next.
+   HTML ELEMENTS
 ===================================================== */
 
 const walletConnectButton =
@@ -178,6 +164,22 @@ const walletStatus =
 
 
 /* =====================================================
+   STATE
+===================================================== */
+
+let connectionInProgress =
+    false;
+
+
+let verificationInProgress =
+    false;
+
+
+let lastVerifiedAddress =
+    "";
+
+
+/* =====================================================
    HELPERS
 ===================================================== */
 
@@ -189,9 +191,22 @@ function cleanText(value) {
 }
 
 
+function sleep(ms) {
+
+    return new Promise(
+        resolve =>
+            setTimeout(
+                resolve,
+                ms
+            )
+    );
+}
+
+
 function getGrembleSessionToken() {
 
     return cleanText(
+
         localStorage.getItem(
             GREMBLE_SESSION_KEY
         )
@@ -204,24 +219,36 @@ function shortenAddress(address) {
     const value =
         cleanText(address);
 
-    if (value.length <= 14) {
+
+    if (
+        value.length <= 16
+    ) {
+
         return value;
     }
 
+
     return (
-        value.slice(0, 6) +
+        value.slice(0, 7) +
         "..." +
-        value.slice(-6)
+        value.slice(-7)
     );
 }
 
+
+/* =====================================================
+   STATUS
+===================================================== */
 
 function setWalletStatus(
     message,
     type = ""
 ) {
 
-    if (!walletStatus) {
+    if (
+        !walletStatus
+    ) {
+
         return;
     }
 
@@ -237,7 +264,9 @@ function setWalletStatus(
     );
 
 
-    if (type) {
+    if (
+        type
+    ) {
 
         walletStatus.classList.add(
             type
@@ -247,15 +276,249 @@ function setWalletStatus(
 
 
 /* =====================================================
-   RANDOM NONCE
+   SOLANA PROVIDER
+===================================================== */
 
-   Used inside the message that the user signs.
+function getSolanaProvider() {
+
+    try {
+
+        const providers =
+            grembleWalletModal
+                .getProviders();
+
+
+        return (
+            providers?.["solana"] ||
+            null
+        );
+
+    }
+    catch (error) {
+
+        console.warn(
+            "Could not get Solana provider:",
+            error
+        );
+
+
+        return null;
+    }
+}
+
+
+/* =====================================================
+   CONNECTED ADDRESS
+===================================================== */
+
+function getConnectedWalletAddress() {
+
+    try {
+
+        const address =
+            grembleWalletModal
+                .getAddress();
+
+
+        return cleanText(
+            address
+        );
+
+    }
+    catch {
+
+        return "";
+    }
+}
+
+
+/* =====================================================
+   CONNECTION STATE
+===================================================== */
+
+function isWalletConnected() {
+
+    try {
+
+        return Boolean(
+            grembleWalletModal
+                .getIsConnected()
+        );
+
+    }
+    catch {
+
+        return Boolean(
+            getConnectedWalletAddress()
+        );
+    }
+}
+
+
+/* =====================================================
+   WALLET NAME
+===================================================== */
+
+function getConnectedWalletName() {
+
+    try {
+
+        const walletInfo =
+            grembleWalletModal
+                .getWalletInfo();
+
+
+        return (
+            cleanText(
+                walletInfo?.name
+            ) ||
+            "Wallet"
+        );
+
+    }
+    catch {
+
+        return "Wallet";
+    }
+}
+
+
+/* =====================================================
+   UI - CONNECTED
+===================================================== */
+
+function showConnectedWallet(
+    address,
+    providerName
+) {
+
+    const cleanAddress =
+        cleanText(address);
+
+
+    if (
+        walletConnectedAddress
+    ) {
+
+        walletConnectedAddress.textContent =
+            shortenAddress(
+                cleanAddress
+            );
+
+
+        walletConnectedAddress.title =
+            cleanAddress;
+    }
+
+
+    if (
+        walletConnectedProvider
+    ) {
+
+        walletConnectedProvider.textContent =
+            providerName ||
+            "Wallet";
+    }
+
+
+    if (
+        walletConnectedBox
+    ) {
+
+        walletConnectedBox.hidden =
+            false;
+    }
+
+
+    if (
+        walletConnectButton
+    ) {
+
+        walletConnectButton.hidden =
+            true;
+
+        walletConnectButton.disabled =
+            false;
+    }
+
+
+    if (
+        walletDisconnectButton
+    ) {
+
+        walletDisconnectButton.hidden =
+            false;
+    }
+}
+
+
+/* =====================================================
+   UI - DISCONNECTED
+===================================================== */
+
+function showDisconnectedWallet() {
+
+    if (
+        walletConnectedBox
+    ) {
+
+        walletConnectedBox.hidden =
+            true;
+    }
+
+
+    if (
+        walletConnectButton
+    ) {
+
+        walletConnectButton.hidden =
+            false;
+
+        walletConnectButton.disabled =
+            false;
+    }
+
+
+    if (
+        walletDisconnectButton
+    ) {
+
+        walletDisconnectButton.hidden =
+            true;
+
+        walletDisconnectButton.disabled =
+            false;
+    }
+
+
+    if (
+        walletConnectedAddress
+    ) {
+
+        walletConnectedAddress.textContent =
+            "";
+    }
+
+
+    if (
+        walletConnectedProvider
+    ) {
+
+        walletConnectedProvider.textContent =
+            "";
+    }
+}
+
+
+/* =====================================================
+   RANDOM NONCE
 ===================================================== */
 
 function createVerificationNonce() {
 
     const bytes =
         new Uint8Array(24);
+
 
     crypto.getRandomValues(
         bytes
@@ -275,119 +538,7 @@ function createVerificationNonce() {
 
 
 /* =====================================================
-   READ CURRENT SOLANA PROVIDER
-===================================================== */
-
-function getSolanaProvider() {
-
-    try {
-
-        const providers =
-            grembleWalletModal
-                .getProviders();
-
-        return (
-            providers?.solana ||
-            null
-        );
-
-    }
-    catch (error) {
-
-        console.error(
-            "Could not read Solana provider:",
-            error
-        );
-
-        return null;
-    }
-}
-
-
-/* =====================================================
-   READ CURRENT WALLET ADDRESS
-===================================================== */
-
-function getConnectedWalletAddress() {
-
-    try {
-
-        const address =
-            grembleWalletModal
-                .getAddress();
-
-        return cleanText(
-            address
-        );
-
-    }
-    catch {
-
-        return "";
-    }
-}
-
-
-/* =====================================================
-   WALLET NAME
-===================================================== */
-
-function getConnectedWalletName() {
-
-    try {
-
-        const walletInfo =
-            grembleWalletModal
-                .getWalletInfo();
-
-        return (
-            cleanText(
-                walletInfo?.name
-            ) ||
-            "Wallet"
-        );
-
-    }
-    catch {
-
-        return "Wallet";
-    }
-}
-
-
-/* =====================================================
-   BUILD EXACT MESSAGE
-
-   IMPORTANT:
-   This must match wallet-verify index.ts exactly.
-===================================================== */
-
-function buildWalletVerificationMessage(
-    telegramId,
-    walletAddress,
-    nonce
-) {
-
-    return [
-        "Gremble Wallet Verification",
-        "",
-        "Sign this message to verify that you own this wallet.",
-        "This does not create a transaction and does not give Gremble access to your funds.",
-        "",
-        `Telegram ID: ${telegramId}`,
-        `Wallet: ${walletAddress}`,
-        `Nonce: ${nonce}`
-    ].join("\n");
-}
-
-
-/* =====================================================
-   READ TELEGRAM ID FROM SESSION JWT
-
-   We ONLY read the public payload locally so the exact
-   message matches what the server verifies.
-
-   The backend still verifies the JWT cryptographically.
+   TELEGRAM ID FROM SESSION
 ===================================================== */
 
 function getTelegramIdFromSession() {
@@ -396,7 +547,9 @@ function getTelegramIdFromSession() {
         getGrembleSessionToken();
 
 
-    if (!token) {
+    if (
+        !token
+    ) {
 
         throw new Error(
             "Connect Telegram first."
@@ -408,7 +561,9 @@ function getTelegramIdFromSession() {
         token.split(".");
 
 
-    if (parts.length !== 3) {
+    if (
+        parts.length !== 3
+    ) {
 
         throw new Error(
             "Invalid Gremble session."
@@ -434,7 +589,9 @@ function getTelegramIdFromSession() {
 
         const decoded =
             JSON.parse(
+
                 decodeURIComponent(
+
                     Array
                         .from(
                             atob(payload)
@@ -482,6 +639,7 @@ function getTelegramIdFromSession() {
             error
         );
 
+
         throw new Error(
             "Invalid Gremble session."
         );
@@ -490,10 +648,41 @@ function getTelegramIdFromSession() {
 
 
 /* =====================================================
-   NORMALIZE SIGNATURE
+   VERIFICATION MESSAGE
 
-   Solana wallets can return the signature in slightly
-   different shapes. Backend expects base58.
+   MUST MATCH wallet-verify EDGE FUNCTION
+===================================================== */
+
+function buildWalletVerificationMessage(
+    telegramId,
+    walletAddress,
+    nonce
+) {
+
+    return [
+
+        "Gremble Wallet Verification",
+
+        "",
+
+        "Sign this message to verify that you own this wallet.",
+
+        "This does not create a transaction and does not give Gremble access to your funds.",
+
+        "",
+
+        `Telegram ID: ${telegramId}`,
+
+        `Wallet: ${walletAddress}`,
+
+        `Nonce: ${nonce}`
+
+    ].join("\n");
+}
+
+
+/* =====================================================
+   SIGNATURE TO BASE58
 ===================================================== */
 
 function signatureToBase58(
@@ -538,6 +727,7 @@ function signatureToBase58(
     ) {
 
         return bs58.encode(
+
             new Uint8Array(
                 signature
             )
@@ -550,9 +740,13 @@ function signatureToBase58(
     ) {
 
         return bs58.encode(
+
             new Uint8Array(
+
                 signature.buffer,
+
                 signature.byteOffset || 0,
+
                 signature.byteLength
             )
         );
@@ -560,254 +754,62 @@ function signatureToBase58(
 
 
     throw new Error(
-        "Wallet returned an unsupported signature format."
+        "Unsupported wallet signature format."
     );
 }
 
 
 /* =====================================================
-   SHOW CONNECTED WALLET
+   WAIT FOR REOWN CONNECTION
 ===================================================== */
 
-function showConnectedWallet(
-    address,
-    providerName
-) {
-
-    if (walletConnectedAddress) {
-
-        walletConnectedAddress.textContent =
-            shortenAddress(
-                address
-            );
-
-        walletConnectedAddress.title =
-            address;
-    }
-
-
-    if (walletConnectedProvider) {
-
-        walletConnectedProvider.textContent =
-            providerName ||
-            "Wallet";
-    }
-
-
-    if (walletConnectedBox) {
-
-        walletConnectedBox.hidden =
-            false;
-    }
-
-
-    if (walletConnectButton) {
-
-        walletConnectButton.hidden =
-            true;
-    }
-
-
-    if (walletDisconnectButton) {
-
-        walletDisconnectButton.hidden =
-            false;
-    }
-}
-
-
-/* =====================================================
-   SHOW DISCONNECTED STATE
-===================================================== */
-
-function showDisconnectedWallet() {
-
-    if (walletConnectedBox) {
-
-        walletConnectedBox.hidden =
-            true;
-    }
-
-
-    if (walletConnectButton) {
-
-        walletConnectButton.hidden =
-            false;
-    }
-
-
-    if (walletDisconnectButton) {
-
-        walletDisconnectButton.hidden =
-            true;
-    }
-
-
-    if (walletConnectedAddress) {
-
-        walletConnectedAddress.textContent =
-            "";
-    }
-
-
-    if (walletConnectedProvider) {
-
-        walletConnectedProvider.textContent =
-            "";
-    }
-}
-
-
-/* =====================================================
-   WAIT FOR SOLANA CONNECTION
-===================================================== */
-
-function waitForSolanaConnection(
+async function waitForWalletConnection(
     timeoutMs = 120000
 ) {
 
-    return new Promise(
-        (resolve, reject) => {
-
-            let finished =
-                false;
+    const start =
+        Date.now();
 
 
-            const finishSuccess =
-                () => {
+    while (
+        Date.now() - start <
+        timeoutMs
+    ) {
 
-                    if (finished) {
-                        return;
-                    }
-
-
-                    const provider =
-                        getSolanaProvider();
-
-                    const address =
-                        getConnectedWalletAddress();
+        const address =
+            getConnectedWalletAddress();
 
 
-                    if (
-                        !provider ||
-                        !address
-                    ) {
-
-                        return;
-                    }
+        const provider =
+            getSolanaProvider();
 
 
-                    finished =
-                        true;
+        if (
+            address &&
+            provider
+        ) {
 
-
-                    clearTimeout(
-                        timeout
-                    );
-
-
-                    if (unsubscribeProvider) {
-
-                        unsubscribeProvider();
-                    }
-
-
-                    resolve({
-                        provider,
-                        address
-                    });
-                };
-
-
-            let unsubscribeProvider =
-                null;
-
-
-            try {
-
-                unsubscribeProvider =
-                    grembleWalletModal
-                        .subscribeProvider(
-                            () => {
-
-                                finishSuccess();
-                            }
-                        );
-
-            }
-            catch (error) {
-
-                console.warn(
-                    "Provider subscription unavailable:",
-                    error
-                );
-            }
-
-
-            const interval =
-                setInterval(
-                    () => {
-
-                        if (finished) {
-
-                            clearInterval(
-                                interval
-                            );
-
-                            return;
-                        }
-
-
-                        finishSuccess();
-
-                    },
-                    500
-                );
-
-
-            const timeout =
-                setTimeout(
-                    () => {
-
-                        if (finished) {
-                            return;
-                        }
-
-
-                        finished =
-                            true;
-
-
-                        clearInterval(
-                            interval
-                        );
-
-
-                        if (unsubscribeProvider) {
-
-                            unsubscribeProvider();
-                        }
-
-
-                        reject(
-                            new Error(
-                                "Wallet connection timed out."
-                            )
-                        );
-
-                    },
-                    timeoutMs
-                );
-
-
-            finishSuccess();
+            return {
+                address,
+                provider
+            };
         }
+
+
+        await sleep(
+            250
+        );
+    }
+
+
+    throw new Error(
+        "Wallet connection timed out."
     );
 }
 
 
 /* =====================================================
-   VERIFY WALLET WITH GREMBLE BACKEND
+   VERIFY CONNECTED WALLET
 ===================================================== */
 
 async function verifyConnectedWallet(
@@ -815,167 +817,291 @@ async function verifyConnectedWallet(
     walletAddress
 ) {
 
-    const sessionToken =
-        getGrembleSessionToken();
+    if (
+        verificationInProgress
+    ) {
 
-
-    if (!sessionToken) {
-
-        throw new Error(
-            "Connect Telegram first."
-        );
+        return;
     }
 
 
-    const telegramId =
-        getTelegramIdFromSession();
+    verificationInProgress =
+        true;
 
 
-    const nonce =
-        createVerificationNonce();
+    try {
+
+        const sessionToken =
+            getGrembleSessionToken();
 
 
-    const message =
-        buildWalletVerificationMessage(
-            telegramId,
+        if (
+            !sessionToken
+        ) {
+
+            throw new Error(
+                "Connect Telegram first."
+            );
+        }
+
+
+        const telegramId =
+            getTelegramIdFromSession();
+
+
+        const nonce =
+            createVerificationNonce();
+
+
+        const message =
+            buildWalletVerificationMessage(
+                telegramId,
+                walletAddress,
+                nonce
+            );
+
+
+        const encodedMessage =
+            new TextEncoder()
+                .encode(
+                    message
+                );
+
+
+        setWalletStatus(
+            "SIGN THE MESSAGE IN YOUR WALLET...",
+            "loading"
+        );
+
+
+        /*
+           MESSAGE SIGNATURE ONLY.
+           NO TRANSACTION.
+        */
+
+        const signatureResult =
+            await provider
+                .signMessage(
+                    encodedMessage
+                );
+
+
+        const signatureBase58 =
+            signatureToBase58(
+                signatureResult
+            );
+
+
+        const walletName =
+            getConnectedWalletName();
+
+
+        setWalletStatus(
+            "VERIFYING WALLET...",
+            "loading"
+        );
+
+
+        const response =
+            await fetch(
+                WALLET_VERIFY_ENDPOINT,
+                {
+
+                    method:
+                        "POST",
+
+                    headers: {
+
+                        "Authorization":
+                            `Bearer ${sessionToken}`,
+
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:
+                        JSON.stringify({
+
+                            wallet_address:
+                                walletAddress,
+
+                            wallet_provider:
+                                walletName,
+
+                            signature:
+                                signatureBase58,
+
+                            nonce
+                        })
+                }
+            );
+
+
+        let result =
+            null;
+
+
+        try {
+
+            result =
+                await response.json();
+
+        }
+        catch {
+
+            result =
+                null;
+        }
+
+
+        if (
+            !response.ok ||
+            !result?.success ||
+            !result?.verified
+        ) {
+
+            throw new Error(
+                result?.error ||
+                "Wallet verification failed."
+            );
+        }
+
+
+        lastVerifiedAddress =
+            walletAddress;
+
+
+        showConnectedWallet(
             walletAddress,
-            nonce
+            walletName
         );
 
 
-    const encodedMessage =
-        new TextEncoder()
-            .encode(
-                message
-            );
-
-
-    setWalletStatus(
-        "CHECK YOUR WALLET AND SIGN THE VERIFICATION MESSAGE.",
-        "loading"
-    );
-
-
-    /*
-       IMPORTANT:
-       signMessage only.
-
-       There is NO signTransaction here.
-    */
-
-    const signatureResult =
-        await provider
-            .signMessage(
-                encodedMessage
-            );
-
-
-    const signatureBase58 =
-        signatureToBase58(
-            signatureResult
+        setWalletStatus(
+            "WALLET CONNECTED",
+            "success"
         );
 
+
+        return result;
+
+    }
+    finally {
+
+        verificationInProgress =
+            false;
+    }
+}
+
+
+/* =====================================================
+   HANDLE CONNECTED WALLET
+===================================================== */
+
+async function handleWalletConnected(
+    address,
+    provider,
+    shouldVerify = false
+) {
 
     const walletName =
         getConnectedWalletName();
 
 
-    setWalletStatus(
-        "VERIFYING WALLET...",
-        "loading"
+    showConnectedWallet(
+        address,
+        walletName
     );
 
 
-    const response =
-        await fetch(
-            WALLET_VERIFY_ENDPOINT,
-            {
-                method:
-                    "POST",
+    /*
+       As soon as Reown reports a connection,
+       the CONNECT WALLET button disappears.
+    */
 
-                headers: {
-
-                    "Authorization":
-                        `Bearer ${sessionToken}`,
-
-                    "Content-Type":
-                        "application/json"
-                },
-
-                body:
-                    JSON.stringify({
-
-                        wallet_address:
-                            walletAddress,
-
-                        wallet_provider:
-                            walletName,
-
-                        signature:
-                            signatureBase58,
-
-                        nonce
-                    })
-            }
-        );
-
-
-    let result =
-        null;
-
-
-    try {
-
-        result =
-            await response.json();
-
-    }
-    catch {
-
-        result =
-            null;
-    }
+    setWalletStatus(
+        "WALLET CONNECTED",
+        "success"
+    );
 
 
     if (
-        !response.ok ||
-        !result?.success ||
-        !result?.verified
+        shouldVerify &&
+        lastVerifiedAddress !== address
     ) {
 
-        throw new Error(
-            result?.error ||
-            "Wallet verification failed."
-        );
+        try {
+
+            await verifyConnectedWallet(
+                provider,
+                address
+            );
+
+        }
+        catch (error) {
+
+            console.error(
+                "Wallet verification error:",
+                error
+            );
+
+
+            /*
+               Wallet itself remains connected.
+               Only verification failed/cancelled.
+            */
+
+            showConnectedWallet(
+                address,
+                walletName
+            );
+
+
+            setWalletStatus(
+                error?.message ||
+                "WALLET CONNECTED — VERIFICATION NOT COMPLETED.",
+                "error"
+            );
+        }
     }
-
-
-    return result;
 }
 
 
 /* =====================================================
-   CONNECT + VERIFY
+   CONNECT WALLET
 ===================================================== */
 
 async function connectAndVerifyWallet() {
 
-    const sessionToken =
-        getGrembleSessionToken();
+    if (
+        connectionInProgress
+    ) {
+
+        return;
+    }
 
 
-    if (!sessionToken) {
+    if (
+        !getGrembleSessionToken()
+    ) {
 
         setWalletStatus(
             "CONNECT TELEGRAM FIRST.",
             "error"
         );
 
+
         return;
     }
 
 
-    if (walletConnectButton) {
+    connectionInProgress =
+        true;
+
+
+    if (
+        walletConnectButton
+    ) {
 
         walletConnectButton.disabled =
             true;
@@ -984,6 +1110,35 @@ async function connectAndVerifyWallet() {
 
     try {
 
+        /*
+           FIRST CHECK:
+           wallet may already be connected.
+        */
+
+        const existingAddress =
+            getConnectedWalletAddress();
+
+
+        const existingProvider =
+            getSolanaProvider();
+
+
+        if (
+            existingAddress &&
+            existingProvider
+        ) {
+
+            await handleWalletConnected(
+                existingAddress,
+                existingProvider,
+                true
+            );
+
+
+            return;
+        }
+
+
         setWalletStatus(
             "SELECT YOUR WALLET...",
             "loading"
@@ -991,13 +1146,16 @@ async function connectAndVerifyWallet() {
 
 
         /*
-           Open normal Reown wallet modal.
+           IMPORTANT FIX:
 
-           We target the Solana namespace because the verified
-           account must be usable for $GREMBLE on Solana.
+           DO NOT AWAIT modal.open().
+
+           Reown keeps the modal lifecycle separate from
+           the wallet connection state.
         */
 
-        await grembleWalletModal.open({
+        grembleWalletModal.open({
+
             view:
                 "Connect",
 
@@ -1006,38 +1164,42 @@ async function connectAndVerifyWallet() {
         });
 
 
+        /*
+           Wait until Reown actually gives us both
+           the Solana address and provider.
+        */
+
         const {
-            provider,
-            address
-        } =
-            await waitForSolanaConnection();
-
-
-        const result =
-            await verifyConnectedWallet(
-                provider,
-                address
-            );
-
-
-        const providerName =
-            cleanText(
-                result?.wallet?.provider
-            ) ||
-            getConnectedWalletName();
-
-
-        showConnectedWallet(
             address,
-            providerName
+            provider
+        } =
+            await waitForWalletConnection();
+
+
+        /*
+           Immediately switch UI to CONNECTED.
+        */
+
+        await handleWalletConnected(
+            address,
+            provider,
+            true
         );
 
 
-        setWalletStatus(
-            "WALLET VERIFIED.",
-            "success"
-        );
+        /*
+           Close modal after wallet has connected.
+        */
 
+        try {
+
+            grembleWalletModal
+                .close();
+
+        }
+        catch {
+            // nothing needed
+        }
 
     }
     catch (error) {
@@ -1049,21 +1211,56 @@ async function connectAndVerifyWallet() {
 
 
         /*
-           User cancelling the wallet modal is not dangerous.
-           We simply return to disconnected state.
+           If Reown connected despite another
+           later error, still show connected state.
         */
 
-        setWalletStatus(
-            error?.message ||
-            "Could not connect wallet.",
-            "error"
-        );
+        const address =
+            getConnectedWalletAddress();
 
 
+        const provider =
+            getSolanaProvider();
+
+
+        if (
+            address &&
+            provider
+        ) {
+
+            showConnectedWallet(
+                address,
+                getConnectedWalletName()
+            );
+
+
+            setWalletStatus(
+                "WALLET CONNECTED",
+                "success"
+            );
+
+        }
+        else {
+
+            showDisconnectedWallet();
+
+
+            setWalletStatus(
+                error?.message ||
+                "Could not connect wallet.",
+                "error"
+            );
+        }
     }
     finally {
 
-        if (walletConnectButton) {
+        connectionInProgress =
+            false;
+
+
+        if (
+            walletConnectButton
+        ) {
 
             walletConnectButton.disabled =
                 false;
@@ -1075,15 +1272,15 @@ async function connectAndVerifyWallet() {
 /* =====================================================
    DISCONNECT WALLET
 
-   IMPORTANT:
-   This only disconnects the current wallet session.
-
-   The last VERIFIED wallet stays saved in Supabase.
+   Does NOT delete the last verified wallet
+   from Supabase.
 ===================================================== */
 
 async function disconnectWallet() {
 
-    if (walletDisconnectButton) {
+    if (
+        walletDisconnectButton
+    ) {
 
         walletDisconnectButton.disabled =
             true;
@@ -1098,6 +1295,10 @@ async function disconnectWallet() {
             ?.disconnect();
 
 
+        lastVerifiedAddress =
+            "";
+
+
         showDisconnectedWallet();
 
 
@@ -1105,7 +1306,6 @@ async function disconnectWallet() {
             "WALLET DISCONNECTED.",
             "success"
         );
-
 
     }
     catch (error) {
@@ -1116,15 +1316,46 @@ async function disconnectWallet() {
         );
 
 
-        setWalletStatus(
-            "COULD NOT DISCONNECT WALLET.",
-            "error"
-        );
+        /*
+           Check whether it actually disconnected.
+        */
 
+        const address =
+            getConnectedWalletAddress();
+
+
+        if (
+            !address
+        ) {
+
+            showDisconnectedWallet();
+
+
+            setWalletStatus(
+                "WALLET DISCONNECTED.",
+                "success"
+            );
+
+        }
+        else {
+
+            showConnectedWallet(
+                address,
+                getConnectedWalletName()
+            );
+
+
+            setWalletStatus(
+                "COULD NOT DISCONNECT WALLET.",
+                "error"
+            );
+        }
     }
     finally {
 
-        if (walletDisconnectButton) {
+        if (
+            walletDisconnectButton
+        ) {
 
             walletDisconnectButton.disabled =
                 false;
@@ -1134,29 +1365,33 @@ async function disconnectWallet() {
 
 
 /* =====================================================
-   RESTORE CURRENT WALLET CONNECTION
-
-   Reown may restore a wallet session automatically.
-   This does NOT re-write the database.
-
-   Database changes happen only after a fresh successful
-   message verification.
+   RESTORE UI AFTER REFRESH
 ===================================================== */
 
-function restoreWalletUi() {
+async function restoreWalletUi() {
 
-    try {
+    /*
+       Reown may need a short moment after page load
+       to restore its saved session.
+    */
 
-        const provider =
-            getSolanaProvider();
+    for (
+        let attempt = 0;
+        attempt < 20;
+        attempt++
+    ) {
 
         const address =
             getConnectedWalletAddress();
 
 
+        const provider =
+            getSolanaProvider();
+
+
         if (
-            provider &&
-            address
+            address &&
+            provider
         ) {
 
             showConnectedWallet(
@@ -1166,7 +1401,7 @@ function restoreWalletUi() {
 
 
             setWalletStatus(
-                "WALLET CONNECTED.",
+                "WALLET CONNECTED",
                 "success"
             );
 
@@ -1175,24 +1410,89 @@ function restoreWalletUi() {
         }
 
 
-        showDisconnectedWallet();
-
-    }
-    catch (error) {
-
-        console.error(
-            "Wallet restore error:",
-            error
+        await sleep(
+            250
         );
-
-
-        showDisconnectedWallet();
     }
+
+
+    showDisconnectedWallet();
+
+
+    setWalletStatus(
+        "",
+        ""
+    );
 }
 
 
 /* =====================================================
-   WATCH WALLET CHANGES
+   WATCH PROVIDERS
+
+   Reown officially exposes providers by namespace.
+===================================================== */
+
+try {
+
+    grembleWalletModal
+        .subscribeProviders(
+            providers => {
+
+                const provider =
+                    providers?.["solana"];
+
+
+                const address =
+                    getConnectedWalletAddress();
+
+
+                if (
+                    provider &&
+                    address
+                ) {
+
+                    showConnectedWallet(
+                        address,
+                        getConnectedWalletName()
+                    );
+
+
+                    setWalletStatus(
+                        "WALLET CONNECTED",
+                        "success"
+                    );
+
+                }
+                else if (
+                    !connectionInProgress
+                ) {
+
+                    const currentAddress =
+                        getConnectedWalletAddress();
+
+
+                    if (
+                        !currentAddress
+                    ) {
+
+                        showDisconnectedWallet();
+                    }
+                }
+            }
+        );
+
+}
+catch (error) {
+
+    console.warn(
+        "Could not subscribe to wallet providers:",
+        error
+    );
+}
+
+
+/* =====================================================
+   WATCH PROVIDER STATE
 ===================================================== */
 
 try {
@@ -1217,17 +1517,19 @@ try {
                         getConnectedWalletName()
                     );
 
+
+                    setWalletStatus(
+                        "WALLET CONNECTED",
+                        "success"
+                    );
+
                 }
-                else {
+                else if (
+                    !connectionInProgress &&
+                    state?.isConnected === false
+                ) {
 
-                    const currentAddress =
-                        getConnectedWalletAddress();
-
-
-                    if (!currentAddress) {
-
-                        showDisconnectedWallet();
-                    }
+                    showDisconnectedWallet();
                 }
             }
         );
@@ -1236,7 +1538,7 @@ try {
 catch (error) {
 
     console.warn(
-        "Wallet provider subscription failed:",
+        "Could not subscribe to provider state:",
         error
     );
 }
@@ -1246,7 +1548,9 @@ catch (error) {
    EVENTS
 ===================================================== */
 
-if (walletConnectButton) {
+if (
+    walletConnectButton
+) {
 
     walletConnectButton.addEventListener(
         "click",
@@ -1255,7 +1559,9 @@ if (walletConnectButton) {
 }
 
 
-if (walletDisconnectButton) {
+if (
+    walletDisconnectButton
+) {
 
     walletDisconnectButton.addEventListener(
         "click",
@@ -1268,10 +1574,17 @@ if (walletDisconnectButton) {
    START
 ===================================================== */
 
-document.addEventListener(
-    "DOMContentLoaded",
-    () => {
+if (
+    document.readyState === "loading"
+) {
 
-        restoreWalletUi();
-    }
-);
+    document.addEventListener(
+        "DOMContentLoaded",
+        restoreWalletUi
+    );
+
+}
+else {
+
+    restoreWalletUi();
+}
