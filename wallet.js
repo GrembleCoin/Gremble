@@ -1,13 +1,15 @@
 /* =====================================================
    GREMBLE WALLET
-   File: wallet.js
+   FULL wallet.js
 
-   - Reown AppKit
-   - Solana wallet connection
+   - Only ONE wallet state is shown at a time
+   - CONNECT WALLET disappears after connection
+   - Last verified wallet is loaded from member profile
+   - Saved wallet can appear on another device
+   - New verified wallet replaces the previous one
    - Message signature only
    - NO transactions
    - NO access to funds
-   - NO seed phrase / private key
 ===================================================== */
 
 
@@ -45,12 +47,16 @@ const WALLET_VERIFY_ENDPOINT =
     "https://tffzjqeckoezursrvcpw.supabase.co/functions/v1/wallet-verify";
 
 
+const MEMBER_PROFILE_ENDPOINT =
+    "https://tffzjqeckoezursrvcpw.supabase.co/functions/v1/member-profile";
+
+
 const GREMBLE_SESSION_KEY =
     "gremble_session_token";
 
 
 /* =====================================================
-   APP METADATA
+   METADATA
 ===================================================== */
 
 const metadata = {
@@ -124,7 +130,7 @@ const grembleWalletModal =
 
 
 /* =====================================================
-   HTML ELEMENTS
+   ELEMENTS
 ===================================================== */
 
 const walletConnectButton =
@@ -175,7 +181,27 @@ let verificationInProgress =
     false;
 
 
-let lastVerifiedAddress =
+/*
+    Wallet currently connected through Reown
+    on THIS browser/device.
+*/
+
+let localWalletAddress =
+    "";
+
+
+/*
+    Last wallet verified and saved in Supabase.
+
+    This can be shown on another device even if
+    Reown is not connected there.
+*/
+
+let savedWalletAddress =
+    "";
+
+
+let savedWalletProvider =
     "";
 
 
@@ -276,7 +302,7 @@ function setWalletStatus(
 
 
 /* =====================================================
-   SOLANA PROVIDER
+   CURRENT SOLANA PROVIDER
 ===================================================== */
 
 function getSolanaProvider() {
@@ -308,7 +334,7 @@ function getSolanaProvider() {
 
 
 /* =====================================================
-   CONNECTED ADDRESS
+   CURRENT REOWN ADDRESS
 ===================================================== */
 
 function getConnectedWalletAddress() {
@@ -333,30 +359,7 @@ function getConnectedWalletAddress() {
 
 
 /* =====================================================
-   CONNECTION STATE
-===================================================== */
-
-function isWalletConnected() {
-
-    try {
-
-        return Boolean(
-            grembleWalletModal
-                .getIsConnected()
-        );
-
-    }
-    catch {
-
-        return Boolean(
-            getConnectedWalletAddress()
-        );
-    }
-}
-
-
-/* =====================================================
-   WALLET NAME
+   CURRENT WALLET PROVIDER NAME
 ===================================================== */
 
 function getConnectedWalletName() {
@@ -384,16 +387,90 @@ function getConnectedWalletName() {
 
 
 /* =====================================================
-   UI - CONNECTED
+   UI
 ===================================================== */
 
-function showConnectedWallet(
+function showConnectButton() {
+
+    if (
+        walletConnectButton
+    ) {
+
+        walletConnectButton.hidden =
+            false;
+
+
+        walletConnectButton.disabled =
+            false;
+    }
+
+
+    if (
+        walletConnectedBox
+    ) {
+
+        walletConnectedBox.hidden =
+            true;
+    }
+
+
+    if (
+        walletDisconnectButton
+    ) {
+
+        walletDisconnectButton.hidden =
+            true;
+    }
+}
+
+
+function showWalletBox(
     address,
-    providerName
+    providerName,
+    localConnection = false
 ) {
 
     const cleanAddress =
         cleanText(address);
+
+
+    if (
+        !cleanAddress
+    ) {
+
+        showConnectButton();
+
+        return;
+    }
+
+
+    /*
+        IMPORTANT:
+
+        When wallet exists, CONNECT WALLET
+        must NOT be visible.
+    */
+
+    if (
+        walletConnectButton
+    ) {
+
+        walletConnectButton.hidden =
+            true;
+
+
+        walletConnectButton.disabled =
+            false;
+    }
+
+
+    if (
+        walletConnectedBox
+    ) {
+
+        walletConnectedBox.hidden =
+            false;
+    }
 
 
     if (
@@ -416,96 +493,33 @@ function showConnectedWallet(
     ) {
 
         walletConnectedProvider.textContent =
-            providerName ||
+            cleanText(
+                providerName
+            ) ||
             "Wallet";
     }
 
 
     if (
-        walletConnectedBox
-    ) {
-
-        walletConnectedBox.hidden =
-            false;
-    }
-
-
-    if (
-        walletConnectButton
-    ) {
-
-        walletConnectButton.hidden =
-            true;
-
-        walletConnectButton.disabled =
-            false;
-    }
-
-
-    if (
         walletDisconnectButton
     ) {
 
         walletDisconnectButton.hidden =
             false;
-    }
-}
 
 
-/* =====================================================
-   UI - DISCONNECTED
-===================================================== */
+        /*
+            If wallet is physically connected in
+            this browser -> DISCONNECT.
 
-function showDisconnectedWallet() {
+            If it is only remembered from Supabase
+            on another device -> CHANGE WALLET.
+        */
 
-    if (
-        walletConnectedBox
-    ) {
-
-        walletConnectedBox.hidden =
-            true;
-    }
-
-
-    if (
-        walletConnectButton
-    ) {
-
-        walletConnectButton.hidden =
-            false;
-
-        walletConnectButton.disabled =
-            false;
-    }
-
-
-    if (
-        walletDisconnectButton
-    ) {
-
-        walletDisconnectButton.hidden =
-            true;
-
-        walletDisconnectButton.disabled =
-            false;
-    }
-
-
-    if (
-        walletConnectedAddress
-    ) {
-
-        walletConnectedAddress.textContent =
-            "";
-    }
-
-
-    if (
-        walletConnectedProvider
-    ) {
-
-        walletConnectedProvider.textContent =
-            "";
+        walletDisconnectButton.textContent =
+            localConnection
+                ? "DISCONNECT"
+                : "CHANGE";
     }
 }
 
@@ -538,7 +552,7 @@ function createVerificationNonce() {
 
 
 /* =====================================================
-   TELEGRAM ID FROM SESSION
+   TELEGRAM ID
 ===================================================== */
 
 function getTelegramIdFromSession() {
@@ -682,7 +696,7 @@ function buildWalletVerificationMessage(
 
 
 /* =====================================================
-   SIGNATURE TO BASE58
+   SIGNATURE -> BASE58
 ===================================================== */
 
 function signatureToBase58(
@@ -760,6 +774,130 @@ function signatureToBase58(
 
 
 /* =====================================================
+   LOAD SAVED WALLET FROM GREMBLE PROFILE
+
+   This is what allows:
+
+   PC -> verify wallet
+   PHONE -> same Telegram account -> see saved wallet
+===================================================== */
+
+async function loadSavedWalletFromProfile() {
+
+    const sessionToken =
+        getGrembleSessionToken();
+
+
+    if (
+        !sessionToken
+    ) {
+
+        savedWalletAddress =
+            "";
+
+
+        savedWalletProvider =
+            "";
+
+
+        return null;
+    }
+
+
+    try {
+
+        const response =
+            await fetch(
+                MEMBER_PROFILE_ENDPOINT,
+                {
+
+                    method:
+                        "GET",
+
+                    headers: {
+
+                        "Authorization":
+                            `Bearer ${sessionToken}`,
+
+                        "Content-Type":
+                            "application/json"
+                    }
+                }
+            );
+
+
+        if (
+            !response.ok
+        ) {
+
+            return null;
+        }
+
+
+        const result =
+            await response.json();
+
+
+        /*
+            Supports both possible response styles:
+
+            {
+                member: {...}
+            }
+
+            or
+
+            {
+                profile: {...}
+            }
+
+            or direct object.
+        */
+
+        const member =
+            result?.member ||
+            result?.profile ||
+            result?.data ||
+            result ||
+            {};
+
+
+        savedWalletAddress =
+            cleanText(
+                member.wallet_address
+            );
+
+
+        savedWalletProvider =
+            cleanText(
+                member.wallet_provider
+            );
+
+
+        return {
+
+            address:
+                savedWalletAddress,
+
+            provider:
+                savedWalletProvider
+        };
+
+    }
+    catch (error) {
+
+        console.warn(
+            "Could not load saved wallet:",
+            error
+        );
+
+
+        return null;
+    }
+}
+
+
+/* =====================================================
    WAIT FOR REOWN CONNECTION
 ===================================================== */
 
@@ -767,12 +905,12 @@ async function waitForWalletConnection(
     timeoutMs = 120000
 ) {
 
-    const start =
+    const startedAt =
         Date.now();
 
 
     while (
-        Date.now() - start <
+        Date.now() - startedAt <
         timeoutMs
     ) {
 
@@ -788,6 +926,10 @@ async function waitForWalletConnection(
             address &&
             provider
         ) {
+
+            localWalletAddress =
+                address;
+
 
             return {
                 address,
@@ -809,7 +951,7 @@ async function waitForWalletConnection(
 
 
 /* =====================================================
-   VERIFY CONNECTED WALLET
+   VERIFY WALLET
 ===================================================== */
 
 async function verifyConnectedWallet(
@@ -821,7 +963,7 @@ async function verifyConnectedWallet(
         verificationInProgress
     ) {
 
-        return;
+        return null;
     }
 
 
@@ -875,8 +1017,9 @@ async function verifyConnectedWallet(
 
 
         /*
-           MESSAGE SIGNATURE ONLY.
-           NO TRANSACTION.
+            MESSAGE SIGNATURE ONLY.
+
+            NO TRANSACTION.
         */
 
         const signatureResult =
@@ -967,19 +1110,33 @@ async function verifyConnectedWallet(
         }
 
 
-        lastVerifiedAddress =
+        /*
+            New wallet becomes the ONE
+            last verified wallet.
+        */
+
+        savedWalletAddress =
             walletAddress;
 
 
-        showConnectedWallet(
+        savedWalletProvider =
+            walletName;
+
+
+        localWalletAddress =
+            walletAddress;
+
+
+        showWalletBox(
             walletAddress,
-            walletName
+            walletName,
+            true
         );
 
 
         setWalletStatus(
-            "WALLET CONNECTED",
-            "success"
+            "",
+            ""
         );
 
 
@@ -995,80 +1152,7 @@ async function verifyConnectedWallet(
 
 
 /* =====================================================
-   HANDLE CONNECTED WALLET
-===================================================== */
-
-async function handleWalletConnected(
-    address,
-    provider,
-    shouldVerify = false
-) {
-
-    const walletName =
-        getConnectedWalletName();
-
-
-    showConnectedWallet(
-        address,
-        walletName
-    );
-
-
-    /*
-       As soon as Reown reports a connection,
-       the CONNECT WALLET button disappears.
-    */
-
-    setWalletStatus(
-        "WALLET CONNECTED",
-        "success"
-    );
-
-
-    if (
-        shouldVerify &&
-        lastVerifiedAddress !== address
-    ) {
-
-        try {
-
-            await verifyConnectedWallet(
-                provider,
-                address
-            );
-
-        }
-        catch (error) {
-
-            console.error(
-                "Wallet verification error:",
-                error
-            );
-
-
-            /*
-               Wallet itself remains connected.
-               Only verification failed/cancelled.
-            */
-
-            showConnectedWallet(
-                address,
-                walletName
-            );
-
-
-            setWalletStatus(
-                error?.message ||
-                "WALLET CONNECTED — VERIFICATION NOT COMPLETED.",
-                "error"
-            );
-        }
-    }
-}
-
-
-/* =====================================================
-   CONNECT WALLET
+   CONNECT + VERIFY NEW WALLET
 ===================================================== */
 
 async function connectAndVerifyWallet() {
@@ -1111,85 +1195,92 @@ async function connectAndVerifyWallet() {
     try {
 
         /*
-           FIRST CHECK:
-           wallet may already be connected.
+            Wallet may already be connected
+            through Reown.
         */
 
-        const existingAddress =
+        let address =
             getConnectedWalletAddress();
 
 
-        const existingProvider =
+        let provider =
             getSolanaProvider();
 
 
         if (
-            existingAddress &&
-            existingProvider
+            !address ||
+            !provider
         ) {
 
-            await handleWalletConnected(
-                existingAddress,
-                existingProvider,
-                true
+            setWalletStatus(
+                "SELECT YOUR WALLET...",
+                "loading"
             );
 
 
-            return;
+            /*
+                IMPORTANT:
+
+                Do NOT await modal.open().
+            */
+
+            grembleWalletModal.open({
+
+                view:
+                    "Connect",
+
+                namespace:
+                    "solana"
+            });
+
+
+            const connection =
+                await waitForWalletConnection();
+
+
+            address =
+                connection.address;
+
+
+            provider =
+                connection.provider;
         }
 
 
+        localWalletAddress =
+            address;
+
+
+        /*
+            As soon as wallet connects,
+            CONNECT button disappears.
+        */
+
+        showWalletBox(
+            address,
+            getConnectedWalletName(),
+            true
+        );
+
+
         setWalletStatus(
-            "SELECT YOUR WALLET...",
+            "VERIFYING OWNERSHIP...",
             "loading"
         );
 
 
         /*
-           IMPORTANT FIX:
+            Verify ownership.
 
-           DO NOT AWAIT modal.open().
-
-           Reown keeps the modal lifecycle separate from
-           the wallet connection state.
+            Successful verification overwrites
+            previous wallet in Supabase.
         */
 
-        grembleWalletModal.open({
-
-            view:
-                "Connect",
-
-            namespace:
-                "solana"
-        });
-
-
-        /*
-           Wait until Reown actually gives us both
-           the Solana address and provider.
-        */
-
-        const {
-            address,
-            provider
-        } =
-            await waitForWalletConnection();
-
-
-        /*
-           Immediately switch UI to CONNECTED.
-        */
-
-        await handleWalletConnected(
-            address,
+        await verifyConnectedWallet(
             provider,
-            true
+            address
         );
 
-
-        /*
-           Close modal after wallet has connected.
-        */
 
         try {
 
@@ -1211,46 +1302,37 @@ async function connectAndVerifyWallet() {
 
 
         /*
-           If Reown connected despite another
-           later error, still show connected state.
+            If wallet physically connected but
+            signature was cancelled, don't pretend
+            it is verified.
         */
 
-        const address =
+        const currentAddress =
             getConnectedWalletAddress();
 
 
-        const provider =
-            getSolanaProvider();
-
-
         if (
-            address &&
-            provider
+            savedWalletAddress
         ) {
 
-            showConnectedWallet(
-                address,
-                getConnectedWalletName()
-            );
-
-
-            setWalletStatus(
-                "WALLET CONNECTED",
-                "success"
+            showWalletBox(
+                savedWalletAddress,
+                savedWalletProvider,
+                currentAddress === savedWalletAddress
             );
 
         }
         else {
 
-            showDisconnectedWallet();
-
-
-            setWalletStatus(
-                error?.message ||
-                "Could not connect wallet.",
-                "error"
-            );
+            showConnectButton();
         }
+
+
+        setWalletStatus(
+            error?.message ||
+            "Wallet verification was not completed.",
+            "error"
+        );
     }
     finally {
 
@@ -1270,13 +1352,17 @@ async function connectAndVerifyWallet() {
 
 
 /* =====================================================
-   DISCONNECT WALLET
+   DISCONNECT LOCAL WALLET
 
-   Does NOT delete the last verified wallet
+   IMPORTANT:
+
+   This does NOT delete wallet_address
    from Supabase.
+
+   The last verified wallet stays remembered.
 ===================================================== */
 
-async function disconnectWallet() {
+async function disconnectLocalWallet() {
 
     if (
         walletDisconnectButton
@@ -1289,23 +1375,56 @@ async function disconnectWallet() {
 
     try {
 
-        await grembleWalletModal
-            .adapter
-            ?.connectionControllerClient
-            ?.disconnect();
+        const connectionController =
+            grembleWalletModal
+                .adapter
+                ?.connectionControllerClient;
 
 
-        lastVerifiedAddress =
+        if (
+            connectionController?.disconnect
+        ) {
+
+            await connectionController
+                .disconnect();
+        }
+
+
+        localWalletAddress =
             "";
 
 
-        showDisconnectedWallet();
+        /*
+            Supabase wallet remains visible.
+        */
+
+        if (
+            savedWalletAddress
+        ) {
+
+            showWalletBox(
+                savedWalletAddress,
+                savedWalletProvider,
+                false
+            );
 
 
-        setWalletStatus(
-            "WALLET DISCONNECTED.",
-            "success"
-        );
+            setWalletStatus(
+                "",
+                ""
+            );
+
+        }
+        else {
+
+            showConnectButton();
+
+
+            setWalletStatus(
+                "",
+                ""
+            );
+        }
 
     }
     catch (error) {
@@ -1316,40 +1435,10 @@ async function disconnectWallet() {
         );
 
 
-        /*
-           Check whether it actually disconnected.
-        */
-
-        const address =
-            getConnectedWalletAddress();
-
-
-        if (
-            !address
-        ) {
-
-            showDisconnectedWallet();
-
-
-            setWalletStatus(
-                "WALLET DISCONNECTED.",
-                "success"
-            );
-
-        }
-        else {
-
-            showConnectedWallet(
-                address,
-                getConnectedWalletName()
-            );
-
-
-            setWalletStatus(
-                "COULD NOT DISCONNECT WALLET.",
-                "error"
-            );
-        }
+        setWalletStatus(
+            "COULD NOT DISCONNECT WALLET.",
+            "error"
+        );
     }
     finally {
 
@@ -1365,15 +1454,142 @@ async function disconnectWallet() {
 
 
 /* =====================================================
-   RESTORE UI AFTER REFRESH
+   CHANGE WALLET
+
+   Used when Supabase remembers a wallet,
+   but no wallet is connected in this browser.
+===================================================== */
+
+async function changeWallet() {
+
+    /*
+        If another wallet session is somehow
+        active, disconnect it first.
+    */
+
+    try {
+
+        const currentAddress =
+            getConnectedWalletAddress();
+
+
+        if (
+            currentAddress
+        ) {
+
+            const connectionController =
+                grembleWalletModal
+                    .adapter
+                    ?.connectionControllerClient;
+
+
+            if (
+                connectionController?.disconnect
+            ) {
+
+                await connectionController
+                    .disconnect();
+            }
+        }
+
+    }
+    catch (error) {
+
+        console.warn(
+            "Could not disconnect previous wallet:",
+            error
+        );
+    }
+
+
+    localWalletAddress =
+        "";
+
+
+    await sleep(
+        200
+    );
+
+
+    await connectAndVerifyWallet();
+}
+
+
+/* =====================================================
+   WALLET ACTION BUTTON
+
+   Same button behaves differently depending on state.
+
+   LOCAL WALLET:
+   DISCONNECT
+
+   SAVED-ONLY WALLET:
+   CHANGE
+===================================================== */
+
+async function walletAction() {
+
+    const currentAddress =
+        getConnectedWalletAddress();
+
+
+    if (
+        currentAddress
+    ) {
+
+        await disconnectLocalWallet();
+
+    }
+    else {
+
+        await changeWallet();
+    }
+}
+
+
+/* =====================================================
+   RESTORE WALLET STATE
 ===================================================== */
 
 async function restoreWalletUi() {
 
+    if (
+        !getGrembleSessionToken()
+    ) {
+
+        showConnectButton();
+
+
+        setWalletStatus(
+            "",
+            ""
+        );
+
+
+        return;
+    }
+
+
     /*
-       Reown may need a short moment after page load
-       to restore its saved session.
+        STEP 1:
+        Load wallet remembered by Supabase.
     */
+
+    await loadSavedWalletFromProfile();
+
+
+    /*
+        STEP 2:
+        Give Reown time to restore local session.
+    */
+
+    let currentAddress =
+        "";
+
+
+    let currentProvider =
+        null;
+
 
     for (
         let attempt = 0;
@@ -1381,32 +1597,20 @@ async function restoreWalletUi() {
         attempt++
     ) {
 
-        const address =
+        currentAddress =
             getConnectedWalletAddress();
 
 
-        const provider =
+        currentProvider =
             getSolanaProvider();
 
 
         if (
-            address &&
-            provider
+            currentAddress &&
+            currentProvider
         ) {
 
-            showConnectedWallet(
-                address,
-                getConnectedWalletName()
-            );
-
-
-            setWalletStatus(
-                "WALLET CONNECTED",
-                "success"
-            );
-
-
-            return;
+            break;
         }
 
 
@@ -1416,7 +1620,112 @@ async function restoreWalletUi() {
     }
 
 
-    showDisconnectedWallet();
+    /*
+        CASE 1:
+        Reown has an active wallet in this browser.
+    */
+
+    if (
+        currentAddress &&
+        currentProvider
+    ) {
+
+        localWalletAddress =
+            currentAddress;
+
+
+        /*
+            Only show it as verified automatically
+            if it matches the saved verified wallet.
+        */
+
+        if (
+            savedWalletAddress &&
+            currentAddress === savedWalletAddress
+        ) {
+
+            showWalletBox(
+                savedWalletAddress,
+                savedWalletProvider ||
+                getConnectedWalletName(),
+                true
+            );
+
+
+            setWalletStatus(
+                "",
+                ""
+            );
+
+
+            return;
+        }
+
+
+        /*
+            A different local wallet exists.
+
+            We still show the last VERIFIED wallet,
+            not an unverified one.
+        */
+
+        if (
+            savedWalletAddress
+        ) {
+
+            showWalletBox(
+                savedWalletAddress,
+                savedWalletProvider,
+                false
+            );
+
+
+            setWalletStatus(
+                "",
+                ""
+            );
+
+
+            return;
+        }
+    }
+
+
+    /*
+        CASE 2:
+        No wallet locally connected,
+        but Telegram profile has a saved wallet.
+
+        This is the PC -> PHONE case.
+    */
+
+    if (
+        savedWalletAddress
+    ) {
+
+        showWalletBox(
+            savedWalletAddress,
+            savedWalletProvider,
+            false
+        );
+
+
+        setWalletStatus(
+            "",
+            ""
+        );
+
+
+        return;
+    }
+
+
+    /*
+        CASE 3:
+        User has never verified a wallet.
+    */
+
+    showConnectButton();
 
 
     setWalletStatus(
@@ -1427,9 +1736,7 @@ async function restoreWalletUi() {
 
 
 /* =====================================================
-   WATCH PROVIDERS
-
-   Reown officially exposes providers by namespace.
+   WATCH REOWN PROVIDERS
 ===================================================== */
 
 try {
@@ -1451,31 +1758,32 @@ try {
                     address
                 ) {
 
-                    showConnectedWallet(
-                        address,
-                        getConnectedWalletName()
-                    );
+                    localWalletAddress =
+                        address;
 
 
-                    setWalletStatus(
-                        "WALLET CONNECTED",
-                        "success"
-                    );
-
-                }
-                else if (
-                    !connectionInProgress
-                ) {
-
-                    const currentAddress =
-                        getConnectedWalletAddress();
-
+                    /*
+                        Only automatically show it as
+                        verified if it matches Supabase.
+                    */
 
                     if (
-                        !currentAddress
+                        savedWalletAddress &&
+                        address === savedWalletAddress
                     ) {
 
-                        showDisconnectedWallet();
+                        showWalletBox(
+                            savedWalletAddress,
+                            savedWalletProvider ||
+                            getConnectedWalletName(),
+                            true
+                        );
+
+
+                        setWalletStatus(
+                            "",
+                            ""
+                        );
                     }
                 }
             }
@@ -1512,24 +1820,65 @@ try {
                     address
                 ) {
 
-                    showConnectedWallet(
-                        address,
-                        getConnectedWalletName()
-                    );
+                    localWalletAddress =
+                        address;
 
 
-                    setWalletStatus(
-                        "WALLET CONNECTED",
-                        "success"
-                    );
+                    if (
+                        savedWalletAddress &&
+                        address === savedWalletAddress
+                    ) {
+
+                        showWalletBox(
+                            savedWalletAddress,
+                            savedWalletProvider ||
+                            getConnectedWalletName(),
+                            true
+                        );
+
+
+                        setWalletStatus(
+                            "",
+                            ""
+                        );
+                    }
 
                 }
                 else if (
-                    !connectionInProgress &&
                     state?.isConnected === false
                 ) {
 
-                    showDisconnectedWallet();
+                    localWalletAddress =
+                        "";
+
+
+                    /*
+                        Keep last verified wallet visible.
+                    */
+
+                    if (
+                        savedWalletAddress
+                    ) {
+
+                        showWalletBox(
+                            savedWalletAddress,
+                            savedWalletProvider,
+                            false
+                        );
+
+
+                        setWalletStatus(
+                            "",
+                            ""
+                        );
+
+                    }
+                    else if (
+                        !connectionInProgress
+                    ) {
+
+                        showConnectButton();
+                    }
                 }
             }
         );
@@ -1545,7 +1894,7 @@ catch (error) {
 
 
 /* =====================================================
-   EVENTS
+   CONNECT BUTTON
 ===================================================== */
 
 if (
@@ -1559,13 +1908,17 @@ if (
 }
 
 
+/* =====================================================
+   DISCONNECT / CHANGE BUTTON
+===================================================== */
+
 if (
     walletDisconnectButton
 ) {
 
     walletDisconnectButton.addEventListener(
         "click",
-        disconnectWallet
+        walletAction
     );
 }
 

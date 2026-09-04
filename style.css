@@ -1,6 +1,6 @@
 /* =====================================================
    GREMBLE
-   style.css
+   FULL style.css
 ===================================================== */
 
 
@@ -126,9 +126,12 @@ img {
 
 .shooting-star {
     position: absolute;
+
     width: 170px;
     height: 2px;
+
     opacity: 0;
+
     border-radius: 999px;
 
     background:
@@ -150,13 +153,19 @@ img {
 
 .shooting-star::after {
     content: "";
+
     position: absolute;
+
     right: -1px;
     top: 50%;
+
     width: 4px;
     height: 4px;
+
     transform: translateY(-50%);
+
     border-radius: 50%;
+
     background: #effff2;
 
     box-shadow:
@@ -257,8 +266,10 @@ img {
 
 .logo img {
     display: block;
+
     width: 82px;
     height: 70px;
+
     object-fit: contain;
 }
 
@@ -322,8 +333,10 @@ img {
 
 .social-circle:hover {
     transform: translateY(-2px);
+
     border-color: rgba(100, 255, 140, 0.50);
     background: rgba(80, 255, 120, 0.08);
+
     color: #71ff8b;
 }
 
@@ -342,6 +355,7 @@ img {
 
 .buy-button {
     min-width: 170px;
+
     padding: 11px 25px;
     margin-left: 3px;
 
@@ -351,6 +365,7 @@ img {
     color: #031008;
 
     font-weight: 900;
+
     cursor: pointer;
 
     transition:
@@ -360,7 +375,10 @@ img {
 
 .buy-button:hover {
     transform: translateY(-2px);
-    box-shadow: 0 10px 30px rgba(90, 255, 120, 0.15);
+
+    box-shadow:
+        0 10px 30px
+        rgba(90, 255, 120, 0.15);
 }
 
 .buy-button span,
@@ -374,7 +392,9 @@ img {
 
 .buy-button small {
     margin-top: 3px;
+
     font-size: 7px;
+
     letter-spacing: 2px;
 }
 
@@ -391,6 +411,7 @@ img {
     min-height: calc(100vh - 100px);
 
     margin: 0 auto;
+
     padding: 25px 0 65px;
 
     display: grid;
@@ -400,6 +421,7 @@ img {
         minmax(410px, 0.85fr);
 
     align-items: center;
+
     gap: 54px;
 }
 
@@ -412,6 +434,7 @@ img {
     display: inline-block;
 
     margin-bottom: 27px;
+
     padding: 11px 17px;
 
     border: 1px solid rgba(90, 255, 130, 0.20);
@@ -421,12 +444,15 @@ img {
 
     font-size: 10px;
     font-weight: 900;
+
     letter-spacing: 2px;
 }
 
 .hero h1 {
     font-size: clamp(58px, 6.5vw, 108px);
+
     line-height: 0.86;
+
     letter-spacing: -5px;
 }
 
@@ -470,6 +496,7 @@ img {
 .main-button,
 .outline-button {
     min-height: 50px;
+
     padding: 0 26px;
 
     display: inline-flex;
@@ -557,6 +584,7 @@ img {
 
     font-size: 9px;
     font-weight: 900;
+
     letter-spacing: 2.5px;
 }
 
@@ -570,7 +598,9 @@ img {
     z-index: 2;
 
     font-size: clamp(34px, 3.6vw, 50px);
+
     line-height: 0.92;
+
     letter-spacing: -2.3px;
 }
 
@@ -589,6 +619,7 @@ img {
     color: #93a099;
 
     font-size: 12px;
+
     line-height: 1.55;
 }
 
@@ -613,12 +644,14 @@ img {
     z-index: 2;
 
     min-height: 18px;
+
     margin-top: 10px;
 
     color: #87958e;
 
     font-size: 10px;
     font-weight: 800;
+
     line-height: 1.4;
 }
 
@@ -647,13 +680,16 @@ img {
 
 .telegram-login-card:has(#memberProfile:not([hidden])) .telegram-login-status {
     min-height: auto;
+
     margin: 0 0 12px;
+
     padding: 0;
 
     color: #65ff83;
 
     font-size: 10px;
     font-weight: 900;
+
     letter-spacing: 0.8px;
 }
 
@@ -671,6 +707,7 @@ img {
     z-index: 2;
 
     margin-top: 0;
+
     padding-top: 0;
 }
 
@@ -717,23 +754,27 @@ img {
 
     font-size: 6.5px;
     font-weight: 900;
+
     letter-spacing: 1.3px;
 }
 
 .member-connected strong {
     color: #f1f5f2;
+
     font-size: 13px;
+
     overflow-wrap: anywhere;
 }
 
 .member-connected span:last-child {
     color: #65ff83;
+
     font-size: 10px;
 }
 
 
 /* =====================================================
-   MEMBER FIELDS
+   MEMBER PROFILE FIELDS
 ===================================================== */
 
 .member-profile-fields {
@@ -751,11 +792,13 @@ img {
 
     font-size: 7px;
     font-weight: 900;
+
     letter-spacing: 1.7px;
 }
 
 .member-profile-fields input {
     width: 100%;
+
     min-height: 42px;
 
     padding: 0 13px;
@@ -770,6 +813,7 @@ img {
     color: #e9efeb;
 
     font: inherit;
+
     font-size: 12px;
 }
 
@@ -787,6 +831,7 @@ img {
 
 .member-profile-fields input:disabled {
     opacity: 0.6;
+
     cursor: not-allowed;
 }
 
@@ -815,40 +860,63 @@ img {
 
 
 /* =====================================================
-   CONNECT WALLET
+   IMPORTANT WALLET VISIBILITY
+
+   Only ONE state can be visible:
+   CONNECT button OR connected wallet.
+===================================================== */
+
+.wallet-connect-button[hidden] {
+    display: none !important;
+}
+
+.wallet-connected-box[hidden] {
+    display: none !important;
+}
+
+.wallet-disconnect-button[hidden] {
+    display: none !important;
+}
+
+
+/* =====================================================
+   CONNECT WALLET BUTTON
 ===================================================== */
 
 .wallet-connect-button {
     width: 100%;
-    min-height: 43px;
+
+    min-height: 44px;
 
     padding: 0 13px;
 
     display: grid;
 
     grid-template-columns:
-        28px
+        32px
         1fr
-        28px;
+        24px;
 
     align-items: center;
 
-    gap: 9px;
+    gap: 10px;
 
-    border: 1px solid rgba(101, 255, 131, 0.24);
+    border: 1px solid rgba(101, 255, 131, 0.28);
+
     border-radius: 12px;
 
     background:
         linear-gradient(
             90deg,
-            rgba(18, 55, 37, 0.38),
-            rgba(7, 31, 21, 0.48)
+            rgba(11, 44, 29, 0.58),
+            rgba(4, 25, 17, 0.72)
         );
 
-    color: #eaf2ed;
+    color: #f0f5f2;
 
     font-size: 10px;
     font-weight: 900;
+
     letter-spacing: 1px;
 
     cursor: pointer;
@@ -863,49 +931,115 @@ img {
 .wallet-connect-button:hover {
     transform: translateY(-1px);
 
-    border-color: rgba(101, 255, 131, 0.55);
+    border-color: rgba(101, 255, 131, 0.60);
 
-    background: rgba(31, 83, 56, 0.45);
+    background:
+        linear-gradient(
+            90deg,
+            rgba(19, 60, 40, 0.65),
+            rgba(7, 35, 24, 0.76)
+        );
 
     box-shadow:
-        0 8px 24px
+        0 8px 25px
         rgba(40, 255, 100, 0.05);
 }
 
 .wallet-connect-button:disabled {
     opacity: 0.45;
+
     cursor: wait;
+
     transform: none;
 }
 
+
+/* =====================================================
+   WALLET ICON
+
+   Replaces old diamond icon.
+===================================================== */
+
 .wallet-button-icon {
-    width: 27px;
-    height: 27px;
+    position: relative;
 
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+    width: 28px;
+    height: 22px;
 
-    border: 1px solid rgba(101, 255, 131, 0.20);
-    border-radius: 8px;
+    display: block;
 
-    color: #65ff83;
-    font-size: 15px;
+    border: 1.5px solid #65ff83;
+
+    border-radius: 6px;
+
+    background:
+        rgba(101, 255, 131, 0.035);
+
+    color: transparent;
+
+    font-size: 0;
+}
+
+.wallet-button-icon::before {
+    content: "";
+
+    position: absolute;
+
+    left: 4px;
+    top: -5px;
+
+    width: 15px;
+    height: 7px;
+
+    border:
+        1.5px solid
+        rgba(101, 255, 131, 0.72);
+
+    border-bottom: 0;
+
+    border-radius:
+        4px 4px 0 0;
+
+    background: #062017;
+}
+
+.wallet-button-icon::after {
+    content: "";
+
+    position: absolute;
+
+    right: -2px;
+    top: 6px;
+
+    width: 9px;
+    height: 7px;
+
+    border:
+        1.5px solid
+        #65ff83;
+
+    border-radius: 3px;
+
+    background: #04150f;
 }
 
 .wallet-button-arrow {
     color: #65ff83;
+
     text-align: right;
+
     font-size: 16px;
 }
 
 
 /* =====================================================
-   VERIFIED WALLET
+   CONNECTED / VERIFIED WALLET
 ===================================================== */
 
 .wallet-connected-box {
-    min-height: 48px;
+    width: 100%;
+
+    min-height: 55px;
 
     padding: 9px 10px 9px 12px;
 
@@ -916,18 +1050,28 @@ img {
 
     gap: 12px;
 
-    border: 1px solid rgba(101, 255, 131, 0.24);
+    border:
+        1px solid
+        rgba(101, 255, 131, 0.32);
+
     border-radius: 12px;
 
-    background: rgba(46, 255, 104, 0.045);
-}
+    background:
+        linear-gradient(
+            90deg,
+            rgba(17, 63, 39, 0.32),
+            rgba(5, 28, 18, 0.60)
+        );
 
-.wallet-connected-box[hidden] {
-    display: none !important;
+    box-shadow:
+        inset 0 1px 0
+        rgba(255, 255, 255, 0.02);
 }
 
 .wallet-connected-info {
     min-width: 0;
+
+    flex: 1;
 
     display: flex;
     align-items: center;
@@ -946,8 +1090,8 @@ img {
     background: #65ff83;
 
     box-shadow:
-        0 0 13px
-        rgba(101, 255, 131, 0.7);
+        0 0 14px
+        rgba(101, 255, 131, 0.82);
 }
 
 .wallet-connected-info > div {
@@ -964,19 +1108,24 @@ img {
 
     font-size: 6px;
     font-weight: 900;
+
     letter-spacing: 1.25px;
 }
 
 .wallet-connected-info strong {
     color: #f0f5f2;
+
     font-size: 11px;
+    font-weight: 900;
 }
 
 #walletConnectedAddress {
     max-width: 230px;
 
     overflow: hidden;
+
     white-space: nowrap;
+
     text-overflow: ellipsis;
 
     color: #8f9d95;
@@ -996,35 +1145,43 @@ img {
 
     padding: 0 10px;
 
-    border: 1px solid rgba(255, 95, 105, 0.25);
+    border:
+        1px solid
+        rgba(255, 95, 105, 0.25);
+
     border-radius: 9px;
 
-    background: rgba(255, 70, 80, 0.035);
+    background:
+        rgba(255, 70, 80, 0.035);
 
     color: #ff7b84;
 
     font-size: 7px;
     font-weight: 900;
+
     letter-spacing: 0.8px;
 
     cursor: pointer;
 
     transition:
         border-color 0.2s ease,
-        background 0.2s ease;
-}
-
-.wallet-disconnect-button[hidden] {
-    display: none !important;
+        background 0.2s ease,
+        color 0.2s ease;
 }
 
 .wallet-disconnect-button:hover {
-    border-color: rgba(255, 95, 105, 0.52);
-    background: rgba(255, 70, 80, 0.07);
+    border-color:
+        rgba(255, 95, 105, 0.52);
+
+    background:
+        rgba(255, 70, 80, 0.07);
+
+    color: #ff939a;
 }
 
 .wallet-disconnect-button:disabled {
     opacity: 0.45;
+
     cursor: wait;
 }
 
@@ -1040,6 +1197,7 @@ img {
 
     font-size: 8px;
     font-weight: 800;
+
     line-height: 1.4;
 }
 
@@ -1047,7 +1205,10 @@ img {
     display: none;
 }
 
-.wallet-status.loading,
+.wallet-status.loading {
+    color: #65ff83;
+}
+
 .wallet-status.success {
     color: #65ff83;
 }
@@ -1062,6 +1223,7 @@ img {
     color: #56645d !important;
 
     font-size: 7.5px !important;
+
     line-height: 1.45 !important;
 }
 
@@ -1079,7 +1241,10 @@ img {
 
     overflow: hidden;
 
-    border: 1px solid rgba(101, 255, 131, 0.23);
+    border:
+        1px solid
+        rgba(101, 255, 131, 0.23);
+
     border-radius: 13px;
 
     background:
@@ -1107,7 +1272,8 @@ img {
 
     border-radius: 50%;
 
-    background: rgba(101, 255, 131, 0.05);
+    background:
+        rgba(101, 255, 131, 0.05);
 
     filter: blur(30px);
 
@@ -1143,6 +1309,7 @@ img {
 
     font-size: 6.5px;
     font-weight: 900;
+
     letter-spacing: 1.2px;
 }
 
@@ -1154,6 +1321,7 @@ img {
     color: #f0f4f2;
 
     font-size: 14px;
+
     line-height: 1.08;
 }
 
@@ -1169,6 +1337,7 @@ img {
     color: #7d8b83;
 
     font-size: 8.5px;
+
     line-height: 1.4;
 }
 
@@ -1189,6 +1358,7 @@ img {
 
     font-size: 6.5px;
     font-weight: 900;
+
     letter-spacing: 0.5px;
 
     white-space: nowrap;
@@ -1209,15 +1379,20 @@ img {
 
     gap: 5px;
 
-    border: 1px solid rgba(101, 255, 131, 0.25);
+    border:
+        1px solid
+        rgba(101, 255, 131, 0.25);
+
     border-radius: 15px;
 
     color: #65ff83;
 
-    background: rgba(101, 255, 131, 0.025);
+    background:
+        rgba(101, 255, 131, 0.025);
 
     font-size: 6.5px;
     font-weight: 900;
+
     letter-spacing: 0.4px;
 
     transition:
@@ -1226,8 +1401,11 @@ img {
 }
 
 .live-contest-button:hover {
-    border-color: rgba(101, 255, 131, 0.55);
-    background: rgba(101, 255, 131, 0.06);
+    border-color:
+        rgba(101, 255, 131, 0.55);
+
+    background:
+        rgba(101, 255, 131, 0.06);
 }
 
 
@@ -1248,6 +1426,7 @@ img {
 
     font-size: 10px;
     font-weight: 900;
+
     letter-spacing: 1px;
 
     cursor: pointer;
@@ -1267,7 +1446,9 @@ img {
 
 .member-save-button:disabled {
     opacity: 0.35;
+
     cursor: not-allowed;
+
     transform: none;
 }
 
@@ -1285,15 +1466,20 @@ img {
 
     margin-top: 0;
 
-    border: 1px solid rgba(255, 100, 110, 0.18);
+    border:
+        1px solid
+        rgba(255, 100, 110, 0.18);
+
     border-radius: 18px;
 
-    background: rgba(255, 60, 70, 0.025);
+    background:
+        rgba(255, 60, 70, 0.025);
 
     color: #d8767c;
 
     font-size: 8px;
     font-weight: 900;
+
     letter-spacing: 1px;
 
     cursor: pointer;
@@ -1305,11 +1491,13 @@ img {
 }
 
 .member-logout-button:hover {
-    border-color: rgba(255, 100, 110, 0.40);
+    border-color:
+        rgba(255, 100, 110, 0.40);
 
     color: #ff7e87;
 
-    background: rgba(255, 60, 70, 0.05);
+    background:
+        rgba(255, 60, 70, 0.05);
 }
 
 
@@ -1330,18 +1518,23 @@ img {
 
     gap: 7px;
 
-    border-top: 1px solid rgba(255, 255, 255, 0.045);
+    border-top:
+        1px solid
+        rgba(255, 255, 255, 0.045);
 
     color: #5d6b63;
 
     font-size: 6px;
     font-weight: 900;
+
     letter-spacing: 0.9px;
+
     line-height: 1.5;
 }
 
 .telegram-privacy span {
     color: #65ff83;
+
     font-size: 6px;
 }
 
@@ -1382,7 +1575,9 @@ img {
 .center-heading h2,
 .faq-heading h2 {
     font-size: clamp(55px, 7vw, 105px);
+
     line-height: 0.87;
+
     letter-spacing: -4px;
 }
 
@@ -1401,6 +1596,7 @@ img {
     color: #d5ddd9;
 
     font-size: 23px;
+
     line-height: 1.5;
 }
 
@@ -1422,15 +1618,23 @@ img {
 .story-row {
     display: grid;
 
-    grid-template-columns: 30% 70%;
+    grid-template-columns:
+        30%
+        70%;
 
     gap: 50px;
 }
 
 .story-number {
-    color: rgba(90, 255, 125, 0.06);
+    color:
+        rgba(90, 255, 125, 0.06);
 
-    font-size: clamp(120px, 18vw, 250px);
+    font-size:
+        clamp(
+            120px,
+            18vw,
+            250px
+        );
 
     line-height: 0.8;
 
@@ -1445,12 +1649,13 @@ img {
     color: #8d9993;
 
     font-size: 17px;
+
     line-height: 1.7;
 }
 
 
 /* =====================================================
-   CENTER HEADING
+   CENTER HEADINGS
 ===================================================== */
 
 .center-heading {
@@ -1479,15 +1684,21 @@ img {
 
     padding: 8px;
 
-    border: 1px solid rgba(90, 255, 125, 0.14);
+    border:
+        1px solid
+        rgba(90, 255, 125, 0.14);
+
     border-radius: 24px;
 
-    background: rgba(0, 10, 7, 0.3);
+    background:
+        rgba(0, 10, 7, 0.3);
 }
 
 .roadmap-box img {
     display: block;
+
     width: 100%;
+
     border-radius: 18px;
 }
 
@@ -1497,7 +1708,8 @@ img {
 ===================================================== */
 
 .arcade-section {
-    padding: 140px 0 170px;
+    padding:
+        140px 0 170px;
 
     background:
         radial-gradient(
@@ -1510,13 +1722,21 @@ img {
 
 .arcade-title {
     max-width: 850px;
+
     margin-bottom: 55px;
 }
 
 .arcade-title h2,
 .game-page-heading h2 {
-    font-size: clamp(60px, 8vw, 110px);
+    font-size:
+        clamp(
+            60px,
+            8vw,
+            110px
+        );
+
     line-height: 0.86;
+
     letter-spacing: -5px;
 }
 
@@ -1534,6 +1754,7 @@ img {
     color: #8e9a94;
 
     font-size: 17px;
+
     line-height: 1.7;
 }
 
@@ -1545,7 +1766,8 @@ img {
 .game-grid {
     display: grid;
 
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns:
+        repeat(2, 1fr);
 
     gap: 25px;
 }
@@ -1561,7 +1783,10 @@ img {
 
     text-align: left;
 
-    border: 1px solid rgba(90, 255, 125, 0.15);
+    border:
+        1px solid
+        rgba(90, 255, 125, 0.15);
+
     border-radius: 28px;
 
     background:
@@ -1584,7 +1809,8 @@ img {
 .game-choice-card:hover {
     transform: translateY(-5px);
 
-    border-color: rgba(90, 255, 125, 0.43);
+    border-color:
+        rgba(90, 255, 125, 0.43);
 
     box-shadow:
         0 30px 70px
@@ -1596,6 +1822,7 @@ img {
 
     font-size: 10px;
     font-weight: 900;
+
     letter-spacing: 3px;
 }
 
@@ -1636,7 +1863,8 @@ img {
             rgba(70, 255, 120, 0.30)
         );
 
-    transition: transform 0.3s ease;
+    transition:
+        transform 0.3s ease;
 }
 
 .game-choice-card:hover .coin-card-image {
@@ -1662,17 +1890,21 @@ img {
     width: 210px;
     height: 65px;
 
-    transform: translateX(-50%);
+    transform:
+        translateX(-50%);
 
     border-radius: 50%;
 
-    background: rgba(70, 255, 120, 0.10);
+    background:
+        rgba(70, 255, 120, 0.10);
 
-    filter: blur(25px);
+    filter:
+        blur(25px);
 }
 
 .survival-cover-image {
     position: relative;
+
     z-index: 2;
 
     width: 185px;
@@ -1686,7 +1918,8 @@ img {
             rgba(50, 255, 120, 0.25)
         );
 
-    transition: transform 0.3s ease;
+    transition:
+        transform 0.3s ease;
 }
 
 .game-choice-card:hover .survival-cover-image {
@@ -1719,13 +1952,17 @@ img {
 .game-features span {
     padding: 7px 11px;
 
-    border: 1px solid rgba(90, 255, 125, 0.15);
+    border:
+        1px solid
+        rgba(90, 255, 125, 0.15);
+
     border-radius: 18px;
 
     color: #6aff88;
 
     font-size: 9px;
     font-weight: 900;
+
     letter-spacing: 1px;
 }
 
@@ -1739,6 +1976,7 @@ img {
 
     font-size: 11px;
     font-weight: 900;
+
     letter-spacing: 1px;
 }
 
@@ -1768,13 +2006,17 @@ img {
 
     font-size: 10px;
     font-weight: 900;
+
     letter-spacing: 3px;
 }
 
 .back-to-games {
     padding: 11px 18px;
 
-    border: 1px solid rgba(90, 255, 125, 0.20);
+    border:
+        1px solid
+        rgba(90, 255, 125, 0.20);
+
     border-radius: 25px;
 
     background: transparent;
@@ -1799,13 +2041,17 @@ img {
 .game-wrapper,
 .survival-wrapper {
     width: 100%;
+
     max-width: 1000px;
 
     margin: 0 auto;
 
     overflow: hidden;
 
-    border: 1px solid rgba(70, 255, 115, 0.32);
+    border:
+        1px solid
+        rgba(70, 255, 115, 0.32);
+
     border-radius: 24px;
 
     background: #010806;
@@ -1817,7 +2063,7 @@ img {
 
 
 /* =====================================================
-   COIN CATCH
+   COIN CATCH TOPBAR
 ===================================================== */
 
 .game-topbar {
@@ -1826,15 +2072,22 @@ img {
     padding: 18px 28px;
 
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+
+    grid-template-columns:
+        1fr
+        1fr
+        1fr;
 
     align-items: center;
 
-    border-bottom: 1px solid rgba(70, 255, 115, 0.20);
+    border-bottom:
+        1px solid
+        rgba(70, 255, 115, 0.20);
 }
 
 .game-stat {
     display: flex;
+
     flex-direction: column;
 
     gap: 4px;
@@ -1845,11 +2098,13 @@ img {
 
     font-size: 9px;
     font-weight: 900;
+
     letter-spacing: 2px;
 }
 
 .game-stat strong {
     color: #63ff82;
+
     font-size: 28px;
 }
 
@@ -1860,6 +2115,7 @@ img {
 
     font-size: 13px;
     font-weight: 900;
+
     letter-spacing: 3px;
 }
 
@@ -1876,8 +2132,14 @@ img {
 
 .heart {
     color: #ff4150;
+
     font-size: 22px;
 }
+
+
+/* =====================================================
+   COIN CATCH MESSAGE
+===================================================== */
 
 .game-message {
     min-height: 43px;
@@ -1894,16 +2156,20 @@ img {
 
     font-size: 13px;
 
-    border-bottom: 1px solid rgba(70, 255, 115, 0.10);
+    border-bottom:
+        1px solid
+        rgba(70, 255, 115, 0.10);
 }
 
 .game-message strong {
     margin-left: 4px;
+
     color: #65ff83;
 }
 
 .canvas-wrapper {
     width: 100%;
+
     background: #001009;
 }
 
@@ -1928,6 +2194,11 @@ img {
         rgba(255, 30, 30, 0.4);
 }
 
+
+/* =====================================================
+   COIN CATCH BOTTOM
+===================================================== */
+
 .game-bottom {
     padding: 20px;
 
@@ -1937,7 +2208,9 @@ img {
 
     gap: 12px;
 
-    border-top: 1px solid rgba(70, 255, 115, 0.15);
+    border-top:
+        1px solid
+        rgba(70, 255, 115, 0.15);
 }
 
 .start-game-btn {
@@ -1961,6 +2234,7 @@ img {
 
     font-size: 9px;
     font-weight: 800;
+
     letter-spacing: 2px;
 }
 
@@ -1970,7 +2244,7 @@ img {
 
 
 /* =====================================================
-   MOBILE CONTROLS
+   MOBILE GAME CONTROLS
 ===================================================== */
 
 .mobile-controls {
@@ -1981,24 +2255,32 @@ img {
 #moveLeft,
 #moveRight,
 .control-btn {
-    -webkit-user-select: none !important;
-    user-select: none !important;
+    -webkit-user-select:
+        none !important;
 
-    -webkit-touch-callout: none !important;
+    user-select:
+        none !important;
 
-    -webkit-tap-highlight-color: transparent !important;
+    -webkit-touch-callout:
+        none !important;
+
+    -webkit-tap-highlight-color:
+        transparent !important;
 }
 
 #moveLeft,
 #moveRight {
-    touch-action: none !important;
+    touch-action:
+        none !important;
+
     cursor: pointer;
+
     outline: none;
 }
 
 
 /* =====================================================
-   SURVIVAL
+   SURVIVAL TOPBAR
 ===================================================== */
 
 .survival-topbar {
@@ -2017,7 +2299,9 @@ img {
 
     align-items: center;
 
-    border-bottom: 1px solid rgba(70, 255, 115, 0.18);
+    border-bottom:
+        1px solid
+        rgba(70, 255, 115, 0.18);
 }
 
 .survival-stat {
@@ -2032,11 +2316,13 @@ img {
 
     font-size: 8px;
     font-weight: 900;
+
     letter-spacing: 2px;
 }
 
 .survival-stat strong {
     color: #63ff82;
+
     font-size: 22px;
 }
 
@@ -2047,6 +2333,7 @@ img {
 
     font-size: 11px;
     font-weight: 900;
+
     letter-spacing: 3px;
 }
 
@@ -2056,13 +2343,20 @@ img {
 
 .survival-lives div {
     display: flex;
+
     gap: 6px;
 }
 
 .survival-lives b {
     color: #ff4050;
+
     font-size: 20px;
 }
+
+
+/* =====================================================
+   SURVIVAL SUBBAR
+===================================================== */
 
 .survival-subbar {
     min-height: 45px;
@@ -2073,12 +2367,15 @@ img {
     align-items: center;
     justify-content: space-between;
 
-    border-bottom: 1px solid rgba(70, 255, 115, 0.10);
+    border-bottom:
+        1px solid
+        rgba(70, 255, 115, 0.10);
 
     color: #87948d;
 
     font-size: 10px;
     font-weight: 800;
+
     letter-spacing: 1px;
 }
 
@@ -2086,16 +2383,27 @@ img {
     color: #65ff83;
 }
 
+
+/* =====================================================
+   SURVIVAL CANVAS
+===================================================== */
+
 .survival-canvas-wrap {
     position: relative;
+
     width: 100%;
+
     background: #001009;
 }
 
 #survivalCanvas {
     display: block;
+
     width: 100%;
     height: auto;
+
+    -webkit-user-select: none;
+    user-select: none;
 }
 
 #survivalCanvas.damage {
@@ -2103,6 +2411,11 @@ img {
         inset 0 0 120px
         rgba(255, 25, 25, 0.45);
 }
+
+
+/* =====================================================
+   SURVIVAL BOTTOM
+===================================================== */
 
 .survival-bottom {
     padding: 20px;
@@ -2113,7 +2426,9 @@ img {
 
     gap: 12px;
 
-    border-top: 1px solid rgba(70, 255, 115, 0.14);
+    border-top:
+        1px solid
+        rgba(70, 255, 115, 0.14);
 }
 
 .survival-start {
@@ -2137,6 +2452,7 @@ img {
 
     font-size: 9px;
     font-weight: 900;
+
     letter-spacing: 1.5px;
 }
 
@@ -2151,6 +2467,7 @@ img {
 
 .upgrade-overlay {
     position: absolute;
+
     inset: 0;
 
     z-index: 20;
@@ -2162,9 +2479,11 @@ img {
 
     padding: 25px;
 
-    background: rgba(0, 8, 5, 0.86);
+    background:
+        rgba(0, 8, 5, 0.86);
 
-    backdrop-filter: blur(8px);
+    backdrop-filter:
+        blur(8px);
 }
 
 .upgrade-overlay.visible {
@@ -2172,18 +2491,30 @@ img {
 }
 
 .upgrade-window {
-    width: min(720px, 100%);
+    width:
+        min(
+            720px,
+            100%
+        );
+
     text-align: center;
 }
 
 .upgrade-window h3 {
     margin-bottom: 25px;
+
     font-size: 28px;
 }
 
 .upgrade-choices {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+
+    grid-template-columns:
+        repeat(
+            3,
+            1fr
+        );
+
     gap: 12px;
 }
 
@@ -2192,7 +2523,10 @@ img {
 
     padding: 20px;
 
-    border: 1px solid rgba(90, 255, 130, 0.22);
+    border:
+        1px solid
+        rgba(90, 255, 130, 0.22);
+
     border-radius: 18px;
 
     background: #04140e;
@@ -2204,12 +2538,15 @@ img {
 
 .upgrade-card:hover {
     border-color: #65ff83;
+
     background: #072016;
 }
 
 .upgrade-icon {
     margin-bottom: 14px;
+
     color: #65ff83;
+
     font-size: 30px;
 }
 
@@ -2221,6 +2558,7 @@ img {
     color: #85918b;
 
     font-size: 11px;
+
     line-height: 1.5;
 }
 
@@ -2253,7 +2591,9 @@ img {
 .faq-item {
     padding: 28px 0;
 
-    border-top: 1px solid rgba(255, 255, 255, 0.07);
+    border-top:
+        1px solid
+        rgba(255, 255, 255, 0.07);
 }
 
 .faq-item h3 {
@@ -2262,6 +2602,7 @@ img {
 
 .faq-item p {
     color: #89958f;
+
     line-height: 1.7;
 }
 
@@ -2281,12 +2622,15 @@ footer {
 
     background: #010604;
 
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    border-top:
+        1px solid
+        rgba(255, 255, 255, 0.05);
 }
 
 footer img {
     width: 80px;
     height: 65px;
+
     object-fit: contain;
 }
 
@@ -2302,6 +2646,7 @@ footer p {
 
     font-size: 10px;
     font-weight: 900;
+
     letter-spacing: 2px;
 }
 
@@ -2312,6 +2657,7 @@ footer p {
 
 .buy-modal {
     position: fixed;
+
     inset: 0;
 
     z-index: 9999;
@@ -2330,24 +2676,35 @@ footer p {
 
 .buy-modal-backdrop {
     position: absolute;
+
     inset: 0;
 
-    background: rgba(0, 7, 5, 0.84);
+    background:
+        rgba(0, 7, 5, 0.84);
 
-    backdrop-filter: blur(10px);
+    backdrop-filter:
+        blur(10px);
 }
 
 .buy-modal-box {
     position: relative;
+
     z-index: 2;
 
-    width: min(520px, 100%);
+    width:
+        min(
+            520px,
+            100%
+        );
 
     padding: 42px;
 
     overflow: hidden;
 
-    border: 1px solid rgba(95, 255, 135, 0.32);
+    border:
+        1px solid
+        rgba(95, 255, 135, 0.32);
+
     border-radius: 24px;
 
     background:
@@ -2366,8 +2723,11 @@ footer p {
 
 .buy-modal-box::before {
     content: "";
+
     position: absolute;
+
     inset: 0;
+
     pointer-events: none;
 
     background:
@@ -2389,7 +2749,10 @@ footer p {
     width: 38px;
     height: 38px;
 
-    border: 1px solid rgba(90, 255, 130, 0.18);
+    border:
+        1px solid
+        rgba(90, 255, 130, 0.18);
+
     border-radius: 50%;
 
     background: transparent;
@@ -2397,6 +2760,7 @@ footer p {
     color: #8c9992;
 
     font-size: 25px;
+
     line-height: 1;
 
     cursor: pointer;
@@ -2404,6 +2768,7 @@ footer p {
 
 .buy-modal-close:hover {
     color: #65ff83;
+
     border-color: #65ff83;
 }
 
@@ -2416,15 +2781,22 @@ footer p {
 
     font-size: 10px;
     font-weight: 900;
+
     letter-spacing: 3px;
 }
 
 .buy-modal-box h2 {
     position: relative;
 
-    font-size: clamp(34px, 6vw, 55px);
+    font-size:
+        clamp(
+            34px,
+            6vw,
+            55px
+        );
 
     line-height: 0.92;
+
     letter-spacing: -2px;
 }
 
@@ -2444,7 +2816,12 @@ footer p {
     margin-top: 30px;
 
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+
+    grid-template-columns:
+        repeat(
+            2,
+            1fr
+        );
 
     gap: 12px;
 }
@@ -2456,15 +2833,20 @@ footer p {
 
     display: flex;
     flex-direction: column;
+
     align-items: center;
     justify-content: center;
 
     gap: 7px;
 
-    border: 1px solid rgba(90, 255, 130, 0.22);
+    border:
+        1px solid
+        rgba(90, 255, 130, 0.22);
+
     border-radius: 16px;
 
-    background: rgba(80, 255, 120, 0.035);
+    background:
+        rgba(80, 255, 120, 0.035);
 
     transition:
         transform 0.2s ease,
@@ -2475,9 +2857,11 @@ footer p {
 .buy-platform-button:hover {
     transform: translateY(-3px);
 
-    border-color: rgba(90, 255, 130, 0.65);
+    border-color:
+        rgba(90, 255, 130, 0.65);
 
-    background: rgba(80, 255, 120, 0.08);
+    background:
+        rgba(80, 255, 120, 0.08);
 }
 
 .buy-platform-button span {
@@ -2492,20 +2876,24 @@ footer p {
 
     font-size: 9px;
     font-weight: 900;
+
     letter-spacing: 1px;
 }
 
 .buy-platform-button.disabled-buy-link {
     opacity: 0.38;
+
     cursor: not-allowed;
 }
 
 .buy-platform-button.disabled-buy-link:hover {
     transform: none;
 
-    border-color: rgba(90, 255, 130, 0.22);
+    border-color:
+        rgba(90, 255, 130, 0.22);
 
-    background: rgba(80, 255, 120, 0.035);
+    background:
+        rgba(80, 255, 120, 0.035);
 }
 
 .buy-coming-soon {
@@ -2517,6 +2905,7 @@ footer p {
 
     font-size: 8px;
     font-weight: 900;
+
     letter-spacing: 2px;
 }
 
@@ -2550,6 +2939,7 @@ footer p {
 
     .buy-button {
         min-width: 140px;
+
         padding: 10px 15px;
     }
 
@@ -2608,7 +2998,11 @@ footer p {
     }
 
     .survival-topbar {
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns:
+            repeat(
+                4,
+                1fr
+            );
     }
 
     .survival-logo {
@@ -2642,13 +3036,17 @@ footer p {
         flex: 1;
 
         min-width: 0;
+
         height: 74px;
 
         display: flex;
         align-items: center;
         justify-content: center;
 
-        border: 1px solid rgba(70, 255, 115, 0.30);
+        border:
+            1px solid
+            rgba(70, 255, 115, 0.30);
+
         border-radius: 20px;
 
         background: #03130d;
@@ -2656,27 +3054,37 @@ footer p {
         color: #65ff83;
 
         font-size: 34px;
+
         line-height: 1;
 
         cursor: pointer;
 
-        touch-action: none !important;
+        touch-action:
+            none !important;
 
-        -webkit-user-select: none !important;
-        user-select: none !important;
+        -webkit-user-select:
+            none !important;
 
-        -webkit-touch-callout: none !important;
+        user-select:
+            none !important;
 
-        -webkit-tap-highlight-color: transparent !important;
+        -webkit-touch-callout:
+            none !important;
+
+        -webkit-tap-highlight-color:
+            transparent !important;
     }
 
     #moveLeft:active,
     #moveRight:active {
-        background: rgba(70, 255, 115, 0.10);
+        background:
+            rgba(70, 255, 115, 0.10);
 
-        border-color: rgba(70, 255, 115, 0.75);
+        border-color:
+            rgba(70, 255, 115, 0.75);
 
-        transform: scale(0.98);
+        transform:
+            scale(0.98);
     }
 }
 
@@ -2688,12 +3096,20 @@ footer p {
 @media (max-width: 700px) {
 
     .container {
-        width: calc(100% - 30px);
+        width:
+            calc(
+                100% - 30px
+            );
     }
 
     .navbar {
-        width: calc(100% - 20px);
+        width:
+            calc(
+                100% - 20px
+            );
+
         min-height: 78px;
+
         gap: 5px;
     }
 
@@ -2722,7 +3138,9 @@ footer p {
 
     .buy-button {
         min-width: 112px;
+
         padding: 8px 9px;
+
         margin-left: 1px;
     }
 
@@ -2732,16 +3150,27 @@ footer p {
 
     .buy-button small {
         font-size: 5.5px;
+
         letter-spacing: 1.5px;
     }
 
     .hero-inner {
-        width: calc(100% - 36px);
+        width:
+            calc(
+                100% - 36px
+            );
+
         padding: 42px 0 70px;
     }
 
     .hero h1 {
-        font-size: clamp(48px, 14vw, 72px);
+        font-size:
+            clamp(
+                48px,
+                14vw,
+                72px
+            );
+
         letter-spacing: -3px;
     }
 
@@ -2751,11 +3180,17 @@ footer p {
 
     .telegram-login-card {
         padding: 22px 18px;
+
         border-radius: 20px;
     }
 
     .telegram-login-card h2 {
-        font-size: clamp(34px, 10vw, 48px);
+        font-size:
+            clamp(
+                34px,
+                10vw,
+                48px
+            );
     }
 
     .member-connected {
@@ -2767,21 +3202,41 @@ footer p {
         min-height: 41px;
     }
 
+
+    /* WALLET ON MOBILE */
+
     .wallet-connected-box {
-        align-items: stretch;
-        flex-direction: column;
+        min-height: 54px;
+
+        padding: 9px 9px 9px 11px;
+
+        flex-direction: row;
+
+        align-items: center;
     }
 
-    .wallet-disconnect-button {
-        width: 100%;
+    .wallet-connected-info {
+        flex: 1;
+
+        min-width: 0;
     }
 
     #walletConnectedAddress {
-        max-width: 100%;
+        max-width: 175px;
     }
+
+    .wallet-disconnect-button {
+        width: auto;
+
+        flex-shrink: 0;
+    }
+
+
+    /* CONTEST */
 
     .live-contest-bottom {
         align-items: stretch;
+
         flex-direction: column;
     }
 
@@ -2793,6 +3248,9 @@ footer p {
         width: 100%;
     }
 
+
+    /* SECTIONS */
+
     .content-section,
     .story-section,
     .roadmap-section,
@@ -2802,8 +3260,12 @@ footer p {
         padding: 90px 0;
     }
 
+
+    /* GAMES */
+
     .game-choice-card {
         min-height: 510px;
+
         padding: 25px;
     }
 
@@ -2822,6 +3284,7 @@ footer p {
 
     .game-title-small {
         font-size: 9px;
+
         letter-spacing: 1.5px;
     }
 
@@ -2831,7 +3294,12 @@ footer p {
 
     .survival-topbar {
         padding: 10px;
-        grid-template-columns: repeat(4, 1fr);
+
+        grid-template-columns:
+            repeat(
+                4,
+                1fr
+            );
     }
 
     .survival-stat strong {
@@ -2846,6 +3314,9 @@ footer p {
         gap: 10px;
     }
 
+
+    /* FOOTER */
+
     footer {
         padding: 30px 20px;
 
@@ -2855,6 +3326,9 @@ footer p {
 
         gap: 20px;
     }
+
+
+    /* BUY MODAL */
 
     .buy-modal-box {
         padding: 40px 20px 25px;
@@ -2877,7 +3351,10 @@ footer p {
 @media (max-width: 470px) {
 
     .navbar {
-        width: calc(100% - 12px);
+        width:
+            calc(
+                100% - 12px
+            );
     }
 
     .logo {
@@ -2905,6 +3382,7 @@ footer p {
 
     .buy-button {
         min-width: 95px;
+
         padding: 7px 6px;
     }
 
@@ -2914,6 +3392,7 @@ footer p {
 
     .buy-button small {
         font-size: 5px;
+
         letter-spacing: 1px;
     }
 
@@ -2927,6 +3406,16 @@ footer p {
 
     .wallet-note {
         font-size: 7px !important;
+    }
+
+    #walletConnectedAddress {
+        max-width: 130px;
+    }
+
+    .wallet-disconnect-button {
+        padding: 0 8px;
+
+        font-size: 6.5px;
     }
 
     .live-contest-card h3 {
