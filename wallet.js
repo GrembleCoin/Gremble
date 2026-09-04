@@ -202,10 +202,6 @@ let profileLoaded =
     false;
 
 
-/*
-   Wallet physically connected in THIS browser.
-*/
-
 let localWalletAddress =
     "";
 
@@ -214,20 +210,9 @@ let localWalletProvider =
     "";
 
 
-/*
-   Active Solana provider in THIS browser.
-
-   Reown exposes it through subscribeProvider()
-   and getWalletProvider().
-*/
-
 let activeSolanaProvider =
     null;
 
-
-/*
-   Last VERIFIED wallet saved in Supabase.
-*/
 
 let savedWalletAddress =
     "";
@@ -240,10 +225,6 @@ let savedWalletProvider =
 let savedWalletVerifiedAt =
     "";
 
-
-/*
-   Telegram session currently loaded.
-*/
 
 let loadedSessionToken =
     "";
@@ -792,25 +773,11 @@ function showVerifiedWallet() {
     }
 
 
-    const currentAddress =
-        getConnectedWalletAddress();
-
-
-    const activeOnThisDevice =
-        Boolean(
-            currentAddress &&
-            currentAddress ===
-                savedWalletAddress
-        );
-
-
     showWalletBox(
         savedWalletAddress,
         "WALLET VERIFIED",
         savedWalletProvider,
-        activeOnThisDevice
-            ? "DISCONNECT"
-            : "CHANGE"
+        "CHANGE WALLET"
     );
 }
 
@@ -1042,8 +1009,6 @@ function getTelegramIdFromSession() {
 
 /* =====================================================
    VERIFICATION MESSAGE
-
-   MUST MATCH wallet-verify EDGE FUNCTION
 ===================================================== */
 
 function buildWalletVerificationMessage(
@@ -1903,6 +1868,29 @@ async function disconnectLocalWallet() {
 
 async function changeWallet() {
 
+    if (
+        connectionInProgress ||
+        verificationInProgress
+    ) {
+
+        return;
+    }
+
+
+    setWalletStatus(
+        "SELECT A NEW WALLET...",
+        "loading"
+    );
+
+
+    /*
+       IMPORTANT:
+       We DO NOT clear savedWalletAddress here.
+
+       The old verified wallet remains in Supabase until
+       the new wallet is successfully verified.
+    */
+
     try {
 
         const controller =
@@ -1945,11 +1933,169 @@ async function changeWallet() {
 
 
     await sleep(
-        250
+        300
     );
 
 
-    await connectAndVerifyWallet();
+    try {
+
+        grembleWalletModal.open({
+
+            view:
+                "Connect",
+
+            namespace:
+                "solana"
+        });
+
+    }
+    catch (error) {
+
+        console.error(
+            "Could not open wallet selector:",
+            error
+        );
+
+
+        setWalletStatus(
+            "COULD NOT OPEN WALLET SELECTOR.",
+            "error"
+        );
+
+
+        return;
+    }
+
+
+    try {
+
+        const connection =
+            await waitForWalletConnection();
+
+
+        const newAddress =
+            connection.address;
+
+
+        const newProvider =
+            connection.provider;
+
+
+        if (
+            !newAddress ||
+            !newProvider
+        ) {
+
+            throw new Error(
+                "New wallet connection failed."
+            );
+        }
+
+
+        /*
+           If user reconnects the same wallet,
+           no database change is necessary.
+        */
+
+        if (
+            newAddress ===
+            savedWalletAddress
+        ) {
+
+            localWalletAddress =
+                newAddress;
+
+
+            localWalletProvider =
+                getConnectedWalletName();
+
+
+            renderWalletUi();
+
+
+            setWalletStatus(
+                "",
+                ""
+            );
+
+
+            try {
+
+                grembleWalletModal
+                    .close();
+
+            }
+            catch {
+
+            }
+
+
+            return;
+        }
+
+
+        localWalletAddress =
+            newAddress;
+
+
+        localWalletProvider =
+            getConnectedWalletName();
+
+
+        renderWalletUi();
+
+
+        setWalletStatus(
+            "WALLET CONNECTED. VERIFYING OWNERSHIP...",
+            "loading"
+        );
+
+
+        await verifyConnectedWallet(
+            newProvider,
+            newAddress
+        );
+
+
+        try {
+
+            grembleWalletModal
+                .close();
+
+        }
+        catch {
+
+        }
+
+    }
+    catch (error) {
+
+        console.error(
+            "Wallet change error:",
+            error
+        );
+
+
+        /*
+           The old verified wallet is still stored.
+           Reload it from Supabase so UI returns to the
+           previous verified wallet if change failed.
+        */
+
+        await loadSavedWalletFromProfile(
+            true
+        );
+
+
+        setWalletStatus(
+            error?.message ||
+            "WALLET CHANGE WAS NOT COMPLETED.",
+            "error"
+        );
+
+
+        renderWalletUi();
+    }
 }
 
 
@@ -1963,34 +2109,33 @@ async function walletAction() {
         getConnectedWalletAddress();
 
 
-    if (
-        savedWalletAddress &&
-        currentAddress ===
-            savedWalletAddress
-    ) {
+    /*
+       VERIFIED WALLET
 
-        await disconnectLocalWallet();
-
-        return;
-    }
-
-
-    if (
-        !savedWalletAddress &&
-        currentAddress
-    ) {
-
-        await disconnectLocalWallet();
-
-        return;
-    }
-
+       Always allow user to replace it.
+    */
 
     if (
         savedWalletAddress
     ) {
 
         await changeWallet();
+
+        return;
+    }
+
+
+    /*
+       Local wallet connected but not verified.
+
+       In this state DISCONNECT is correct.
+    */
+
+    if (
+        currentAddress
+    ) {
+
+        await disconnectLocalWallet();
 
         return;
     }
@@ -2276,11 +2421,7 @@ try {
                         provider &&
                         !verificationInProgress &&
                         !connectionInProgress &&
-                        (
-                            !savedWalletAddress ||
-                            savedWalletAddress !==
-                                address
-                        )
+                        !savedWalletAddress
                     ) {
 
                         setWalletStatus(
@@ -2363,7 +2504,7 @@ if (
 
 
 /* =====================================================
-   DISCONNECT / CHANGE
+   CHANGE / DISCONNECT BUTTON
 ===================================================== */
 
 if (
