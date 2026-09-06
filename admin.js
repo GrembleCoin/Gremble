@@ -1,25 +1,6 @@
 /* =====================================================
    GREMBLE ADMIN PANEL
    File: admin.js
-
-   EXISTING SYSTEMS PRESERVED:
-   - Admin authorization
-   - Members
-   - Telegram groups
-   - X username
-   - Solana address
-   - Country
-   - Verified wallet
-   - Member statistics
-   - Contest
-
-   PREPARED:
-   - Sidebar navigation
-   - Quiz Builder
-   - Saved Quizzes
-   - Live Control
-   - Lobby players
-   - Past Quizzes
 ===================================================== */
 
 
@@ -33,16 +14,22 @@ const ADMIN_MEMBERS_ENDPOINT =
 const ADMIN_CONTEST_ENDPOINT =
     "https://tffzjqeckoezursrvcpw.supabase.co/functions/v1/admin-contest";
 
-/*
-    We will create these later.
 
-    IMPORTANT:
-    They stay empty for now so admin.js never calls
-    an Edge Function that does not exist yet.
+/*
+    QUIZ ENDPOINTS
+
+    We will fill these after creating the
+    Supabase quiz Edge Functions.
+
+    Keeping them empty means the current
+    Members + Contest systems continue working
+    without trying to call a missing quiz backend.
 */
 
 const ADMIN_QUIZ_ENDPOINT = "";
+
 const ADMIN_QUIZ_LIVE_ENDPOINT = "";
+
 
 const GREMBLE_SESSION_KEY =
     "gremble_session_token";
@@ -50,10 +37,32 @@ const GREMBLE_SESSION_KEY =
 const GREMBLE_SESSION_EXPIRY_KEY =
     "gremble_session_expires_at";
 
+
 const CONTEST_ITEMS_PER_PAGE = 5;
+
 const MEMBERS_ITEMS_PER_PAGE = 10;
 
-const QUIZ_QUESTION_TIME_SECONDS = 5;
+
+/*
+    QUIZ RULES
+*/
+
+const QUIZ_READ_TIME_SECONDS = 4;
+
+const QUIZ_MAX_SCORE = 1000;
+
+const QUIZ_DEFAULT_ANSWER_TIME = 10;
+
+const QUIZ_ANSWER_TIME_OPTIONS = [
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    15,
+    20
+];
 
 
 /* =====================================================
@@ -80,6 +89,7 @@ const sidebarAdminIdentity =
         "sidebarAdminIdentity"
     );
 
+
 const statTotalMembers =
     document.getElementById(
         "statTotalMembers"
@@ -104,6 +114,7 @@ const statMembersWithWallet =
     document.getElementById(
         "statMembersWithWallet"
     );
+
 
 const memberSearch =
     document.getElementById(
@@ -165,6 +176,7 @@ const contestPanel =
         "contestPanel"
     );
 
+
 const contestTotalEntries =
     document.getElementById(
         "contestTotalEntries"
@@ -179,6 +191,7 @@ const contestEntriesLabel =
     document.getElementById(
         "contestEntriesLabel"
     );
+
 
 const contestEntryForm =
     document.getElementById(
@@ -205,6 +218,7 @@ const contestPoints =
         "contestPoints"
     );
 
+
 const contestRequirementsYes =
     document.getElementById(
         "contestRequirementsYes"
@@ -220,6 +234,7 @@ const contestRequirementsValue =
         "contestRequirementsValue"
     );
 
+
 const contestSubmitButton =
     document.getElementById(
         "contestSubmitButton"
@@ -234,6 +249,7 @@ const contestFormMessage =
     document.getElementById(
         "contestFormMessage"
     );
+
 
 const contestTableBody =
     document.getElementById(
@@ -277,7 +293,7 @@ const contestPageInfo =
 
 
 /* =====================================================
-   QUIZ ELEMENTS
+   QUIZ BUILDER ELEMENTS
 ===================================================== */
 
 const quizBuilderForm =
@@ -300,11 +316,6 @@ const quizDescription =
         "quizDescription"
     );
 
-const quizDefaultTime =
-    document.getElementById(
-        "quizDefaultTime"
-    );
-
 const quizBuilderTitle =
     document.getElementById(
         "quizBuilderTitle"
@@ -314,6 +325,7 @@ const quizBuilderMessage =
     document.getElementById(
         "quizBuilderMessage"
     );
+
 
 const quizQuestionCount =
     document.getElementById(
@@ -335,6 +347,7 @@ const addQuizQuestionButton =
         "addQuizQuestionButton"
     );
 
+
 const quizQuestionEditor =
     document.getElementById(
         "quizQuestionEditor"
@@ -354,6 +367,7 @@ const quizQuestionText =
     document.getElementById(
         "quizQuestionText"
     );
+
 
 const quizAnswerA =
     document.getElementById(
@@ -375,6 +389,7 @@ const quizAnswerD =
         "quizAnswerD"
     );
 
+
 const quizCorrectAnswer =
     document.getElementById(
         "quizCorrectAnswer"
@@ -386,6 +401,13 @@ const quizCorrectButtons =
             "[data-correct-answer]"
         )
     );
+
+
+const quizQuestionAnswerTime =
+    document.getElementById(
+        "quizQuestionAnswerTime"
+    );
+
 
 const quizSaveQuestionButton =
     document.getElementById(
@@ -402,6 +424,7 @@ const quizDeleteQuestionButton =
         "quizDeleteQuestionButton"
     );
 
+
 const quizResetBuilderButton =
     document.getElementById(
         "quizResetBuilderButton"
@@ -417,10 +440,16 @@ const quizDuplicateCurrentButton =
         "quizDuplicateCurrentButton"
     );
 
+
 const quizQuestionListItemTemplate =
     document.getElementById(
         "quizQuestionListItemTemplate"
     );
+
+
+/* =====================================================
+   SAVED QUIZ ELEMENTS
+===================================================== */
 
 const savedQuizCardTemplate =
     document.getElementById(
@@ -441,6 +470,11 @@ const createQuizFromSavedButton =
     document.getElementById(
         "createQuizFromSavedButton"
     );
+
+
+/* =====================================================
+   LIVE QUIZ ELEMENTS
+===================================================== */
 
 const liveQuizStatusBadge =
     document.getElementById(
@@ -472,6 +506,7 @@ const liveQuizTotalQuestions =
         "liveQuizTotalQuestions"
     );
 
+
 const selectQuizForLiveButton =
     document.getElementById(
         "selectQuizForLiveButton"
@@ -502,6 +537,7 @@ const closeQuizLobbyButton =
         "closeQuizLobbyButton"
     );
 
+
 const liveCurrentQuestionControl =
     document.getElementById(
         "liveCurrentQuestionControl"
@@ -516,6 +552,7 @@ const currentQuizQuestionText =
     document.getElementById(
         "currentQuizQuestionText"
     );
+
 
 const liveQuizAnsweredCount =
     document.getElementById(
@@ -537,10 +574,12 @@ const liveQuizNoAnswerCount =
         "liveQuizNoAnswerCount"
     );
 
+
 const liveQuizMessage =
     document.getElementById(
         "liveQuizMessage"
     );
+
 
 const liveLobbyPlayerCountBadge =
     document.getElementById(
@@ -562,6 +601,17 @@ const liveQuizPlayerTemplate =
         "liveQuizPlayerTemplate"
     );
 
+
+const sidebarQuizLiveDot =
+    document.getElementById(
+        "sidebarQuizLiveDot"
+    );
+
+
+/* =====================================================
+   PAST QUIZ ELEMENTS
+===================================================== */
+
 const pastQuizzesList =
     document.getElementById(
         "pastQuizzesList"
@@ -577,48 +627,52 @@ const pastQuizCardTemplate =
         "pastQuizCardTemplate"
     );
 
-const sidebarQuizLiveDot =
-    document.getElementById(
-        "sidebarQuizLiveDot"
-    );
-
 
 /* =====================================================
    DATA
 ===================================================== */
 
 let allMembers = [];
+
 let allContestEntries = [];
 
+
 let contestLoaded = false;
+
 let contestLoading = false;
+
 let contestSaving = false;
 
+
 let contestCurrentPage = 1;
+
 let membersCurrentPage = 1;
 
 
 /*
-    Quiz state.
+    QUIZ STATE
 
-    For now this is local UI state only.
-    Database will become the source of truth
-    once admin-quiz backend is created.
+    Currently local admin UI state.
+
+    Once quiz backend is created,
+    Supabase becomes the source of truth.
 */
 
 let quizDraftQuestions = [];
 
+let quizQuestionCounter = 0;
+
+
 let savedQuizzes = [];
 
 let pastQuizSessions = [];
+
 
 let selectedLiveQuiz = null;
 
 let liveQuizPlayers = [];
 
 let liveQuizSession = null;
-
-let quizQuestionCounter = 0;
 
 
 /* =====================================================
@@ -649,13 +703,12 @@ function numberOrZero(value) {
 function createLocalId(prefix) {
 
     return (
-        prefix +
-        "_" +
+        `${prefix}_` +
         Date.now() +
         "_" +
         Math.random()
             .toString(36)
-            .slice(2, 9)
+            .slice(2, 10)
     );
 
 }
@@ -692,6 +745,10 @@ function setAdminMessage(
 
 }
 
+
+/* =====================================================
+   ADMIN IDENTITY
+===================================================== */
 
 function setAdminIdentity(message) {
 
@@ -829,17 +886,28 @@ function formatDate(value) {
             date.getTime()
         )
     ) {
+
         return "—";
+
     }
 
     return new Intl.DateTimeFormat(
         "sk-SK",
         {
-            day: "2-digit",
-            month: "2-digit",
-            year: "numeric",
-            hour: "2-digit",
-            minute: "2-digit"
+            day:
+                "2-digit",
+
+            month:
+                "2-digit",
+
+            year:
+                "numeric",
+
+            hour:
+                "2-digit",
+
+            minute:
+                "2-digit"
         }
     ).format(date);
 
@@ -847,7 +915,7 @@ function formatDate(value) {
 
 
 /* =====================================================
-   SHORT ADDRESS
+   SHORT WALLET
 ===================================================== */
 
 function shortWallet(value) {
@@ -859,8 +927,12 @@ function shortWallet(value) {
         return "";
     }
 
-    if (wallet.length <= 14) {
+    if (
+        wallet.length <= 14
+    ) {
+
         return wallet;
+
     }
 
     return (
@@ -994,6 +1066,10 @@ function getAnnouncementsStatus(member) {
 }
 
 
+/* =====================================================
+   TELEGRAM BADGE
+===================================================== */
+
 function createTelegramBadge(
     status,
     type
@@ -1011,6 +1087,7 @@ function createTelegramBadge(
 
     badge.className =
         "telegram-group-badge";
+
 
     if (
         normalized === "member"
@@ -1077,6 +1154,7 @@ function countryCodeToFlag(code) {
     }
 
     return String.fromCodePoint(
+
         ...normalized
             .split("")
             .map(
@@ -1084,6 +1162,7 @@ function countryCodeToFlag(code) {
                     127397 +
                     character.charCodeAt(0)
             )
+
     );
 
 }
@@ -1110,6 +1189,7 @@ function createCountryCell(member) {
             member.country_name
         );
 
+
     if (
         !countryCode &&
         !countryName
@@ -1134,6 +1214,7 @@ function createCountryCell(member) {
 
     }
 
+
     const wrapper =
         document.createElement(
             "span"
@@ -1141,6 +1222,7 @@ function createCountryCell(member) {
 
     wrapper.className =
         "country-cell";
+
 
     const flag =
         countryCodeToFlag(
@@ -1166,6 +1248,7 @@ function createCountryCell(member) {
 
     }
 
+
     const name =
         document.createElement(
             "span"
@@ -1173,12 +1256,6 @@ function createCountryCell(member) {
 
     name.className =
         "country-name";
-
-    /*
-        We only really need country code now.
-        country_name remains supported because older
-        database rows may still contain it.
-    */
 
     name.textContent =
         countryCode ||
@@ -1203,7 +1280,7 @@ function createCountryCell(member) {
 
 
 /* =====================================================
-   VERIFIED WALLET CELL
+   VERIFIED WALLET
 ===================================================== */
 
 function createVerifiedWalletCell(member) {
@@ -1230,6 +1307,7 @@ function createVerifiedWalletCell(member) {
 
     dot.className =
         "wallet-status-dot";
+
 
     if (walletAddress) {
 
@@ -1292,6 +1370,7 @@ function updateStats(
 
         );
 
+
     const completedProfiles =
         numberOrZero(
 
@@ -1313,6 +1392,7 @@ function updateStats(
 
         );
 
+
     const chatMembers =
         numberOrZero(
 
@@ -1331,6 +1411,7 @@ function updateStats(
 
         );
 
+
     const announcementsMembers =
         numberOrZero(
 
@@ -1347,6 +1428,7 @@ function updateStats(
             ).length
 
         );
+
 
     const membersWithWallet =
         numberOrZero(
@@ -1365,6 +1447,7 @@ function updateStats(
 
         );
 
+
     if (statTotalMembers) {
 
         statTotalMembers.textContent =
@@ -1373,6 +1456,7 @@ function updateStats(
             );
 
     }
+
 
     if (statCompletedProfiles) {
 
@@ -1383,6 +1467,7 @@ function updateStats(
 
     }
 
+
     if (statTelegramChatMembers) {
 
         statTelegramChatMembers.textContent =
@@ -1391,6 +1476,7 @@ function updateStats(
             );
 
     }
+
 
     if (
         statTelegramAnnouncementsMembers
@@ -1402,6 +1488,7 @@ function updateStats(
             );
 
     }
+
 
     if (statMembersWithWallet) {
 
@@ -1425,6 +1512,7 @@ function createMemberRow(member) {
         document.createElement(
             "tr"
         );
+
 
     const telegramName =
         cleanText(
@@ -1477,8 +1565,20 @@ function createMemberRow(member) {
     }
     else {
 
-        telegramNameCell.innerHTML =
-            '<span class="empty-value">—</span>';
+        const empty =
+            document.createElement(
+                "span"
+            );
+
+        empty.className =
+            "empty-value";
+
+        empty.textContent =
+            "—";
+
+        telegramNameCell.appendChild(
+            empty
+        );
 
     }
 
@@ -1515,13 +1615,25 @@ function createMemberRow(member) {
     }
     else {
 
-        telegramUsernameCell.innerHTML =
-            '<span class="empty-value">NO USERNAME</span>';
+        const empty =
+            document.createElement(
+                "span"
+            );
+
+        empty.className =
+            "empty-value";
+
+        empty.textContent =
+            "NO USERNAME";
+
+        telegramUsernameCell.appendChild(
+            empty
+        );
 
     }
 
 
-    /* CHAT */
+    /* GREMBLE CHAT */
 
     const chatCell =
         document.createElement(
@@ -1574,6 +1686,7 @@ function createMemberRow(member) {
         wrapper.className =
             "wallet-cell";
 
+
         const value =
             document.createElement(
                 "span"
@@ -1586,6 +1699,10 @@ function createMemberRow(member) {
             xUsername.startsWith("@")
                 ? xUsername
                 : `@${xUsername}`;
+
+        value.title =
+            value.textContent;
+
 
         const copyButton =
             document.createElement(
@@ -1613,6 +1730,7 @@ function createMemberRow(member) {
             }
         );
 
+
         wrapper.appendChild(
             value
         );
@@ -1628,8 +1746,20 @@ function createMemberRow(member) {
     }
     else {
 
-        xUsernameCell.innerHTML =
-            '<span class="empty-value">NOT ADDED</span>';
+        const empty =
+            document.createElement(
+                "span"
+            );
+
+        empty.className =
+            "empty-value";
+
+        empty.textContent =
+            "NOT ADDED";
+
+        xUsernameCell.appendChild(
+            empty
+        );
 
     }
 
@@ -1651,6 +1781,7 @@ function createMemberRow(member) {
         wrapper.className =
             "wallet-cell";
 
+
         const address =
             document.createElement(
                 "span"
@@ -1666,6 +1797,7 @@ function createMemberRow(member) {
 
         address.title =
             solanaAddress;
+
 
         const copyButton =
             document.createElement(
@@ -1693,6 +1825,7 @@ function createMemberRow(member) {
             }
         );
 
+
         wrapper.appendChild(
             address
         );
@@ -1708,8 +1841,20 @@ function createMemberRow(member) {
     }
     else {
 
-        solanaCell.innerHTML =
-            '<span class="empty-value">NOT ADDED</span>';
+        const empty =
+            document.createElement(
+                "span"
+            );
+
+        empty.className =
+            "empty-value";
+
+        empty.textContent =
+            "NOT ADDED";
+
+        solanaCell.appendChild(
+            empty
+        );
 
     }
 
@@ -1754,15 +1899,13 @@ function createMemberRow(member) {
         );
 
 
-    /* VERIFIED WALLET */
+    /* WALLET */
 
     const verifiedWalletCell =
         createVerifiedWalletCell(
             member
         );
 
-
-    /* EXACT TABLE ORDER */
 
     row.appendChild(
         telegramNameCell
@@ -1803,6 +1946,7 @@ function createMemberRow(member) {
     row.appendChild(
         verifiedWalletCell
     );
+
 
     return row;
 
@@ -1851,11 +1995,14 @@ function getFilteredMembers() {
                     ? "yes wallet connected verified"
                     : "no wallet";
 
+
             const values = [
 
                 member.telegram_name,
                 member.telegram_username,
+
                 member.x_username,
+
                 member.solana_address,
 
                 member.country_code,
@@ -1865,11 +2012,13 @@ function getFilteredMembers() {
                 member.wallet_provider,
 
                 chatStatus,
+
                 announcementsStatus,
 
                 hasWallet
 
             ];
+
 
             return values.some(
                 value =>
@@ -1913,6 +2062,7 @@ function renderMembers() {
             )
         );
 
+
     if (
         membersCurrentPage >
         totalPages
@@ -1923,13 +2073,16 @@ function renderMembers() {
 
     }
 
+
     if (
         membersCurrentPage < 1
     ) {
 
-        membersCurrentPage = 1;
+        membersCurrentPage =
+            1;
 
     }
+
 
     const startIndex =
         (
@@ -1937,9 +2090,11 @@ function renderMembers() {
         ) *
         MEMBERS_ITEMS_PER_PAGE;
 
+
     const endIndex =
         startIndex +
         MEMBERS_ITEMS_PER_PAGE;
+
 
     const pageMembers =
         filteredMembers.slice(
@@ -1947,8 +2102,10 @@ function renderMembers() {
             endIndex
         );
 
+
     membersTableBody.innerHTML =
         "";
+
 
     if (
         totalFiltered === 0
@@ -1985,9 +2142,11 @@ function renderMembers() {
             member => {
 
                 fragment.appendChild(
+
                     createMemberRow(
                         member
                     )
+
                 );
 
             }
@@ -1999,6 +2158,7 @@ function renderMembers() {
 
     }
 
+
     updateMembersPagination(
         totalFiltered,
         totalPages
@@ -2008,7 +2168,7 @@ function renderMembers() {
 
 
 /* =====================================================
-   MEMBERS PAGINATION
+   MEMBER PAGINATION
 ===================================================== */
 
 function updateMembersPagination(
@@ -2024,6 +2184,7 @@ function updateMembersPagination(
         totalFiltered <=
         MEMBERS_ITEMS_PER_PAGE;
 
+
     if (membersPageInfo) {
 
         membersPageInfo.textContent =
@@ -2031,12 +2192,14 @@ function updateMembersPagination(
 
     }
 
+
     if (membersPrevPage) {
 
         membersPrevPage.disabled =
             membersCurrentPage <= 1;
 
     }
+
 
     if (membersNextPage) {
 
@@ -2124,6 +2287,7 @@ function showAccessError(
 
     }
 
+
     if (status === 401) {
 
         setAdminIdentity(
@@ -2139,6 +2303,7 @@ function showAccessError(
 
     }
 
+
     if (status === 403) {
 
         setAdminIdentity(
@@ -2153,6 +2318,7 @@ function showAccessError(
         return;
 
     }
+
 
     setAdminIdentity(
         "ERROR"
@@ -2176,6 +2342,7 @@ async function loadAdminData() {
     const token =
         getSessionToken();
 
+
     if (!token) {
 
         showAccessError(
@@ -2185,6 +2352,7 @@ async function loadAdminData() {
         return;
 
     }
+
 
     if (
         sessionIsExpired()
@@ -2200,6 +2368,7 @@ async function loadAdminData() {
 
     }
 
+
     setAdminIdentity(
         "VERIFYING..."
     );
@@ -2208,12 +2377,14 @@ async function loadAdminData() {
         "VERIFYING YOUR TELEGRAM ID AND LOADING GREMBLE MEMBERS..."
     );
 
+
     if (openContestPanel) {
 
         openContestPanel.disabled =
             true;
 
     }
+
 
     if (refreshMembers) {
 
@@ -2224,6 +2395,7 @@ async function loadAdminData() {
             "LOADING...";
 
     }
+
 
     try {
 
@@ -2246,7 +2418,9 @@ async function loadAdminData() {
                 }
             );
 
+
         let result = null;
+
 
         try {
 
@@ -2259,6 +2433,7 @@ async function loadAdminData() {
             result = null;
 
         }
+
 
         if (
             response.status === 401
@@ -2274,6 +2449,7 @@ async function loadAdminData() {
 
         }
 
+
         if (
             response.status === 403
         ) {
@@ -2285,6 +2461,7 @@ async function loadAdminData() {
             return;
 
         }
+
 
         if (
             !response.ok ||
@@ -2298,6 +2475,7 @@ async function loadAdminData() {
 
         }
 
+
         allMembers =
             Array.isArray(
                 result.members
@@ -2305,13 +2483,18 @@ async function loadAdminData() {
                 ? result.members
                 : [];
 
-        membersCurrentPage = 1;
+
+        membersCurrentPage =
+            1;
+
 
         updateStats(
             result.stats || {}
         );
 
+
         renderMembers();
+
 
         if (
             contestLoaded
@@ -2321,12 +2504,14 @@ async function loadAdminData() {
 
         }
 
+
         if (adminDashboard) {
 
             adminDashboard.hidden =
                 false;
 
         }
+
 
         if (openContestPanel) {
 
@@ -2335,9 +2520,11 @@ async function loadAdminData() {
 
         }
 
+
         setAdminIdentity(
             "VERIFIED ADMIN"
         );
+
 
         setAdminMessage(
             `ACCESS GRANTED — ${allMembers.length} GREMBLE MEMBER${allMembers.length === 1 ? "" : "S"} LOADED.`,
@@ -2393,6 +2580,7 @@ function findMemberByContestUsername(
         return null;
     }
 
+
     return (
 
         allMembers.find(
@@ -2404,15 +2592,14 @@ function findMemberByContestUsername(
                     );
 
                 return (
-
                     memberXUsername &&
                     memberXUsername ===
                     contestUsername
-
                 );
 
             }
-        ) || null
+        ) ||
+        null
 
     );
 
@@ -2430,6 +2617,7 @@ function getContestMemberStatus(entry) {
             entry.participant
         );
 
+
     if (!member) {
 
         return {
@@ -2444,6 +2632,7 @@ function getContestMemberStatus(entry) {
 
     }
 
+
     const chatStatus =
         getChatStatus(
             member
@@ -2454,12 +2643,14 @@ function getContestMemberStatus(entry) {
             member
         );
 
+
     const isInChat =
         chatStatus === "member";
 
     const isInAnnouncements =
         announcementsStatus ===
         "member";
+
 
     if (
         isInChat ||
@@ -2468,6 +2659,7 @@ function getContestMemberStatus(entry) {
 
         let tooltip =
             "VERIFIED + TELEGRAM";
+
 
         if (
             isInChat &&
@@ -2491,6 +2683,7 @@ function getContestMemberStatus(entry) {
 
         }
 
+
         return {
 
             type:
@@ -2501,6 +2694,7 @@ function getContestMemberStatus(entry) {
         };
 
     }
+
 
     return {
 
@@ -2514,6 +2708,10 @@ function getContestMemberStatus(entry) {
 
 }
 
+
+/* =====================================================
+   CREATE CONTEST MEMBER STATUS
+===================================================== */
 
 function createContestMemberStatus(entry) {
 
@@ -2539,6 +2737,7 @@ function createContestMemberStatus(entry) {
         "aria-label",
         status.tooltip
     );
+
 
     const dot =
         document.createElement(
@@ -2606,6 +2805,7 @@ function setContestRequirements(
 
     }
 
+
     if (contestRequirementsYes) {
 
         contestRequirementsYes.classList.toggle(
@@ -2614,6 +2814,7 @@ function setContestRequirements(
         );
 
     }
+
 
     if (contestRequirementsNo) {
 
@@ -2636,12 +2837,14 @@ function updateContestStats() {
     const total =
         allContestEntries.length;
 
+
     const verified =
         allContestEntries.filter(
             entry =>
                 entry.requirements_ok ===
                 true
         ).length;
+
 
     if (contestTotalEntries) {
 
@@ -2651,6 +2854,7 @@ function updateContestStats() {
             );
 
     }
+
 
     if (contestVerifiedEntries) {
 
@@ -2675,6 +2879,7 @@ function getFilteredContestEntries() {
             contestSearch?.value
         ).toLowerCase();
 
+
     if (!search) {
 
         return [
@@ -2683,10 +2888,12 @@ function getFilteredContestEntries() {
 
     }
 
+
     const normalizedSearch =
         normalizeXUsername(
             search
         );
+
 
     return allContestEntries.filter(
         entry => {
@@ -2715,12 +2922,15 @@ function sortContestEntries(entries) {
     const sortMode =
         cleanText(
             contestSort?.value
-        ) || "newest";
+        ) ||
+        "newest";
+
 
     const sorted =
         [
             ...entries
         ];
+
 
     sorted.sort(
         (a, b) => {
@@ -2728,12 +2938,15 @@ function sortContestEntries(entries) {
             const dateA =
                 new Date(
                     a.created_at
-                ).getTime() || 0;
+                ).getTime() ||
+                0;
 
             const dateB =
                 new Date(
                     b.created_at
-                ).getTime() || 0;
+                ).getTime() ||
+                0;
+
 
             const pointsA =
                 numberOrZero(
@@ -2745,6 +2958,7 @@ function sortContestEntries(entries) {
                     b.points
                 );
 
+
             const rulesA =
                 a.requirements_ok === true
                     ? 1
@@ -2755,6 +2969,7 @@ function sortContestEntries(entries) {
                     ? 1
                     : 0;
 
+
             if (
                 sortMode === "oldest"
             ) {
@@ -2763,9 +2978,9 @@ function sortContestEntries(entries) {
 
             }
 
+
             if (
-                sortMode ===
-                "points-high"
+                sortMode === "points-high"
             ) {
 
                 if (
@@ -2780,9 +2995,9 @@ function sortContestEntries(entries) {
 
             }
 
+
             if (
-                sortMode ===
-                "points-low"
+                sortMode === "points-low"
             ) {
 
                 if (
@@ -2797,9 +3012,9 @@ function sortContestEntries(entries) {
 
             }
 
+
             if (
-                sortMode ===
-                "rules-yes"
+                sortMode === "rules-yes"
             ) {
 
                 if (
@@ -2814,9 +3029,9 @@ function sortContestEntries(entries) {
 
             }
 
+
             if (
-                sortMode ===
-                "rules-no"
+                sortMode === "rules-no"
             ) {
 
                 if (
@@ -2831,10 +3046,12 @@ function sortContestEntries(entries) {
 
             }
 
+
             return dateB - dateA;
 
         }
     );
+
 
     return sorted;
 
@@ -2871,7 +3088,8 @@ function createContestRow(entry) {
     participant.textContent =
         cleanText(
             entry.participant
-        ) || "—";
+        ) ||
+        "—";
 
     participantCell.appendChild(
         participant
@@ -2889,6 +3107,7 @@ function createContestRow(entry) {
         cleanText(
             entry.meme_url
         );
+
 
     if (memeUrl) {
 
@@ -2956,8 +3175,8 @@ function createContestRow(entry) {
         );
 
     const requirementsOk =
-        entry.requirements_ok ===
-        true;
+        entry.requirements_ok === true;
+
 
     rulesBadge.className =
         requirementsOk
@@ -3005,6 +3224,7 @@ function createContestRow(entry) {
     actions.className =
         "contest-actions";
 
+
     const editButton =
         document.createElement(
             "button"
@@ -3030,6 +3250,7 @@ function createContestRow(entry) {
         }
     );
 
+
     const deleteButton =
         document.createElement(
             "button"
@@ -3054,6 +3275,7 @@ function createContestRow(entry) {
 
         }
     );
+
 
     actions.appendChild(
         editButton
@@ -3115,6 +3337,7 @@ function createContestRow(entry) {
         statusCell
     );
 
+
     return row;
 
 }
@@ -3130,16 +3353,20 @@ function renderContestEntries() {
         return;
     }
 
+
     const filtered =
         getFilteredContestEntries();
+
 
     const sorted =
         sortContestEntries(
             filtered
         );
 
+
     const totalFiltered =
         sorted.length;
+
 
     const totalPages =
         Math.max(
@@ -3149,6 +3376,7 @@ function renderContestEntries() {
                 CONTEST_ITEMS_PER_PAGE
             )
         );
+
 
     if (
         contestCurrentPage >
@@ -3160,19 +3388,23 @@ function renderContestEntries() {
 
     }
 
+
     if (
         contestCurrentPage < 1
     ) {
 
-        contestCurrentPage = 1;
+        contestCurrentPage =
+            1;
 
     }
+
 
     const startIndex =
         (
             contestCurrentPage - 1
         ) *
         CONTEST_ITEMS_PER_PAGE;
+
 
     const pageEntries =
         sorted.slice(
@@ -3184,11 +3416,14 @@ function renderContestEntries() {
 
         );
 
+
     contestTableBody.innerHTML =
         "";
 
+
     const fragment =
         document.createDocumentFragment();
+
 
     pageEntries.forEach(
         entry => {
@@ -3204,9 +3439,11 @@ function renderContestEntries() {
         }
     );
 
+
     contestTableBody.appendChild(
         fragment
     );
+
 
     if (contestEntriesLabel) {
 
@@ -3214,6 +3451,7 @@ function renderContestEntries() {
             !!cleanText(
                 contestSearch?.value
             );
+
 
         if (hasSearch) {
 
@@ -3230,10 +3468,12 @@ function renderContestEntries() {
 
     }
 
+
     if (contestEmpty) {
 
         contestEmpty.hidden =
             totalFiltered > 0;
+
 
         if (
             totalFiltered === 0
@@ -3250,10 +3490,12 @@ function renderContestEntries() {
 
     }
 
+
     updateContestPagination(
         totalFiltered,
         totalPages
     );
+
 
     updateContestStats();
 
@@ -3273,9 +3515,11 @@ function updateContestPagination(
         return;
     }
 
+
     contestPagination.hidden =
         totalFiltered <=
         CONTEST_ITEMS_PER_PAGE;
+
 
     if (contestPageInfo) {
 
@@ -3284,12 +3528,14 @@ function updateContestPagination(
 
     }
 
+
     if (contestPrevPage) {
 
         contestPrevPage.disabled =
             contestCurrentPage <= 1;
 
     }
+
 
     if (contestNextPage) {
 
@@ -3322,6 +3568,7 @@ function goToNextContestPage() {
     const filtered =
         getFilteredContestEntries();
 
+
     const totalPages =
         Math.max(
             1,
@@ -3331,12 +3578,14 @@ function goToNextContestPage() {
             )
         );
 
+
     if (
         contestCurrentPage >=
         totalPages
     ) {
         return;
     }
+
 
     contestCurrentPage++;
 
@@ -3376,12 +3625,14 @@ function resetContestForm() {
 
     }
 
+
     if (contestParticipant) {
 
         contestParticipant.value =
             "";
 
     }
+
 
     if (contestMemeUrl) {
 
@@ -3390,6 +3641,7 @@ function resetContestForm() {
 
     }
 
+
     if (contestPoints) {
 
         contestPoints.value =
@@ -3397,9 +3649,11 @@ function resetContestForm() {
 
     }
 
+
     setContestRequirements(
         false
     );
+
 
     if (contestSubmitButton) {
 
@@ -3408,6 +3662,7 @@ function resetContestForm() {
 
     }
 
+
     if (contestCancelEdit) {
 
         contestCancelEdit.hidden =
@@ -3415,10 +3670,12 @@ function resetContestForm() {
 
     }
 
+
     const title =
         document.querySelector(
             ".contest-form-title"
         );
+
 
     if (title) {
 
@@ -3426,6 +3683,7 @@ function resetContestForm() {
             "ADD NEW ENTRY";
 
     }
+
 
     setContestMessage(
         ""
@@ -3444,6 +3702,7 @@ function startContestEdit(entry) {
         return;
     }
 
+
     if (contestEntryId) {
 
         contestEntryId.value =
@@ -3452,6 +3711,7 @@ function startContestEdit(entry) {
             );
 
     }
+
 
     if (contestParticipant) {
 
@@ -3462,6 +3722,7 @@ function startContestEdit(entry) {
 
     }
 
+
     if (contestMemeUrl) {
 
         contestMemeUrl.value =
@@ -3470,6 +3731,7 @@ function startContestEdit(entry) {
             );
 
     }
+
 
     if (contestPoints) {
 
@@ -3482,10 +3744,12 @@ function startContestEdit(entry) {
 
     }
 
+
     setContestRequirements(
         entry.requirements_ok ===
         true
     );
+
 
     if (contestSubmitButton) {
 
@@ -3494,6 +3758,7 @@ function startContestEdit(entry) {
 
     }
 
+
     if (contestCancelEdit) {
 
         contestCancelEdit.hidden =
@@ -3501,10 +3766,12 @@ function startContestEdit(entry) {
 
     }
 
+
     const title =
         document.querySelector(
             ".contest-form-title"
         );
+
 
     if (title) {
 
@@ -3513,9 +3780,11 @@ function startContestEdit(entry) {
 
     }
 
+
     setContestMessage(
         `EDITING ${cleanText(entry.participant) || "PARTICIPANT"}`
     );
+
 
     contestParticipant?.focus();
 
@@ -3534,6 +3803,7 @@ async function contestRequest(
     const token =
         getSessionToken();
 
+
     if (!token) {
 
         throw new Error(
@@ -3541,6 +3811,7 @@ async function contestRequest(
         );
 
     }
+
 
     if (
         sessionIsExpired()
@@ -3553,6 +3824,7 @@ async function contestRequest(
         );
 
     }
+
 
     const options = {
 
@@ -3570,7 +3842,10 @@ async function contestRequest(
 
     };
 
-    if (body !== null) {
+
+    if (
+        body !== null
+    ) {
 
         options.headers[
             "Content-Type"
@@ -3584,13 +3859,16 @@ async function contestRequest(
 
     }
 
+
     const response =
         await fetch(
             ADMIN_CONTEST_ENDPOINT,
             options
         );
 
+
     let result = null;
+
 
     try {
 
@@ -3604,6 +3882,7 @@ async function contestRequest(
 
     }
 
+
     if (
         response.status === 401
     ) {
@@ -3616,6 +3895,7 @@ async function contestRequest(
 
     }
 
+
     if (
         response.status === 403
     ) {
@@ -3625,6 +3905,7 @@ async function contestRequest(
         );
 
     }
+
 
     if (
         !response.ok ||
@@ -3637,6 +3918,7 @@ async function contestRequest(
         );
 
     }
+
 
     return result;
 
@@ -3655,6 +3937,7 @@ async function loadContestEntries(
         return;
     }
 
+
     if (
         contestLoaded &&
         !force
@@ -3662,11 +3945,15 @@ async function loadContestEntries(
         return;
     }
 
-    contestLoading = true;
+
+    contestLoading =
+        true;
+
 
     setContestMessage(
         "LOADING CONTEST ENTRIES..."
     );
+
 
     try {
 
@@ -3675,6 +3962,7 @@ async function loadContestEntries(
                 "GET"
             );
 
+
         allContestEntries =
             Array.isArray(
                 result.entries
@@ -3682,13 +3970,17 @@ async function loadContestEntries(
                 ? result.entries
                 : [];
 
+
         contestLoaded =
             true;
+
 
         contestCurrentPage =
             1;
 
+
         renderContestEntries();
+
 
         setContestMessage(
             `${allContestEntries.length} CONTEST ${allContestEntries.length === 1 ? "ENTRY" : "ENTRIES"} LOADED.`,
@@ -3702,6 +3994,7 @@ async function loadContestEntries(
             "Contest load error:",
             error
         );
+
 
         setContestMessage(
             error?.message ||
@@ -3728,33 +4021,40 @@ async function saveContestEntry(event) {
 
     event.preventDefault();
 
+
     if (contestSaving) {
         return;
     }
+
 
     const participant =
         cleanText(
             contestParticipant?.value
         );
 
+
     const memeUrl =
         cleanText(
             contestMemeUrl?.value
         );
+
 
     const points =
         Number(
             contestPoints?.value
         );
 
+
     const requirementsOk =
         contestRequirementsValue?.value ===
         "true";
+
 
     const editingId =
         Number(
             contestEntryId?.value
         );
+
 
     if (!participant) {
 
@@ -3769,6 +4069,7 @@ async function saveContestEntry(event) {
 
     }
 
+
     if (!memeUrl) {
 
         setContestMessage(
@@ -3782,12 +4083,14 @@ async function saveContestEntry(event) {
 
     }
 
+
     try {
 
         const parsedUrl =
             new URL(
                 memeUrl
             );
+
 
         if (
             parsedUrl.protocol !== "https:" &&
@@ -3812,6 +4115,7 @@ async function saveContestEntry(event) {
 
     }
 
+
     if (
         !Number.isInteger(points) ||
         points < 0 ||
@@ -3829,14 +4133,17 @@ async function saveContestEntry(event) {
 
     }
 
+
     const isEditing =
         Number.isSafeInteger(
             editingId
         ) &&
         editingId > 0;
 
+
     contestSaving =
         true;
+
 
     if (contestSubmitButton) {
 
@@ -3850,11 +4157,13 @@ async function saveContestEntry(event) {
 
     }
 
+
     setContestMessage(
         isEditing
             ? "SAVING CHANGES..."
             : "ADDING PARTICIPANT..."
     );
+
 
     try {
 
@@ -3872,12 +4181,14 @@ async function saveContestEntry(event) {
 
         };
 
+
         if (isEditing) {
 
             payload.id =
                 editingId;
 
         }
+
 
         await contestRequest(
             isEditing
@@ -3886,14 +4197,18 @@ async function saveContestEntry(event) {
             payload
         );
 
+
         resetContestForm();
+
 
         contestLoaded =
             false;
 
+
         await loadContestEntries(
             true
         );
+
 
         setContestMessage(
             isEditing
@@ -3910,6 +4225,7 @@ async function saveContestEntry(event) {
             error
         );
 
+
         setContestMessage(
             error?.message ||
             "COULD NOT SAVE PARTICIPANT.",
@@ -3922,15 +4238,18 @@ async function saveContestEntry(event) {
         contestSaving =
             false;
 
+
         if (contestSubmitButton) {
 
             contestSubmitButton.disabled =
                 false;
 
+
             const stillEditing =
                 Number(
                     contestEntryId?.value
                 ) > 0;
+
 
             contestSubmitButton.textContent =
                 stillEditing
@@ -3954,26 +4273,31 @@ async function deleteContestEntry(entry) {
         return;
     }
 
+
     const participant =
         cleanText(
             entry.participant
         ) ||
         "THIS PARTICIPANT";
 
+
     const confirmed =
         window.confirm(
             `Delete ${participant} from the contest?`
         );
 
+
     if (!confirmed) {
         return;
     }
+
 
     try {
 
         setContestMessage(
             `DELETING ${participant}...`
         );
+
 
         await contestRequest(
             "DELETE",
@@ -3984,6 +4308,7 @@ async function deleteContestEntry(entry) {
                     )
             }
         );
+
 
         if (
             Number(
@@ -3998,12 +4323,15 @@ async function deleteContestEntry(entry) {
 
         }
 
+
         contestLoaded =
             false;
+
 
         await loadContestEntries(
             true
         );
+
 
         setContestMessage(
             `${participant} DELETED.`,
@@ -4017,6 +4345,7 @@ async function deleteContestEntry(entry) {
             "Contest delete error:",
             error
         );
+
 
         setContestMessage(
             error?.message ||
@@ -4071,13 +4400,16 @@ function setQuizBuilderMessage(
         return;
     }
 
+
     quizBuilderMessage.textContent =
         message;
+
 
     quizBuilderMessage.classList.remove(
         "success",
         "error"
     );
+
 
     if (type) {
 
@@ -4099,13 +4431,16 @@ function setLiveQuizMessage(
         return;
     }
 
+
     liveQuizMessage.textContent =
         message;
+
 
     liveQuizMessage.classList.remove(
         "success",
         "error"
     );
+
 
     if (type) {
 
@@ -4119,7 +4454,33 @@ function setLiveQuizMessage(
 
 
 /* =====================================================
-   QUIZ BUILDER RESET
+   VALID ANSWER TIME
+===================================================== */
+
+function normalizeQuizAnswerTime(value) {
+
+    const seconds =
+        Number(value);
+
+
+    if (
+        QUIZ_ANSWER_TIME_OPTIONS.includes(
+            seconds
+        )
+    ) {
+
+        return seconds;
+
+    }
+
+
+    return QUIZ_DEFAULT_ANSWER_TIME;
+
+}
+
+
+/* =====================================================
+   RESET QUESTION EDITOR
 ===================================================== */
 
 function resetQuizQuestionEditor() {
@@ -4131,12 +4492,14 @@ function resetQuizQuestionEditor() {
 
     }
 
+
     if (quizQuestionText) {
 
         quizQuestionText.value =
             "";
 
     }
+
 
     if (quizAnswerA) {
 
@@ -4145,12 +4508,14 @@ function resetQuizQuestionEditor() {
 
     }
 
+
     if (quizAnswerB) {
 
         quizAnswerB.value =
             "";
 
     }
+
 
     if (quizAnswerC) {
 
@@ -4159,6 +4524,7 @@ function resetQuizQuestionEditor() {
 
     }
 
+
     if (quizAnswerD) {
 
         quizAnswerD.value =
@@ -4166,12 +4532,24 @@ function resetQuizQuestionEditor() {
 
     }
 
+
     if (quizCorrectAnswer) {
 
         quizCorrectAnswer.value =
             "";
 
     }
+
+
+    if (quizQuestionAnswerTime) {
+
+        quizQuestionAnswerTime.value =
+            String(
+                QUIZ_DEFAULT_ANSWER_TIME
+            );
+
+    }
+
 
     quizCorrectButtons.forEach(
         button => {
@@ -4183,12 +4561,14 @@ function resetQuizQuestionEditor() {
         }
     );
 
+
     if (quizQuestionEditorTitle) {
 
         quizQuestionEditorTitle.textContent =
             "Add Question";
 
     }
+
 
     if (quizDeleteQuestionButton) {
 
@@ -4200,9 +4580,14 @@ function resetQuizQuestionEditor() {
 }
 
 
+/* =====================================================
+   CLOSE QUESTION EDITOR
+===================================================== */
+
 function closeQuizQuestionEditor() {
 
     resetQuizQuestionEditor();
+
 
     if (quizQuestionEditor) {
 
@@ -4214,18 +4599,25 @@ function closeQuizQuestionEditor() {
 }
 
 
+/* =====================================================
+   OPEN QUESTION EDITOR
+===================================================== */
+
 function openQuizQuestionEditor(
     question = null
 ) {
 
     resetQuizQuestionEditor();
 
+
     if (!quizQuestionEditor) {
         return;
     }
 
+
     quizQuestionEditor.hidden =
         false;
+
 
     if (question) {
 
@@ -4238,6 +4630,7 @@ function openQuizQuestionEditor(
 
         }
 
+
         if (quizQuestionEditorTitle) {
 
             quizQuestionEditorTitle.textContent =
@@ -4245,47 +4638,79 @@ function openQuizQuestionEditor(
 
         }
 
+
         if (quizQuestionText) {
 
             quizQuestionText.value =
-                question.question;
+                cleanText(
+                    question.question
+                );
 
         }
+
 
         if (quizAnswerA) {
 
             quizAnswerA.value =
-                question.answer_a;
+                cleanText(
+                    question.answer_a
+                );
 
         }
+
 
         if (quizAnswerB) {
 
             quizAnswerB.value =
-                question.answer_b;
+                cleanText(
+                    question.answer_b
+                );
 
         }
+
 
         if (quizAnswerC) {
 
             quizAnswerC.value =
-                question.answer_c;
+                cleanText(
+                    question.answer_c
+                );
 
         }
+
 
         if (quizAnswerD) {
 
             quizAnswerD.value =
-                question.answer_d;
+                cleanText(
+                    question.answer_d
+                );
 
         }
+
 
         if (quizCorrectAnswer) {
 
             quizCorrectAnswer.value =
-                question.correct_answer;
+                cleanText(
+                    question.correct_answer
+                ).toUpperCase();
 
         }
+
+
+        if (quizQuestionAnswerTime) {
+
+            quizQuestionAnswerTime.value =
+                String(
+                    normalizeQuizAnswerTime(
+                        question.answer_time_seconds ??
+                        question.time_seconds
+                    )
+                );
+
+        }
+
 
         quizCorrectButtons.forEach(
             button => {
@@ -4294,11 +4719,14 @@ function openQuizQuestionEditor(
                     "active",
 
                     button.dataset.correctAnswer ===
-                    question.correct_answer
+                    cleanText(
+                        question.correct_answer
+                    ).toUpperCase()
                 );
 
             }
         );
+
 
         if (quizDeleteQuestionButton) {
 
@@ -4309,31 +4737,37 @@ function openQuizQuestionEditor(
 
     }
 
+
     quizQuestionText?.focus();
 
 }
 
 
 /* =====================================================
-   QUIZ CORRECT ANSWER
+   SELECT CORRECT ANSWER
 ===================================================== */
 
-function selectQuizCorrectAnswer(
-    answer
-) {
+function selectQuizCorrectAnswer(answer) {
 
     const normalized =
-        cleanText(answer)
-            .toUpperCase();
+        cleanText(
+            answer
+        ).toUpperCase();
+
 
     if (
-        !["A", "B", "C", "D"]
-            .includes(
-                normalized
-            )
+        ![
+            "A",
+            "B",
+            "C",
+            "D"
+        ].includes(
+            normalized
+        )
     ) {
         return;
     }
+
 
     if (quizCorrectAnswer) {
 
@@ -4341,6 +4775,7 @@ function selectQuizCorrectAnswer(
             normalized;
 
     }
+
 
     quizCorrectButtons.forEach(
         button => {
@@ -4359,53 +4794,61 @@ function selectQuizCorrectAnswer(
 
 
 /* =====================================================
-   SAVE QUESTION INTO CURRENT DRAFT
+   GET QUESTION EDITOR DATA
 ===================================================== */
 
-function saveQuizQuestion() {
+function getQuestionEditorData() {
 
     const question =
         cleanText(
             quizQuestionText?.value
         );
 
+
     const answerA =
         cleanText(
             quizAnswerA?.value
         );
+
 
     const answerB =
         cleanText(
             quizAnswerB?.value
         );
 
+
     const answerC =
         cleanText(
             quizAnswerC?.value
         );
+
 
     const answerD =
         cleanText(
             quizAnswerD?.value
         );
 
+
     const correctAnswer =
         cleanText(
             quizCorrectAnswer?.value
         ).toUpperCase();
 
-    if (!question) {
 
-        setQuizBuilderMessage(
-            "WRITE THE QUESTION.",
-            "error"
+    const answerTime =
+        normalizeQuizAnswerTime(
+            quizQuestionAnswerTime?.value
         );
 
-        quizQuestionText?.focus();
 
-        return;
+    if (!question) {
+
+        throw new Error(
+            "WRITE THE QUESTION."
+        );
 
     }
+
 
     if (
         !answerA ||
@@ -4414,132 +4857,178 @@ function saveQuizQuestion() {
         !answerD
     ) {
 
-        setQuizBuilderMessage(
-            "ADD ALL 4 ANSWERS.",
-            "error"
+        throw new Error(
+            "ADD ALL 4 ANSWERS."
         );
 
-        return;
-
     }
+
 
     if (
-        !["A", "B", "C", "D"]
-            .includes(
-                correctAnswer
-            )
+        ![
+            "A",
+            "B",
+            "C",
+            "D"
+        ].includes(
+            correctAnswer
+        )
     ) {
 
-        setQuizBuilderMessage(
-            "SELECT THE CORRECT ANSWER.",
-            "error"
-        );
-
-        return;
-
-    }
-
-    const editingId =
-        cleanText(
-            quizQuestionEditingId?.value
-        );
-
-    if (editingId) {
-
-        const index =
-            quizDraftQuestions.findIndex(
-                item =>
-                    String(
-                        item.local_id
-                    ) ===
-                    editingId
-            );
-
-        if (index !== -1) {
-
-            quizDraftQuestions[index] = {
-
-                ...quizDraftQuestions[index],
-
-                question,
-
-                answer_a:
-                    answerA,
-
-                answer_b:
-                    answerB,
-
-                answer_c:
-                    answerC,
-
-                answer_d:
-                    answerD,
-
-                correct_answer:
-                    correctAnswer,
-
-                time_seconds:
-                    QUIZ_QUESTION_TIME_SECONDS
-
-            };
-
-        }
-
-    }
-    else {
-
-        quizQuestionCounter++;
-
-        quizDraftQuestions.push(
-            {
-
-                local_id:
-                    createLocalId(
-                        "question"
-                    ),
-
-                sort_order:
-                    quizQuestionCounter,
-
-                question,
-
-                answer_a:
-                    answerA,
-
-                answer_b:
-                    answerB,
-
-                answer_c:
-                    answerC,
-
-                answer_d:
-                    answerD,
-
-                correct_answer:
-                    correctAnswer,
-
-                time_seconds:
-                    QUIZ_QUESTION_TIME_SECONDS
-
-            }
+        throw new Error(
+            "SELECT ONE CORRECT ANSWER."
         );
 
     }
 
-    closeQuizQuestionEditor();
 
-    renderQuizQuestions();
+    return {
 
-    setQuizBuilderMessage(
-        "QUESTION SAVED IN QUIZ DRAFT.",
-        "success"
-    );
+        question,
+
+        answer_a:
+            answerA,
+
+        answer_b:
+            answerB,
+
+        answer_c:
+            answerC,
+
+        answer_d:
+            answerD,
+
+        correct_answer:
+            correctAnswer,
+
+        read_time_seconds:
+            QUIZ_READ_TIME_SECONDS,
+
+        answer_time_seconds:
+            answerTime,
+
+        max_score:
+            QUIZ_MAX_SCORE
+
+    };
 
 }
 
 
 /* =====================================================
-   DELETE QUESTION
+   SAVE QUESTION
+===================================================== */
+
+function saveQuizQuestion() {
+
+    try {
+
+        const questionData =
+            getQuestionEditorData();
+
+
+        const editingId =
+            cleanText(
+                quizQuestionEditingId?.value
+            );
+
+
+        if (editingId) {
+
+            const index =
+                quizDraftQuestions.findIndex(
+                    item =>
+                        String(
+                            item.local_id
+                        ) ===
+                        editingId
+                );
+
+
+            if (
+                index === -1
+            ) {
+
+                throw new Error(
+                    "QUESTION COULD NOT BE FOUND."
+                );
+
+            }
+
+
+            quizDraftQuestions[index] = {
+
+                ...quizDraftQuestions[index],
+
+                ...questionData
+
+            };
+
+        }
+        else {
+
+            quizQuestionCounter++;
+
+
+            quizDraftQuestions.push(
+                {
+
+                    local_id:
+                        createLocalId(
+                            "question"
+                        ),
+
+                    sort_order:
+                        quizQuestionCounter,
+
+                    ...questionData
+
+                }
+            );
+
+        }
+
+
+        quizDraftQuestions =
+            quizDraftQuestions.map(
+                (item, index) => ({
+
+                    ...item,
+
+                    sort_order:
+                        index + 1
+
+                })
+            );
+
+
+        closeQuizQuestionEditor();
+
+
+        renderQuizQuestions();
+
+
+        setQuizBuilderMessage(
+            `QUESTION SAVED — ${QUIZ_READ_TIME_SECONDS} SEC READ + ${questionData.answer_time_seconds} SEC ANSWER TIME.`,
+            "success"
+        );
+
+    }
+    catch (error) {
+
+        setQuizBuilderMessage(
+            error?.message ||
+            "COULD NOT SAVE QUESTION.",
+            "error"
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   DELETE CURRENT QUESTION
 ===================================================== */
 
 function deleteCurrentQuizQuestion() {
@@ -4549,9 +5038,11 @@ function deleteCurrentQuizQuestion() {
             quizQuestionEditingId?.value
         );
 
+
     if (!editingId) {
         return;
     }
+
 
     const question =
         quizDraftQuestions.find(
@@ -4562,18 +5053,22 @@ function deleteCurrentQuizQuestion() {
                 editingId
         );
 
+
     if (!question) {
         return;
     }
+
 
     const confirmed =
         window.confirm(
             "Delete this question?"
         );
 
+
     if (!confirmed) {
         return;
     }
+
 
     quizDraftQuestions =
         quizDraftQuestions.filter(
@@ -4584,18 +5079,25 @@ function deleteCurrentQuizQuestion() {
                 editingId
         );
 
+
     quizDraftQuestions =
         quizDraftQuestions.map(
             (item, index) => ({
+
                 ...item,
+
                 sort_order:
                     index + 1
+
             })
         );
 
+
     closeQuizQuestionEditor();
 
+
     renderQuizQuestions();
+
 
     setQuizBuilderMessage(
         "QUESTION DELETED.",
@@ -4606,7 +5108,63 @@ function deleteCurrentQuizQuestion() {
 
 
 /* =====================================================
-   QUIZ QUESTION LIST
+   DELETE QUESTION FROM LIST
+===================================================== */
+
+function deleteQuizQuestionFromList(
+    question
+) {
+
+    if (!question) {
+        return;
+    }
+
+
+    const confirmed =
+        window.confirm(
+            "Delete this question?"
+        );
+
+
+    if (!confirmed) {
+        return;
+    }
+
+
+    quizDraftQuestions =
+        quizDraftQuestions.filter(
+            item =>
+                item.local_id !==
+                question.local_id
+        );
+
+
+    quizDraftQuestions =
+        quizDraftQuestions.map(
+            (item, index) => ({
+
+                ...item,
+
+                sort_order:
+                    index + 1
+
+            })
+        );
+
+
+    renderQuizQuestions();
+
+
+    setQuizBuilderMessage(
+        "QUESTION DELETED.",
+        "success"
+    );
+
+}
+
+
+/* =====================================================
+   RENDER QUESTIONS
 ===================================================== */
 
 function renderQuizQuestions() {
@@ -4615,9 +5173,6 @@ function renderQuizQuestions() {
         return;
     }
 
-    /*
-        Keep empty state element.
-    */
 
     Array.from(
         quizQuestionList.children
@@ -4636,12 +5191,14 @@ function renderQuizQuestions() {
         }
     );
 
+
     if (quizQuestionCount) {
 
         quizQuestionCount.textContent =
             `${quizDraftQuestions.length} ${quizDraftQuestions.length === 1 ? "QUESTION" : "QUESTIONS"}`;
 
     }
+
 
     if (quizQuestionsEmpty) {
 
@@ -4651,11 +5208,11 @@ function renderQuizQuestions() {
 
     }
 
-    if (
-        !quizQuestionListItemTemplate
-    ) {
+
+    if (!quizQuestionListItemTemplate) {
         return;
     }
+
 
     quizDraftQuestions.forEach(
         (question, index) => {
@@ -4667,30 +5224,36 @@ function renderQuizQuestions() {
                         true
                     );
 
-            const card =
-                fragment.querySelector(
-                    ".saved-quiz-card"
-                );
 
             const title =
                 fragment.querySelector(
                     "[data-question-title]"
                 );
 
+
             const meta =
                 fragment.querySelector(
                     "[data-question-meta]"
                 );
 
-            const edit =
+
+            const editButton =
                 fragment.querySelector(
                     "[data-question-edit]"
                 );
 
-            const remove =
+
+            const deleteButton =
                 fragment.querySelector(
                     "[data-question-delete]"
                 );
+
+
+            const answerTime =
+                normalizeQuizAnswerTime(
+                    question.answer_time_seconds
+                );
+
 
             if (title) {
 
@@ -4699,16 +5262,18 @@ function renderQuizQuestions() {
 
             }
 
+
             if (meta) {
 
                 meta.textContent =
-                    `CORRECT: ${question.correct_answer} · ${QUIZ_QUESTION_TIME_SECONDS} SECONDS`;
+                    `${QUIZ_READ_TIME_SECONDS} SEC READ · ${answerTime} SEC ANSWER · CORRECT ${question.correct_answer} · MAX ${QUIZ_MAX_SCORE} PTS`;
 
             }
 
-            if (edit) {
 
-                edit.addEventListener(
+            if (editButton) {
+
+                editButton.addEventListener(
                     "click",
                     () => {
 
@@ -4721,34 +5286,22 @@ function renderQuizQuestions() {
 
             }
 
-            if (remove) {
 
-                remove.addEventListener(
+            if (deleteButton) {
+
+                deleteButton.addEventListener(
                     "click",
                     () => {
 
-                        const confirmed =
-                            window.confirm(
-                                "Delete this question?"
-                            );
-
-                        if (!confirmed) {
-                            return;
-                        }
-
-                        quizDraftQuestions =
-                            quizDraftQuestions.filter(
-                                item =>
-                                    item.local_id !==
-                                    question.local_id
-                            );
-
-                        renderQuizQuestions();
+                        deleteQuizQuestionFromList(
+                            question
+                        );
 
                     }
                 );
 
             }
+
 
             quizQuestionList.appendChild(
                 fragment
@@ -4761,33 +5314,18 @@ function renderQuizQuestions() {
 
 
 /* =====================================================
-   RESET QUIZ BUILDER
+   CLEAR QUIZ BUILDER
 ===================================================== */
 
-function resetQuizBuilder() {
+function clearQuizBuilder() {
 
-    if (
-        quizDraftQuestions.length >
-        0 ||
-        cleanText(
-            quizTitle?.value
-        )
-    ) {
+    quizDraftQuestions =
+        [];
 
-        const confirmed =
-            window.confirm(
-                "Start a new quiz? Unsaved changes will be cleared."
-            );
 
-        if (!confirmed) {
-            return;
-        }
+    quizQuestionCounter =
+        0;
 
-    }
-
-    quizDraftQuestions = [];
-
-    quizQuestionCounter = 0;
 
     if (quizEditingId) {
 
@@ -4796,12 +5334,14 @@ function resetQuizBuilder() {
 
     }
 
+
     if (quizTitle) {
 
         quizTitle.value =
             "";
 
     }
+
 
     if (quizDescription) {
 
@@ -4810,12 +5350,6 @@ function resetQuizBuilder() {
 
     }
 
-    if (quizDefaultTime) {
-
-        quizDefaultTime.value =
-            "5";
-
-    }
 
     if (quizBuilderTitle) {
 
@@ -4824,12 +5358,14 @@ function resetQuizBuilder() {
 
     }
 
+
     if (saveQuizButton) {
 
         saveQuizButton.textContent =
             "SAVE QUIZ";
 
     }
+
 
     if (quizDuplicateCurrentButton) {
 
@@ -4838,9 +5374,12 @@ function resetQuizBuilder() {
 
     }
 
+
     closeQuizQuestionEditor();
 
+
     renderQuizQuestions();
+
 
     setQuizBuilderMessage(
         ""
@@ -4850,7 +5389,44 @@ function resetQuizBuilder() {
 
 
 /* =====================================================
-   QUIZ DRAFT VALIDATION
+   RESET QUIZ BUILDER
+===================================================== */
+
+function resetQuizBuilder() {
+
+    const hasDraft =
+        quizDraftQuestions.length >
+        0 ||
+        !!cleanText(
+            quizTitle?.value
+        ) ||
+        !!cleanText(
+            quizDescription?.value
+        );
+
+
+    if (hasDraft) {
+
+        const confirmed =
+            window.confirm(
+                "Start a new quiz? Unsaved changes will be cleared."
+            );
+
+
+        if (!confirmed) {
+            return;
+        }
+
+    }
+
+
+    clearQuizBuilder();
+
+}
+
+
+/* =====================================================
+   QUIZ DRAFT PAYLOAD
 ===================================================== */
 
 function getQuizDraftPayload() {
@@ -4860,10 +5436,12 @@ function getQuizDraftPayload() {
             quizTitle?.value
         );
 
+
     const description =
         cleanText(
             quizDescription?.value
         );
+
 
     if (!title) {
 
@@ -4872,6 +5450,7 @@ function getQuizDraftPayload() {
         );
 
     }
+
 
     if (
         quizDraftQuestions.length ===
@@ -4884,52 +5463,218 @@ function getQuizDraftPayload() {
 
     }
 
+
+    const questions =
+        quizDraftQuestions.map(
+            (question, index) => ({
+
+                question:
+                    cleanText(
+                        question.question
+                    ),
+
+                answer_a:
+                    cleanText(
+                        question.answer_a
+                    ),
+
+                answer_b:
+                    cleanText(
+                        question.answer_b
+                    ),
+
+                answer_c:
+                    cleanText(
+                        question.answer_c
+                    ),
+
+                answer_d:
+                    cleanText(
+                        question.answer_d
+                    ),
+
+                correct_answer:
+                    cleanText(
+                        question.correct_answer
+                    ).toUpperCase(),
+
+                sort_order:
+                    index + 1,
+
+                read_time_seconds:
+                    QUIZ_READ_TIME_SECONDS,
+
+                answer_time_seconds:
+                    normalizeQuizAnswerTime(
+                        question.answer_time_seconds
+                    ),
+
+                max_score:
+                    QUIZ_MAX_SCORE
+
+            })
+        );
+
+
     return {
 
         id:
             cleanText(
                 quizEditingId?.value
-            ) || null,
+            ) ||
+            null,
 
         title,
 
         description,
 
-        question_time_seconds:
-            QUIZ_QUESTION_TIME_SECONDS,
-
-        questions:
-            quizDraftQuestions.map(
-                (question, index) => ({
-
-                    question:
-                        question.question,
-
-                    answer_a:
-                        question.answer_a,
-
-                    answer_b:
-                        question.answer_b,
-
-                    answer_c:
-                        question.answer_c,
-
-                    answer_d:
-                        question.answer_d,
-
-                    correct_answer:
-                        question.correct_answer,
-
-                    time_seconds:
-                        QUIZ_QUESTION_TIME_SECONDS,
-
-                    sort_order:
-                        index + 1
-
-                })
-            )
+        questions
 
     };
+
+}
+
+
+/* =====================================================
+   GENERIC QUIZ ADMIN REQUEST
+   READY FOR FUTURE BACKEND
+===================================================== */
+
+async function quizAdminRequest(
+    method,
+    body = null
+) {
+
+    if (!ADMIN_QUIZ_ENDPOINT) {
+
+        throw new Error(
+            "QUIZ BACKEND IS NOT CONNECTED YET."
+        );
+
+    }
+
+
+    const token =
+        getSessionToken();
+
+
+    if (!token) {
+
+        throw new Error(
+            "LOGIN REQUIRED."
+        );
+
+    }
+
+
+    if (
+        sessionIsExpired()
+    ) {
+
+        clearLocalSession();
+
+        throw new Error(
+            "YOUR SESSION HAS EXPIRED. LOG IN AGAIN."
+        );
+
+    }
+
+
+    const options = {
+
+        method,
+
+        headers: {
+
+            "Authorization":
+                `Bearer ${token}`
+
+        },
+
+        cache:
+            "no-store"
+
+    };
+
+
+    if (
+        body !== null
+    ) {
+
+        options.headers[
+            "Content-Type"
+        ] =
+            "application/json";
+
+        options.body =
+            JSON.stringify(
+                body
+            );
+
+    }
+
+
+    const response =
+        await fetch(
+            ADMIN_QUIZ_ENDPOINT,
+            options
+        );
+
+
+    let result = null;
+
+
+    try {
+
+        result =
+            await response.json();
+
+    }
+    catch {
+
+        result = null;
+
+    }
+
+
+    if (
+        response.status === 401
+    ) {
+
+        clearLocalSession();
+
+        throw new Error(
+            "YOUR SESSION HAS EXPIRED. LOG IN AGAIN."
+        );
+
+    }
+
+
+    if (
+        response.status === 403
+    ) {
+
+        throw new Error(
+            "ADMIN ACCESS DENIED."
+        );
+
+    }
+
+
+    if (
+        !response.ok ||
+        !result?.success
+    ) {
+
+        throw new Error(
+            result?.error ||
+            "QUIZ REQUEST FAILED."
+        );
+
+    }
+
+
+    return result;
 
 }
 
@@ -4942,38 +5687,95 @@ async function saveQuiz(event) {
 
     event?.preventDefault();
 
+
     try {
 
         const payload =
             getQuizDraftPayload();
 
+
         /*
-            Database backend is intentionally not called
-            until we create admin-quiz Edge Function.
+            Until the Supabase quiz backend exists,
+            do not fake a permanent save.
+
+            We still validate the complete quiz,
+            including per-question time.
         */
 
         if (!ADMIN_QUIZ_ENDPOINT) {
 
             console.log(
-                "QUIZ READY FOR BACKEND",
+                "GREMBLE QUIZ READY FOR BACKEND:",
                 payload
             );
 
+
             setQuizBuilderMessage(
-                "QUIZ IS READY. NEXT WE NEED TO CREATE THE SUPABASE QUIZ DATABASE + ADMIN-QUIZ BACKEND BEFORE IT CAN BE PERMANENTLY SAVED.",
+                `QUIZ READY — ${payload.questions.length} QUESTION${payload.questions.length === 1 ? "" : "S"}. NEXT STEP IS CONNECTING THE SUPABASE QUIZ BACKEND.`,
                 "success"
             );
+
 
             return;
 
         }
 
-        /*
-            Future backend save will go here.
-        */
+
+        if (saveQuizButton) {
+
+            saveQuizButton.disabled =
+                true;
+
+            saveQuizButton.textContent =
+                "SAVING...";
+
+        }
+
+
+        const isEditing =
+            !!payload.id;
+
+
+        const result =
+            await quizAdminRequest(
+                isEditing
+                    ? "PUT"
+                    : "POST",
+                payload
+            );
+
+
+        setQuizBuilderMessage(
+            isEditing
+                ? "QUIZ UPDATED."
+                : "QUIZ SAVED.",
+            "success"
+        );
+
+
+        await loadSavedQuizzes(
+            true
+        );
+
+
+        if (
+            result.quiz
+        ) {
+
+            loadQuizIntoBuilder(
+                result.quiz
+            );
+
+        }
 
     }
     catch (error) {
+
+        console.error(
+            "Quiz save error:",
+            error
+        );
+
 
         setQuizBuilderMessage(
             error?.message ||
@@ -4982,12 +5784,82 @@ async function saveQuiz(event) {
         );
 
     }
+    finally {
+
+        if (saveQuizButton) {
+
+            saveQuizButton.disabled =
+                false;
+
+
+            saveQuizButton.textContent =
+                cleanText(
+                    quizEditingId?.value
+                )
+                    ? "SAVE CHANGES"
+                    : "SAVE QUIZ";
+
+        }
+
+    }
 
 }
 
 
 /* =====================================================
-   EDIT QUIZ
+   LOAD SAVED QUIZZES
+===================================================== */
+
+async function loadSavedQuizzes(
+    force = false
+) {
+
+    /*
+        Backend not created yet.
+    */
+
+    if (!ADMIN_QUIZ_ENDPOINT) {
+
+        renderSavedQuizzes();
+
+        return;
+
+    }
+
+
+    try {
+
+        const result =
+            await quizAdminRequest(
+                "GET"
+            );
+
+
+        savedQuizzes =
+            Array.isArray(
+                result.quizzes
+            )
+                ? result.quizzes
+                : [];
+
+
+        renderSavedQuizzes();
+
+    }
+    catch (error) {
+
+        console.error(
+            "Load saved quizzes error:",
+            error
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   LOAD QUIZ INTO BUILDER
 ===================================================== */
 
 function loadQuizIntoBuilder(quiz) {
@@ -4996,14 +5868,17 @@ function loadQuizIntoBuilder(quiz) {
         return;
     }
 
+
     if (quizEditingId) {
 
         quizEditingId.value =
             String(
-                quiz.id
+                quiz.id ??
+                ""
             );
 
     }
+
 
     if (quizTitle) {
 
@@ -5014,6 +5889,7 @@ function loadQuizIntoBuilder(quiz) {
 
     }
 
+
     if (quizDescription) {
 
         quizDescription.value =
@@ -5022,6 +5898,7 @@ function loadQuizIntoBuilder(quiz) {
             );
 
     }
+
 
     quizDraftQuestions =
         Array.isArray(
@@ -5034,19 +5911,34 @@ function loadQuizIntoBuilder(quiz) {
 
                     local_id:
                         question.local_id ||
+                        question.id ||
                         createLocalId(
                             "question"
                         ),
 
                     sort_order:
-                        index + 1
+                        index + 1,
+
+                    read_time_seconds:
+                        QUIZ_READ_TIME_SECONDS,
+
+                    answer_time_seconds:
+                        normalizeQuizAnswerTime(
+                            question.answer_time_seconds ??
+                            question.time_seconds
+                        ),
+
+                    max_score:
+                        QUIZ_MAX_SCORE
 
                 })
             )
             : [];
 
+
     quizQuestionCounter =
         quizDraftQuestions.length;
+
 
     if (quizBuilderTitle) {
 
@@ -5055,12 +5947,14 @@ function loadQuizIntoBuilder(quiz) {
 
     }
 
+
     if (saveQuizButton) {
 
         saveQuizButton.textContent =
             "SAVE CHANGES";
 
     }
+
 
     if (quizDuplicateCurrentButton) {
 
@@ -5069,7 +5963,16 @@ function loadQuizIntoBuilder(quiz) {
 
     }
 
+
+    closeQuizQuestionEditor();
+
+
     renderQuizQuestions();
+
+
+    setQuizBuilderMessage(
+        `EDITING "${cleanText(quiz.title) || "QUIZ"}".`
+    );
 
 }
 
@@ -5080,11 +5983,23 @@ function loadQuizIntoBuilder(quiz) {
 
 function duplicateCurrentQuiz() {
 
-    if (!cleanText(
-        quizTitle?.value
-    )) {
+    const currentTitle =
+        cleanText(
+            quizTitle?.value
+        );
+
+
+    if (!currentTitle) {
+
+        setQuizBuilderMessage(
+            "ENTER OR LOAD A QUIZ FIRST.",
+            "error"
+        );
+
         return;
+
     }
+
 
     if (quizEditingId) {
 
@@ -5093,12 +6008,43 @@ function duplicateCurrentQuiz() {
 
     }
 
+
     if (quizTitle) {
 
         quizTitle.value =
-            `${cleanText(quizTitle.value)} COPY`;
+            `${currentTitle} COPY`;
 
     }
+
+
+    quizDraftQuestions =
+        quizDraftQuestions.map(
+            (question, index) => ({
+
+                ...question,
+
+                local_id:
+                    createLocalId(
+                        "question"
+                    ),
+
+                sort_order:
+                    index + 1,
+
+                read_time_seconds:
+                    QUIZ_READ_TIME_SECONDS,
+
+                answer_time_seconds:
+                    normalizeQuizAnswerTime(
+                        question.answer_time_seconds
+                    ),
+
+                max_score:
+                    QUIZ_MAX_SCORE
+
+            })
+        );
+
 
     if (quizBuilderTitle) {
 
@@ -5107,6 +6053,7 @@ function duplicateCurrentQuiz() {
 
     }
 
+
     if (saveQuizButton) {
 
         saveQuizButton.textContent =
@@ -5114,12 +6061,17 @@ function duplicateCurrentQuiz() {
 
     }
 
+
     if (quizDuplicateCurrentButton) {
 
         quizDuplicateCurrentButton.hidden =
             true;
 
     }
+
+
+    renderQuizQuestions();
+
 
     setQuizBuilderMessage(
         "QUIZ DUPLICATED AS A NEW DRAFT.",
@@ -5130,7 +6082,76 @@ function duplicateCurrentQuiz() {
 
 
 /* =====================================================
-   SAVED QUIZZES RENDER
+   DELETE SAVED QUIZ
+===================================================== */
+
+async function deleteSavedQuiz(quiz) {
+
+    if (!quiz) {
+        return;
+    }
+
+
+    const confirmed =
+        window.confirm(
+            `Delete "${cleanText(quiz.title) || "this quiz"}"?`
+        );
+
+
+    if (!confirmed) {
+        return;
+    }
+
+
+    if (!ADMIN_QUIZ_ENDPOINT) {
+
+        setQuizBuilderMessage(
+            "QUIZ DELETE WILL WORK AFTER THE SUPABASE QUIZ BACKEND IS CONNECTED.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    try {
+
+        await quizAdminRequest(
+            "DELETE",
+            {
+                id:
+                    quiz.id
+            }
+        );
+
+
+        await loadSavedQuizzes(
+            true
+        );
+
+    }
+    catch (error) {
+
+        console.error(
+            "Delete quiz error:",
+            error
+        );
+
+
+        setQuizBuilderMessage(
+            error?.message ||
+            "COULD NOT DELETE QUIZ.",
+            "error"
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   RENDER SAVED QUIZZES
 ===================================================== */
 
 function renderSavedQuizzes() {
@@ -5138,6 +6159,7 @@ function renderSavedQuizzes() {
     if (!savedQuizzesList) {
         return;
     }
+
 
     Array.from(
         savedQuizzesList.children
@@ -5156,6 +6178,7 @@ function renderSavedQuizzes() {
         }
     );
 
+
     if (savedQuizzesEmpty) {
 
         savedQuizzesEmpty.hidden =
@@ -5164,9 +6187,11 @@ function renderSavedQuizzes() {
 
     }
 
+
     if (!savedQuizCardTemplate) {
         return;
     }
+
 
     savedQuizzes.forEach(
         quiz => {
@@ -5178,61 +6203,73 @@ function renderSavedQuizzes() {
                         true
                     );
 
+
             const title =
                 fragment.querySelector(
                     "[data-saved-quiz-title]"
                 );
+
 
             const meta =
                 fragment.querySelector(
                     "[data-saved-quiz-meta]"
                 );
 
-            const edit =
+
+            const editButton =
                 fragment.querySelector(
                     "[data-saved-quiz-edit]"
                 );
 
-            const duplicate =
+
+            const duplicateButton =
                 fragment.querySelector(
                     "[data-saved-quiz-duplicate]"
                 );
 
-            const live =
+
+            const liveButton =
                 fragment.querySelector(
                     "[data-saved-quiz-live]"
                 );
 
-            const remove =
+
+            const deleteButton =
                 fragment.querySelector(
                     "[data-saved-quiz-delete]"
                 );
 
+
+            const questions =
+                Array.isArray(
+                    quiz.questions
+                )
+                    ? quiz.questions
+                    : [];
+
+
             if (title) {
 
                 title.textContent =
-                    quiz.title ||
+                    cleanText(
+                        quiz.title
+                    ) ||
                     "UNTITLED QUIZ";
 
             }
 
+
             if (meta) {
 
-                const count =
-                    Array.isArray(
-                        quiz.questions
-                    )
-                        ? quiz.questions.length
-                        : 0;
-
                 meta.textContent =
-                    `${count} ${count === 1 ? "QUESTION" : "QUESTIONS"} · 5 SECONDS`;
+                    `${questions.length} ${questions.length === 1 ? "QUESTION" : "QUESTIONS"} · ${QUIZ_READ_TIME_SECONDS} SEC READ · CUSTOM ANSWER TIME`;
 
             }
 
-            if (edit) {
 
-                edit.addEventListener(
+            if (editButton) {
+
+                editButton.addEventListener(
                     "click",
                     () => {
 
@@ -5249,9 +6286,10 @@ function renderSavedQuizzes() {
 
             }
 
-            if (duplicate) {
 
-                duplicate.addEventListener(
+            if (duplicateButton) {
+
+                duplicateButton.addEventListener(
                     "click",
                     () => {
 
@@ -5261,6 +6299,7 @@ function renderSavedQuizzes() {
 
                         duplicateCurrentQuiz();
 
+
                         clickQuizTab(
                             "builder"
                         );
@@ -5270,9 +6309,10 @@ function renderSavedQuizzes() {
 
             }
 
-            if (live) {
 
-                live.addEventListener(
+            if (liveButton) {
+
+                liveButton.addEventListener(
                     "click",
                     () => {
 
@@ -5285,20 +6325,22 @@ function renderSavedQuizzes() {
 
             }
 
-            if (remove) {
 
-                remove.addEventListener(
+            if (deleteButton) {
+
+                deleteButton.addEventListener(
                     "click",
                     () => {
 
-                        setQuizBuilderMessage(
-                            "DELETE WILL BE CONNECTED AFTER ADMIN-QUIZ BACKEND IS CREATED."
+                        deleteSavedQuiz(
+                            quiz
                         );
 
                     }
                 );
 
             }
+
 
             savedQuizzesList.appendChild(
                 fragment
@@ -5321,6 +6363,7 @@ function clickQuizTab(name) {
             `[data-quiz-subview="${name}"]`
         );
 
+
     if (button) {
 
         button.click();
@@ -5339,26 +6382,35 @@ function selectQuizForLive(quiz) {
     selectedLiveQuiz =
         quiz;
 
+
     if (liveQuizSelectedTitle) {
 
         liveQuizSelectedTitle.textContent =
-            quiz?.title ||
+            cleanText(
+                quiz?.title
+            ) ||
             "NO QUIZ SELECTED";
 
     }
+
+
+    const questions =
+        Array.isArray(
+            quiz?.questions
+        )
+            ? quiz.questions
+            : [];
+
 
     if (liveQuizTotalQuestions) {
 
         liveQuizTotalQuestions.textContent =
             String(
-                Array.isArray(
-                    quiz?.questions
-                )
-                    ? quiz.questions.length
-                    : 0
+                questions.length
             );
 
     }
+
 
     if (openQuizLobbyButton) {
 
@@ -5367,11 +6419,13 @@ function selectQuizForLive(quiz) {
 
     }
 
+
     setLiveQuizMessage(
         quiz
-            ? "QUIZ SELECTED. YOU CAN OPEN THE LOBBY WHEN THE LIVE BACKEND IS CONNECTED."
+            ? `SELECTED: ${cleanText(quiz.title) || "QUIZ"}`
             : ""
     );
+
 
     clickQuizTab(
         "control"
@@ -5381,17 +6435,21 @@ function selectQuizForLive(quiz) {
 
 
 /* =====================================================
-   LIVE STATUS
+   LIVE QUIZ STATUS
 ===================================================== */
 
 function updateLiveQuizStatusUI() {
 
     const status =
-        liveQuizSession?.status ||
+        cleanText(
+            liveQuizSession?.status
+        ).toLowerCase() ||
         "inactive";
+
 
     const players =
         liveQuizPlayers.length;
+
 
     if (liveQuizStatus) {
 
@@ -5399,6 +6457,7 @@ function updateLiveQuizStatusUI() {
             status.toUpperCase();
 
     }
+
 
     if (liveQuizPlayerCount) {
 
@@ -5409,6 +6468,7 @@ function updateLiveQuizStatusUI() {
 
     }
 
+
     if (liveLobbyPlayerCountBadge) {
 
         liveLobbyPlayerCountBadge.textContent =
@@ -5416,10 +6476,12 @@ function updateLiveQuizStatusUI() {
 
     }
 
+
     if (liveQuizStatusBadge) {
 
         liveQuizStatusBadge.className =
             "live-status-badge";
+
 
         if (
             status === "lobby" ||
@@ -5432,12 +6494,14 @@ function updateLiveQuizStatusUI() {
 
         }
 
+
         liveQuizStatusBadge.textContent =
             status === "inactive"
                 ? "INACTIVE"
                 : status.toUpperCase();
 
     }
+
 
     if (sidebarQuizLiveDot) {
 
@@ -5453,7 +6517,7 @@ function updateLiveQuizStatusUI() {
 
 
 /* =====================================================
-   LOBBY PLAYER LIST
+   LIVE PLAYER LIST
 ===================================================== */
 
 function renderLiveQuizPlayers() {
@@ -5461,6 +6525,7 @@ function renderLiveQuizPlayers() {
     if (!liveQuizPlayersList) {
         return;
     }
+
 
     Array.from(
         liveQuizPlayersList.children
@@ -5479,6 +6544,7 @@ function renderLiveQuizPlayers() {
         }
     );
 
+
     if (liveQuizPlayersEmpty) {
 
         liveQuizPlayersEmpty.hidden =
@@ -5487,6 +6553,7 @@ function renderLiveQuizPlayers() {
 
     }
 
+
     if (!liveQuizPlayerTemplate) {
 
         updateLiveQuizStatusUI();
@@ -5494,6 +6561,7 @@ function renderLiveQuizPlayers() {
         return;
 
     }
+
 
     liveQuizPlayers.forEach(
         player => {
@@ -5505,15 +6573,18 @@ function renderLiveQuizPlayers() {
                         true
                     );
 
+
             const name =
                 fragment.querySelector(
                     "[data-player-name]"
                 );
 
+
             const username =
                 fragment.querySelector(
                     "[data-player-username]"
                 );
+
 
             if (name) {
 
@@ -5525,12 +6596,14 @@ function renderLiveQuizPlayers() {
 
             }
 
+
             if (username) {
 
                 const raw =
                     cleanText(
                         player.telegram_username
                     );
+
 
                 username.textContent =
                     raw
@@ -5543,6 +6616,7 @@ function renderLiveQuizPlayers() {
 
             }
 
+
             liveQuizPlayersList.appendChild(
                 fragment
             );
@@ -5550,26 +6624,164 @@ function renderLiveQuizPlayers() {
         }
     );
 
+
     updateLiveQuizStatusUI();
 
 }
 
 
 /* =====================================================
-   LIVE CONTROLS PLACEHOLDERS
+   LIVE BACKEND PLACEHOLDER
 ===================================================== */
 
 function quizLiveBackendNotReady() {
 
     setLiveQuizMessage(
-        "LIVE QUIZ BACKEND IS NOT CONNECTED YET. NEXT WE WILL CREATE THE SUPABASE QUIZ TABLES AND SECURE ADMIN QUIZ EDGE FUNCTIONS.",
+        "LIVE QUIZ BACKEND IS NOT CONNECTED YET. NEXT WE CREATE THE SUPABASE QUIZ TABLES + SECURE LIVE ENDPOINTS.",
         "error"
     );
 
 }
 
 
-function openQuizLobby() {
+/* =====================================================
+   LIVE QUIZ REQUEST
+===================================================== */
+
+async function liveQuizRequest(
+    action,
+    body = {}
+) {
+
+    if (!ADMIN_QUIZ_LIVE_ENDPOINT) {
+
+        throw new Error(
+            "LIVE QUIZ BACKEND IS NOT CONNECTED YET."
+        );
+
+    }
+
+
+    const token =
+        getSessionToken();
+
+
+    if (!token) {
+
+        throw new Error(
+            "LOGIN REQUIRED."
+        );
+
+    }
+
+
+    if (
+        sessionIsExpired()
+    ) {
+
+        clearLocalSession();
+
+        throw new Error(
+            "YOUR SESSION HAS EXPIRED. LOG IN AGAIN."
+        );
+
+    }
+
+
+    const response =
+        await fetch(
+            ADMIN_QUIZ_LIVE_ENDPOINT,
+            {
+                method:
+                    "POST",
+
+                headers: {
+
+                    "Authorization":
+                        `Bearer ${token}`,
+
+                    "Content-Type":
+                        "application/json"
+
+                },
+
+                body:
+                    JSON.stringify(
+                        {
+                            action,
+                            ...body
+                        }
+                    ),
+
+                cache:
+                    "no-store"
+            }
+        );
+
+
+    let result = null;
+
+
+    try {
+
+        result =
+            await response.json();
+
+    }
+    catch {
+
+        result = null;
+
+    }
+
+
+    if (
+        response.status === 401
+    ) {
+
+        clearLocalSession();
+
+        throw new Error(
+            "YOUR SESSION HAS EXPIRED. LOG IN AGAIN."
+        );
+
+    }
+
+
+    if (
+        response.status === 403
+    ) {
+
+        throw new Error(
+            "ADMIN ACCESS DENIED."
+        );
+
+    }
+
+
+    if (
+        !response.ok ||
+        !result?.success
+    ) {
+
+        throw new Error(
+            result?.error ||
+            "LIVE QUIZ REQUEST FAILED."
+        );
+
+    }
+
+
+    return result;
+
+}
+
+
+/* =====================================================
+   OPEN QUIZ LOBBY
+===================================================== */
+
+async function openQuizLobby() {
 
     if (!selectedLiveQuiz) {
 
@@ -5582,18 +6794,6 @@ function openQuizLobby() {
 
     }
 
-    if (!ADMIN_QUIZ_LIVE_ENDPOINT) {
-
-        quizLiveBackendNotReady();
-
-        return;
-
-    }
-
-}
-
-
-function startLiveQuiz() {
 
     if (!ADMIN_QUIZ_LIVE_ENDPOINT) {
 
@@ -5603,42 +6803,44 @@ function startLiveQuiz() {
 
     }
 
-}
+
+    try {
+
+        const result =
+            await liveQuizRequest(
+                "open_lobby",
+                {
+                    quiz_id:
+                        selectedLiveQuiz.id
+                }
+            );
 
 
-function nextLiveQuizQuestion() {
+        liveQuizSession =
+            result.session ||
+            null;
 
-    if (!ADMIN_QUIZ_LIVE_ENDPOINT) {
 
-        quizLiveBackendNotReady();
+        liveQuizPlayers =
+            Array.isArray(
+                result.players
+            )
+                ? result.players
+                : [];
 
-        return;
+
+        renderLiveQuizPlayers();
+
+        updateLiveQuizStatusUI();
 
     }
+    catch (error) {
 
-}
-
-
-function finishLiveQuiz() {
-
-    if (!ADMIN_QUIZ_LIVE_ENDPOINT) {
-
-        quizLiveBackendNotReady();
-
-        return;
-
-    }
-
-}
-
-
-function closeLiveQuizLobby() {
-
-    if (!ADMIN_QUIZ_LIVE_ENDPOINT) {
-
-        quizLiveBackendNotReady();
-
-        return;
+        setLiveQuizMessage(
+            error?.message ||
+            "COULD NOT OPEN LOBBY.",
+            "error"
+        );
 
     }
 
@@ -5646,7 +6848,483 @@ function closeLiveQuizLobby() {
 
 
 /* =====================================================
-   PAST QUIZZES
+   START LIVE QUIZ
+===================================================== */
+
+async function startLiveQuiz() {
+
+    if (!ADMIN_QUIZ_LIVE_ENDPOINT) {
+
+        quizLiveBackendNotReady();
+
+        return;
+
+    }
+
+
+    if (!liveQuizSession?.id) {
+
+        setLiveQuizMessage(
+            "OPEN THE LOBBY FIRST.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    try {
+
+        const result =
+            await liveQuizRequest(
+                "start_quiz",
+                {
+                    session_id:
+                        liveQuizSession.id
+                }
+            );
+
+
+        liveQuizSession =
+            result.session ||
+            liveQuizSession;
+
+
+        updateLiveQuizStatusUI();
+
+    }
+    catch (error) {
+
+        setLiveQuizMessage(
+            error?.message ||
+            "COULD NOT START QUIZ.",
+            "error"
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   NEXT QUESTION
+===================================================== */
+
+async function nextLiveQuizQuestion() {
+
+    if (!ADMIN_QUIZ_LIVE_ENDPOINT) {
+
+        quizLiveBackendNotReady();
+
+        return;
+
+    }
+
+
+    if (!liveQuizSession?.id) {
+
+        setLiveQuizMessage(
+            "NO ACTIVE QUIZ.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    try {
+
+        const result =
+            await liveQuizRequest(
+                "next_question",
+                {
+                    session_id:
+                        liveQuizSession.id
+                }
+            );
+
+
+        liveQuizSession =
+            result.session ||
+            liveQuizSession;
+
+
+        updateLiveQuizStatusUI();
+
+    }
+    catch (error) {
+
+        setLiveQuizMessage(
+            error?.message ||
+            "COULD NOT OPEN NEXT QUESTION.",
+            "error"
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   FINISH QUIZ
+===================================================== */
+
+async function finishLiveQuiz() {
+
+    if (!ADMIN_QUIZ_LIVE_ENDPOINT) {
+
+        quizLiveBackendNotReady();
+
+        return;
+
+    }
+
+
+    if (!liveQuizSession?.id) {
+
+        setLiveQuizMessage(
+            "NO ACTIVE QUIZ.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    const confirmed =
+        window.confirm(
+            "Finish this live quiz and show final results?"
+        );
+
+
+    if (!confirmed) {
+        return;
+    }
+
+
+    try {
+
+        const result =
+            await liveQuizRequest(
+                "finish_quiz",
+                {
+                    session_id:
+                        liveQuizSession.id
+                }
+            );
+
+
+        liveQuizSession =
+            result.session ||
+            liveQuizSession;
+
+
+        updateLiveQuizStatusUI();
+
+
+        await loadPastQuizzes();
+
+    }
+    catch (error) {
+
+        setLiveQuizMessage(
+            error?.message ||
+            "COULD NOT FINISH QUIZ.",
+            "error"
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   CLOSE LOBBY
+===================================================== */
+
+async function closeLiveQuizLobby() {
+
+    if (!ADMIN_QUIZ_LIVE_ENDPOINT) {
+
+        quizLiveBackendNotReady();
+
+        return;
+
+    }
+
+
+    if (!liveQuizSession?.id) {
+
+        setLiveQuizMessage(
+            "NO OPEN LOBBY.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    const confirmed =
+        window.confirm(
+            "Close this lobby?"
+        );
+
+
+    if (!confirmed) {
+        return;
+    }
+
+
+    try {
+
+        await liveQuizRequest(
+            "close_lobby",
+            {
+                session_id:
+                    liveQuizSession.id
+            }
+        );
+
+
+        liveQuizSession =
+            null;
+
+        liveQuizPlayers =
+            [];
+
+
+        renderLiveQuizPlayers();
+
+        updateLiveQuizStatusUI();
+
+    }
+    catch (error) {
+
+        setLiveQuizMessage(
+            error?.message ||
+            "COULD NOT CLOSE LOBBY.",
+            "error"
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   UPDATE LIVE QUESTION UI
+===================================================== */
+
+function renderCurrentLiveQuestion(
+    question = null,
+    stats = {}
+) {
+
+    if (!question) {
+
+        if (liveCurrentQuestionControl) {
+
+            liveCurrentQuestionControl.hidden =
+                true;
+
+        }
+
+        if (liveQuizCurrentQuestion) {
+
+            liveQuizCurrentQuestion.textContent =
+                "—";
+
+        }
+
+        return;
+
+    }
+
+
+    if (liveCurrentQuestionControl) {
+
+        liveCurrentQuestionControl.hidden =
+            false;
+
+    }
+
+
+    const currentNumber =
+        numberOrZero(
+            question.sort_order ??
+            question.question_number
+        );
+
+
+    if (liveQuizCurrentQuestion) {
+
+        liveQuizCurrentQuestion.textContent =
+            String(
+                currentNumber || "—"
+            );
+
+    }
+
+
+    if (currentQuizQuestionNumber) {
+
+        currentQuizQuestionNumber.textContent =
+            `QUESTION ${currentNumber || ""}`;
+
+    }
+
+
+    if (currentQuizQuestionText) {
+
+        currentQuizQuestionText.textContent =
+            cleanText(
+                question.question
+            ) ||
+            "—";
+
+    }
+
+
+    if (liveQuizAnsweredCount) {
+
+        liveQuizAnsweredCount.textContent =
+            String(
+                numberOrZero(
+                    stats.answered
+                )
+            );
+
+    }
+
+
+    if (liveQuizCorrectCount) {
+
+        liveQuizCorrectCount.textContent =
+            String(
+                numberOrZero(
+                    stats.correct
+                )
+            );
+
+    }
+
+
+    if (liveQuizWrongCount) {
+
+        liveQuizWrongCount.textContent =
+            String(
+                numberOrZero(
+                    stats.wrong
+                )
+            );
+
+    }
+
+
+    if (liveQuizNoAnswerCount) {
+
+        liveQuizNoAnswerCount.textContent =
+            String(
+                numberOrZero(
+                    stats.no_answer
+                )
+            );
+
+    }
+
+}
+
+
+/* =====================================================
+   PAST QUIZ REQUEST PLACEHOLDER
+===================================================== */
+
+async function loadPastQuizzes() {
+
+    /*
+        This will come from the quiz backend later.
+    */
+
+    if (!ADMIN_QUIZ_ENDPOINT) {
+
+        renderPastQuizzes();
+
+        return;
+
+    }
+
+
+    try {
+
+        const token =
+            getSessionToken();
+
+
+        if (!token) {
+            return;
+        }
+
+
+        const response =
+            await fetch(
+                `${ADMIN_QUIZ_ENDPOINT}?history=1`,
+                {
+                    method:
+                        "GET",
+
+                    headers: {
+
+                        "Authorization":
+                            `Bearer ${token}`
+
+                    },
+
+                    cache:
+                        "no-store"
+                }
+            );
+
+
+        const result =
+            await response.json();
+
+
+        if (
+            response.ok &&
+            result?.success
+        ) {
+
+            pastQuizSessions =
+                Array.isArray(
+                    result.sessions
+                )
+                    ? result.sessions
+                    : [];
+
+
+            renderPastQuizzes();
+
+        }
+
+    }
+    catch (error) {
+
+        console.error(
+            "Past quiz load error:",
+            error
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   RENDER PAST QUIZZES
 ===================================================== */
 
 function renderPastQuizzes() {
@@ -5654,6 +7332,7 @@ function renderPastQuizzes() {
     if (!pastQuizzesList) {
         return;
     }
+
 
     Array.from(
         pastQuizzesList.children
@@ -5672,6 +7351,7 @@ function renderPastQuizzes() {
         }
     );
 
+
     if (pastQuizzesEmpty) {
 
         pastQuizzesEmpty.hidden =
@@ -5680,9 +7360,11 @@ function renderPastQuizzes() {
 
     }
 
+
     if (!pastQuizCardTemplate) {
         return;
     }
+
 
     pastQuizSessions.forEach(
         session => {
@@ -5694,28 +7376,35 @@ function renderPastQuizzes() {
                         true
                     );
 
+
             const title =
                 fragment.querySelector(
                     "[data-past-quiz-title]"
                 );
+
 
             const meta =
                 fragment.querySelector(
                     "[data-past-quiz-meta]"
                 );
 
+
             const winner =
                 fragment.querySelector(
                     "[data-past-quiz-winner]"
                 );
 
+
             if (title) {
 
                 title.textContent =
-                    session.quiz_title ||
+                    cleanText(
+                        session.quiz_title
+                    ) ||
                     "QUIZ";
 
             }
+
 
             if (meta) {
 
@@ -5724,15 +7413,34 @@ function renderPastQuizzes() {
 
             }
 
+
             if (winner) {
 
-                winner.textContent =
+                const winnerUsername =
                     cleanText(
                         session.winner_username
-                    ) ||
-                    "—";
+                    );
+
+                const winnerName =
+                    cleanText(
+                        session.winner_name
+                    );
+
+
+                winner.textContent =
+                    winnerUsername
+                        ? (
+                            winnerUsername.startsWith("@")
+                                ? winnerUsername
+                                : `@${winnerUsername}`
+                        )
+                        : (
+                            winnerName ||
+                            "—"
+                        );
 
             }
+
 
             pastQuizzesList.appendChild(
                 fragment
@@ -5810,6 +7518,7 @@ if (openContestPanel) {
 
     openContestPanel.disabled =
         true;
+
 
     openContestPanel.addEventListener(
         "click",
@@ -6017,22 +7726,41 @@ if (quizDuplicateCurrentButton) {
 }
 
 
+/* =====================================================
+   SAVED QUIZ EVENTS
+===================================================== */
+
 if (createQuizFromSavedButton) {
 
     createQuizFromSavedButton.addEventListener(
         "click",
         () => {
 
-            if (
-                quizDraftQuestions.length ||
-                cleanText(
+            const hasDraft =
+                quizDraftQuestions.length >
+                0 ||
+                !!cleanText(
                     quizTitle?.value
-                )
-            ) {
+                );
 
-                resetQuizBuilder();
+
+            if (hasDraft) {
+
+                const confirmed =
+                    window.confirm(
+                        "Create a new quiz? Unsaved changes will be cleared."
+                    );
+
+
+                if (!confirmed) {
+                    return;
+                }
 
             }
+
+
+            clearQuizBuilder();
+
 
             clickQuizTab(
                 "builder"
@@ -6106,9 +7834,13 @@ document.addEventListener(
     "DOMContentLoaded",
     () => {
 
-        /* EXISTING */
+
+        /* =================================================
+           EXISTING SYSTEM
+        ================================================== */
 
         resetContestForm();
+
 
         if (contestSort) {
 
@@ -6117,39 +7849,79 @@ document.addEventListener(
 
         }
 
+
         membersCurrentPage =
             1;
 
 
-        /* QUIZ */
+        /* =================================================
+           QUIZ DEFAULT STATE
+        ================================================== */
 
-        quizDraftQuestions = [];
+        quizDraftQuestions =
+            [];
 
-        savedQuizzes = [];
 
-        pastQuizSessions = [];
+        quizQuestionCounter =
+            0;
 
-        liveQuizPlayers = [];
 
-        liveQuizSession = null;
+        savedQuizzes =
+            [];
 
-        selectedLiveQuiz = null;
+
+        pastQuizSessions =
+            [];
+
+
+        liveQuizPlayers =
+            [];
+
+
+        liveQuizSession =
+            null;
+
+
+        selectedLiveQuiz =
+            null;
+
+
+        if (quizQuestionAnswerTime) {
+
+            quizQuestionAnswerTime.value =
+                String(
+                    QUIZ_DEFAULT_ANSWER_TIME
+                );
+
+        }
+
+
+        closeQuizQuestionEditor();
+
 
         renderQuizQuestions();
 
+
         renderSavedQuizzes();
+
 
         renderLiveQuizPlayers();
 
+
         renderPastQuizzes();
+
+
+        renderCurrentLiveQuestion(
+            null
+        );
+
 
         updateLiveQuizStatusUI();
 
 
-        /*
-            Open lobby remains disabled until
-            a real saved quiz has been selected.
-        */
+        /* =================================================
+           LIVE BUTTON DEFAULT STATE
+        ================================================== */
 
         if (openQuizLobbyButton) {
 
@@ -6158,12 +7930,14 @@ document.addEventListener(
 
         }
 
+
         if (startQuizButton) {
 
             startQuizButton.disabled =
                 true;
 
         }
+
 
         if (nextQuizQuestionButton) {
 
@@ -6172,12 +7946,14 @@ document.addEventListener(
 
         }
 
+
         if (finishQuizButton) {
 
             finishQuizButton.disabled =
                 true;
 
         }
+
 
         if (closeQuizLobbyButton) {
 
@@ -6187,9 +7963,23 @@ document.addEventListener(
         }
 
 
-        /* LOAD SECURE ADMIN DATA */
+        /* =================================================
+           LOAD SECURE ADMIN DATA
+        ================================================== */
 
         loadAdminData();
+
+
+        /*
+            Safe to call now.
+
+            Because ADMIN_QUIZ_ENDPOINT is currently empty,
+            these do not make any network requests.
+        */
+
+        loadSavedQuizzes();
+
+        loadPastQuizzes();
 
     }
 );
