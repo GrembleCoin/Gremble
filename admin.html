@@ -17,7 +17,6 @@
 
     <title>Gremble Admin</title>
 
-
     <style>
 
         /* =====================================================
@@ -65,6 +64,7 @@
         textarea,
         select {
             font: inherit;
+            outline: none;
         }
 
         button,
@@ -79,13 +79,6 @@
 
         [hidden] {
             display: none !important;
-        }
-
-        button,
-        input,
-        textarea,
-        select {
-            outline: none;
         }
 
 
@@ -107,9 +100,6 @@
 
             --text: #eef5f0;
             --muted: #77857c;
-            --muted-2: #58665d;
-
-            --border: rgba(255,255,255,.055);
 
             --sidebar-width: 245px;
         }
@@ -195,7 +185,7 @@
                 rgba(101,255,131,.08);
 
             background:
-                rgba(2,10,6,.92);
+                rgba(2,10,6,.94);
 
             backdrop-filter:
                 blur(20px);
@@ -222,18 +212,12 @@
             object-fit: contain;
         }
 
-        .sidebar-brand-copy {
-            min-width: 0;
-        }
-
         .sidebar-brand-copy strong {
             display: block;
 
             color: #f4f7f5;
 
             font-size: 18px;
-
-            letter-spacing: .7px;
         }
 
         .sidebar-brand-copy span {
@@ -389,10 +373,6 @@
 
         .sidebar-bottom {
             margin-top: auto;
-
-            display: grid;
-
-            gap: 8px;
         }
 
         .sidebar-back-button {
@@ -419,37 +399,6 @@
 
         .sidebar-back-button:hover {
             color: var(--green);
-
-            border-color:
-                rgba(101,255,131,.34);
-        }
-
-
-        /* =====================================================
-           MOBILE MENU
-        ===================================================== */
-
-        .mobile-menu-button {
-            display: none;
-
-            width: 42px;
-            height: 42px;
-
-            align-items: center;
-            justify-content: center;
-
-            border:
-                1px solid
-                var(--green-border);
-
-            border-radius: 11px;
-
-            background:
-                rgba(101,255,131,.04);
-
-            color: var(--green);
-
-            font-size: 20px;
         }
 
 
@@ -508,8 +457,27 @@
             min-width: 0;
         }
 
-        .topbar-page-copy {
-            min-width: 0;
+        .mobile-menu-button {
+            display: none;
+
+            width: 42px;
+            height: 42px;
+
+            align-items: center;
+            justify-content: center;
+
+            border:
+                1px solid
+                var(--green-border);
+
+            border-radius: 11px;
+
+            background:
+                rgba(101,255,131,.04);
+
+            color: var(--green);
+
+            font-size: 20px;
         }
 
         .topbar-page-label {
@@ -528,30 +496,19 @@
 
             font-size: 19px;
             font-weight: 900;
-
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .topbar-right {
-            display: flex;
-            align-items: center;
-
-            gap: 9px;
         }
 
         .topbar-admin-pill {
-            display: flex;
-            align-items: center;
-
-            gap: 7px;
-
             min-height: 37px;
 
             padding:
                 0
                 12px;
+
+            display: flex;
+            align-items: center;
+
+            gap: 7px;
 
             border:
                 1px solid
@@ -583,7 +540,7 @@
 
 
         /* =====================================================
-           ADMIN MESSAGE
+           MESSAGE
         ===================================================== */
 
         .admin-message {
@@ -623,31 +580,15 @@
 
 
         /* =====================================================
-           VIEWS
+           COMMON
         ===================================================== */
-
-        .admin-dashboard,
-        .admin-view {
-            min-width: 0;
-        }
 
         .admin-view[hidden] {
             display: none !important;
         }
 
-
-        /* =====================================================
-           PAGE HEADER
-        ===================================================== */
-
         .page-header {
             margin-bottom: 18px;
-
-            display: flex;
-            align-items: flex-end;
-            justify-content: space-between;
-
-            gap: 18px;
         }
 
         .page-eyebrow {
@@ -686,10 +627,49 @@
             line-height: 1.7;
         }
 
+        .admin-card {
+            border:
+                1px solid
+                rgba(101,255,131,.1);
 
-        /* =====================================================
-           BUTTONS
-        ===================================================== */
+            border-radius: 18px;
+
+            background:
+                rgba(4,13,9,.78);
+        }
+
+        .card-header {
+            min-height: 62px;
+
+            padding:
+                16px
+                18px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            gap: 12px;
+
+            border-bottom:
+                1px solid
+                rgba(255,255,255,.045);
+        }
+
+        .card-title-wrap span {
+            color: var(--green);
+
+            font-size: 7px;
+            font-weight: 900;
+
+            letter-spacing: 1.8px;
+        }
+
+        .card-title-wrap h2 {
+            margin-top: 5px;
+
+            font-size: 18px;
+        }
 
         .primary-button,
         .secondary-button,
@@ -705,9 +685,6 @@
 
             font-size: 9px;
             font-weight: 900;
-
-            transition:
-                .16s ease;
         }
 
         .primary-button {
@@ -761,55 +738,6 @@
 
 
         /* =====================================================
-           COMMON CARD
-        ===================================================== */
-
-        .admin-card {
-            border:
-                1px solid
-                rgba(101,255,131,.1);
-
-            border-radius: 18px;
-
-            background:
-                rgba(4,13,9,.78);
-        }
-
-        .card-header {
-            min-height: 62px;
-
-            padding:
-                16px
-                18px;
-
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-
-            gap: 12px;
-
-            border-bottom:
-                1px solid
-                rgba(255,255,255,.045);
-        }
-
-        .card-title-wrap span {
-            color: var(--green);
-
-            font-size: 7px;
-            font-weight: 900;
-
-            letter-spacing: 1.8px;
-        }
-
-        .card-title-wrap h2 {
-            margin-top: 5px;
-
-            font-size: 18px;
-        }
-
-
-        /* =====================================================
            DASHBOARD
         ===================================================== */
 
@@ -817,8 +745,8 @@
             display: grid;
 
             grid-template-columns:
-                minmax(0,1.32fr)
-                minmax(290px,.68fr);
+                minmax(0,1.3fr)
+                minmax(280px,.7fr);
 
             gap: 16px;
 
@@ -826,13 +754,9 @@
         }
 
         .dashboard-founder-card {
-            position: relative;
-
-            min-height: 330px;
+            min-height: 300px;
 
             padding: 34px;
-
-            overflow: hidden;
 
             display: flex;
             flex-direction: column;
@@ -852,23 +776,6 @@
                 );
         }
 
-        .founder-card-orb {
-            position: absolute;
-
-            width: 280px;
-            height: 280px;
-
-            right: -80px;
-            top: -90px;
-
-            border-radius: 50%;
-
-            background:
-                rgba(101,255,131,.12);
-
-            filter: blur(55px);
-        }
-
         .founder-tag {
             color: var(--green);
 
@@ -879,37 +786,20 @@
         }
 
         .dashboard-founder-card h1 {
-            position: relative;
-
             margin-top: 18px;
-
-            max-width: 780px;
 
             font-size:
                 clamp(
-                    48px,
+                    46px,
                     6vw,
-                    86px
+                    80px
                 );
 
-            line-height: .94;
-
-            letter-spacing: -3px;
+            line-height: .95;
         }
 
         .dashboard-founder-card h1 span {
             color: var(--green);
-        }
-
-        .founder-line {
-            width: 74px;
-            height: 3px;
-
-            margin-top: 25px;
-
-            background: var(--green);
-
-            border-radius: 99px;
         }
 
         .private-access-card {
@@ -931,25 +821,13 @@
             font-size: 8px;
             font-weight: 900;
 
-            letter-spacing: 2.2px;
+            letter-spacing: 2px;
         }
 
         .private-access-card h2 {
             margin-top: 18px;
 
             font-size: 25px;
-
-            line-height: 1.08;
-        }
-
-        .private-access-card p {
-            margin-top: 14px;
-
-            color: #77857c;
-
-            font-size: 10px;
-
-            line-height: 1.7;
         }
 
         .private-id-box {
@@ -972,8 +850,6 @@
 
             font-size: 7px;
             font-weight: 900;
-
-            letter-spacing: 1.6px;
         }
 
         .private-id-box strong {
@@ -1019,8 +895,6 @@
         }
 
         .stat-card span {
-            display: block;
-
             color: #68766d;
 
             font-size: 7px;
@@ -1031,8 +905,6 @@
             display: block;
 
             margin-top: 9px;
-
-            color: #f4f7f5;
 
             font-size: 31px;
         }
@@ -1045,7 +917,6 @@
             color: var(--green);
 
             font-size: 8px;
-            font-weight: 800;
         }
 
 
@@ -1067,13 +938,13 @@
         }
 
         .members-panel-top {
+            padding: 20px;
+
             display: flex;
             align-items: center;
             justify-content: space-between;
 
             gap: 18px;
-
-            padding: 20px;
         }
 
         .members-panel-title span {
@@ -1091,7 +962,6 @@
 
         .members-tools {
             display: flex;
-            align-items: center;
 
             gap: 9px;
         }
@@ -1146,7 +1016,6 @@
             width: 100%;
 
             overflow-x: auto;
-            overflow-y: hidden;
 
             border-top:
                 1px solid
@@ -1161,29 +1030,24 @@
             border-collapse: collapse;
         }
 
-        .members-table th {
+        .members-table th,
+        .members-table td {
             padding:
                 14px
                 16px;
 
             text-align: left;
 
-            color: #627067;
-
-            background:
-                rgba(255,255,255,.014);
-
-            font-size: 7px;
-            font-weight: 900;
-
             white-space: nowrap;
         }
 
-        .members-table td {
-            padding:
-                16px
-                16px;
+        .members-table th {
+            color: #627067;
 
+            font-size: 7px;
+        }
+
+        .members-table td {
             border-top:
                 1px solid
                 rgba(255,255,255,.04);
@@ -1191,15 +1055,6 @@
             color: #cbd5cf;
 
             font-size: 10px;
-
-            white-space: nowrap;
-
-            vertical-align: middle;
-        }
-
-        .members-table tr:hover td {
-            background:
-                rgba(101,255,131,.018);
         }
 
         .telegram-name {
@@ -1212,10 +1067,6 @@
             color: var(--green);
         }
 
-        .empty-value {
-            color: #59665e;
-        }
-
         .wallet-cell {
             display: flex;
             align-items: center;
@@ -1224,14 +1075,6 @@
         }
 
         .wallet-address {
-            max-width: 165px;
-
-            overflow: hidden;
-
-            text-overflow: ellipsis;
-
-            white-space: nowrap;
-
             color: #aab6ae;
         }
 
@@ -1255,9 +1098,12 @@
             font-weight: 900;
         }
 
-        .telegram-group-badge {
+        .telegram-group-badge,
+        .wallet-status-badge {
             display: inline-flex;
             align-items: center;
+
+            gap: 6px;
 
             padding:
                 7px
@@ -1267,95 +1113,9 @@
 
             font-size: 7px;
             font-weight: 900;
-
-            white-space: nowrap;
         }
 
-        .telegram-group-badge.member {
-            border:
-                1px solid
-                rgba(101,255,131,.25);
-
-            background:
-                rgba(101,255,131,.07);
-
-            color: var(--green);
-        }
-
-        .telegram-group-badge.not-member {
-            border:
-                1px solid
-                rgba(255,89,100,.24);
-
-            background:
-                rgba(255,89,100,.06);
-
-            color: #ff717b;
-        }
-
-        .telegram-group-badge.unknown {
-            border:
-                1px solid
-                rgba(255,211,92,.22);
-
-            background:
-                rgba(255,211,92,.05);
-
-            color: #ffd35c;
-        }
-
-        .chat-header,
-        .announcements-header {
-            color: var(--green) !important;
-        }
-
-        .date-value {
-            color: #75837a;
-            white-space: nowrap;
-        }
-
-        .country-cell {
-            display: inline-flex;
-            align-items: center;
-
-            gap: 6px;
-        }
-
-        .country-flag {
-            font-size: 13px;
-        }
-
-        .country-name {
-            color: #cbd5cf;
-            font-weight: 900;
-        }
-
-        .wallet-status-badge {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-
-            gap: 6px;
-
-            min-width: 64px;
-
-            padding:
-                7px
-                10px;
-
-            border-radius: 999px;
-
-            font-size: 7px;
-            font-weight: 900;
-        }
-
-        .wallet-status-dot {
-            width: 7px;
-            height: 7px;
-
-            border-radius: 50%;
-        }
-
+        .telegram-group-badge.member,
         .wallet-status-badge.yes {
             border:
                 1px solid
@@ -1367,11 +1127,7 @@
             color: var(--green);
         }
 
-        .wallet-status-badge.yes
-        .wallet-status-dot {
-            background: var(--green);
-        }
-
+        .telegram-group-badge.not-member,
         .wallet-status-badge.no {
             border:
                 1px solid
@@ -1383,29 +1139,44 @@
             color: #ff717b;
         }
 
-        .wallet-status-badge.no
-        .wallet-status-dot {
-            background: #ff5964;
+        .telegram-group-badge.unknown {
+            color: var(--yellow);
         }
 
-        .members-empty {
+        .wallet-status-dot {
+            width: 7px;
+            height: 7px;
+
+            border-radius: 50%;
+
+            background: currentColor;
+        }
+
+        .country-cell {
+            display: inline-flex;
+            align-items: center;
+
+            gap: 6px;
+        }
+
+        .members-empty,
+        .contest-empty,
+        .saved-quizzes-empty,
+        .lobby-player-empty {
             padding:
-                48px
+                40px
                 20px;
 
             text-align: center;
 
             color: #657269;
 
-            font-size: 10px;
+            font-size: 9px;
         }
 
-        .members-pagination {
-            min-height: 60px;
-
-            padding:
-                12px
-                16px;
+        .members-pagination,
+        .contest-pagination {
+            min-height: 58px;
 
             display: flex;
             align-items: center;
@@ -1415,11 +1186,12 @@
 
             border-top:
                 1px solid
-                rgba(255,255,255,.045);
+                rgba(255,255,255,.04);
         }
 
-        .members-page-button {
-            min-width: 92px;
+        .members-page-button,
+        .contest-page-button {
+            min-width: 90px;
             min-height: 34px;
 
             border:
@@ -1434,17 +1206,6 @@
             color: var(--green);
 
             font-size: 7px;
-            font-weight: 900;
-        }
-
-        .members-page-info {
-            min-width: 75px;
-
-            text-align: center;
-
-            color: #87938b;
-
-            font-size: 8px;
             font-weight: 900;
         }
 
@@ -1467,17 +1228,13 @@
         }
 
         .contest-panel-header {
-            min-height: 65px;
-
             padding:
                 16px
                 18px;
 
             display: flex;
-            align-items: center;
             justify-content: space-between;
-
-            gap: 14px;
+            align-items: center;
 
             border-bottom:
                 1px solid
@@ -1491,13 +1248,7 @@
             gap: 11px;
         }
 
-        .contest-title-icon {
-            font-size: 24px;
-        }
-
         .contest-title-copy span {
-            display: block;
-
             color: var(--green);
 
             font-size: 7px;
@@ -1506,8 +1257,6 @@
 
         .contest-title-copy h2 {
             margin-top: 4px;
-
-            font-size: 20px;
         }
 
         .contest-close-button {
@@ -1527,9 +1276,6 @@
                 rgba(255,255,255,.02);
 
             color: #839087;
-
-            font-size: 8px;
-            font-weight: 900;
         }
 
         .contest-stats {
@@ -1557,9 +1303,6 @@
                 rgba(101,255,131,.08);
 
             border-radius: 13px;
-
-            background:
-                rgba(101,255,131,.02);
         }
 
         .contest-stat-card span {
@@ -1575,17 +1318,6 @@
             margin-top: 7px;
 
             font-size: 26px;
-        }
-
-        .contest-stat-card small {
-            display: block;
-
-            margin-top: 5px;
-
-            color: var(--green);
-
-            font-size: 7px;
-            font-weight: 900;
         }
 
         .contest-body {
@@ -1632,8 +1364,6 @@
         }
 
         .contest-form label {
-            margin-top: 4px;
-
             color: #69766e;
 
             font-size: 7px;
@@ -1642,7 +1372,6 @@
 
         .contest-form input {
             width: 100%;
-
             min-height: 42px;
 
             padding:
@@ -1659,8 +1388,6 @@
                 rgba(0,5,3,.7);
 
             color: #eef4f0;
-
-            font-size: 10px;
         }
 
         .contest-requirements {
@@ -1704,14 +1431,10 @@
             color: #ff717b;
         }
 
-        .contest-rule-button.active.yes {
-            background:
-                rgba(101,255,131,.13);
-        }
-
-        .contest-rule-button.active.no {
-            background:
-                rgba(255,89,100,.11);
+        .contest-rule-button.active {
+            box-shadow:
+                0 0 18px
+                rgba(101,255,131,.08);
         }
 
         .contest-submit-button {
@@ -1747,15 +1470,10 @@
                 rgba(255,255,255,.02);
 
             color: #87938b;
-
-            font-size: 7px;
-            font-weight: 900;
         }
 
         .contest-form-message {
             min-height: 16px;
-
-            margin-top: 6px;
 
             color: #77857d;
 
@@ -1768,10 +1486,6 @@
 
         .contest-form-message.error {
             color: #ff717b;
-        }
-
-        .contest-list-card {
-            overflow: hidden;
         }
 
         .contest-list-top {
@@ -1790,10 +1504,6 @@
                 rgba(255,255,255,.04);
         }
 
-        .contest-list-title strong {
-            font-size: 10px;
-        }
-
         .contest-list-title span {
             display: block;
 
@@ -1802,31 +1512,21 @@
             color: #657269;
 
             font-size: 7px;
-            font-weight: 900;
         }
 
         .contest-tools {
             display: flex;
-            align-items: center;
 
             gap: 8px;
         }
 
-        .contest-search-wrap {
-            position: relative;
-
-            width: 230px;
-        }
-
-        .contest-search {
-            width: 100%;
+        .contest-search,
+        .contest-sort {
             min-height: 39px;
 
             padding:
                 0
-                12px
-                0
-                33px;
+                12px;
 
             border:
                 1px solid
@@ -1842,102 +1542,35 @@
             font-size: 9px;
         }
 
-        .contest-search-icon {
-            position: absolute;
-
-            left: 12px;
-            top: 50%;
-
-            transform:
-                translateY(-50%);
-
-            color: var(--green);
-        }
-
-        .contest-sort-wrap {
-            position: relative;
-
-            min-width: 165px;
-        }
-
-        .contest-sort {
-            width: 100%;
-            min-height: 39px;
-
-            padding:
-                0
-                32px
-                0
-                11px;
-
-            border:
-                1px solid
-                rgba(101,255,131,.11);
-
-            border-radius: 10px;
-
-            background:
-                rgba(0,5,3,.7);
-
-            color: var(--green);
-
-            font-size: 8px;
-            font-weight: 900;
-        }
-
-        .contest-sort-arrow {
-            position: absolute;
-
-            right: 11px;
-            top: 50%;
-
-            transform:
-                translateY(-50%);
-
-            pointer-events: none;
-
-            color: var(--green);
-
-            font-size: 8px;
-        }
-
         .contest-table-wrap {
             width: 100%;
-
             overflow-x: auto;
         }
 
         .contest-table {
             width: 100%;
-
             min-width: 850px;
 
             border-collapse: collapse;
         }
 
-        .contest-table th {
-            padding:
-                12px
-                13px;
-
-            text-align: left;
-
-            color: #657269;
-
-            font-size: 7px;
-            font-weight: 900;
-
-            white-space: nowrap;
-        }
-
+        .contest-table th,
         .contest-table td {
             padding: 13px;
 
+            text-align: left;
+        }
+
+        .contest-table th {
+            color: #657269;
+
+            font-size: 7px;
+        }
+
+        .contest-table td {
             border-top:
                 1px solid
                 rgba(255,255,255,.04);
-
-            color: #cbd5cf;
 
             font-size: 9px;
         }
@@ -1950,12 +1583,6 @@
         }
 
         .contest-rule-badge {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-
-            min-width: 45px;
-
             padding:
                 5px
                 8px;
@@ -1967,30 +1594,15 @@
         }
 
         .contest-rule-badge.yes {
-            border:
-                1px solid
-                rgba(101,255,131,.22);
-
-            background:
-                rgba(101,255,131,.06);
-
             color: var(--green);
         }
 
         .contest-rule-badge.no {
-            border:
-                1px solid
-                rgba(255,89,100,.22);
-
-            background:
-                rgba(255,89,100,.05);
-
             color: #ff717b;
         }
 
         .contest-actions {
             display: flex;
-            align-items: center;
 
             gap: 5px;
         }
@@ -2004,6 +1616,8 @@
 
             border-radius: 7px;
 
+            background: transparent;
+
             font-size: 6px;
             font-weight: 900;
         }
@@ -2013,9 +1627,6 @@
                 1px solid
                 rgba(101,255,131,.16);
 
-            background:
-                rgba(101,255,131,.035);
-
             color: var(--green);
         }
 
@@ -2024,27 +1635,17 @@
                 1px solid
                 rgba(255,89,100,.17);
 
-            background:
-                rgba(255,89,100,.035);
-
             color: #ff717b;
         }
 
-        .contest-member-status-cell {
-            text-align: center;
-        }
-
         .contest-member-status {
-            position: relative;
-
             display: inline-flex;
-            align-items: center;
-            justify-content: center;
 
             width: 21px;
             height: 21px;
 
-            border-radius: 50%;
+            align-items: center;
+            justify-content: center;
         }
 
         .contest-member-status-dot {
@@ -2069,132 +1670,15 @@
             background: #ff5964;
         }
 
-        .contest-member-status::after {
-            content:
-                attr(data-tooltip);
-
-            position: absolute;
-
-            right: 0;
-            bottom:
-                calc(100% + 8px);
-
-            min-width: 160px;
-
-            padding:
-                7px
-                9px;
-
-            border:
-                1px solid
-                rgba(101,255,131,.12);
-
-            border-radius: 8px;
-
-            background: #06100a;
-
-            color: #dce5df;
-
-            font-size: 6px;
-            font-weight: 900;
-
-            white-space: nowrap;
-
-            opacity: 0;
-            visibility: hidden;
-
-            z-index: 30;
-        }
-
-        .contest-member-status:hover::after {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .contest-empty {
-            padding:
-                38px
-                20px;
-
-            text-align: center;
-
-            color: #657269;
-
-            font-size: 9px;
-        }
-
-        .contest-pagination {
-            min-height: 55px;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            gap: 10px;
-
-            border-top:
-                1px solid
-                rgba(255,255,255,.04);
-        }
-
-        .contest-page-button {
-            min-width: 88px;
-            min-height: 32px;
-
-            border:
-                1px solid
-                rgba(101,255,131,.12);
-
-            border-radius: 8px;
-
-            background:
-                rgba(101,255,131,.03);
-
-            color: var(--green);
-
-            font-size: 7px;
-            font-weight: 900;
-        }
-
-        .contest-page-info {
-            min-width: 70px;
-
-            text-align: center;
-
-            color: #849188;
-
-            font-size: 7px;
-            font-weight: 900;
-        }
-
 
         /* =====================================================
-           QUIZ
+           QUIZ COMMON
         ===================================================== */
-
-        .quiz-layout {
-            display: grid;
-
-            grid-template-columns:
-                minmax(0,1.05fr)
-                minmax(320px,.75fr);
-
-            gap: 15px;
-        }
-
-        .quiz-column {
-            display: grid;
-
-            align-content: start;
-
-            gap: 15px;
-        }
 
         .quiz-tabs {
             margin-bottom: 16px;
 
             display: flex;
-            align-items: center;
 
             gap: 7px;
 
@@ -2241,8 +1725,22 @@
             color: var(--green);
         }
 
-        .quiz-subview[hidden] {
-            display: none !important;
+        .quiz-layout {
+            display: grid;
+
+            grid-template-columns:
+                minmax(0,1fr)
+                minmax(300px,.7fr);
+
+            gap: 15px;
+        }
+
+        .quiz-column {
+            display: grid;
+
+            align-content: start;
+
+            gap: 15px;
         }
 
         .quiz-builder-card {
@@ -2250,13 +1748,12 @@
         }
 
         .quiz-builder-heading {
+            margin-bottom: 17px;
+
             display: flex;
-            align-items: center;
             justify-content: space-between;
 
             gap: 12px;
-
-            margin-bottom: 17px;
         }
 
         .quiz-builder-heading span {
@@ -2268,20 +1765,17 @@
 
         .quiz-builder-heading h2 {
             margin-top: 4px;
-
-            font-size: 21px;
         }
 
-        .quiz-form-grid {
-            display: grid;
-
-            gap: 13px;
-        }
-
+        .quiz-form-grid,
         .quiz-field {
             display: grid;
 
-            gap: 7px;
+            gap: 8px;
+        }
+
+        .quiz-form-grid {
+            gap: 13px;
         }
 
         .quiz-field label {
@@ -2289,8 +1783,6 @@
 
             font-size: 7px;
             font-weight: 900;
-
-            letter-spacing: 1.2px;
         }
 
         .quiz-input,
@@ -2308,8 +1800,6 @@
                 rgba(0,5,3,.69);
 
             color: #eef4f0;
-
-            font-size: 10px;
         }
 
         .quiz-input,
@@ -2324,47 +1814,23 @@
         .quiz-textarea {
             min-height: 82px;
 
-            resize: vertical;
-
             padding: 12px;
 
-            line-height: 1.5;
+            resize: vertical;
         }
-
-        .quiz-input:focus,
-        .quiz-textarea:focus,
-        .quiz-select:focus {
-            border-color:
-                rgba(101,255,131,.36);
-        }
-
-
-        /* =====================================================
-           QUIZ QUESTIONS
-        ===================================================== */
 
         .quiz-question-section {
             margin-top: 19px;
         }
 
         .quiz-question-section-header {
+            margin-bottom: 12px;
+
             display: flex;
             align-items: center;
             justify-content: space-between;
 
             gap: 10px;
-
-            margin-bottom: 12px;
-        }
-
-        .quiz-question-section-header h3 {
-            font-size: 15px;
-        }
-
-        .quiz-question-section-header span {
-            color: #647268;
-
-            font-size: 8px;
         }
 
         .quiz-question-list {
@@ -2387,8 +1853,6 @@
             text-align: center;
 
             color: #657269;
-
-            font-size: 9px;
         }
 
         .quiz-question-editor {
@@ -2406,61 +1870,42 @@
                 rgba(101,255,131,.018);
         }
 
-        .quiz-question-editor[hidden] {
-            display: none !important;
-        }
-
         .quiz-editor-title {
             margin-bottom: 14px;
 
             display: flex;
-            align-items: center;
             justify-content: space-between;
-
-            gap: 10px;
         }
 
-        .quiz-editor-title strong {
-            font-size: 12px;
+        .quiz-read-time-box,
+        .quiz-question-time-box {
+            margin-top: 14px;
+
+            padding: 14px;
+
+            border:
+                1px solid
+                rgba(101,255,131,.12);
+
+            border-radius: 11px;
+
+            background:
+                rgba(101,255,131,.03);
         }
-
-
-        /* =====================================================
-           READ TIME
-        ===================================================== */
 
         .quiz-read-time-box {
             margin-bottom: 14px;
 
-            padding:
-                12px
-                14px;
-
             display: flex;
-            align-items: center;
             justify-content: space-between;
-
-            gap: 12px;
-
-            border:
-                1px solid
-                rgba(101,255,131,.14);
-
-            border-radius: 10px;
-
-            background:
-                rgba(101,255,131,.04);
         }
 
-        .quiz-read-time-copy span {
-            display: block;
-
+        .quiz-read-time-copy span,
+        .quiz-question-time-box label {
             color: #69766e;
 
             font-size: 7px;
             font-weight: 900;
-
-            letter-spacing: 1.2px;
         }
 
         .quiz-read-time-copy strong {
@@ -2469,39 +1914,16 @@
             margin-top: 5px;
 
             color: var(--green);
-
-            font-size: 10px;
         }
 
         .quiz-read-time-value {
-            min-width: 80px;
-
-            padding:
-                8px
-                10px;
-
-            border:
-                1px solid
-                rgba(101,255,131,.16);
-
-            border-radius: 999px;
-
             color: var(--green);
 
-            text-align: center;
-
-            font-size: 8px;
+            font-size: 9px;
             font-weight: 900;
         }
 
-
-        /* =====================================================
-           ANSWERS
-        ===================================================== */
-
         .quiz-option-grid {
-            margin-top: 13px;
-
             display: grid;
 
             gap: 8px;
@@ -2515,9 +1937,9 @@
                 minmax(0,1fr)
                 90px;
 
-            align-items: center;
-
             gap: 8px;
+
+            align-items: center;
         }
 
         .quiz-option-letter {
@@ -2559,70 +1981,85 @@
         }
 
         .quiz-correct-button.active {
-            border-color:
-                rgba(101,255,131,.45);
-
             background:
                 rgba(101,255,131,.12);
 
             color: var(--green);
+        }
+
+        .quiz-editor-actions,
+        .quiz-builder-actions {
+            margin-top: 14px;
+
+            display: flex;
+            justify-content: flex-end;
+
+            gap: 8px;
+        }
+
+        .quiz-builder-message,
+        .live-quiz-message {
+            min-height: 18px;
+
+            margin-top: 12px;
+
+            color: #77857d;
+
+            font-size: 8px;
+        }
+
+        .quiz-builder-message.success,
+        .live-quiz-message.success {
+            color: var(--green);
+        }
+
+        .quiz-builder-message.error,
+        .live-quiz-message.error {
+            color: #ff717b;
         }
 
 
         /* =====================================================
-           PER QUESTION ANSWER TIME
+           QUIZ QUESTION ITEM
         ===================================================== */
 
-        .quiz-question-time-box {
-            margin-top: 15px;
+        .quiz-question-item {
+            padding: 13px;
 
-            padding: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            gap: 10px;
 
             border:
                 1px solid
-                rgba(101,255,131,.12);
+                rgba(101,255,131,.1);
 
             border-radius: 11px;
 
             background:
-                rgba(0,8,5,.48);
+                rgba(101,255,131,.02);
         }
 
-        .quiz-question-time-box label {
+        .quiz-question-item-copy strong {
+            font-size: 10px;
+        }
+
+        .quiz-question-item-copy span {
             display: block;
 
-            margin-bottom: 8px;
+            margin-top: 4px;
 
-            color: var(--green);
+            color: #66736b;
 
             font-size: 7px;
-            font-weight: 900;
-
-            letter-spacing: 1.3px;
         }
 
-        .quiz-question-time-help {
-            margin-top: 8px;
-
-            color: #6e7c73;
-
-            font-size: 8px;
-
-            line-height: 1.5;
-        }
-
-        .quiz-question-time-help strong {
-            color: var(--green);
-        }
-
-        .quiz-editor-actions {
-            margin-top: 14px;
-
+        .quiz-question-item-actions {
             display: flex;
-            align-items: center;
-            justify-content: flex-end;
 
-            gap: 8px;
+            gap: 5px;
         }
 
 
@@ -2631,23 +2068,11 @@
         ===================================================== */
 
         .saved-quizzes-list {
+            padding: 16px;
+
             display: grid;
 
             gap: 10px;
-
-            padding: 16px;
-        }
-
-        .saved-quizzes-empty {
-            padding:
-                40px
-                18px;
-
-            text-align: center;
-
-            color: #657269;
-
-            font-size: 9px;
         }
 
         .saved-quiz-card {
@@ -2669,17 +2094,7 @@
                 rgba(101,255,131,.02);
         }
 
-        .saved-quiz-info {
-            min-width: 0;
-        }
-
         .saved-quiz-info strong {
-            display: block;
-
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-
             font-size: 11px;
         }
 
@@ -2688,18 +2103,17 @@
 
             margin-top: 5px;
 
-            color: #6f7c74;
+            color: #68766d;
 
-            font-size: 8px;
+            font-size: 7px;
         }
 
         .saved-quiz-actions {
             display: flex;
-            align-items: center;
 
-            gap: 6px;
+            gap: 5px;
 
-            flex: 0 0 auto;
+            flex-wrap: wrap;
         }
 
 
@@ -2707,28 +2121,86 @@
            LIVE QUIZ
         ===================================================== */
 
-        .live-status-badge {
-            display: inline-flex;
-            align-items: center;
+        .live-control-grid {
+            display: grid;
 
-            gap: 6px;
+            grid-template-columns:
+                minmax(0,1fr)
+                minmax(280px,.55fr);
 
-            min-height: 31px;
+            gap: 15px;
+        }
 
-            padding:
-                0
-                10px;
+        .live-control-card {
+            padding: 18px;
+        }
 
-            border-radius: 999px;
+        .live-control-status {
+            display: grid;
+
+            grid-template-columns:
+                repeat(
+                    4,
+                    minmax(0,1fr)
+                );
+
+            gap: 9px;
+
+            margin-top: 16px;
+        }
+
+        .live-control-stat {
+            padding: 13px;
 
             border:
                 1px solid
-                rgba(255,255,255,.07);
+                rgba(101,255,131,.08);
+
+            border-radius: 11px;
 
             background:
-                rgba(255,255,255,.025);
+                rgba(101,255,131,.02);
+        }
 
-            color: #87938b;
+        .live-control-stat span {
+            color: #68766d;
+
+            font-size: 7px;
+            font-weight: 900;
+        }
+
+        .live-control-stat strong {
+            display: block;
+
+            margin-top: 6px;
+
+            font-size: 18px;
+        }
+
+        .live-control-buttons {
+            margin-top: 16px;
+
+            display: flex;
+
+            gap: 8px;
+
+            flex-wrap: wrap;
+        }
+
+        .live-status-badge {
+            display: inline-flex;
+
+            padding:
+                7px
+                10px;
+
+            border:
+                1px solid
+                rgba(255,255,255,.08);
+
+            border-radius: 999px;
+
+            color: #829088;
 
             font-size: 7px;
             font-weight: 900;
@@ -2737,132 +2209,21 @@
         .live-status-badge.lobby,
         .live-status-badge.live {
             border-color:
-                rgba(101,255,131,.24);
-
-            background:
-                rgba(101,255,131,.08);
+                rgba(101,255,131,.2);
 
             color: var(--green);
         }
 
-        .live-control-body {
-            padding: 17px;
-        }
-
-        .live-selected-quiz {
-            padding: 14px;
-
-            border:
-                1px solid
-                rgba(101,255,131,.1);
-
-            border-radius: 11px;
-
-            background:
-                rgba(101,255,131,.02);
-        }
-
-        .live-selected-quiz small {
-            color: #637168;
-
-            font-size: 7px;
-            font-weight: 900;
-        }
-
-        .live-selected-quiz strong {
-            display: block;
-
-            margin-top: 6px;
-
-            font-size: 14px;
-        }
-
-        .live-info-grid {
-            margin-top: 12px;
-
-            display: grid;
-
-            grid-template-columns:
-                repeat(
-                    2,
-                    minmax(0,1fr)
-                );
-
-            gap: 9px;
-        }
-
-        .live-info-card {
-            padding: 13px;
-
-            border:
-                1px solid
-                rgba(101,255,131,.08);
-
-            border-radius: 10px;
-
-            background:
-                rgba(255,255,255,.012);
-        }
-
-        .live-info-card span {
-            color: #647168;
-
-            font-size: 7px;
-            font-weight: 900;
-        }
-
-        .live-info-card strong {
-            display: block;
-
-            margin-top: 5px;
-
-            color: #eef4f0;
-
-            font-size: 18px;
-        }
-
-        .live-control-actions {
-            margin-top: 13px;
-
-            display: grid;
-
-            grid-template-columns:
-                repeat(
-                    2,
-                    minmax(0,1fr)
-                );
-
-            gap: 8px;
-        }
-
-        .lobby-player-card {
-            overflow: hidden;
-        }
-
         .lobby-player-list {
-            max-height: 335px;
+            display: grid;
 
-            overflow-y: auto;
+            gap: 7px;
 
-            padding: 10px;
-        }
-
-        .lobby-player-empty {
-            padding:
-                34px
-                12px;
-
-            text-align: center;
-
-            color: #657269;
-
-            font-size: 9px;
+            padding: 14px;
         }
 
         .lobby-player-row {
-            padding:
-                11px
-                10px;
+            padding: 12px;
 
             display: flex;
             align-items: center;
@@ -2870,58 +2231,46 @@
 
             gap: 10px;
 
-            border-bottom:
+            border:
                 1px solid
-                rgba(255,255,255,.035);
+                rgba(101,255,131,.08);
+
+            border-radius: 10px;
         }
 
         .lobby-player-name {
-            color: #f0f5f1;
+            color: #f0f5f2;
 
-            font-size: 9px;
+            font-size: 10px;
             font-weight: 800;
         }
 
         .lobby-player-username {
+            margin-top: 4px;
+
             color: var(--green);
 
-            font-size: 8px;
-        }
-
-        .current-question-control {
-            margin-top: 15px;
+            font-size: 7px;
         }
 
         .current-question-box {
-            padding: 15px;
+            margin-top: 16px;
+
+            padding: 16px;
 
             border:
                 1px solid
-                rgba(101,255,131,.12);
+                rgba(101,255,131,.1);
 
             border-radius: 12px;
-
-            background:
-                rgba(101,255,131,.022);
         }
 
-        .current-question-number {
-            color: var(--green);
-
-            font-size: 8px;
-            font-weight: 900;
-        }
-
-        .current-question-text {
+        .current-question-box h3 {
             margin-top: 8px;
-
-            font-size: 16px;
-
-            line-height: 1.35;
         }
 
         .current-question-stats {
-            margin-top: 12px;
+            margin-top: 14px;
 
             display: grid;
 
@@ -2931,29 +2280,25 @@
                     minmax(0,1fr)
                 );
 
-            gap: 7px;
+            gap: 8px;
         }
 
         .current-question-stat {
             padding: 10px;
 
+            text-align: center;
+
             border:
                 1px solid
-                rgba(255,255,255,.05);
+                rgba(101,255,131,.08);
 
             border-radius: 9px;
-
-            background:
-                rgba(0,0,0,.16);
-
-            text-align: center;
         }
 
         .current-question-stat span {
             color: #657269;
 
             font-size: 6px;
-            font-weight: 900;
         }
 
         .current-question-stat strong {
@@ -2972,34 +2317,43 @@
         .past-quizzes-list {
             display: grid;
 
-            gap: 10px;
+            gap: 12px;
         }
 
         .past-quiz-card {
+            overflow: hidden;
+
+            border:
+                1px solid
+                rgba(101,255,131,.1);
+
+            border-radius: 15px;
+
+            background:
+                rgba(4,13,9,.76);
+        }
+
+        .past-quiz-summary {
+            width: 100%;
+
             padding: 17px;
 
             display: grid;
 
             grid-template-columns:
                 minmax(0,1fr)
+                auto
                 auto;
 
             gap: 15px;
 
             align-items: center;
-
-            border:
-                1px solid
-                rgba(101,255,131,.09);
-
-            border-radius: 14px;
-
-            background:
-                rgba(4,13,9,.72);
         }
 
         .past-quiz-copy strong {
             display: block;
+
+            color: #f4f7f5;
 
             font-size: 12px;
         }
@@ -3015,6 +2369,8 @@
         }
 
         .past-quiz-result {
+            min-width: 120px;
+
             text-align: right;
         }
 
@@ -3035,6 +2391,170 @@
             font-size: 11px;
         }
 
+        .past-quiz-toggle {
+            min-height: 38px;
+
+            padding:
+                0
+                13px;
+
+            border:
+                1px solid
+                rgba(101,255,131,.2);
+
+            border-radius: 9px;
+
+            background:
+                rgba(101,255,131,.05);
+
+            color: var(--green);
+
+            font-size: 7px;
+            font-weight: 900;
+
+            white-space: nowrap;
+        }
+
+        .past-quiz-toggle:hover {
+            background:
+                rgba(101,255,131,.1);
+        }
+
+        .past-quiz-details {
+            border-top:
+                1px solid
+                rgba(255,255,255,.045);
+
+            background:
+                rgba(0,6,3,.38);
+        }
+
+        .past-quiz-details-head {
+            padding:
+                14px
+                16px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            gap: 12px;
+
+            border-bottom:
+                1px solid
+                rgba(255,255,255,.04);
+        }
+
+        .past-quiz-details-head strong {
+            color: #f0f5f2;
+
+            font-size: 10px;
+        }
+
+        .past-quiz-details-head span {
+            color: #68766d;
+
+            font-size: 7px;
+            font-weight: 900;
+        }
+
+        .past-quiz-table-wrap {
+            width: 100%;
+
+            overflow-x: auto;
+        }
+
+        .past-quiz-table {
+            width: 100%;
+
+            min-width: 850px;
+
+            border-collapse: collapse;
+        }
+
+        .past-quiz-table th {
+            padding:
+                13px
+                15px;
+
+            text-align: left;
+
+            color: #657269;
+
+            background:
+                rgba(255,255,255,.012);
+
+            font-size: 7px;
+            font-weight: 900;
+
+            white-space: nowrap;
+        }
+
+        .past-quiz-table td {
+            padding:
+                15px
+                15px;
+
+            border-top:
+                1px solid
+                rgba(255,255,255,.04);
+
+            color: #cbd5cf;
+
+            font-size: 9px;
+
+            white-space: nowrap;
+        }
+
+        .past-quiz-table tr:hover td {
+            background:
+                rgba(101,255,131,.018);
+        }
+
+        .past-rank {
+            color: #f4f7f5;
+
+            font-weight: 900;
+        }
+
+        .past-player-name {
+            color: #f4f7f5;
+
+            font-weight: 800;
+        }
+
+        .past-player-username,
+        .past-player-score {
+            color: var(--green);
+
+            font-weight: 900;
+        }
+
+        .past-player-correct {
+            color: var(--green);
+        }
+
+        .past-player-wrong {
+            color: #ff717b;
+        }
+
+        .past-player-no-answer {
+            color: var(--yellow);
+        }
+
+        .past-quiz-table-loading,
+        .past-quiz-table-empty {
+            padding:
+                28px
+                16px;
+
+            text-align: center;
+
+            color: #69766e;
+
+            font-size: 8px;
+        }
+
         .past-quizzes-empty {
             padding:
                 55px
@@ -3049,96 +2569,16 @@
             text-align: center;
 
             color: #657269;
-
-            font-size: 9px;
         }
 
 
         /* =====================================================
-           RESPONSIVE
+           MOBILE
         ===================================================== */
 
-        @media (max-width: 1180px) {
-
-            :root {
-                --sidebar-width: 215px;
-            }
-
-            .stats-grid {
-                grid-template-columns:
-                    repeat(
-                        3,
-                        minmax(0,1fr)
-                    );
-            }
-
-            .quiz-layout {
-                grid-template-columns:
-                    1fr;
-            }
-
-        }
-
-        @media (max-width: 980px) {
-
-            .dashboard-hero {
-                grid-template-columns:
-                    1fr;
-            }
-
-            .contest-body {
-                grid-template-columns:
-                    1fr;
-            }
-
-        }
-
-        @media (max-width: 820px) {
-
-            .admin-app {
-                display: block;
-            }
-
-            .admin-sidebar {
-                position: fixed;
-
-                top: 0;
-                left: 0;
-
-                width:
-                    min(
-                        290px,
-                        86vw
-                    );
-
-                height: 100vh;
-
-                transform:
-                    translateX(-105%);
-
-                transition:
-                    transform .2s ease;
-
-                box-shadow:
-                    20px 0 60px
-                    rgba(0,0,0,.45);
-            }
-
-            .admin-sidebar.mobile-open {
-                transform:
-                    translateX(0);
-            }
-
-            .admin-main {
-                padding:
-                    14px
-                    14px
-                    40px;
-            }
-
-            .mobile-menu-button {
-                display: inline-flex;
-            }
+        @media (
+            max-width: 1050px
+        ) {
 
             .stats-grid {
                 grid-template-columns:
@@ -3148,54 +2588,98 @@
                     );
             }
 
-        }
-
-        @media (max-width: 650px) {
-
-            .topbar-right {
-                display: none;
+            .contest-body,
+            .quiz-layout,
+            .live-control-grid,
+            .dashboard-hero {
+                grid-template-columns:
+                    1fr;
             }
 
-            .page-header {
+        }
+
+
+        @media (
+            max-width: 800px
+        ) {
+
+            .admin-app {
+                display: block;
+            }
+
+            .admin-sidebar {
+                position: fixed;
+
+                left: -280px;
+                top: 0;
+
+                width: 245px;
+
+                transition:
+                    .2s ease;
+            }
+
+            .admin-sidebar.mobile-open {
+                left: 0;
+            }
+
+            .admin-main {
+                padding:
+                    16px
+                    14px
+                    40px;
+            }
+
+            .mobile-menu-button {
+                display: inline-flex;
+            }
+
+            .members-panel-top,
+            .contest-list-top {
                 align-items: stretch;
                 flex-direction: column;
             }
 
-            .dashboard-founder-card {
-                min-height: 260px;
-
-                padding:
-                    25px
-                    21px;
-            }
-
-            .dashboard-founder-card h1 {
-                font-size: 48px;
-            }
-
-            .members-panel-top,
             .members-tools,
-            .contest-panel-header,
-            .contest-list-top,
             .contest-tools {
-                align-items: stretch;
-
+                width: 100%;
                 flex-direction: column;
             }
 
             .member-search,
-            .refresh-button,
-            .contest-search-wrap,
-            .contest-sort-wrap {
+            .contest-search,
+            .contest-sort {
                 width: 100%;
             }
 
-            .quiz-tabs {
-                overflow-x: auto;
+            .live-control-status,
+            .current-question-stats {
+                grid-template-columns:
+                    repeat(
+                        2,
+                        1fr
+                    );
             }
 
-            .quiz-tab-button {
-                white-space: nowrap;
+            .past-quiz-summary {
+                grid-template-columns:
+                    1fr;
+            }
+
+            .past-quiz-result {
+                text-align: left;
+            }
+
+        }
+
+
+        @media (
+            max-width: 520px
+        ) {
+
+            .stats-grid {
+                grid-template-columns:
+                    1fr;
             }
 
             .quiz-option-row {
@@ -3205,30 +2689,8 @@
             }
 
             .quiz-correct-button {
-                grid-column: 2;
-            }
-
-            .live-info-grid,
-            .live-control-actions,
-            .current-question-stats {
-                grid-template-columns:
-                    repeat(
-                        2,
-                        minmax(0,1fr)
-                    );
-            }
-
-        }
-
-        @media (max-width: 450px) {
-
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .live-info-grid,
-            .live-control-actions {
-                grid-template-columns: 1fr;
+                grid-column:
+                    2;
             }
 
         }
@@ -3241,12 +2703,10 @@
 <body>
 
 
-    <div
-        class="admin-background"
-        aria-hidden="true"
-    >
+    <div class="admin-background">
 
         <div class="admin-glow glow-one"></div>
+
         <div class="admin-glow glow-two"></div>
 
     </div>
@@ -3255,9 +2715,9 @@
     <div class="admin-app">
 
 
-        <!-- =================================================
+        <!-- =====================================================
              SIDEBAR
-        ================================================== -->
+        ====================================================== -->
 
         <aside
             class="admin-sidebar"
@@ -3278,7 +2738,7 @@
                     </strong>
 
                     <span>
-                        PRIVATE CONTROL ROOM
+                        ADMIN
                     </span>
 
                 </div>
@@ -3289,7 +2749,7 @@
             <div class="sidebar-access">
 
                 <div class="sidebar-access-label">
-                    CURRENT ACCESS
+                    ACCESS
                 </div>
 
                 <div class="sidebar-access-value">
@@ -3297,7 +2757,7 @@
                     <span class="sidebar-access-dot"></span>
 
                     <span id="sidebarAdminIdentity">
-                        CHECKING...
+                        VERIFYING...
                     </span>
 
                 </div>
@@ -3307,21 +2767,18 @@
 
             <nav class="sidebar-nav">
 
-
                 <button
                     type="button"
                     class="sidebar-nav-button active"
                     data-admin-view="dashboard"
                 >
-
                     <span class="sidebar-nav-icon">
-                        ⌂
+                        ◉
                     </span>
 
                     <span class="sidebar-nav-text">
                         Dashboard
                     </span>
-
                 </button>
 
 
@@ -3330,15 +2787,13 @@
                     class="sidebar-nav-button"
                     data-admin-view="members"
                 >
-
                     <span class="sidebar-nav-icon">
-                        👥
+                        ◎
                     </span>
 
                     <span class="sidebar-nav-text">
                         Members
                     </span>
-
                 </button>
 
 
@@ -3348,15 +2803,13 @@
                     data-admin-view="contest"
                     id="openContestPanel"
                 >
-
                     <span class="sidebar-nav-icon">
-                        🏆
+                        ◇
                     </span>
 
                     <span class="sidebar-nav-text">
                         Contest
                     </span>
-
                 </button>
 
 
@@ -3365,9 +2818,8 @@
                     class="sidebar-nav-button"
                     data-admin-view="quiz"
                 >
-
                     <span class="sidebar-nav-icon">
-                        ⚡
+                        ?
                     </span>
 
                     <span class="sidebar-nav-text">
@@ -3388,7 +2840,6 @@
                     class="sidebar-nav-button"
                     data-admin-view="past-quizzes"
                 >
-
                     <span class="sidebar-nav-icon">
                         ◷
                     </span>
@@ -3396,7 +2847,6 @@
                     <span class="sidebar-nav-text">
                         Past Quizzes
                     </span>
-
                 </button>
 
             </nav>
@@ -3416,9 +2866,9 @@
         </aside>
 
 
-        <!-- =================================================
+        <!-- =====================================================
              MAIN
-        ================================================== -->
+        ====================================================== -->
 
         <main class="admin-main">
 
@@ -3436,7 +2886,7 @@
                     </button>
 
 
-                    <div class="topbar-page-copy">
+                    <div>
 
                         <div
                             class="topbar-page-label"
@@ -3457,15 +2907,13 @@
                 </div>
 
 
-                <div class="topbar-right">
+                <div class="topbar-admin-pill">
 
-                    <div class="topbar-admin-pill">
+                    <span class="topbar-admin-dot"></span>
 
-                        <span class="topbar-admin-dot"></span>
-
-                        ADMIN ACCESS
-
-                    </div>
+                    <span id="adminIdentity">
+                        VERIFYING...
+                    </span>
 
                 </div>
 
@@ -3476,14 +2924,13 @@
                 class="admin-message"
                 id="adminMessage"
             >
-                CHECKING ADMIN ACCESS...
+                VERIFYING ADMIN ACCESS...
             </div>
 
 
             <section
                 class="admin-dashboard"
                 id="adminDashboard"
-                hidden
             >
 
 
@@ -3493,8 +2940,8 @@
 
                 <section
                     class="admin-view"
-                    id="adminViewDashboard"
                     data-view-name="dashboard"
+                    id="adminViewDashboard"
                 >
 
                     <div class="dashboard-hero">
@@ -3502,63 +2949,50 @@
 
                         <section class="dashboard-founder-card">
 
-                            <div class="founder-card-orb"></div>
-
-                            <p class="founder-tag">
+                            <div class="founder-tag">
                                 ADMIN PANEL
-                            </p>
+                            </div>
 
                             <h1>
-                                WELCOME<br>
-                                <span>ADMIN.</span>
+                                WELCOME
+                                <span>
+                                    ADMIN.
+                                </span>
                             </h1>
-
-                            <div class="founder-line"></div>
 
                         </section>
 
 
-                        <aside class="private-access-card">
+                        <section class="private-access-card">
 
-                            <p class="private-access-label">
+                            <div class="private-access-label">
                                 PRIVATE ACCESS
-                            </p>
+                            </div>
 
                             <h2>
-                                YOUR GREMBLE CONTROL ROOM.
+                                GREMBLE CONTROL
                             </h2>
-
-                            <p>
-
-                                Admin data is loaded through
-                                the secure backend.
-                                Access is verified against
-                                your Telegram ID.
-
-                            </p>
-
 
                             <div class="private-id-box">
 
                                 <small>
-                                    CURRENT ACCESS
+                                    STATUS
                                 </small>
 
-                                <strong id="adminIdentity">
-                                    CHECKING...
+                                <strong>
+                                    TELEGRAM VERIFIED
                                 </strong>
 
                             </div>
 
-                        </aside>
+                        </section>
 
                     </div>
 
 
                     <div class="stats-grid">
 
-
-                        <article class="stat-card">
+                        <div class="stat-card">
 
                             <span>
                                 TOTAL MEMBERS
@@ -3569,13 +3003,13 @@
                             </strong>
 
                             <small>
-                                REGISTERED MEMBERS
+                                REGISTERED
                             </small>
 
-                        </article>
+                        </div>
 
 
-                        <article class="stat-card">
+                        <div class="stat-card">
 
                             <span>
                                 COMPLETE PROFILES
@@ -3589,13 +3023,13 @@
                                 X + SOLANA
                             </small>
 
-                        </article>
+                        </div>
 
 
-                        <article class="stat-card">
+                        <div class="stat-card">
 
                             <span>
-                                IN TELEGRAM
+                                TELEGRAM CHAT
                             </span>
 
                             <strong id="statTelegramChatMembers">
@@ -3603,16 +3037,16 @@
                             </strong>
 
                             <small>
-                                GREMBLE CHAT
+                                MEMBERS
                             </small>
 
-                        </article>
+                        </div>
 
 
-                        <article class="stat-card">
+                        <div class="stat-card">
 
                             <span>
-                                IN TELEGRAM
+                                ANNOUNCEMENTS
                             </span>
 
                             <strong id="statTelegramAnnouncementsMembers">
@@ -3620,16 +3054,16 @@
                             </strong>
 
                             <small>
-                                GREMBLE ANNOUNCEMENTS
+                                MEMBERS
                             </small>
 
-                        </article>
+                        </div>
 
 
-                        <article class="stat-card">
+                        <div class="stat-card">
 
                             <span>
-                                WALLET CONNECTED
+                                WALLET VERIFIED
                             </span>
 
                             <strong id="statMembersWithWallet">
@@ -3637,10 +3071,10 @@
                             </strong>
 
                             <small>
-                                VERIFIED WALLETS
+                                CONNECTED
                             </small>
 
-                        </article>
+                        </div>
 
                     </div>
 
@@ -3660,23 +3094,22 @@
 
                     <div class="page-header">
 
-                        <div>
-
-                            <div class="page-eyebrow">
-                                GREMBLE MEMBERS
-                            </div>
-
-                            <h1 class="page-title">
-                                Registered people
-                            </h1>
-
+                        <div class="page-eyebrow">
+                            GREMBLE MEMBERS
                         </div>
+
+                        <h1 class="page-title">
+                            Registered People
+                        </h1>
+
+                        <p class="page-description">
+                            All registered Gremble members and their profile information.
+                        </p>
 
                     </div>
 
 
                     <section class="members-panel">
-
 
                         <div class="members-panel-top">
 
@@ -3687,7 +3120,7 @@
                                 </span>
 
                                 <h2>
-                                    All registered members
+                                    Community
                                 </h2>
 
                             </div>
@@ -3699,8 +3132,7 @@
                                     type="search"
                                     class="member-search"
                                     id="memberSearch"
-                                    placeholder="Search Telegram, X, country, wallet or group status..."
-                                    autocomplete="off"
+                                    placeholder="Search members..."
                                 >
 
                                 <button
@@ -3724,64 +3156,35 @@
 
                                     <tr>
 
-                                        <th>
-                                            TELEGRAM NAME
-                                        </th>
-
-                                        <th>
-                                            TELEGRAM USERNAME
-                                        </th>
-
-                                        <th class="chat-header">
-                                            GREMBLE CHAT
-                                        </th>
-
-                                        <th class="announcements-header">
-                                            GREMBLE ANNOUNCEMENTS
-                                        </th>
-
-                                        <th>
-                                            X USERNAME
-                                        </th>
-
-                                        <th>
-                                            SOLANA ADDRESS
-                                        </th>
-
-                                        <th>
-                                            JOINED
-                                        </th>
-
-                                        <th>
-                                            UPDATED
-                                        </th>
-
-                                        <th>
-                                            COUNTRY
-                                        </th>
-
-                                        <th>
-                                            WALLET
-                                        </th>
+                                        <th>TELEGRAM NAME</th>
+                                        <th>TELEGRAM</th>
+                                        <th class="chat-header">GREMBLE CHAT</th>
+                                        <th class="announcements-header">ANNOUNCEMENTS</th>
+                                        <th>X USERNAME</th>
+                                        <th>SOLANA ADDRESS</th>
+                                        <th>JOINED</th>
+                                        <th>UPDATED</th>
+                                        <th>COUNTRY</th>
+                                        <th>WALLET</th>
 
                                     </tr>
 
                                 </thead>
 
-                                <tbody id="membersTableBody">
-                                </tbody>
+
+                                <tbody id="membersTableBody"></tbody>
 
                             </table>
 
+                        </div>
 
-                            <div
-                                class="members-empty"
-                                id="membersEmpty"
-                                hidden
-                            >
-                                NO MEMBERS FOUND.
-                            </div>
 
+                        <div
+                            class="members-empty"
+                            id="membersEmpty"
+                            hidden
+                        >
+                            NO MEMBERS FOUND.
                         </div>
 
 
@@ -3796,7 +3199,7 @@
                                 class="members-page-button"
                                 id="membersPrevPage"
                             >
-                                ‹ PREVIOUS
+                                PREVIOUS
                             </button>
 
                             <span
@@ -3811,7 +3214,7 @@
                                 class="members-page-button"
                                 id="membersNextPage"
                             >
-                                NEXT ›
+                                NEXT
                             </button>
 
                         </div>
@@ -3827,49 +3230,42 @@
 
                 <section
                     class="admin-view"
-                    id="adminViewContest"
+                    id="contestPanel"
                     data-view-name="contest"
                     hidden
                 >
 
                     <div class="page-header">
 
-                        <div>
-
-                            <div class="page-eyebrow">
-                                MEME CONTEST
-                            </div>
-
-                            <h1 class="page-title">
-                                Contest Participants
-                            </h1>
-
+                        <div class="page-eyebrow">
+                            MEME CONTEST
                         </div>
+
+                        <h1 class="page-title">
+                            Contest Participants
+                        </h1>
+
+                        <p class="page-description">
+                            Add participants, review entries and assign points.
+                        </p>
 
                     </div>
 
 
-                    <section
-                        class="contest-panel"
-                        id="contestPanel"
-                    >
+                    <section class="contest-panel">
 
                         <div class="contest-panel-header">
 
                             <div class="contest-panel-title">
 
-                                <span class="contest-title-icon">
-                                    🏆
-                                </span>
-
                                 <div class="contest-title-copy">
 
                                     <span>
-                                        GREMBLE CONTEST
+                                        CONTEST MANAGER
                                     </span>
 
                                     <h2>
-                                        Manage entries
+                                        Meme Contest
                                     </h2>
 
                                 </div>
@@ -3882,7 +3278,7 @@
                                 class="contest-close-button"
                                 id="closeContestPanel"
                             >
-                                DASHBOARD
+                                CLOSE
                             </button>
 
                         </div>
@@ -3890,7 +3286,7 @@
 
                         <div class="contest-stats">
 
-                            <article class="contest-stat-card">
+                            <div class="contest-stat-card">
 
                                 <span>
                                     TOTAL ENTRIES
@@ -3904,13 +3300,13 @@
                                     PARTICIPANTS
                                 </small>
 
-                            </article>
+                            </div>
 
 
-                            <article class="contest-stat-card">
+                            <div class="contest-stat-card">
 
                                 <span>
-                                    RULES VERIFIED
+                                    VERIFIED
                                 </span>
 
                                 <strong id="contestVerifiedEntries">
@@ -3918,10 +3314,10 @@
                                 </strong>
 
                                 <small>
-                                    REQUIREMENTS = YES
+                                    REQUIREMENTS OK
                                 </small>
 
-                            </article>
+                            </div>
 
                         </div>
 
@@ -3929,11 +3325,11 @@
                         <div class="contest-body">
 
 
-                            <section class="contest-form-card">
+                            <div class="contest-form-card">
 
-                                <p class="contest-form-title">
+                                <div class="contest-form-title">
                                     ADD NEW ENTRY
-                                </p>
+                                </div>
 
 
                                 <form
@@ -3944,21 +3340,18 @@
                                     <input
                                         type="hidden"
                                         id="contestEntryId"
-                                        value=""
                                     >
 
 
                                     <label for="contestParticipant">
-                                        PARTICIPANT / X USERNAME
+                                        X USERNAME
                                     </label>
 
                                     <input
                                         type="text"
                                         id="contestParticipant"
                                         placeholder="@username"
-                                        maxlength="80"
                                         autocomplete="off"
-                                        required
                                     >
 
 
@@ -3969,9 +3362,7 @@
                                     <input
                                         type="url"
                                         id="contestMemeUrl"
-                                        placeholder="https://x.com/username/status/..."
-                                        autocomplete="off"
-                                        required
+                                        placeholder="https://x.com/..."
                                     >
 
 
@@ -3985,13 +3376,18 @@
                                         min="0"
                                         max="100000"
                                         value="0"
-                                        required
                                     >
 
 
                                     <label>
-                                        MEETS ALL REQUIREMENTS?
+                                        REQUIREMENTS
                                     </label>
+
+                                    <input
+                                        type="hidden"
+                                        id="contestRequirementsValue"
+                                        value="false"
+                                    >
 
 
                                     <div class="contest-requirements">
@@ -4015,13 +3411,6 @@
                                     </div>
 
 
-                                    <input
-                                        type="hidden"
-                                        id="contestRequirementsValue"
-                                        value="false"
-                                    >
-
-
                                     <button
                                         type="submit"
                                         class="contest-submit-button"
@@ -4041,24 +3430,24 @@
                                     </button>
 
 
-                                    <p
+                                    <div
                                         class="contest-form-message"
                                         id="contestFormMessage"
-                                    ></p>
+                                    ></div>
 
                                 </form>
 
-                            </section>
+                            </div>
 
 
-                            <section class="contest-list-card">
+                            <div class="contest-list-card">
 
                                 <div class="contest-list-top">
 
                                     <div class="contest-list-title">
 
                                         <strong>
-                                            ALL CONTEST ENTRIES
+                                            PARTICIPANTS
                                         </strong>
 
                                         <span id="contestEntriesLabel">
@@ -4070,61 +3459,41 @@
 
                                     <div class="contest-tools">
 
-                                        <div class="contest-search-wrap">
+                                        <input
+                                            type="search"
+                                            class="contest-search"
+                                            id="contestSearch"
+                                            placeholder="Search..."
+                                        >
 
-                                            <span class="contest-search-icon">
-                                                ⌕
-                                            </span>
+                                        <select
+                                            class="contest-sort"
+                                            id="contestSort"
+                                        >
+                                            <option value="newest">
+                                                NEWEST
+                                            </option>
 
-                                            <input
-                                                type="search"
-                                                class="contest-search"
-                                                id="contestSearch"
-                                                placeholder="Search X username..."
-                                                autocomplete="off"
-                                            >
+                                            <option value="oldest">
+                                                OLDEST
+                                            </option>
 
-                                        </div>
+                                            <option value="points-high">
+                                                POINTS HIGH
+                                            </option>
 
+                                            <option value="points-low">
+                                                POINTS LOW
+                                            </option>
 
-                                        <div class="contest-sort-wrap">
+                                            <option value="rules-yes">
+                                                RULES YES
+                                            </option>
 
-                                            <select
-                                                class="contest-sort"
-                                                id="contestSort"
-                                            >
-
-                                                <option value="newest">
-                                                    NEWEST
-                                                </option>
-
-                                                <option value="oldest">
-                                                    OLDEST
-                                                </option>
-
-                                                <option value="points-high">
-                                                    POINTS: HIGH → LOW
-                                                </option>
-
-                                                <option value="points-low">
-                                                    POINTS: LOW → HIGH
-                                                </option>
-
-                                                <option value="rules-yes">
-                                                    RULES: YES FIRST
-                                                </option>
-
-                                                <option value="rules-no">
-                                                    RULES: NO FIRST
-                                                </option>
-
-                                            </select>
-
-                                            <span class="contest-sort-arrow">
-                                                ▼
-                                            </span>
-
-                                        </div>
+                                            <option value="rules-no">
+                                                RULES NO
+                                            </option>
+                                        </select>
 
                                     </div>
 
@@ -4142,7 +3511,7 @@
                                                 <th>PARTICIPANT</th>
                                                 <th>MEME</th>
                                                 <th>POINTS</th>
-                                                <th>RULES OK?</th>
+                                                <th>RULES</th>
                                                 <th>ADDED</th>
                                                 <th>ACTIONS</th>
                                                 <th>STATUS</th>
@@ -4151,19 +3520,20 @@
 
                                         </thead>
 
-                                        <tbody id="contestTableBody">
-                                        </tbody>
+
+                                        <tbody id="contestTableBody"></tbody>
 
                                     </table>
 
+                                </div>
 
-                                    <div
-                                        class="contest-empty"
-                                        id="contestEmpty"
-                                    >
-                                        NO CONTEST ENTRIES YET.
-                                    </div>
 
+                                <div
+                                    class="contest-empty"
+                                    id="contestEmpty"
+                                    hidden
+                                >
+                                    NO CONTEST ENTRIES YET.
                                 </div>
 
 
@@ -4178,7 +3548,7 @@
                                         class="contest-page-button"
                                         id="contestPrevPage"
                                     >
-                                        ‹ PREVIOUS
+                                        PREVIOUS
                                     </button>
 
                                     <span
@@ -4193,12 +3563,12 @@
                                         class="contest-page-button"
                                         id="contestNextPage"
                                     >
-                                        NEXT ›
+                                        NEXT
                                     </button>
 
                                 </div>
 
-                            </section>
+                            </div>
 
                         </div>
 
@@ -4208,7 +3578,7 @@
 
 
                 <!-- =================================================
-                     LIVE QUIZ
+                     QUIZ
                 ================================================== -->
 
                 <section
@@ -4220,24 +3590,17 @@
 
                     <div class="page-header">
 
-                        <div>
-
-                            <div class="page-eyebrow">
-                                GREMBLE LIVE QUIZ
-                            </div>
-
-                            <h1 class="page-title">
-                                Quiz Control Room
-                            </h1>
-
-                            <p class="page-description">
-
-                                Create quizzes, prepare questions
-                                and control every live game.
-
-                            </p>
-
+                        <div class="page-eyebrow">
+                            GREMBLE LIVE QUIZ
                         </div>
+
+                        <h1 class="page-title">
+                            Quiz Control Room
+                        </h1>
+
+                        <p class="page-description">
+                            Create quizzes, select a saved quiz and control live sessions.
+                        </p>
 
                     </div>
 
@@ -4248,7 +3611,6 @@
                             type="button"
                             class="quiz-tab-button active"
                             data-quiz-subview="builder"
-                            id="quizBuilderTabButton"
                         >
                             QUIZ BUILDER
                         </button>
@@ -4257,7 +3619,6 @@
                             type="button"
                             class="quiz-tab-button"
                             data-quiz-subview="saved"
-                            id="quizSavedTabButton"
                         >
                             SAVED QUIZZES
                         </button>
@@ -4274,13 +3635,10 @@
                     </div>
 
 
-                    <!-- =========================================
-                         BUILDER
-                    ========================================== -->
+                    <!-- BUILDER -->
 
                     <section
                         class="quiz-subview"
-                        id="quizSubviewBuilder"
                         data-quiz-subview-name="builder"
                     >
 
@@ -4289,9 +3647,7 @@
 
                             <div class="quiz-column">
 
-
                                 <section class="admin-card quiz-builder-card">
-
 
                                     <div class="quiz-builder-heading">
 
@@ -4319,20 +3675,15 @@
                                     </div>
 
 
-                                    <form
-                                        id="quizBuilderForm"
-                                        autocomplete="off"
-                                    >
+                                    <form id="quizBuilderForm">
 
                                         <input
                                             type="hidden"
                                             id="quizEditingId"
-                                            value=""
                                         >
 
 
                                         <div class="quiz-form-grid">
-
 
                                             <div class="quiz-field">
 
@@ -4344,8 +3695,7 @@
                                                     type="text"
                                                     class="quiz-input"
                                                     id="quizTitle"
-                                                    maxlength="120"
-                                                    placeholder="Gremble Quiz #1"
+                                                    placeholder="Example: Gremble Quiz #1"
                                                 >
 
                                             </div>
@@ -4360,8 +3710,7 @@
                                                 <textarea
                                                     class="quiz-textarea"
                                                     id="quizDescription"
-                                                    maxlength="500"
-                                                    placeholder="Optional description..."
+                                                    placeholder="Short quiz description..."
                                                 ></textarea>
 
                                             </div>
@@ -4369,10 +3718,7 @@
                                         </div>
 
 
-                                        <!-- QUESTIONS -->
-
                                         <div class="quiz-question-section">
-
 
                                             <div class="quiz-question-section-header">
 
@@ -4409,13 +3755,11 @@
                                                     class="quiz-question-empty"
                                                     id="quizQuestionsEmpty"
                                                 >
-                                                    NO QUESTIONS YET.
+                                                    NO QUESTIONS ADDED YET.
                                                 </div>
 
                                             </div>
 
-
-                                            <!-- QUESTION EDITOR -->
 
                                             <div
                                                 class="quiz-question-editor"
@@ -4426,7 +3770,6 @@
                                                 <input
                                                     type="hidden"
                                                     id="quizQuestionEditingId"
-                                                    value=""
                                                 >
 
 
@@ -4436,14 +3779,8 @@
                                                         Add Question
                                                     </strong>
 
-                                                    <span class="live-status-badge">
-                                                        MAX 1000 PTS
-                                                    </span>
-
                                                 </div>
 
-
-                                                <!-- READ TIME -->
 
                                                 <div class="quiz-read-time-box">
 
@@ -4454,19 +3791,17 @@
                                                         </span>
 
                                                         <strong>
-                                                            ANSWERS LOCKED
+                                                            Fixed before answers unlock
                                                         </strong>
 
                                                     </div>
 
                                                     <div class="quiz-read-time-value">
-                                                        4 SECONDS
+                                                        4 SEC
                                                     </div>
 
                                                 </div>
 
-
-                                                <!-- QUESTION -->
 
                                                 <div class="quiz-field">
 
@@ -4477,29 +3812,25 @@
                                                     <textarea
                                                         class="quiz-textarea"
                                                         id="quizQuestionText"
-                                                        maxlength="500"
                                                         placeholder="Write the question..."
                                                     ></textarea>
 
                                                 </div>
 
 
-                                                <!-- ANSWERS -->
-
                                                 <div class="quiz-option-grid">
 
 
                                                     <div class="quiz-option-row">
 
-                                                        <span class="quiz-option-letter">
+                                                        <div class="quiz-option-letter">
                                                             A
-                                                        </span>
+                                                        </div>
 
                                                         <input
                                                             type="text"
                                                             class="quiz-input"
                                                             id="quizAnswerA"
-                                                            maxlength="200"
                                                             placeholder="Answer A"
                                                         >
 
@@ -4516,15 +3847,14 @@
 
                                                     <div class="quiz-option-row">
 
-                                                        <span class="quiz-option-letter">
+                                                        <div class="quiz-option-letter">
                                                             B
-                                                        </span>
+                                                        </div>
 
                                                         <input
                                                             type="text"
                                                             class="quiz-input"
                                                             id="quizAnswerB"
-                                                            maxlength="200"
                                                             placeholder="Answer B"
                                                         >
 
@@ -4541,15 +3871,14 @@
 
                                                     <div class="quiz-option-row">
 
-                                                        <span class="quiz-option-letter">
+                                                        <div class="quiz-option-letter">
                                                             C
-                                                        </span>
+                                                        </div>
 
                                                         <input
                                                             type="text"
                                                             class="quiz-input"
                                                             id="quizAnswerC"
-                                                            maxlength="200"
                                                             placeholder="Answer C"
                                                         >
 
@@ -4566,15 +3895,14 @@
 
                                                     <div class="quiz-option-row">
 
-                                                        <span class="quiz-option-letter">
+                                                        <div class="quiz-option-letter">
                                                             D
-                                                        </span>
+                                                        </div>
 
                                                         <input
                                                             type="text"
                                                             class="quiz-input"
                                                             id="quizAnswerD"
-                                                            maxlength="200"
                                                             placeholder="Answer D"
                                                         >
 
@@ -4594,70 +3922,60 @@
                                                 <input
                                                     type="hidden"
                                                     id="quizCorrectAnswer"
-                                                    value=""
                                                 >
 
 
-                                                <!-- ANSWER TIME PER QUESTION -->
-
                                                 <div class="quiz-question-time-box">
 
-                                                    <label for="quizQuestionAnswerTime">
-                                                        ANSWER TIME FOR THIS QUESTION
-                                                    </label>
+                                                    <div class="quiz-field">
 
+                                                        <label for="quizQuestionAnswerTime">
+                                                            ANSWER TIME
+                                                        </label>
 
-                                                    <select
-                                                        class="quiz-select"
-                                                        id="quizQuestionAnswerTime"
-                                                    >
-
-                                                        <option value="5">
-                                                            5 SECONDS
-                                                        </option>
-
-                                                        <option value="6">
-                                                            6 SECONDS
-                                                        </option>
-
-                                                        <option value="7">
-                                                            7 SECONDS
-                                                        </option>
-
-                                                        <option value="8">
-                                                            8 SECONDS
-                                                        </option>
-
-                                                        <option value="9">
-                                                            9 SECONDS
-                                                        </option>
-
-                                                        <option
-                                                            value="10"
-                                                            selected
+                                                        <select
+                                                            class="quiz-select"
+                                                            id="quizQuestionAnswerTime"
                                                         >
-                                                            10 SECONDS
-                                                        </option>
 
-                                                        <option value="15">
-                                                            15 SECONDS
-                                                        </option>
+                                                            <option value="5">
+                                                                5 seconds
+                                                            </option>
 
-                                                        <option value="20">
-                                                            20 SECONDS
-                                                        </option>
+                                                            <option value="6">
+                                                                6 seconds
+                                                            </option>
 
-                                                    </select>
+                                                            <option value="7">
+                                                                7 seconds
+                                                            </option>
 
+                                                            <option value="8">
+                                                                8 seconds
+                                                            </option>
 
-                                                    <p class="quiz-question-time-help">
+                                                            <option value="9">
+                                                                9 seconds
+                                                            </option>
 
-                                                        Players first get
-                                                        <strong>4 seconds to read</strong>.
-                                                        Answers stay locked.
-                                                        Then this answer timer begins.
+                                                            <option
+                                                                value="10"
+                                                                selected
+                                                            >
+                                                                10 seconds
+                                                            </option>
 
-                                                    </p>
+                                                            <option value="15">
+                                                                15 seconds
+                                                            </option>
+
+                                                            <option value="20">
+                                                                20 seconds
+                                                            </option>
+
+                                                        </select>
+
+                                                    </div>
 
                                                 </div>
 
@@ -4673,7 +3991,6 @@
                                                         DELETE
                                                     </button>
 
-
                                                     <button
                                                         type="button"
                                                         class="ghost-button"
@@ -4681,7 +3998,6 @@
                                                     >
                                                         CANCEL
                                                     </button>
-
 
                                                     <button
                                                         type="button"
@@ -4698,20 +4014,16 @@
                                         </div>
 
 
-                                        <div
-                                            class="quiz-editor-actions"
-                                            style="margin-top:20px"
-                                        >
+                                        <div class="quiz-builder-actions">
 
                                             <button
                                                 type="button"
-                                                class="ghost-button"
+                                                class="secondary-button"
                                                 id="quizDuplicateCurrentButton"
                                                 hidden
                                             >
-                                                DUPLICATE QUIZ
+                                                DUPLICATE
                                             </button>
-
 
                                             <button
                                                 type="submit"
@@ -4724,91 +4036,12 @@
                                         </div>
 
 
-                                        <p
-                                            class="contest-form-message"
+                                        <div
+                                            class="quiz-builder-message"
                                             id="quizBuilderMessage"
-                                        ></p>
+                                        ></div>
 
                                     </form>
-
-                                </section>
-
-                            </div>
-
-
-                            <!-- RULES -->
-
-                            <div class="quiz-column">
-
-                                <section class="admin-card">
-
-                                    <div class="card-header">
-
-                                        <div class="card-title-wrap">
-
-                                            <span>
-                                                HOW IT WORKS
-                                            </span>
-
-                                            <h2>
-                                                Quiz rules
-                                            </h2>
-
-                                        </div>
-
-                                    </div>
-
-
-                                    <div
-                                        style="
-                                            padding:18px;
-                                            color:#78857d;
-                                            font-size:10px;
-                                            line-height:1.9;
-                                        "
-                                    >
-
-                                        <p>
-                                            • 4 seconds read time
-                                        </p>
-
-                                        <p>
-                                            • Answers locked during read time
-                                        </p>
-
-                                        <p>
-                                            • Answer time selected per question
-                                        </p>
-
-                                        <p>
-                                            • 4 answers per question
-                                        </p>
-
-                                        <p>
-                                            • 1 correct answer
-                                        </p>
-
-                                        <p>
-                                            • Maximum 1000 points
-                                        </p>
-
-                                        <p>
-                                            • Faster correct answers earn more points
-                                        </p>
-
-                                        <p>
-                                            • Wrong answer = 0 points
-                                        </p>
-
-                                        <p>
-                                            • No leaderboard between questions
-                                        </p>
-
-                                        <p>
-                                            • Final leaderboard after finish
-                                        </p>
-
-                                    </div>
 
                                 </section>
 
@@ -4819,13 +4052,10 @@
                     </section>
 
 
-                    <!-- =========================================
-                         SAVED QUIZZES
-                    ========================================== -->
+                    <!-- SAVED QUIZZES -->
 
                     <section
                         class="quiz-subview"
-                        id="quizSubviewSaved"
                         data-quiz-subview-name="saved"
                         hidden
                     >
@@ -4837,11 +4067,11 @@
                                 <div class="card-title-wrap">
 
                                     <span>
-                                        QUIZ LIBRARY
+                                        SAVED QUIZZES
                                     </span>
 
                                     <h2>
-                                        Saved Quizzes
+                                        Quiz Library
                                     </h2>
 
                                 </div>
@@ -4852,7 +4082,7 @@
                                     class="primary-button"
                                     id="createQuizFromSavedButton"
                                 >
-                                    + NEW QUIZ
+                                    + CREATE QUIZ
                                 </button>
 
                             </div>
@@ -4877,329 +4107,281 @@
                     </section>
 
 
-                    <!-- =========================================
-                         LIVE CONTROL
-                    ========================================== -->
+                    <!-- LIVE CONTROL -->
 
                     <section
                         class="quiz-subview"
-                        id="quizSubviewControl"
                         data-quiz-subview-name="control"
                         hidden
                     >
 
-                        <div class="quiz-layout">
+                        <div class="live-control-grid">
 
 
-                            <div class="quiz-column">
+                            <section class="admin-card live-control-card">
 
+                                <div class="card-header">
 
-                                <section class="admin-card">
+                                    <div class="card-title-wrap">
 
-                                    <div class="card-header">
-
-                                        <div class="card-title-wrap">
-
-                                            <span>
-                                                LIVE CONTROL
-                                            </span>
-
-                                            <h2>
-                                                Current Session
-                                            </h2>
-
-                                        </div>
-
-
-                                        <span
-                                            class="live-status-badge"
-                                            id="liveQuizStatusBadge"
-                                        >
-                                            INACTIVE
+                                        <span>
+                                            LIVE SESSION
                                         </span>
+
+                                        <h2 id="liveQuizSelectedTitle">
+                                            NO QUIZ SELECTED
+                                        </h2>
 
                                     </div>
 
 
-                                    <div class="live-control-body">
+                                    <span
+                                        class="live-status-badge"
+                                        id="liveQuizStatusBadge"
+                                    >
+                                        INACTIVE
+                                    </span>
+
+                                </div>
 
 
-                                        <div class="live-selected-quiz">
+                                <div class="live-control-status">
 
-                                            <small>
-                                                SELECTED QUIZ
-                                            </small>
+                                    <div class="live-control-stat">
 
-                                            <strong id="liveQuizSelectedTitle">
-                                                NO QUIZ SELECTED
+                                        <span>
+                                            STATUS
+                                        </span>
+
+                                        <strong id="liveQuizStatus">
+                                            INACTIVE
+                                        </strong>
+
+                                    </div>
+
+
+                                    <div class="live-control-stat">
+
+                                        <span>
+                                            PLAYERS
+                                        </span>
+
+                                        <strong id="liveQuizPlayerCount">
+                                            0
+                                        </strong>
+
+                                    </div>
+
+
+                                    <div class="live-control-stat">
+
+                                        <span>
+                                            QUESTION
+                                        </span>
+
+                                        <strong id="liveQuizCurrentQuestion">
+                                            —
+                                        </strong>
+
+                                    </div>
+
+
+                                    <div class="live-control-stat">
+
+                                        <span>
+                                            TOTAL QUESTIONS
+                                        </span>
+
+                                        <strong id="liveQuizTotalQuestions">
+                                            0
+                                        </strong>
+
+                                    </div>
+
+                                </div>
+
+
+                                <div class="live-control-buttons">
+
+                                    <button
+                                        type="button"
+                                        class="secondary-button"
+                                        id="selectQuizForLiveButton"
+                                    >
+                                        SELECT QUIZ
+                                    </button>
+
+                                    <button
+                                        type="button"
+                                        class="primary-button"
+                                        id="openQuizLobbyButton"
+                                        disabled
+                                    >
+                                        OPEN LOBBY
+                                    </button>
+
+                                    <button
+                                        type="button"
+                                        class="primary-button"
+                                        id="startQuizButton"
+                                        disabled
+                                    >
+                                        START QUIZ
+                                    </button>
+
+                                    <button
+                                        type="button"
+                                        class="secondary-button"
+                                        id="nextQuizQuestionButton"
+                                        disabled
+                                    >
+                                        NEXT QUESTION
+                                    </button>
+
+                                    <button
+                                        type="button"
+                                        class="primary-button"
+                                        id="finishQuizButton"
+                                        disabled
+                                    >
+                                        FINISH QUIZ
+                                    </button>
+
+                                    <button
+                                        type="button"
+                                        class="danger-button"
+                                        id="closeQuizLobbyButton"
+                                        disabled
+                                    >
+                                        CLOSE LOBBY
+                                    </button>
+
+                                </div>
+
+
+                                <div
+                                    class="current-question-box"
+                                    id="liveCurrentQuestionControl"
+                                    hidden
+                                >
+
+                                    <span id="currentQuizQuestionNumber">
+                                        QUESTION
+                                    </span>
+
+                                    <h3 id="currentQuizQuestionText">
+                                        —
+                                    </h3>
+
+
+                                    <div class="current-question-stats">
+
+                                        <div class="current-question-stat">
+
+                                            <span>
+                                                ANSWERED
+                                            </span>
+
+                                            <strong id="liveQuizAnsweredCount">
+                                                0
                                             </strong>
 
                                         </div>
 
 
-                                        <div class="live-info-grid">
-
-
-                                            <div class="live-info-card">
-
-                                                <span>
-                                                    STATUS
-                                                </span>
-
-                                                <strong id="liveQuizStatus">
-                                                    —
-                                                </strong>
-
-                                            </div>
-
-
-                                            <div class="live-info-card">
-
-                                                <span>
-                                                    PLAYERS IN LOBBY
-                                                </span>
-
-                                                <strong id="liveQuizPlayerCount">
-                                                    0
-                                                </strong>
-
-                                            </div>
-
-
-                                            <div class="live-info-card">
-
-                                                <span>
-                                                    CURRENT QUESTION
-                                                </span>
-
-                                                <strong id="liveQuizCurrentQuestion">
-                                                    —
-                                                </strong>
-
-                                            </div>
-
-
-                                            <div class="live-info-card">
-
-                                                <span>
-                                                    TOTAL QUESTIONS
-                                                </span>
-
-                                                <strong id="liveQuizTotalQuestions">
-                                                    0
-                                                </strong>
-
-                                            </div>
-
-                                        </div>
-
-
-                                        <div class="live-control-actions">
-
-                                            <button
-                                                type="button"
-                                                class="secondary-button"
-                                                id="selectQuizForLiveButton"
-                                            >
-                                                SELECT QUIZ
-                                            </button>
-
-
-                                            <button
-                                                type="button"
-                                                class="primary-button"
-                                                id="openQuizLobbyButton"
-                                                disabled
-                                            >
-                                                OPEN LOBBY
-                                            </button>
-
-
-                                            <button
-                                                type="button"
-                                                class="primary-button"
-                                                id="startQuizButton"
-                                                disabled
-                                            >
-                                                START QUIZ
-                                            </button>
-
-
-                                            <button
-                                                type="button"
-                                                class="secondary-button"
-                                                id="nextQuizQuestionButton"
-                                                disabled
-                                            >
-                                                NEXT QUESTION
-                                            </button>
-
-
-                                            <button
-                                                type="button"
-                                                class="danger-button"
-                                                id="finishQuizButton"
-                                                disabled
-                                            >
-                                                FINISH QUIZ
-                                            </button>
-
-
-                                            <button
-                                                type="button"
-                                                class="danger-button"
-                                                id="closeQuizLobbyButton"
-                                                disabled
-                                            >
-                                                CLOSE LOBBY
-                                            </button>
-
-                                        </div>
-
-
-                                        <div
-                                            class="current-question-control"
-                                            id="liveCurrentQuestionControl"
-                                            hidden
-                                        >
-
-                                            <div class="current-question-box">
-
-                                                <div
-                                                    class="current-question-number"
-                                                    id="currentQuizQuestionNumber"
-                                                >
-                                                    QUESTION 1
-                                                </div>
-
-                                                <div
-                                                    class="current-question-text"
-                                                    id="currentQuizQuestionText"
-                                                >
-                                                    —
-                                                </div>
-
-
-                                                <div class="current-question-stats">
-
-
-                                                    <div class="current-question-stat">
-
-                                                        <span>
-                                                            ANSWERED
-                                                        </span>
-
-                                                        <strong id="liveQuizAnsweredCount">
-                                                            0
-                                                        </strong>
-
-                                                    </div>
-
-
-                                                    <div class="current-question-stat">
-
-                                                        <span>
-                                                            CORRECT
-                                                        </span>
-
-                                                        <strong id="liveQuizCorrectCount">
-                                                            0
-                                                        </strong>
-
-                                                    </div>
-
-
-                                                    <div class="current-question-stat">
-
-                                                        <span>
-                                                            WRONG
-                                                        </span>
-
-                                                        <strong id="liveQuizWrongCount">
-                                                            0
-                                                        </strong>
-
-                                                    </div>
-
-
-                                                    <div class="current-question-stat">
-
-                                                        <span>
-                                                            NO ANSWER
-                                                        </span>
-
-                                                        <strong id="liveQuizNoAnswerCount">
-                                                            0
-                                                        </strong>
-
-                                                    </div>
-
-                                                </div>
-
-                                            </div>
-
-                                        </div>
-
-
-                                        <p
-                                            class="contest-form-message"
-                                            id="liveQuizMessage"
-                                        ></p>
-
-                                    </div>
-
-                                </section>
-
-                            </div>
-
-
-                            <div class="quiz-column">
-
-
-                                <section class="admin-card lobby-player-card">
-
-                                    <div class="card-header">
-
-                                        <div class="card-title-wrap">
+                                        <div class="current-question-stat">
 
                                             <span>
-                                                LIVE LOBBY
+                                                CORRECT
                                             </span>
 
-                                            <h2>
-                                                Players
-                                            </h2>
+                                            <strong id="liveQuizCorrectCount">
+                                                0
+                                            </strong>
 
                                         </div>
 
 
-                                        <span
-                                            class="live-status-badge"
-                                            id="liveLobbyPlayerCountBadge"
-                                        >
-                                            0 PLAYERS
+                                        <div class="current-question-stat">
+
+                                            <span>
+                                                WRONG
+                                            </span>
+
+                                            <strong id="liveQuizWrongCount">
+                                                0
+                                            </strong>
+
+                                        </div>
+
+
+                                        <div class="current-question-stat">
+
+                                            <span>
+                                                NO ANSWER
+                                            </span>
+
+                                            <strong id="liveQuizNoAnswerCount">
+                                                0
+                                            </strong>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+
+                                <div
+                                    class="live-quiz-message"
+                                    id="liveQuizMessage"
+                                ></div>
+
+                            </section>
+
+
+                            <section class="admin-card">
+
+                                <div class="card-header">
+
+                                    <div class="card-title-wrap">
+
+                                        <span>
+                                            LOBBY
                                         </span>
 
+                                        <h2>
+                                            Players
+                                        </h2>
+
                                     </div>
 
+
+                                    <span
+                                        class="live-status-badge lobby"
+                                        id="liveLobbyPlayerCountBadge"
+                                    >
+                                        0 PLAYERS
+                                    </span>
+
+                                </div>
+
+
+                                <div
+                                    class="lobby-player-list"
+                                    id="liveQuizPlayersList"
+                                >
 
                                     <div
-                                        class="lobby-player-list"
-                                        id="liveQuizPlayersList"
+                                        class="lobby-player-empty"
+                                        id="liveQuizPlayersEmpty"
                                     >
-
-                                        <div
-                                            class="lobby-player-empty"
-                                            id="liveQuizPlayersEmpty"
-                                        >
-                                            NO PLAYERS IN LOBBY.
-                                        </div>
-
+                                        NO PLAYERS IN LOBBY.
                                     </div>
 
-                                </section>
+                                </div>
 
-                            </div>
+                            </section>
 
                         </div>
 
@@ -5221,24 +4403,17 @@
 
                     <div class="page-header">
 
-                        <div>
-
-                            <div class="page-eyebrow">
-                                QUIZ HISTORY
-                            </div>
-
-                            <h1 class="page-title">
-                                Past Quizzes
-                            </h1>
-
-                            <p class="page-description">
-
-                                Finished quiz sessions,
-                                winners and final results.
-
-                            </p>
-
+                        <div class="page-eyebrow">
+                            QUIZ HISTORY
                         </div>
+
+                        <h1 class="page-title">
+                            Past Quizzes
+                        </h1>
+
+                        <p class="page-description">
+                            Finished quiz sessions, winners and complete results of every player.
+                        </p>
 
                     </div>
 
@@ -5259,7 +4434,6 @@
 
                 </section>
 
-
             </section>
 
         </main>
@@ -5273,25 +4447,26 @@
 
     <template id="quizQuestionListItemTemplate">
 
-        <div class="saved-quiz-card">
+        <div class="quiz-question-item">
 
-            <div class="saved-quiz-info">
+            <div class="quiz-question-item-copy">
 
                 <strong data-question-title>
                     QUESTION
                 </strong>
 
                 <span data-question-meta>
-                    4 SEC READ · ANSWER TIME
+                    META
                 </span>
 
             </div>
 
-            <div class="saved-quiz-actions">
+
+            <div class="quiz-question-item-actions">
 
                 <button
                     type="button"
-                    class="secondary-button"
+                    class="ghost-button"
                     data-question-edit
                 >
                     EDIT
@@ -5327,7 +4502,7 @@
                 </strong>
 
                 <span data-saved-quiz-meta>
-                    0 QUESTIONS
+                    QUESTIONS
                 </span>
 
             </div>
@@ -5353,10 +4528,10 @@
 
                 <button
                     type="button"
-                    class="secondary-button"
+                    class="primary-button"
                     data-saved-quiz-live
                 >
-                    OPEN LIVE
+                    USE LIVE
                 </button>
 
                 <button
@@ -5400,6 +4575,7 @@
 
             </div>
 
+
             <span class="live-status-badge lobby">
                 READY
             </span>
@@ -5417,28 +4593,133 @@
 
         <article class="past-quiz-card">
 
-            <div class="past-quiz-copy">
+            <div class="past-quiz-summary">
 
-                <strong data-past-quiz-title>
-                    QUIZ TITLE
-                </strong>
 
-                <span data-past-quiz-meta>
-                    DATE · PLAYERS
-                </span>
+                <div class="past-quiz-copy">
+
+                    <strong data-past-quiz-title>
+                        QUIZ TITLE
+                    </strong>
+
+                    <span data-past-quiz-meta>
+                        DATE · PLAYERS
+                    </span>
+
+                </div>
+
+
+                <div class="past-quiz-result">
+
+                    <small>
+                        WINNER
+                    </small>
+
+                    <strong data-past-quiz-winner>
+                        —
+                    </strong>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="past-quiz-toggle"
+                    data-past-quiz-toggle
+                >
+                    VIEW RESULTS
+                </button>
 
             </div>
 
 
-            <div class="past-quiz-result">
+            <!-- COMPLETE PLAYER TABLE -->
 
-                <small>
-                    WINNER
-                </small>
+            <div
+                class="past-quiz-details"
+                data-past-quiz-details
+                hidden
+            >
 
-                <strong data-past-quiz-winner>
-                    —
-                </strong>
+                <div class="past-quiz-details-head">
+
+                    <strong>
+                        FULL RESULTS
+                    </strong>
+
+                    <span data-past-quiz-player-total>
+                        0 PLAYERS
+                    </span>
+
+                </div>
+
+
+                <div class="past-quiz-table-wrap">
+
+                    <table class="past-quiz-table">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    #
+                                </th>
+
+                                <th>
+                                    PLAYER
+                                </th>
+
+                                <th>
+                                    TELEGRAM
+                                </th>
+
+                                <th>
+                                    SCORE
+                                </th>
+
+                                <th>
+                                    CORRECT
+                                </th>
+
+                                <th>
+                                    WRONG
+                                </th>
+
+                                <th>
+                                    NO ANSWER
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody
+                            data-past-quiz-results-body
+                        ></tbody>
+
+                    </table>
+
+                </div>
+
+
+                <div
+                    class="past-quiz-table-loading"
+                    data-past-quiz-loading
+                    hidden
+                >
+                    LOADING RESULTS...
+                </div>
+
+
+                <div
+                    class="past-quiz-table-empty"
+                    data-past-quiz-empty
+                    hidden
+                >
+                    NO PLAYER RESULTS FOUND.
+                </div>
 
             </div>
 
@@ -5451,7 +4732,7 @@
          ADMIN JS
     ====================================================== -->
 
-    <script src="admin.js?v=114"></script>
+    <script src="admin.js?v=115"></script>
 
 
     <!-- =====================================================
@@ -5467,10 +4748,12 @@
                     "adminSidebar"
                 );
 
+
             const mobileMenuButton =
                 document.getElementById(
                     "adminMobileMenuButton"
                 );
+
 
             const navButtons =
                 Array.from(
@@ -5479,6 +4762,7 @@
                     )
                 );
 
+
             const views =
                 Array.from(
                     document.querySelectorAll(
@@ -5486,10 +4770,12 @@
                     )
                 );
 
+
             const pageTitle =
                 document.getElementById(
                     "adminPageTitle"
                 );
+
 
             const pageLabel =
                 document.getElementById(
@@ -5617,6 +4903,7 @@
                             const name =
                                 button.dataset.adminView;
 
+
                             if (name) {
 
                                 openAdminView(
@@ -5649,6 +4936,7 @@
                     "closeContestPanel"
                 );
 
+
             closeContestPanel?.addEventListener(
                 "click",
                 () => {
@@ -5661,7 +4949,9 @@
             );
 
 
-            /* QUIZ SUBVIEWS */
+            /* =================================================
+               QUIZ SUBVIEWS
+            ================================================== */
 
             const quizTabButtons =
                 Array.from(
@@ -5669,6 +4959,7 @@
                         "[data-quiz-subview]"
                     )
                 );
+
 
             const quizSubviews =
                 Array.from(
@@ -5772,7 +5063,11 @@
             catch {}
 
 
-            if (!viewTitles[savedView]) {
+            if (
+                !viewTitles[
+                    savedView
+                ]
+            ) {
 
                 savedView =
                     "dashboard";
@@ -5783,6 +5078,7 @@
             openAdminView(
                 savedView
             );
+
 
             openQuizSubview(
                 "builder"

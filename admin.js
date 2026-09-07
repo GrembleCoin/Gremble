@@ -3,34 +3,16 @@
    File: admin.js
 ===================================================== */
 
+const ADMIN_MEMBERS_ENDPOINT = "https://tffzjqeckoezursrvcpw.supabase.co/functions/v1/admin-members";
+const ADMIN_CONTEST_ENDPOINT = "https://tffzjqeckoezursrvcpw.supabase.co/functions/v1/admin-contest";
+const ADMIN_QUIZ_ENDPOINT = "https://tffzjqeckoezursrvcpw.supabase.co/functions/v1/admin-quiz";
+const ADMIN_QUIZ_LIVE_ENDPOINT = "https://tffzjqeckoezursrvcpw.supabase.co/functions/v1/admin-quiz-live";
 
-/* =====================================================
-   CONFIG
-===================================================== */
+const GREMBLE_SESSION_KEY = "gremble_session_token";
+const GREMBLE_SESSION_EXPIRY_KEY = "gremble_session_expires_at";
 
-const ADMIN_MEMBERS_ENDPOINT =
-    "https://tffzjqeckoezursrvcpw.supabase.co/functions/v1/admin-members";
-
-const ADMIN_CONTEST_ENDPOINT =
-    "https://tffzjqeckoezursrvcpw.supabase.co/functions/v1/admin-contest";
-
-const ADMIN_QUIZ_ENDPOINT =
-    "https://tffzjqeckoezursrvcpw.supabase.co/functions/v1/admin-quiz";
-
-const ADMIN_QUIZ_LIVE_ENDPOINT =
-    "https://tffzjqeckoezursrvcpw.supabase.co/functions/v1/admin-quiz-live";
-
-
-const GREMBLE_SESSION_KEY =
-    "gremble_session_token";
-
-const GREMBLE_SESSION_EXPIRY_KEY =
-    "gremble_session_expires_at";
-
-
-const CONTEST_ITEMS_PER_PAGE = 5;
 const MEMBERS_ITEMS_PER_PAGE = 10;
-
+const CONTEST_ITEMS_PER_PAGE = 5;
 
 const QUIZ_READ_TIME_SECONDS = 4;
 const QUIZ_MAX_SCORE = 1000;
@@ -47,613 +29,424 @@ const QUIZ_ANSWER_TIME_OPTIONS = [
     20
 ];
 
-
 const LIVE_QUIZ_POLL_MS = 1000;
 
 
+const $ = id =>
+    document.getElementById(id);
+
+const $$ = selector =>
+    Array.from(
+        document.querySelectorAll(selector)
+    );
+
+
 /* =====================================================
-   MEMBER ELEMENTS
+   ADMIN
 ===================================================== */
 
 const adminMessage =
-    document.getElementById(
-        "adminMessage"
-    );
+    $("adminMessage");
 
 const adminDashboard =
-    document.getElementById(
-        "adminDashboard"
-    );
+    $("adminDashboard");
 
 const adminIdentity =
-    document.getElementById(
-        "adminIdentity"
-    );
+    $("adminIdentity");
 
 const sidebarAdminIdentity =
-    document.getElementById(
-        "sidebarAdminIdentity"
-    );
-
-
-const statTotalMembers =
-    document.getElementById(
-        "statTotalMembers"
-    );
-
-const statCompletedProfiles =
-    document.getElementById(
-        "statCompletedProfiles"
-    );
-
-const statTelegramChatMembers =
-    document.getElementById(
-        "statTelegramChatMembers"
-    );
-
-const statTelegramAnnouncementsMembers =
-    document.getElementById(
-        "statTelegramAnnouncementsMembers"
-    );
-
-const statMembersWithWallet =
-    document.getElementById(
-        "statMembersWithWallet"
-    );
-
-
-const memberSearch =
-    document.getElementById(
-        "memberSearch"
-    );
-
-const refreshMembers =
-    document.getElementById(
-        "refreshMembers"
-    );
-
-const membersTableBody =
-    document.getElementById(
-        "membersTableBody"
-    );
-
-const membersEmpty =
-    document.getElementById(
-        "membersEmpty"
-    );
-
-const membersPagination =
-    document.getElementById(
-        "membersPagination"
-    );
-
-const membersPrevPage =
-    document.getElementById(
-        "membersPrevPage"
-    );
-
-const membersNextPage =
-    document.getElementById(
-        "membersNextPage"
-    );
-
-const membersPageInfo =
-    document.getElementById(
-        "membersPageInfo"
-    );
+    $("sidebarAdminIdentity");
 
 
 /* =====================================================
-   CONTEST ELEMENTS
+   STATS
+===================================================== */
+
+const statTotalMembers =
+    $("statTotalMembers");
+
+const statCompletedProfiles =
+    $("statCompletedProfiles");
+
+const statTelegramChatMembers =
+    $("statTelegramChatMembers");
+
+const statTelegramAnnouncementsMembers =
+    $("statTelegramAnnouncementsMembers");
+
+const statMembersWithWallet =
+    $("statMembersWithWallet");
+
+
+/* =====================================================
+   MEMBERS
+===================================================== */
+
+const memberSearch =
+    $("memberSearch");
+
+const refreshMembers =
+    $("refreshMembers");
+
+const membersTableBody =
+    $("membersTableBody");
+
+const membersEmpty =
+    $("membersEmpty");
+
+const membersPagination =
+    $("membersPagination");
+
+const membersPrevPage =
+    $("membersPrevPage");
+
+const membersNextPage =
+    $("membersNextPage");
+
+const membersPageInfo =
+    $("membersPageInfo");
+
+
+/* =====================================================
+   CONTEST
 ===================================================== */
 
 const openContestPanel =
-    document.getElementById(
-        "openContestPanel"
-    );
-
-const closeContestPanel =
-    document.getElementById(
-        "closeContestPanel"
-    );
-
-const contestPanel =
-    document.getElementById(
-        "contestPanel"
-    );
-
+    $("openContestPanel");
 
 const contestTotalEntries =
-    document.getElementById(
-        "contestTotalEntries"
-    );
+    $("contestTotalEntries");
 
 const contestVerifiedEntries =
-    document.getElementById(
-        "contestVerifiedEntries"
-    );
+    $("contestVerifiedEntries");
 
 const contestEntriesLabel =
-    document.getElementById(
-        "contestEntriesLabel"
-    );
-
+    $("contestEntriesLabel");
 
 const contestEntryForm =
-    document.getElementById(
-        "contestEntryForm"
-    );
+    $("contestEntryForm");
 
 const contestEntryId =
-    document.getElementById(
-        "contestEntryId"
-    );
+    $("contestEntryId");
 
 const contestParticipant =
-    document.getElementById(
-        "contestParticipant"
-    );
+    $("contestParticipant");
 
 const contestMemeUrl =
-    document.getElementById(
-        "contestMemeUrl"
-    );
+    $("contestMemeUrl");
 
 const contestPoints =
-    document.getElementById(
-        "contestPoints"
-    );
-
+    $("contestPoints");
 
 const contestRequirementsYes =
-    document.getElementById(
-        "contestRequirementsYes"
-    );
+    $("contestRequirementsYes");
 
 const contestRequirementsNo =
-    document.getElementById(
-        "contestRequirementsNo"
-    );
+    $("contestRequirementsNo");
 
 const contestRequirementsValue =
-    document.getElementById(
-        "contestRequirementsValue"
-    );
-
+    $("contestRequirementsValue");
 
 const contestSubmitButton =
-    document.getElementById(
-        "contestSubmitButton"
-    );
+    $("contestSubmitButton");
 
 const contestCancelEdit =
-    document.getElementById(
-        "contestCancelEdit"
-    );
+    $("contestCancelEdit");
 
 const contestFormMessage =
-    document.getElementById(
-        "contestFormMessage"
-    );
-
+    $("contestFormMessage");
 
 const contestTableBody =
-    document.getElementById(
-        "contestTableBody"
-    );
+    $("contestTableBody");
 
 const contestEmpty =
-    document.getElementById(
-        "contestEmpty"
-    );
+    $("contestEmpty");
 
 const contestSearch =
-    document.getElementById(
-        "contestSearch"
-    );
+    $("contestSearch");
 
 const contestSort =
-    document.getElementById(
-        "contestSort"
-    );
+    $("contestSort");
 
 const contestPagination =
-    document.getElementById(
-        "contestPagination"
-    );
+    $("contestPagination");
 
 const contestPrevPage =
-    document.getElementById(
-        "contestPrevPage"
-    );
+    $("contestPrevPage");
 
 const contestNextPage =
-    document.getElementById(
-        "contestNextPage"
-    );
+    $("contestNextPage");
 
 const contestPageInfo =
-    document.getElementById(
-        "contestPageInfo"
-    );
+    $("contestPageInfo");
 
 
 /* =====================================================
-   QUIZ BUILDER ELEMENTS
+   QUIZ BUILDER
 ===================================================== */
 
 const quizBuilderForm =
-    document.getElementById(
-        "quizBuilderForm"
-    );
+    $("quizBuilderForm");
 
 const quizEditingId =
-    document.getElementById(
-        "quizEditingId"
-    );
+    $("quizEditingId");
 
 const quizTitle =
-    document.getElementById(
-        "quizTitle"
-    );
+    $("quizTitle");
 
 const quizDescription =
-    document.getElementById(
-        "quizDescription"
-    );
+    $("quizDescription");
 
 const quizBuilderTitle =
-    document.getElementById(
-        "quizBuilderTitle"
-    );
+    $("quizBuilderTitle");
 
 const quizBuilderMessage =
-    document.getElementById(
-        "quizBuilderMessage"
-    );
-
+    $("quizBuilderMessage");
 
 const quizQuestionCount =
-    document.getElementById(
-        "quizQuestionCount"
-    );
+    $("quizQuestionCount");
 
 const quizQuestionList =
-    document.getElementById(
-        "quizQuestionList"
-    );
+    $("quizQuestionList");
 
 const quizQuestionsEmpty =
-    document.getElementById(
-        "quizQuestionsEmpty"
-    );
+    $("quizQuestionsEmpty");
 
 const addQuizQuestionButton =
-    document.getElementById(
-        "addQuizQuestionButton"
-    );
-
+    $("addQuizQuestionButton");
 
 const quizQuestionEditor =
-    document.getElementById(
-        "quizQuestionEditor"
-    );
+    $("quizQuestionEditor");
 
 const quizQuestionEditingId =
-    document.getElementById(
-        "quizQuestionEditingId"
-    );
+    $("quizQuestionEditingId");
 
 const quizQuestionEditorTitle =
-    document.getElementById(
-        "quizQuestionEditorTitle"
-    );
+    $("quizQuestionEditorTitle");
 
 const quizQuestionText =
-    document.getElementById(
-        "quizQuestionText"
-    );
-
+    $("quizQuestionText");
 
 const quizAnswerA =
-    document.getElementById(
-        "quizAnswerA"
-    );
+    $("quizAnswerA");
 
 const quizAnswerB =
-    document.getElementById(
-        "quizAnswerB"
-    );
+    $("quizAnswerB");
 
 const quizAnswerC =
-    document.getElementById(
-        "quizAnswerC"
-    );
+    $("quizAnswerC");
 
 const quizAnswerD =
-    document.getElementById(
-        "quizAnswerD"
-    );
-
+    $("quizAnswerD");
 
 const quizCorrectAnswer =
-    document.getElementById(
-        "quizCorrectAnswer"
-    );
+    $("quizCorrectAnswer");
 
 const quizCorrectButtons =
-    Array.from(
-        document.querySelectorAll(
-            "[data-correct-answer]"
-        )
-    );
-
+    $$("[data-correct-answer]");
 
 const quizQuestionAnswerTime =
-    document.getElementById(
-        "quizQuestionAnswerTime"
-    );
-
+    $("quizQuestionAnswerTime");
 
 const quizSaveQuestionButton =
-    document.getElementById(
-        "quizSaveQuestionButton"
-    );
+    $("quizSaveQuestionButton");
 
 const quizCancelQuestionButton =
-    document.getElementById(
-        "quizCancelQuestionButton"
-    );
+    $("quizCancelQuestionButton");
 
 const quizDeleteQuestionButton =
-    document.getElementById(
-        "quizDeleteQuestionButton"
-    );
-
+    $("quizDeleteQuestionButton");
 
 const quizResetBuilderButton =
-    document.getElementById(
-        "quizResetBuilderButton"
-    );
+    $("quizResetBuilderButton");
 
 const saveQuizButton =
-    document.getElementById(
-        "saveQuizButton"
-    );
+    $("saveQuizButton");
 
 const quizDuplicateCurrentButton =
-    document.getElementById(
-        "quizDuplicateCurrentButton"
-    );
-
+    $("quizDuplicateCurrentButton");
 
 const quizQuestionListItemTemplate =
-    document.getElementById(
-        "quizQuestionListItemTemplate"
-    );
+    $("quizQuestionListItemTemplate");
 
 
 /* =====================================================
-   SAVED QUIZ ELEMENTS
+   SAVED QUIZZES
 ===================================================== */
 
 const savedQuizCardTemplate =
-    document.getElementById(
-        "savedQuizCardTemplate"
-    );
+    $("savedQuizCardTemplate");
 
 const savedQuizzesList =
-    document.getElementById(
-        "savedQuizzesList"
-    );
+    $("savedQuizzesList");
 
 const savedQuizzesEmpty =
-    document.getElementById(
-        "savedQuizzesEmpty"
-    );
+    $("savedQuizzesEmpty");
 
 const createQuizFromSavedButton =
-    document.getElementById(
-        "createQuizFromSavedButton"
-    );
+    $("createQuizFromSavedButton");
 
 
 /* =====================================================
-   LIVE QUIZ ELEMENTS
+   LIVE QUIZ
 ===================================================== */
 
 const liveQuizStatusBadge =
-    document.getElementById(
-        "liveQuizStatusBadge"
-    );
+    $("liveQuizStatusBadge");
 
 const liveQuizSelectedTitle =
-    document.getElementById(
-        "liveQuizSelectedTitle"
-    );
+    $("liveQuizSelectedTitle");
 
 const liveQuizStatus =
-    document.getElementById(
-        "liveQuizStatus"
-    );
+    $("liveQuizStatus");
 
 const liveQuizPlayerCount =
-    document.getElementById(
-        "liveQuizPlayerCount"
-    );
+    $("liveQuizPlayerCount");
 
 const liveQuizCurrentQuestion =
-    document.getElementById(
-        "liveQuizCurrentQuestion"
-    );
+    $("liveQuizCurrentQuestion");
 
 const liveQuizTotalQuestions =
-    document.getElementById(
-        "liveQuizTotalQuestions"
-    );
-
-
-const selectQuizForLiveButton =
-    document.getElementById(
-        "selectQuizForLiveButton"
-    );
+    $("liveQuizTotalQuestions");
 
 const openQuizLobbyButton =
-    document.getElementById(
-        "openQuizLobbyButton"
-    );
+    $("openQuizLobbyButton");
 
 const startQuizButton =
-    document.getElementById(
-        "startQuizButton"
-    );
+    $("startQuizButton");
 
 const nextQuizQuestionButton =
-    document.getElementById(
-        "nextQuizQuestionButton"
-    );
+    $("nextQuizQuestionButton");
 
 const finishQuizButton =
-    document.getElementById(
-        "finishQuizButton"
-    );
+    $("finishQuizButton");
 
 const closeQuizLobbyButton =
-    document.getElementById(
-        "closeQuizLobbyButton"
-    );
-
+    $("closeQuizLobbyButton");
 
 const liveCurrentQuestionControl =
-    document.getElementById(
-        "liveCurrentQuestionControl"
-    );
+    $("liveCurrentQuestionControl");
 
 const currentQuizQuestionNumber =
-    document.getElementById(
-        "currentQuizQuestionNumber"
-    );
+    $("currentQuizQuestionNumber");
 
 const currentQuizQuestionText =
-    document.getElementById(
-        "currentQuizQuestionText"
-    );
-
+    $("currentQuizQuestionText");
 
 const liveQuizAnsweredCount =
-    document.getElementById(
-        "liveQuizAnsweredCount"
-    );
+    $("liveQuizAnsweredCount");
 
 const liveQuizCorrectCount =
-    document.getElementById(
-        "liveQuizCorrectCount"
-    );
+    $("liveQuizCorrectCount");
 
 const liveQuizWrongCount =
-    document.getElementById(
-        "liveQuizWrongCount"
-    );
+    $("liveQuizWrongCount");
 
 const liveQuizNoAnswerCount =
-    document.getElementById(
-        "liveQuizNoAnswerCount"
-    );
-
+    $("liveQuizNoAnswerCount");
 
 const liveQuizMessage =
-    document.getElementById(
-        "liveQuizMessage"
-    );
-
+    $("liveQuizMessage");
 
 const liveLobbyPlayerCountBadge =
-    document.getElementById(
-        "liveLobbyPlayerCountBadge"
-    );
+    $("liveLobbyPlayerCountBadge");
 
 const liveQuizPlayersList =
-    document.getElementById(
-        "liveQuizPlayersList"
-    );
+    $("liveQuizPlayersList");
 
 const liveQuizPlayersEmpty =
-    document.getElementById(
-        "liveQuizPlayersEmpty"
-    );
+    $("liveQuizPlayersEmpty");
 
 const liveQuizPlayerTemplate =
-    document.getElementById(
-        "liveQuizPlayerTemplate"
-    );
-
+    $("liveQuizPlayerTemplate");
 
 const sidebarQuizLiveDot =
-    document.getElementById(
-        "sidebarQuizLiveDot"
-    );
+    $("sidebarQuizLiveDot");
 
 
 /* =====================================================
-   PAST QUIZ ELEMENTS
+   PAST QUIZZES
 ===================================================== */
 
 const pastQuizzesList =
-    document.getElementById(
-        "pastQuizzesList"
-    );
+    $("pastQuizzesList");
 
 const pastQuizzesEmpty =
-    document.getElementById(
-        "pastQuizzesEmpty"
-    );
+    $("pastQuizzesEmpty");
 
 const pastQuizCardTemplate =
-    document.getElementById(
-        "pastQuizCardTemplate"
-    );
+    $("pastQuizCardTemplate");
 
 
 /* =====================================================
-   DATA
+   STATE
 ===================================================== */
 
-let allMembers = [];
+let allMembers =
+    [];
 
-let allContestEntries = [];
-
-let contestLoaded = false;
-let contestLoading = false;
-let contestSaving = false;
-
-let contestCurrentPage = 1;
-let membersCurrentPage = 1;
+let membersCurrentPage =
+    1;
 
 
-let quizDraftQuestions = [];
-let quizQuestionCounter = 0;
+let allContestEntries =
+    [];
 
-let savedQuizzes = [];
-let pastQuizSessions = [];
+let contestCurrentPage =
+    1;
 
-let selectedLiveQuiz = null;
+let contestLoaded =
+    false;
 
-let liveQuizPlayers = [];
+let contestLoading =
+    false;
 
-let liveQuizSession = null;
+let contestSaving =
+    false;
 
-let liveQuizStatePollTimer = null;
-let liveQuizStateLoading = false;
 
-let liveQuizLastTotalQuestions = 0;
+let quizDraftQuestions =
+    [];
 
-let liveQuizLastQuestion = null;
+let quizQuestionCounter =
+    0;
 
-let liveQuizLastStats = {};
+let savedQuizzes =
+    [];
+
+let selectedLiveQuiz =
+    null;
+
+let liveQuizSession =
+    null;
+
+let liveQuizPlayers =
+    [];
+
+let liveQuizLastQuestion =
+    null;
+
+let liveQuizLastStats =
+    {};
+
+let liveQuizLastTotalQuestions =
+    0;
+
+let liveQuizStateLoading =
+    false;
+
+let liveQuizStatePollTimer =
+    null;
+
+let pastQuizSessions =
+    [];
+
+const pastQuizResultsCache =
+    new Map();
 
 
 /* =====================================================
-   BASIC HELPERS
+   HELPERS
 ===================================================== */
 
 function cleanText(value) {
@@ -692,99 +485,6 @@ function createLocalId(prefix) {
 
 
 /* =====================================================
-   ADMIN MESSAGE
-===================================================== */
-
-function setAdminMessage(
-    message,
-    type = ""
-) {
-
-    if (!adminMessage) {
-        return;
-    }
-
-
-    adminMessage.textContent =
-        message;
-
-
-    adminMessage.classList.remove(
-        "success",
-        "error"
-    );
-
-
-    if (type) {
-
-        adminMessage.classList.add(
-            type
-        );
-
-    }
-
-}
-
-
-/* =====================================================
-   ADMIN IDENTITY
-===================================================== */
-
-function setAdminIdentity(message) {
-
-    if (adminIdentity) {
-
-        adminIdentity.textContent =
-            message;
-
-    }
-
-
-    if (sidebarAdminIdentity) {
-
-        sidebarAdminIdentity.textContent =
-            message;
-
-    }
-
-}
-
-
-/* =====================================================
-   NORMALIZE X USERNAME
-===================================================== */
-
-function normalizeXUsername(value) {
-
-    let username =
-        cleanText(value)
-            .toLowerCase();
-
-
-    if (!username) {
-        return "";
-    }
-
-
-    while (
-        username.startsWith("@")
-    ) {
-
-        username =
-            username.slice(1);
-
-    }
-
-
-    return username.replace(
-        /\s+/g,
-        ""
-    );
-
-}
-
-
-/* =====================================================
    SESSION
 ===================================================== */
 
@@ -806,19 +506,31 @@ function getSessionExpiry() {
             GREMBLE_SESSION_EXPIRY_KEY
         );
 
-
-    if (!raw) {
-        return null;
-    }
-
-
-    const expiry =
+    const number =
         Number(raw);
 
-
-    return Number.isFinite(expiry)
-        ? expiry
+    return (
+        raw &&
+        Number.isFinite(number)
+    )
+        ? number
         : null;
+
+}
+
+
+function sessionIsExpired() {
+
+    const expiry =
+        getSessionExpiry();
+
+    return (
+        !!expiry &&
+        expiry <=
+        Math.floor(
+            Date.now() / 1000
+        )
+    );
 
 }
 
@@ -829,7 +541,6 @@ function clearLocalSession() {
         GREMBLE_SESSION_KEY
     );
 
-
     localStorage.removeItem(
         GREMBLE_SESSION_EXPIRY_KEY
     );
@@ -837,31 +548,8 @@ function clearLocalSession() {
 }
 
 
-function sessionIsExpired() {
-
-    const expiry =
-        getSessionExpiry();
-
-
-    if (!expiry) {
-        return false;
-    }
-
-
-    const nowSeconds =
-        Math.floor(
-            Date.now() / 1000
-        );
-
-
-    return expiry <=
-        nowSeconds;
-
-}
-
-
 /* =====================================================
-   DATE FORMAT
+   FORMAT
 ===================================================== */
 
 function formatDate(value) {
@@ -909,10 +597,6 @@ function formatDate(value) {
 }
 
 
-/* =====================================================
-   SHORT WALLET
-===================================================== */
-
 function shortWallet(value) {
 
     const wallet =
@@ -938,6 +622,118 @@ function shortWallet(value) {
         "..." +
         wallet.slice(-5)
     );
+
+}
+
+
+/* =====================================================
+   MESSAGES
+===================================================== */
+
+function setMessage(
+    element,
+    message,
+    type = ""
+) {
+
+    if (!element) {
+        return;
+    }
+
+
+    element.textContent =
+        message;
+
+
+    element.classList.remove(
+        "success",
+        "error"
+    );
+
+
+    if (type) {
+
+        element.classList.add(
+            type
+        );
+
+    }
+
+}
+
+
+function setAdminMessage(
+    message,
+    type = ""
+) {
+
+    setMessage(
+        adminMessage,
+        message,
+        type
+    );
+
+}
+
+
+function setContestMessage(
+    message,
+    type = ""
+) {
+
+    setMessage(
+        contestFormMessage,
+        message,
+        type
+    );
+
+}
+
+
+function setQuizBuilderMessage(
+    message,
+    type = ""
+) {
+
+    setMessage(
+        quizBuilderMessage,
+        message,
+        type
+    );
+
+}
+
+
+function setLiveQuizMessage(
+    message,
+    type = ""
+) {
+
+    setMessage(
+        liveQuizMessage,
+        message,
+        type
+    );
+
+}
+
+
+function setAdminIdentity(message) {
+
+    if (adminIdentity) {
+
+        adminIdentity.textContent =
+            message;
+
+    }
+
+
+    if (sidebarAdminIdentity) {
+
+        sidebarAdminIdentity.textContent =
+            message;
+
+    }
 
 }
 
@@ -1014,12 +810,14 @@ function normalizeTelegramStatus(value) {
 
 
     if (
-        status === "member" ||
-        status === "administrator" ||
-        status === "creator" ||
-        status === "in_group" ||
-        status === "in_chat" ||
-        status === "yes"
+        [
+            "member",
+            "administrator",
+            "creator",
+            "in_group",
+            "in_chat",
+            "yes"
+        ].includes(status)
     ) {
 
         return "member";
@@ -1028,12 +826,14 @@ function normalizeTelegramStatus(value) {
 
 
     if (
-        status === "not_member" ||
-        status === "left" ||
-        status === "kicked" ||
-        status === "no" ||
-        status === "not_in_group" ||
-        status === "not_in_chat"
+        [
+            "not_member",
+            "left",
+            "kicked",
+            "no",
+            "not_in_group",
+            "not_in_chat"
+        ].includes(status)
     ) {
 
         return "not_member";
@@ -1072,10 +872,6 @@ function getAnnouncementsStatus(member) {
 }
 
 
-/* =====================================================
-   TELEGRAM BADGE
-===================================================== */
-
 function createTelegramBadge(
     status,
     type
@@ -1094,50 +890,29 @@ function createTelegramBadge(
 
 
     badge.className =
-        "telegram-group-badge";
+        `telegram-group-badge ${
+            normalized === "member"
+                ? "member"
+                : normalized === "not_member"
+                    ? "not-member"
+                    : "unknown"
+        }`;
 
 
-    if (
+    badge.textContent =
         normalized === "member"
-    ) {
-
-        badge.classList.add(
-            "member"
-        );
-
-
-        badge.textContent =
-            type === "announcements"
-                ? "✓ IN ANNOUNCEMENTS"
-                : "✓ IN CHAT";
-
-    }
-    else if (
-        normalized === "not_member"
-    ) {
-
-        badge.classList.add(
-            "not-member"
-        );
-
-
-        badge.textContent =
-            type === "announcements"
-                ? "× NOT IN ANNOUNCEMENTS"
-                : "× NOT IN CHAT";
-
-    }
-    else {
-
-        badge.classList.add(
-            "unknown"
-        );
-
-
-        badge.textContent =
-            "UNKNOWN";
-
-    }
+            ? (
+                type === "announcements"
+                    ? "✓ IN ANNOUNCEMENTS"
+                    : "✓ IN CHAT"
+            )
+            : normalized === "not_member"
+                ? (
+                    type === "announcements"
+                        ? "× NOT IN ANNOUNCEMENTS"
+                        : "× NOT IN CHAT"
+                )
+                : "UNKNOWN";
 
 
     return badge;
@@ -1207,24 +982,8 @@ function createCountryCell(member) {
         !countryName
     ) {
 
-        const empty =
-            document.createElement(
-                "span"
-            );
-
-
-        empty.className =
-            "empty-value";
-
-
-        empty.textContent =
-            "—";
-
-
-        cell.appendChild(
-            empty
-        );
-
+        cell.innerHTML =
+            '<span class="empty-value">—</span>';
 
         return cell;
 
@@ -1270,29 +1029,29 @@ function createCountryCell(member) {
     }
 
 
-    const name =
+    const label =
         document.createElement(
             "span"
         );
 
 
-    name.className =
+    label.className =
         "country-name";
 
 
-    name.textContent =
+    label.textContent =
         countryCode ||
         countryName;
 
 
-    name.title =
+    label.title =
         countryName
             ? `${countryCode} — ${countryName}`
             : countryCode;
 
 
     wrapper.appendChild(
-        name
+        label
     );
 
 
@@ -1318,7 +1077,7 @@ function createVerifiedWalletCell(member) {
         );
 
 
-    const walletAddress =
+    const wallet =
         cleanText(
             member.wallet_address
         );
@@ -1328,6 +1087,22 @@ function createVerifiedWalletCell(member) {
         document.createElement(
             "span"
         );
+
+
+    badge.className =
+        `wallet-status-badge ${
+            wallet
+                ? "yes"
+                : "no"
+        }`;
+
+
+    if (wallet) {
+
+        badge.title =
+            wallet;
+
+    }
 
 
     const dot =
@@ -1340,46 +1115,20 @@ function createVerifiedWalletCell(member) {
         "wallet-status-dot";
 
 
-    if (walletAddress) {
-
-        badge.className =
-            "wallet-status-badge yes";
-
-
-        badge.title =
-            walletAddress;
+    badge.appendChild(
+        dot
+    );
 
 
-        badge.appendChild(
-            dot
-        );
+    badge.appendChild(
 
+        document.createTextNode(
+            wallet
+                ? "YES"
+                : "NO"
+        )
 
-        badge.appendChild(
-            document.createTextNode(
-                "YES"
-            )
-        );
-
-    }
-    else {
-
-        badge.className =
-            "wallet-status-badge no";
-
-
-        badge.appendChild(
-            dot
-        );
-
-
-        badge.appendChild(
-            document.createTextNode(
-                "NO"
-            )
-        );
-
-    }
+    );
 
 
     cell.appendChild(
@@ -1400,7 +1149,7 @@ function updateStats(
     stats = {}
 ) {
 
-    const totalMembers =
+    const total =
         numberOrZero(
 
             stats.total_members ??
@@ -1409,22 +1158,20 @@ function updateStats(
         );
 
 
-    const completedProfiles =
+    const completed =
         numberOrZero(
 
             stats.completed_profiles ??
             stats.complete_profiles ??
+
             allMembers.filter(
                 member =>
-
                     cleanText(
                         member.x_username
                     ) &&
-
                     cleanText(
                         member.solana_address
                     )
-
             ).length
 
         );
@@ -1439,11 +1186,9 @@ function updateStats(
 
             allMembers.filter(
                 member =>
-
                     getChatStatus(
                         member
                     ) === "member"
-
             ).length
 
         );
@@ -1457,17 +1202,15 @@ function updateStats(
 
             allMembers.filter(
                 member =>
-
                     getAnnouncementsStatus(
                         member
                     ) === "member"
-
             ).length
 
         );
 
 
-    const membersWithWallet =
+    const wallets =
         numberOrZero(
 
             stats.members_with_wallet ??
@@ -1475,11 +1218,9 @@ function updateStats(
 
             allMembers.filter(
                 member =>
-
-                    !!cleanText(
+                    cleanText(
                         member.wallet_address
                     )
-
             ).length
 
         );
@@ -1488,9 +1229,7 @@ function updateStats(
     if (statTotalMembers) {
 
         statTotalMembers.textContent =
-            String(
-                totalMembers
-            );
+            String(total);
 
     }
 
@@ -1498,9 +1237,7 @@ function updateStats(
     if (statCompletedProfiles) {
 
         statCompletedProfiles.textContent =
-            String(
-                completedProfiles
-            );
+            String(completed);
 
     }
 
@@ -1508,9 +1245,7 @@ function updateStats(
     if (statTelegramChatMembers) {
 
         statTelegramChatMembers.textContent =
-            String(
-                chatMembers
-            );
+            String(chatMembers);
 
     }
 
@@ -1530,9 +1265,7 @@ function updateStats(
     if (statMembersWithWallet) {
 
         statMembersWithWallet.textContent =
-            String(
-                membersWithWallet
-            );
+            String(wallets);
 
     }
 
@@ -1540,7 +1273,7 @@ function updateStats(
 
 
 /* =====================================================
-   CREATE MEMBER ROW
+   MEMBER ROW
 ===================================================== */
 
 function createMemberRow(member) {
@@ -1575,9 +1308,9 @@ function createMemberRow(member) {
         );
 
 
-    /* TELEGRAM NAME */
+    /* NAME */
 
-    const telegramNameCell =
+    const nameCell =
         document.createElement(
             "td"
         );
@@ -1585,55 +1318,36 @@ function createMemberRow(member) {
 
     if (telegramName) {
 
-        const value =
+        const span =
             document.createElement(
                 "span"
             );
 
 
-        value.className =
+        span.className =
             "telegram-name";
 
 
-        value.textContent =
+        span.textContent =
             telegramName;
 
 
-        value.title =
-            telegramName;
-
-
-        telegramNameCell.appendChild(
-            value
+        nameCell.appendChild(
+            span
         );
 
     }
     else {
 
-        const empty =
-            document.createElement(
-                "span"
-            );
-
-
-        empty.className =
-            "empty-value";
-
-
-        empty.textContent =
-            "—";
-
-
-        telegramNameCell.appendChild(
-            empty
-        );
+        nameCell.innerHTML =
+            '<span class="empty-value">—</span>';
 
     }
 
 
-    /* TELEGRAM USERNAME */
+    /* TELEGRAM */
 
-    const telegramUsernameCell =
+    const telegramCell =
         document.createElement(
             "td"
         );
@@ -1641,50 +1355,31 @@ function createMemberRow(member) {
 
     if (telegramUsername) {
 
-        const value =
+        const span =
             document.createElement(
                 "span"
             );
 
 
-        value.className =
+        span.className =
             "telegram-username";
 
 
-        value.textContent =
+        span.textContent =
             telegramUsername.startsWith("@")
                 ? telegramUsername
                 : `@${telegramUsername}`;
 
 
-        value.title =
-            value.textContent;
-
-
-        telegramUsernameCell.appendChild(
-            value
+        telegramCell.appendChild(
+            span
         );
 
     }
     else {
 
-        const empty =
-            document.createElement(
-                "span"
-            );
-
-
-        empty.className =
-            "empty-value";
-
-
-        empty.textContent =
-            "NO USERNAME";
-
-
-        telegramUsernameCell.appendChild(
-            empty
-        );
+        telegramCell.innerHTML =
+            '<span class="empty-value">NO USERNAME</span>';
 
     }
 
@@ -1727,9 +1422,9 @@ function createMemberRow(member) {
     );
 
 
-    /* X USERNAME */
+    /* X */
 
-    const xUsernameCell =
+    const xCell =
         document.createElement(
             "td"
         );
@@ -1747,24 +1442,20 @@ function createMemberRow(member) {
             "wallet-cell";
 
 
-        const value =
+        const span =
             document.createElement(
                 "span"
             );
 
 
-        value.className =
+        span.className =
             "x-username";
 
 
-        value.textContent =
+        span.textContent =
             xUsername.startsWith("@")
                 ? xUsername
                 : `@${xUsername}`;
-
-
-        value.title =
-            value.textContent;
 
 
         const copyButton =
@@ -1787,51 +1478,29 @@ function createMemberRow(member) {
 
         copyButton.addEventListener(
             "click",
-            () => {
-
+            () =>
                 copyText(
                     xUsername,
                     copyButton
-                );
-
-            }
+                )
         );
 
 
-        wrapper.appendChild(
-            value
-        );
-
-
-        wrapper.appendChild(
+        wrapper.append(
+            span,
             copyButton
         );
 
 
-        xUsernameCell.appendChild(
+        xCell.appendChild(
             wrapper
         );
 
     }
     else {
 
-        const empty =
-            document.createElement(
-                "span"
-            );
-
-
-        empty.className =
-            "empty-value";
-
-
-        empty.textContent =
-            "NOT ADDED";
-
-
-        xUsernameCell.appendChild(
-            empty
-        );
+        xCell.innerHTML =
+            '<span class="empty-value">NOT ADDED</span>';
 
     }
 
@@ -1896,23 +1565,16 @@ function createMemberRow(member) {
 
         copyButton.addEventListener(
             "click",
-            () => {
-
+            () =>
                 copyText(
                     solanaAddress,
                     copyButton
-                );
-
-            }
+                )
         );
 
 
-        wrapper.appendChild(
-            address
-        );
-
-
-        wrapper.appendChild(
+        wrapper.append(
+            address,
             copyButton
         );
 
@@ -1924,26 +1586,13 @@ function createMemberRow(member) {
     }
     else {
 
-        const empty =
-            document.createElement(
-                "span"
-            );
-
-
-        empty.className =
-            "empty-value";
-
-
-        empty.textContent =
-            "NOT ADDED";
-
-
-        solanaCell.appendChild(
-            empty
-        );
+        solanaCell.innerHTML =
+            '<span class="empty-value">NOT ADDED</span>';
 
     }
 
+
+    /* DATES */
 
     const joinedCell =
         document.createElement(
@@ -1977,56 +1626,17 @@ function createMemberRow(member) {
         );
 
 
-    const countryCell =
-        createCountryCell(
-            member
-        );
-
-
-    const verifiedWalletCell =
-        createVerifiedWalletCell(
-            member
-        );
-
-
-    row.appendChild(
-        telegramNameCell
-    );
-
-    row.appendChild(
-        telegramUsernameCell
-    );
-
-    row.appendChild(
-        chatCell
-    );
-
-    row.appendChild(
-        announcementsCell
-    );
-
-    row.appendChild(
-        xUsernameCell
-    );
-
-    row.appendChild(
-        solanaCell
-    );
-
-    row.appendChild(
-        joinedCell
-    );
-
-    row.appendChild(
-        updatedCell
-    );
-
-    row.appendChild(
-        countryCell
-    );
-
-    row.appendChild(
-        verifiedWalletCell
+    row.append(
+        nameCell,
+        telegramCell,
+        chatCell,
+        announcementsCell,
+        xCell,
+        solanaCell,
+        joinedCell,
+        updatedCell,
+        createCountryCell(member),
+        createVerifiedWalletCell(member)
     );
 
 
@@ -2036,7 +1646,7 @@ function createMemberRow(member) {
 
 
 /* =====================================================
-   MEMBERS
+   FILTER MEMBERS
 ===================================================== */
 
 function getFilteredMembers() {
@@ -2059,30 +1669,6 @@ function getFilteredMembers() {
     return allMembers.filter(
         member => {
 
-            const chatStatus =
-                getChatStatus(
-                    member
-                );
-
-
-            const announcementsStatus =
-                getAnnouncementsStatus(
-                    member
-                );
-
-
-            const walletAddress =
-                cleanText(
-                    member.wallet_address
-                );
-
-
-            const hasWallet =
-                walletAddress
-                    ? "yes wallet connected verified"
-                    : "no wallet";
-
-
             const values = [
 
                 member.telegram_name,
@@ -2098,17 +1684,23 @@ function getFilteredMembers() {
                 member.wallet_address,
                 member.wallet_provider,
 
-                chatStatus,
-                announcementsStatus,
+                getChatStatus(member),
 
-                hasWallet
+                getAnnouncementsStatus(
+                    member
+                ),
+
+                cleanText(
+                    member.wallet_address
+                )
+                    ? "yes wallet connected verified"
+                    : "no wallet"
 
             ];
 
 
             return values.some(
                 value =>
-
                     cleanText(value)
                         .toLowerCase()
                         .includes(
@@ -2122,6 +1714,10 @@ function getFilteredMembers() {
 }
 
 
+/* =====================================================
+   RENDER MEMBERS
+===================================================== */
+
 function renderMembers() {
 
     if (!membersTableBody) {
@@ -2129,106 +1725,51 @@ function renderMembers() {
     }
 
 
-    const filteredMembers =
+    const filtered =
         getFilteredMembers();
-
-
-    const totalFiltered =
-        filteredMembers.length;
 
 
     const totalPages =
         Math.max(
             1,
             Math.ceil(
-                totalFiltered /
+                filtered.length /
                 MEMBERS_ITEMS_PER_PAGE
             )
         );
 
 
-    if (
-        membersCurrentPage >
-        totalPages
-    ) {
-
-        membersCurrentPage =
-            totalPages;
-
-    }
-
-
-    if (
-        membersCurrentPage < 1
-    ) {
-
-        membersCurrentPage =
-            1;
-
-    }
+    membersCurrentPage =
+        Math.min(
+            Math.max(
+                1,
+                membersCurrentPage
+            ),
+            totalPages
+        );
 
 
-    const startIndex =
+    const start =
         (
             membersCurrentPage - 1
         ) *
         MEMBERS_ITEMS_PER_PAGE;
 
 
-    const endIndex =
-        startIndex +
-        MEMBERS_ITEMS_PER_PAGE;
-
-
-    const pageMembers =
-        filteredMembers.slice(
-            startIndex,
-            endIndex
-        );
-
-
     membersTableBody.innerHTML =
         "";
 
 
-    if (
-        totalFiltered === 0
-    ) {
-
-        if (membersEmpty) {
-
-            membersEmpty.hidden =
-                false;
-
-
-            membersEmpty.textContent =
-                cleanText(
-                    memberSearch?.value
-                )
-                    ? "NO MATCHING MEMBERS FOUND."
-                    : "NO MEMBERS FOUND.";
-
-        }
-
-    }
-    else {
-
-        if (membersEmpty) {
-
-            membersEmpty.hidden =
-                true;
-
-        }
-
-
-        const fragment =
-            document.createDocumentFragment();
-
-
-        pageMembers.forEach(
+    filtered
+        .slice(
+            start,
+            start +
+            MEMBERS_ITEMS_PER_PAGE
+        )
+        .forEach(
             member => {
 
-                fragment.appendChild(
+                membersTableBody.appendChild(
 
                     createMemberRow(
                         member
@@ -2240,34 +1781,29 @@ function renderMembers() {
         );
 
 
-        membersTableBody.appendChild(
-            fragment
-        );
+    if (membersEmpty) {
+
+        membersEmpty.hidden =
+            filtered.length > 0;
+
+
+        membersEmpty.textContent =
+            cleanText(
+                memberSearch?.value
+            )
+                ? "NO MATCHING MEMBERS FOUND."
+                : "NO MEMBERS FOUND.";
 
     }
 
 
-    updateMembersPagination(
-        totalFiltered,
-        totalPages
-    );
+    if (membersPagination) {
 
-}
+        membersPagination.hidden =
+            filtered.length <=
+            MEMBERS_ITEMS_PER_PAGE;
 
-
-function updateMembersPagination(
-    totalFiltered,
-    totalPages
-) {
-
-    if (!membersPagination) {
-        return;
     }
-
-
-    membersPagination.hidden =
-        totalFiltered <=
-        MEMBERS_ITEMS_PER_PAGE;
 
 
     if (membersPageInfo) {
@@ -2297,73 +1833,13 @@ function updateMembersPagination(
 }
 
 
-function goToPreviousMembersPage() {
-
-    if (
-        membersCurrentPage <= 1
-    ) {
-        return;
-    }
-
-
-    membersCurrentPage--;
-
-
-    renderMembers();
-
-}
-
-
-function goToNextMembersPage() {
-
-    const filteredMembers =
-        getFilteredMembers();
-
-
-    const totalPages =
-        Math.max(
-            1,
-            Math.ceil(
-                filteredMembers.length /
-                MEMBERS_ITEMS_PER_PAGE
-            )
-        );
-
-
-    if (
-        membersCurrentPage >=
-        totalPages
-    ) {
-        return;
-    }
-
-
-    membersCurrentPage++;
-
-
-    renderMembers();
-
-}
-
-
-function filterMembers() {
-
-    membersCurrentPage =
-        1;
-
-
-    renderMembers();
-
-}
-
-
 /* =====================================================
-   ACCESS ERROR
+   ACCESS
 ===================================================== */
 
 function showAccessError(
     status,
-    message
+    message = ""
 ) {
 
     if (adminDashboard) {
@@ -2394,13 +1870,8 @@ function showAccessError(
             "error"
         );
 
-
-        return;
-
     }
-
-
-    if (status === 403) {
+    else if (status === 403) {
 
         setAdminIdentity(
             "ACCESS DENIED"
@@ -2412,28 +1883,27 @@ function showAccessError(
             "error"
         );
 
+    }
+    else {
 
-        return;
+        setAdminIdentity(
+            "ERROR"
+        );
+
+
+        setAdminMessage(
+            message ||
+            "COULD NOT LOAD THE ADMIN PANEL.",
+            "error"
+        );
 
     }
-
-
-    setAdminIdentity(
-        "ERROR"
-    );
-
-
-    setAdminMessage(
-        message ||
-        "COULD NOT LOAD THE ADMIN PANEL.",
-        "error"
-    );
 
 }
 
 
 /* =====================================================
-   LOAD ADMIN DATA
+   LOAD ADMIN
 ===================================================== */
 
 async function loadAdminData() {
@@ -2442,22 +1912,18 @@ async function loadAdminData() {
         getSessionToken();
 
 
-    if (!token) {
-
-        showAccessError(
-            401
-        );
-
-        return;
-
-    }
-
-
     if (
+        !token ||
         sessionIsExpired()
     ) {
 
-        clearLocalSession();
+        if (
+            sessionIsExpired()
+        ) {
+
+            clearLocalSession();
+
+        }
 
 
         showAccessError(
@@ -2478,14 +1944,6 @@ async function loadAdminData() {
     setAdminMessage(
         "VERIFYING YOUR TELEGRAM ID AND LOADING GREMBLE MEMBERS..."
     );
-
-
-    if (openContestPanel) {
-
-        openContestPanel.disabled =
-            true;
-
-    }
 
 
     if (refreshMembers) {
@@ -2510,10 +1968,8 @@ async function loadAdminData() {
                         "GET",
 
                     headers: {
-
-                        "Authorization":
+                        Authorization:
                             `Bearer ${token}`
-
                     },
 
                     cache:
@@ -2522,7 +1978,8 @@ async function loadAdminData() {
             );
 
 
-        let result = null;
+        let result =
+            null;
 
 
         try {
@@ -2531,11 +1988,7 @@ async function loadAdminData() {
                 await response.json();
 
         }
-        catch {
-
-            result = null;
-
-        }
+        catch {}
 
 
         if (
@@ -2544,11 +1997,9 @@ async function loadAdminData() {
 
             clearLocalSession();
 
-
             showAccessError(
                 401
             );
-
 
             return;
 
@@ -2562,7 +2013,6 @@ async function loadAdminData() {
             showAccessError(
                 403
             );
-
 
             return;
 
@@ -2602,9 +2052,7 @@ async function loadAdminData() {
         renderMembers();
 
 
-        if (
-            contestLoaded
-        ) {
+        if (contestLoaded) {
 
             renderContestEntries();
 
@@ -2648,8 +2096,7 @@ async function loadAdminData() {
 
         showAccessError(
             500,
-            error?.message ||
-            "Could not load admin data."
+            error?.message
         );
 
     }
@@ -2675,42 +2122,45 @@ async function loadAdminData() {
    CONTEST HELPERS
 ===================================================== */
 
+function normalizeXUsername(value) {
+
+    return cleanText(value)
+        .toLowerCase()
+        .replace(
+            /^@+/,
+            ""
+        )
+        .replace(
+            /\s+/g,
+            ""
+        );
+
+}
+
+
 function findMemberByContestUsername(
     participant
 ) {
 
-    const contestUsername =
+    const username =
         normalizeXUsername(
             participant
         );
 
 
-    if (!contestUsername) {
+    if (!username) {
         return null;
     }
 
 
     return (
-
         allMembers.find(
-            member => {
-
-                const memberXUsername =
-                    normalizeXUsername(
-                        member.x_username
-                    );
-
-
-                return (
-                    memberXUsername &&
-                    memberXUsername ===
-                    contestUsername
-                );
-
-            }
+            member =>
+                normalizeXUsername(
+                    member.x_username
+                ) === username
         ) ||
         null
-
     );
 
 }
@@ -2727,91 +2177,55 @@ function getContestMemberStatus(entry) {
     if (!member) {
 
         return {
-
             type:
                 "not-found",
 
             tooltip:
                 "X USERNAME NOT FOUND"
-
         };
 
     }
 
 
-    const chatStatus =
+    const inChat =
         getChatStatus(
             member
-        );
+        ) === "member";
 
 
-    const announcementsStatus =
+    const inAnnouncements =
         getAnnouncementsStatus(
             member
-        );
-
-
-    const isInChat =
-        chatStatus === "member";
-
-
-    const isInAnnouncements =
-        announcementsStatus ===
-        "member";
+        ) === "member";
 
 
     if (
-        isInChat ||
-        isInAnnouncements
+        inChat ||
+        inAnnouncements
     ) {
 
-        let tooltip =
-            "VERIFIED + TELEGRAM";
-
-
-        if (
-            isInChat &&
-            isInAnnouncements
-        ) {
-
-            tooltip =
-                "IN CHAT + ANNOUNCEMENTS";
-
-        }
-        else if (isInChat) {
-
-            tooltip =
-                "IN GREMBLE CHAT";
-
-        }
-        else {
-
-            tooltip =
-                "IN GREMBLE ANNOUNCEMENTS";
-
-        }
-
-
         return {
-
             type:
                 "verified",
 
-            tooltip
-
+            tooltip:
+                inChat &&
+                inAnnouncements
+                    ? "IN CHAT + ANNOUNCEMENTS"
+                    : inChat
+                        ? "IN GREMBLE CHAT"
+                        : "IN GREMBLE ANNOUNCEMENTS"
         };
 
     }
 
 
     return {
-
         type:
             "registered",
 
         tooltip:
             "X FOUND / NOT IN TELEGRAM"
-
     };
 
 }
@@ -2835,16 +2249,8 @@ function createContestMemberStatus(entry) {
         `contest-member-status ${status.type}`;
 
 
-    wrapper.setAttribute(
-        "data-tooltip",
-        status.tooltip
-    );
-
-
-    wrapper.setAttribute(
-        "aria-label",
-        status.tooltip
-    );
+    wrapper.title =
+        status.tooltip;
 
 
     const dot =
@@ -2867,92 +2273,41 @@ function createContestMemberStatus(entry) {
 }
 
 
-function setContestMessage(
-    message,
-    type = ""
-) {
+function setContestRequirements(value) {
 
-    if (!contestFormMessage) {
-        return;
-    }
-
-
-    contestFormMessage.textContent =
-        message;
-
-
-    contestFormMessage.classList.remove(
-        "success",
-        "error"
-    );
-
-
-    if (type) {
-
-        contestFormMessage.classList.add(
-            type
-        );
-
-    }
-
-}
-
-
-function setContestRequirements(
-    isVerified
-) {
-
-    if (contestRequirementsValue) {
+    if (
+        contestRequirementsValue
+    ) {
 
         contestRequirementsValue.value =
-            isVerified
+            value
                 ? "true"
                 : "false";
 
     }
 
 
-    if (contestRequirementsYes) {
-
-        contestRequirementsYes.classList.toggle(
-            "active",
-            isVerified
-        );
-
-    }
+    contestRequirementsYes?.classList.toggle(
+        "active",
+        value
+    );
 
 
-    if (contestRequirementsNo) {
-
-        contestRequirementsNo.classList.toggle(
-            "active",
-            !isVerified
-        );
-
-    }
+    contestRequirementsNo?.classList.toggle(
+        "active",
+        !value
+    );
 
 }
 
 
 function updateContestStats() {
 
-    const total =
-        allContestEntries.length;
-
-
-    const verified =
-        allContestEntries.filter(
-            entry =>
-                entry.requirements_ok ===
-                true
-        ).length;
-
-
     if (contestTotalEntries) {
 
         contestTotalEntries.textContent =
             String(
-                total
+                allContestEntries.length
             );
 
     }
@@ -2962,7 +2317,11 @@ function updateContestStats() {
 
         contestVerifiedEntries.textContent =
             String(
-                verified
+                allContestEntries.filter(
+                    entry =>
+                        entry.requirements_ok ===
+                        true
+                ).length
             );
 
     }
@@ -2973,9 +2332,9 @@ function updateContestStats() {
 function getFilteredContestEntries() {
 
     const search =
-        cleanText(
+        normalizeXUsername(
             contestSearch?.value
-        ).toLowerCase();
+        );
 
 
     if (!search) {
@@ -2987,26 +2346,13 @@ function getFilteredContestEntries() {
     }
 
 
-    const normalizedSearch =
-        normalizeXUsername(
-            search
-        );
-
-
     return allContestEntries.filter(
-        entry => {
-
-            const participant =
-                normalizeXUsername(
-                    entry.participant
-                );
-
-
-            return participant.includes(
-                normalizedSearch
-            );
-
-        }
+        entry =>
+            normalizeXUsername(
+                entry.participant
+            ).includes(
+                search
+            )
     );
 
 }
@@ -3014,20 +2360,16 @@ function getFilteredContestEntries() {
 
 function sortContestEntries(entries) {
 
-    const sortMode =
+    const mode =
         cleanText(
             contestSort?.value
         ) ||
         "newest";
 
 
-    const sorted =
-        [
-            ...entries
-        ];
-
-
-    sorted.sort(
+    return [
+        ...entries
+    ].sort(
         (a, b) => {
 
             const dateA =
@@ -3057,111 +2399,98 @@ function sortContestEntries(entries) {
 
 
             const rulesA =
-                a.requirements_ok === true
+                a.requirements_ok
                     ? 1
                     : 0;
 
 
             const rulesB =
-                b.requirements_ok === true
+                b.requirements_ok
                     ? 1
                     : 0;
 
 
             if (
-                sortMode === "oldest"
+                mode === "oldest"
             ) {
 
-                return dateA - dateB;
+                return (
+                    dateA -
+                    dateB
+                );
 
             }
 
 
             if (
-                sortMode === "points-high"
+                mode === "points-high"
             ) {
 
-                if (
-                    pointsB !== pointsA
-                ) {
-
-                    return pointsB - pointsA;
-
-                }
-
-
-                return dateB - dateA;
+                return (
+                    pointsB -
+                    pointsA ||
+                    dateB -
+                    dateA
+                );
 
             }
 
 
             if (
-                sortMode === "points-low"
+                mode === "points-low"
             ) {
 
-                if (
-                    pointsA !== pointsB
-                ) {
-
-                    return pointsA - pointsB;
-
-                }
-
-
-                return dateB - dateA;
+                return (
+                    pointsA -
+                    pointsB ||
+                    dateB -
+                    dateA
+                );
 
             }
 
 
             if (
-                sortMode === "rules-yes"
+                mode === "rules-yes"
             ) {
 
-                if (
-                    rulesB !== rulesA
-                ) {
-
-                    return rulesB - rulesA;
-
-                }
-
-
-                return dateB - dateA;
+                return (
+                    rulesB -
+                    rulesA ||
+                    dateB -
+                    dateA
+                );
 
             }
 
 
             if (
-                sortMode === "rules-no"
+                mode === "rules-no"
             ) {
 
-                if (
-                    rulesA !== rulesB
-                ) {
-
-                    return rulesA - rulesB;
-
-                }
-
-
-                return dateB - dateA;
+                return (
+                    rulesA -
+                    rulesB ||
+                    dateB -
+                    dateA
+                );
 
             }
 
 
-            return dateB - dateA;
+            return (
+                dateB -
+                dateA
+            );
 
         }
     );
-
-
-    return sorted;
 
 }
 
 
 /* =====================================================
-   CREATE CONTEST ROW
+   CONTEST ROW
 ===================================================== */
 
 function createContestRow(entry) {
@@ -3171,6 +2500,8 @@ function createContestRow(entry) {
             "tr"
         );
 
+
+    /* PARTICIPANT */
 
     const participantCell =
         document.createElement(
@@ -3200,6 +2531,8 @@ function createContestRow(entry) {
     );
 
 
+    /* MEME */
+
     const memeCell =
         document.createElement(
             "td"
@@ -3214,34 +2547,30 @@ function createContestRow(entry) {
 
     if (memeUrl) {
 
-        const memeLink =
+        const link =
             document.createElement(
                 "a"
             );
 
 
-        memeLink.className =
-            "contest-link";
-
-
-        memeLink.href =
+        link.href =
             memeUrl;
 
 
-        memeLink.target =
+        link.target =
             "_blank";
 
 
-        memeLink.rel =
+        link.rel =
             "noopener noreferrer";
 
 
-        memeLink.textContent =
+        link.textContent =
             "OPEN MEME ↗";
 
 
         memeCell.appendChild(
-            memeLink
+            link
         );
 
     }
@@ -3252,6 +2581,8 @@ function createContestRow(entry) {
 
     }
 
+
+    /* POINTS */
 
     const pointsCell =
         document.createElement(
@@ -3271,6 +2602,8 @@ function createContestRow(entry) {
         );
 
 
+    /* RULES */
+
     const rulesCell =
         document.createElement(
             "td"
@@ -3283,18 +2616,16 @@ function createContestRow(entry) {
         );
 
 
-    const requirementsOk =
-        entry.requirements_ok === true;
-
-
     rulesBadge.className =
-        requirementsOk
-            ? "contest-rule-badge yes"
-            : "contest-rule-badge no";
+        `contest-rule-badge ${
+            entry.requirements_ok
+                ? "yes"
+                : "no"
+        }`;
 
 
     rulesBadge.textContent =
-        requirementsOk
+        entry.requirements_ok
             ? "YES"
             : "NO";
 
@@ -3303,6 +2634,8 @@ function createContestRow(entry) {
         rulesBadge
     );
 
+
+    /* DATE */
 
     const addedCell =
         document.createElement(
@@ -3319,6 +2652,8 @@ function createContestRow(entry) {
             entry.created_at
         );
 
+
+    /* ACTIONS */
 
     const actionsCell =
         document.createElement(
@@ -3356,13 +2691,10 @@ function createContestRow(entry) {
 
     editButton.addEventListener(
         "click",
-        () => {
-
+        () =>
             startContestEdit(
                 entry
-            );
-
-        }
+            )
     );
 
 
@@ -3386,22 +2718,15 @@ function createContestRow(entry) {
 
     deleteButton.addEventListener(
         "click",
-        () => {
-
+        () =>
             deleteContestEntry(
                 entry
-            );
-
-        }
+            )
     );
 
 
-    actions.appendChild(
-        editButton
-    );
-
-
-    actions.appendChild(
+    actions.append(
+        editButton,
         deleteButton
     );
 
@@ -3410,6 +2735,8 @@ function createContestRow(entry) {
         actions
     );
 
+
+    /* STATUS */
 
     const statusCell =
         document.createElement(
@@ -3430,31 +2757,13 @@ function createContestRow(entry) {
     );
 
 
-    row.appendChild(
-        participantCell
-    );
-
-    row.appendChild(
-        memeCell
-    );
-
-    row.appendChild(
-        pointsCell
-    );
-
-    row.appendChild(
-        rulesCell
-    );
-
-    row.appendChild(
-        addedCell
-    );
-
-    row.appendChild(
-        actionsCell
-    );
-
-    row.appendChild(
+    row.append(
+        participantCell,
+        memeCell,
+        pointsCell,
+        rulesCell,
+        addedCell,
+        actionsCell,
         statusCell
     );
 
@@ -3475,117 +2784,68 @@ function renderContestEntries() {
     }
 
 
-    const filtered =
-        getFilteredContestEntries();
-
-
     const sorted =
         sortContestEntries(
-            filtered
+            getFilteredContestEntries()
         );
-
-
-    const totalFiltered =
-        sorted.length;
 
 
     const totalPages =
         Math.max(
             1,
             Math.ceil(
-                totalFiltered /
+                sorted.length /
                 CONTEST_ITEMS_PER_PAGE
             )
         );
 
 
-    if (
-        contestCurrentPage >
-        totalPages
-    ) {
-
-        contestCurrentPage =
-            totalPages;
-
-    }
-
-
-    if (
-        contestCurrentPage < 1
-    ) {
-
-        contestCurrentPage =
-            1;
-
-    }
+    contestCurrentPage =
+        Math.min(
+            Math.max(
+                1,
+                contestCurrentPage
+            ),
+            totalPages
+        );
 
 
-    const startIndex =
+    const start =
         (
             contestCurrentPage - 1
         ) *
         CONTEST_ITEMS_PER_PAGE;
 
 
-    const pageEntries =
-        sorted.slice(
-
-            startIndex,
-
-            startIndex +
-            CONTEST_ITEMS_PER_PAGE
-
-        );
-
-
     contestTableBody.innerHTML =
         "";
 
 
-    const fragment =
-        document.createDocumentFragment();
+    sorted
+        .slice(
+            start,
+            start +
+            CONTEST_ITEMS_PER_PAGE
+        )
+        .forEach(
+            entry => {
 
+                contestTableBody.appendChild(
 
-    pageEntries.forEach(
-        entry => {
+                    createContestRow(
+                        entry
+                    )
 
-            fragment.appendChild(
+                );
 
-                createContestRow(
-                    entry
-                )
-
-            );
-
-        }
-    );
-
-
-    contestTableBody.appendChild(
-        fragment
-    );
+            }
+        );
 
 
     if (contestEntriesLabel) {
 
-        const hasSearch =
-            !!cleanText(
-                contestSearch?.value
-            );
-
-
-        if (hasSearch) {
-
-            contestEntriesLabel.textContent =
-                `${totalFiltered} ${totalFiltered === 1 ? "MATCH" : "MATCHES"}`;
-
-        }
-        else {
-
-            contestEntriesLabel.textContent =
-                `${allContestEntries.length} ${allContestEntries.length === 1 ? "ENTRY" : "ENTRIES"}`;
-
-        }
+        contestEntriesLabel.textContent =
+            `${sorted.length} ${sorted.length === 1 ? "ENTRY" : "ENTRIES"}`;
 
     }
 
@@ -3593,49 +2853,26 @@ function renderContestEntries() {
     if (contestEmpty) {
 
         contestEmpty.hidden =
-            totalFiltered > 0;
+            sorted.length > 0;
 
 
-        if (
-            totalFiltered === 0
-        ) {
-
-            contestEmpty.textContent =
-                cleanText(
-                    contestSearch?.value
-                )
-                    ? "NO MATCHING PARTICIPANT."
-                    : "NO CONTEST ENTRIES YET.";
-
-        }
+        contestEmpty.textContent =
+            cleanText(
+                contestSearch?.value
+            )
+                ? "NO MATCHING PARTICIPANT."
+                : "NO CONTEST ENTRIES YET.";
 
     }
 
 
-    updateContestPagination(
-        totalFiltered,
-        totalPages
-    );
+    if (contestPagination) {
 
+        contestPagination.hidden =
+            sorted.length <=
+            CONTEST_ITEMS_PER_PAGE;
 
-    updateContestStats();
-
-}
-
-
-function updateContestPagination(
-    totalFiltered,
-    totalPages
-) {
-
-    if (!contestPagination) {
-        return;
     }
-
-
-    contestPagination.hidden =
-        totalFiltered <=
-        CONTEST_ITEMS_PER_PAGE;
 
 
     if (contestPageInfo) {
@@ -3662,76 +2899,8 @@ function updateContestPagination(
 
     }
 
-}
 
-
-function goToPreviousContestPage() {
-
-    if (
-        contestCurrentPage <= 1
-    ) {
-        return;
-    }
-
-
-    contestCurrentPage--;
-
-
-    renderContestEntries();
-
-}
-
-
-function goToNextContestPage() {
-
-    const filtered =
-        getFilteredContestEntries();
-
-
-    const totalPages =
-        Math.max(
-            1,
-            Math.ceil(
-                filtered.length /
-                CONTEST_ITEMS_PER_PAGE
-            )
-        );
-
-
-    if (
-        contestCurrentPage >=
-        totalPages
-    ) {
-        return;
-    }
-
-
-    contestCurrentPage++;
-
-
-    renderContestEntries();
-
-}
-
-
-function filterContestEntries() {
-
-    contestCurrentPage =
-        1;
-
-
-    renderContestEntries();
-
-}
-
-
-function changeContestSort() {
-
-    contestCurrentPage =
-        1;
-
-
-    renderContestEntries();
+    updateContestStats();
 
 }
 
@@ -3866,7 +3035,8 @@ function startContestEdit(entry) {
 
 
     setContestRequirements(
-        entry.requirements_ok === true
+        entry.requirements_ok ===
+        true
     );
 
 
@@ -3951,10 +3121,8 @@ async function contestRequest(
         method,
 
         headers: {
-
-            "Authorization":
+            Authorization:
                 `Bearer ${token}`
-
         },
 
         cache:
@@ -3988,7 +3156,8 @@ async function contestRequest(
         );
 
 
-    let result = null;
+    let result =
+        null;
 
 
     try {
@@ -3997,12 +3166,7 @@ async function contestRequest(
             await response.json();
 
     }
-    catch {
-
-        result =
-            null;
-
-    }
+    catch {}
 
 
     if (
@@ -4056,16 +3220,16 @@ async function loadContestEntries(
     force = false
 ) {
 
-    if (contestLoading) {
-        return;
-    }
-
-
     if (
-        contestLoaded &&
-        !force
+        contestLoading ||
+        (
+            contestLoaded &&
+            !force
+        )
     ) {
+
         return;
+
     }
 
 
@@ -4137,7 +3301,7 @@ async function loadContestEntries(
 
 
 /* =====================================================
-   SAVE CONTEST ENTRY
+   SAVE CONTEST
 ===================================================== */
 
 async function saveContestEntry(event) {
@@ -4173,7 +3337,7 @@ async function saveContestEntry(event) {
         "true";
 
 
-    const editingId =
+    const id =
         Number(
             contestEntryId?.value
         );
@@ -4185,10 +3349,6 @@ async function saveContestEntry(event) {
             "ENTER PARTICIPANT X USERNAME.",
             "error"
         );
-
-
-        contestParticipant?.focus();
-
 
         return;
 
@@ -4202,10 +3362,6 @@ async function saveContestEntry(event) {
             "error"
         );
 
-
-        contestMemeUrl?.focus();
-
-
         return;
 
     }
@@ -4213,15 +3369,19 @@ async function saveContestEntry(event) {
 
     try {
 
-        const parsedUrl =
+        const url =
             new URL(
                 memeUrl
             );
 
 
         if (
-            parsedUrl.protocol !== "https:" &&
-            parsedUrl.protocol !== "http:"
+            ![
+                "http:",
+                "https:"
+            ].includes(
+                url.protocol
+            )
         ) {
 
             throw new Error();
@@ -4235,10 +3395,6 @@ async function saveContestEntry(event) {
             "ENTER A VALID MEME LINK.",
             "error"
         );
-
-
-        contestMemeUrl?.focus();
-
 
         return;
 
@@ -4256,20 +3412,16 @@ async function saveContestEntry(event) {
             "error"
         );
 
-
-        contestPoints?.focus();
-
-
         return;
 
     }
 
 
-    const isEditing =
+    const editing =
         Number.isSafeInteger(
-            editingId
+            id
         ) &&
-        editingId > 0;
+        id > 0;
 
 
     contestSaving =
@@ -4283,47 +3435,35 @@ async function saveContestEntry(event) {
 
 
         contestSubmitButton.textContent =
-            isEditing
+            editing
                 ? "SAVING..."
                 : "ADDING...";
 
     }
 
 
-    setContestMessage(
-        isEditing
-            ? "SAVING CHANGES..."
-            : "ADDING PARTICIPANT..."
-    );
-
-
     try {
 
         const payload = {
-
             participant,
-
             meme_url:
                 memeUrl,
-
             points,
-
             requirements_ok:
                 requirementsOk
-
         };
 
 
-        if (isEditing) {
+        if (editing) {
 
             payload.id =
-                editingId;
+                id;
 
         }
 
 
         await contestRequest(
-            isEditing
+            editing
                 ? "PUT"
                 : "POST",
             payload
@@ -4343,7 +3483,7 @@ async function saveContestEntry(event) {
 
 
         setContestMessage(
-            isEditing
+            editing
                 ? "PARTICIPANT UPDATED."
                 : "PARTICIPANT ADDED.",
             "success"
@@ -4351,12 +3491,6 @@ async function saveContestEntry(event) {
 
     }
     catch (error) {
-
-        console.error(
-            "Contest save error:",
-            error
-        );
-
 
         setContestMessage(
             error?.message ||
@@ -4377,14 +3511,10 @@ async function saveContestEntry(event) {
                 false;
 
 
-            const stillEditing =
+            contestSubmitButton.textContent =
                 Number(
                     contestEntryId?.value
-                ) > 0;
-
-
-            contestSubmitButton.textContent =
-                stillEditing
+                ) > 0
                     ? "SAVE CHANGES"
                     : "+ ADD PARTICIPANT";
 
@@ -4396,7 +3526,7 @@ async function saveContestEntry(event) {
 
 
 /* =====================================================
-   DELETE CONTEST ENTRY
+   DELETE CONTEST
 ===================================================== */
 
 async function deleteContestEntry(entry) {
@@ -4406,16 +3536,9 @@ async function deleteContestEntry(entry) {
     }
 
 
-    const participant =
-        cleanText(
-            entry.participant
-        ) ||
-        "THIS PARTICIPANT";
-
-
     const confirmed =
         window.confirm(
-            `Delete ${participant} from the contest?`
+            `Delete ${cleanText(entry.participant) || "this participant"} from the contest?`
         );
 
 
@@ -4425,11 +3548,6 @@ async function deleteContestEntry(entry) {
 
 
     try {
-
-        setContestMessage(
-            `DELETING ${participant}...`
-        );
-
 
         await contestRequest(
             "DELETE",
@@ -4466,18 +3584,12 @@ async function deleteContestEntry(entry) {
 
 
         setContestMessage(
-            `${participant} DELETED.`,
+            "PARTICIPANT DELETED.",
             "success"
         );
 
     }
     catch (error) {
-
-        console.error(
-            "Contest delete error:",
-            error
-        );
-
 
         setContestMessage(
             error?.message ||
@@ -4490,123 +3602,27 @@ async function deleteContestEntry(entry) {
 }
 
 
-async function openContest() {
-
-    if (!contestPanel) {
-        return;
-    }
-
-
-    contestPanel.hidden =
-        false;
-
-
-    await loadContestEntries();
-
-}
-
-
-function closeContest() {
-
-    resetContestForm();
-
-}
-
-
 /* =====================================================
-   QUIZ MESSAGES
-===================================================== */
-
-function setQuizBuilderMessage(
-    message,
-    type = ""
-) {
-
-    if (!quizBuilderMessage) {
-        return;
-    }
-
-
-    quizBuilderMessage.textContent =
-        message;
-
-
-    quizBuilderMessage.classList.remove(
-        "success",
-        "error"
-    );
-
-
-    if (type) {
-
-        quizBuilderMessage.classList.add(
-            type
-        );
-
-    }
-
-}
-
-
-function setLiveQuizMessage(
-    message,
-    type = ""
-) {
-
-    if (!liveQuizMessage) {
-        return;
-    }
-
-
-    liveQuizMessage.textContent =
-        message;
-
-
-    liveQuizMessage.classList.remove(
-        "success",
-        "error"
-    );
-
-
-    if (type) {
-
-        liveQuizMessage.classList.add(
-            type
-        );
-
-    }
-
-}
-
-
-/* =====================================================
-   QUIZ QUESTION TIME
+   QUIZ HELPERS
 ===================================================== */
 
 function normalizeQuizAnswerTime(value) {
 
-    const seconds =
+    const number =
         Number(value);
 
 
-    if (
-        QUIZ_ANSWER_TIME_OPTIONS.includes(
-            seconds
-        )
-    ) {
-
-        return seconds;
-
-    }
-
-
-    return QUIZ_DEFAULT_ANSWER_TIME;
+    return QUIZ_ANSWER_TIME_OPTIONS.includes(
+        number
+    )
+        ? number
+        : QUIZ_DEFAULT_ANSWER_TIME;
 
 }
 
 
 /* =====================================================
-   QUIZ QUESTION EDITOR
+   QUESTION EDITOR
 ===================================================== */
 
 function resetQuizQuestionEditor() {
@@ -4619,44 +3635,24 @@ function resetQuizQuestionEditor() {
     }
 
 
-    if (quizQuestionText) {
+    [
+        quizQuestionText,
+        quizAnswerA,
+        quizAnswerB,
+        quizAnswerC,
+        quizAnswerD
+    ].forEach(
+        element => {
 
-        quizQuestionText.value =
-            "";
+            if (element) {
 
-    }
+                element.value =
+                    "";
 
+            }
 
-    if (quizAnswerA) {
-
-        quizAnswerA.value =
-            "";
-
-    }
-
-
-    if (quizAnswerB) {
-
-        quizAnswerB.value =
-            "";
-
-    }
-
-
-    if (quizAnswerC) {
-
-        quizAnswerC.value =
-            "";
-
-    }
-
-
-    if (quizAnswerD) {
-
-        quizAnswerD.value =
-            "";
-
-    }
+        }
+    );
 
 
     if (quizCorrectAnswer) {
@@ -4679,7 +3675,6 @@ function resetQuizQuestionEditor() {
 
     quizCorrectButtons.forEach(
         button =>
-
             button.classList.remove(
                 "active"
             )
@@ -4805,12 +3800,16 @@ function openQuizQuestionEditor(
         }
 
 
+        const correctAnswer =
+            cleanText(
+                question.correct_answer
+            ).toUpperCase();
+
+
         if (quizCorrectAnswer) {
 
             quizCorrectAnswer.value =
-                cleanText(
-                    question.correct_answer
-                ).toUpperCase();
+                correctAnswer;
 
         }
 
@@ -4836,10 +3835,9 @@ function openQuizQuestionEditor(
                 button.classList.toggle(
                     "active",
                     button.dataset.correctAnswer ===
-                    cleanText(
-                        question.correct_answer
-                    ).toUpperCase()
+                    correctAnswer
                 )
+
         );
 
 
@@ -4876,7 +3874,9 @@ function selectQuizCorrectAnswer(answer) {
             normalized
         )
     ) {
+
         return;
+
     }
 
 
@@ -4896,13 +3896,14 @@ function selectQuizCorrectAnswer(answer) {
                 button.dataset.correctAnswer ===
                 normalized
             )
+
     );
 
 }
 
 
 /* =====================================================
-   GET QUESTION DATA
+   QUESTION DATA
 ===================================================== */
 
 function getQuestionEditorData() {
@@ -4991,7 +3992,6 @@ function getQuestionEditorData() {
 
 
     return {
-
         question,
 
         answer_a:
@@ -5017,7 +4017,6 @@ function getQuestionEditorData() {
 
         max_score:
             QUIZ_MAX_SCORE
-
     };
 
 }
@@ -5045,16 +4044,16 @@ function saveQuizQuestion() {
 
             const index =
                 quizDraftQuestions.findIndex(
-                    item =>
+                    question =>
                         String(
-                            item.local_id
+                            question.local_id
                         ) ===
                         editingId
                 );
 
 
             if (
-                index === -1
+                index < 0
             ) {
 
                 throw new Error(
@@ -5067,11 +4066,8 @@ function saveQuizQuestion() {
             quizDraftQuestions[
                 index
             ] = {
-
                 ...quizDraftQuestions[index],
-
                 ...questionData
-
             };
 
         }
@@ -5082,7 +4078,6 @@ function saveQuizQuestion() {
 
             quizDraftQuestions.push(
                 {
-
                     local_id:
                         createLocalId(
                             "question"
@@ -5092,7 +4087,6 @@ function saveQuizQuestion() {
                         quizQuestionCounter,
 
                     ...questionData
-
                 }
             );
 
@@ -5102,15 +4096,12 @@ function saveQuizQuestion() {
         quizDraftQuestions =
             quizDraftQuestions.map(
                 (
-                    item,
+                    question,
                     index
                 ) => ({
-
-                    ...item,
-
+                    ...question,
                     sort_order:
                         index + 1
-
                 })
             );
 
@@ -5122,7 +4113,7 @@ function saveQuizQuestion() {
 
 
         setQuizBuilderMessage(
-            `QUESTION SAVED — ${QUIZ_READ_TIME_SECONDS} SEC READ + ${questionData.answer_time_seconds} SEC ANSWER TIME.`,
+            `QUESTION SAVED — 4 SEC READ + ${questionData.answer_time_seconds} SEC ANSWER TIME.`,
             "success"
         );
 
@@ -5144,30 +4135,9 @@ function saveQuizQuestion() {
    DELETE QUESTION
 ===================================================== */
 
-function deleteCurrentQuizQuestion() {
+function deleteQuestionById(id) {
 
-    const editingId =
-        cleanText(
-            quizQuestionEditingId?.value
-        );
-
-
-    if (!editingId) {
-        return;
-    }
-
-
-    const question =
-        quizDraftQuestions.find(
-            item =>
-                String(
-                    item.local_id
-                ) ===
-                editingId
-        );
-
-
-    if (!question) {
+    if (!id) {
         return;
     }
 
@@ -5184,29 +4154,24 @@ function deleteCurrentQuizQuestion() {
 
 
     quizDraftQuestions =
-        quizDraftQuestions.filter(
-            item =>
-                String(
-                    item.local_id
-                ) !==
-                editingId
-        );
-
-
-    quizDraftQuestions =
-        quizDraftQuestions.map(
-            (
-                item,
-                index
-            ) => ({
-
-                ...item,
-
-                sort_order:
-                    index + 1
-
-            })
-        );
+        quizDraftQuestions
+            .filter(
+                question =>
+                    String(
+                        question.local_id
+                    ) !==
+                    String(id)
+            )
+            .map(
+                (
+                    question,
+                    index
+                ) => ({
+                    ...question,
+                    sort_order:
+                        index + 1
+                })
+            );
 
 
     closeQuizQuestionEditor();
@@ -5223,63 +4188,8 @@ function deleteCurrentQuizQuestion() {
 }
 
 
-function deleteQuizQuestionFromList(
-    question
-) {
-
-    if (!question) {
-        return;
-    }
-
-
-    const confirmed =
-        window.confirm(
-            "Delete this question?"
-        );
-
-
-    if (!confirmed) {
-        return;
-    }
-
-
-    quizDraftQuestions =
-        quizDraftQuestions.filter(
-            item =>
-                item.local_id !==
-                question.local_id
-        );
-
-
-    quizDraftQuestions =
-        quizDraftQuestions.map(
-            (
-                item,
-                index
-            ) => ({
-
-                ...item,
-
-                sort_order:
-                    index + 1
-
-            })
-        );
-
-
-    renderQuizQuestions();
-
-
-    setQuizBuilderMessage(
-        "QUESTION DELETED.",
-        "success"
-    );
-
-}
-
-
 /* =====================================================
-   RENDER QUIZ QUESTIONS
+   RENDER QUESTIONS
 ===================================================== */
 
 function renderQuizQuestions() {
@@ -5335,9 +4245,11 @@ function renderQuizQuestions() {
         ) => {
 
             const fragment =
-                quizQuestionListItemTemplate.content.cloneNode(
-                    true
-                );
+                quizQuestionListItemTemplate
+                    .content
+                    .cloneNode(
+                        true
+                    );
 
 
             const title =
@@ -5364,12 +4276,6 @@ function renderQuizQuestions() {
                 );
 
 
-            const answerTime =
-                normalizeQuizAnswerTime(
-                    question.answer_time_seconds
-                );
-
-
             if (title) {
 
                 title.textContent =
@@ -5381,41 +4287,27 @@ function renderQuizQuestions() {
             if (meta) {
 
                 meta.textContent =
-                    `${QUIZ_READ_TIME_SECONDS} SEC READ · ${answerTime} SEC ANSWER · CORRECT ${question.correct_answer} · MAX ${QUIZ_MAX_SCORE} PTS`;
+                    `4 SEC READ · ${normalizeQuizAnswerTime(question.answer_time_seconds)} SEC ANSWER · CORRECT ${question.correct_answer} · MAX 1000 PTS`;
 
             }
 
 
-            if (editButton) {
-
-                editButton.addEventListener(
-                    "click",
-                    () => {
-
-                        openQuizQuestionEditor(
-                            question
-                        );
-
-                    }
-                );
-
-            }
+            editButton?.addEventListener(
+                "click",
+                () =>
+                    openQuizQuestionEditor(
+                        question
+                    )
+            );
 
 
-            if (deleteButton) {
-
-                deleteButton.addEventListener(
-                    "click",
-                    () => {
-
-                        deleteQuizQuestionFromList(
-                            question
-                        );
-
-                    }
-                );
-
-            }
+            deleteButton?.addEventListener(
+                "click",
+                () =>
+                    deleteQuestionById(
+                        question.local_id
+                    )
+            );
 
 
             quizQuestionList.appendChild(
@@ -5429,7 +4321,7 @@ function renderQuizQuestions() {
 
 
 /* =====================================================
-   CLEAR QUIZ BUILDER
+   CLEAR BUILDER
 ===================================================== */
 
 function clearQuizBuilder() {
@@ -5503,43 +4395,8 @@ function clearQuizBuilder() {
 }
 
 
-function resetQuizBuilder() {
-
-    const hasDraft =
-
-        quizDraftQuestions.length > 0 ||
-
-        !!cleanText(
-            quizTitle?.value
-        ) ||
-
-        !!cleanText(
-            quizDescription?.value
-        );
-
-
-    if (hasDraft) {
-
-        const confirmed =
-            window.confirm(
-                "Start a new quiz? Unsaved changes will be cleared."
-            );
-
-
-        if (!confirmed) {
-            return;
-        }
-
-    }
-
-
-    clearQuizBuilder();
-
-}
-
-
 /* =====================================================
-   QUIZ DRAFT PAYLOAD
+   QUIZ PAYLOAD
 ===================================================== */
 
 function getQuizDraftPayload() {
@@ -5547,12 +4404,6 @@ function getQuizDraftPayload() {
     const title =
         cleanText(
             quizTitle?.value
-        );
-
-
-    const description =
-        cleanText(
-            quizDescription?.value
         );
 
 
@@ -5566,7 +4417,7 @@ function getQuizDraftPayload() {
 
 
     if (
-        quizDraftQuestions.length === 0
+        !quizDraftQuestions.length
     ) {
 
         throw new Error(
@@ -5576,63 +4427,7 @@ function getQuizDraftPayload() {
     }
 
 
-    const questions =
-        quizDraftQuestions.map(
-            (
-                question,
-                index
-            ) => ({
-
-                question:
-                    cleanText(
-                        question.question
-                    ),
-
-                answer_a:
-                    cleanText(
-                        question.answer_a
-                    ),
-
-                answer_b:
-                    cleanText(
-                        question.answer_b
-                    ),
-
-                answer_c:
-                    cleanText(
-                        question.answer_c
-                    ),
-
-                answer_d:
-                    cleanText(
-                        question.answer_d
-                    ),
-
-                correct_answer:
-                    cleanText(
-                        question.correct_answer
-                    ).toUpperCase(),
-
-                sort_order:
-                    index + 1,
-
-                read_time_seconds:
-                    QUIZ_READ_TIME_SECONDS,
-
-                answer_time_seconds:
-                    normalizeQuizAnswerTime(
-                        question.answer_time_seconds
-                    ),
-
-                max_score:
-                    QUIZ_MAX_SCORE
-
-            })
-        );
-
-
     return {
-
         id:
             cleanText(
                 quizEditingId?.value
@@ -5641,10 +4436,62 @@ function getQuizDraftPayload() {
 
         title,
 
-        description,
+        description:
+            cleanText(
+                quizDescription?.value
+            ),
 
-        questions
+        questions:
+            quizDraftQuestions.map(
+                (
+                    question,
+                    index
+                ) => ({
+                    question:
+                        cleanText(
+                            question.question
+                        ),
 
+                    answer_a:
+                        cleanText(
+                            question.answer_a
+                        ),
+
+                    answer_b:
+                        cleanText(
+                            question.answer_b
+                        ),
+
+                    answer_c:
+                        cleanText(
+                            question.answer_c
+                        ),
+
+                    answer_d:
+                        cleanText(
+                            question.answer_d
+                        ),
+
+                    correct_answer:
+                        cleanText(
+                            question.correct_answer
+                        ).toUpperCase(),
+
+                    sort_order:
+                        index + 1,
+
+                    read_time_seconds:
+                        4,
+
+                    answer_time_seconds:
+                        normalizeQuizAnswerTime(
+                            question.answer_time_seconds
+                        ),
+
+                    max_score:
+                        1000
+                })
+            )
     };
 
 }
@@ -5656,7 +4503,8 @@ function getQuizDraftPayload() {
 
 async function quizAdminRequest(
     method,
-    body = null
+    body = null,
+    query = ""
 ) {
 
     const token =
@@ -5687,19 +4535,15 @@ async function quizAdminRequest(
 
 
     const options = {
-
         method,
 
         headers: {
-
-            "Authorization":
+            Authorization:
                 `Bearer ${token}`
-
         },
 
         cache:
             "no-store"
-
     };
 
 
@@ -5723,12 +4567,13 @@ async function quizAdminRequest(
 
     const response =
         await fetch(
-            ADMIN_QUIZ_ENDPOINT,
+            `${ADMIN_QUIZ_ENDPOINT}${query}`,
             options
         );
 
 
-    let result = null;
+    let result =
+        null;
 
 
     try {
@@ -5737,12 +4582,7 @@ async function quizAdminRequest(
             await response.json();
 
     }
-    catch {
-
-        result =
-            null;
-
-    }
+    catch {}
 
 
     if (
@@ -5815,13 +4655,9 @@ async function saveQuiz(event) {
         }
 
 
-        const isEditing =
-            !!payload.id;
-
-
         const result =
             await quizAdminRequest(
-                isEditing
+                payload.id
                     ? "PUT"
                     : "POST",
                 payload
@@ -5829,16 +4665,14 @@ async function saveQuiz(event) {
 
 
         setQuizBuilderMessage(
-            isEditing
+            payload.id
                 ? "QUIZ UPDATED."
                 : "QUIZ SAVED.",
             "success"
         );
 
 
-        await loadSavedQuizzes(
-            true
-        );
+        await loadSavedQuizzes();
 
 
         if (result.quiz) {
@@ -5851,12 +4685,6 @@ async function saveQuiz(event) {
 
     }
     catch (error) {
-
-        console.error(
-            "Quiz save error:",
-            error
-        );
-
 
         setQuizBuilderMessage(
             error?.message ||
@@ -5975,7 +4803,6 @@ function loadQuizIntoBuilder(quiz) {
                     question,
                     index
                 ) => ({
-
                     ...question,
 
                     local_id:
@@ -5989,7 +4816,7 @@ function loadQuizIntoBuilder(quiz) {
                         index + 1,
 
                     read_time_seconds:
-                        QUIZ_READ_TIME_SECONDS,
+                        4,
 
                     answer_time_seconds:
                         normalizeQuizAnswerTime(
@@ -6000,8 +4827,7 @@ function loadQuizIntoBuilder(quiz) {
                         ),
 
                     max_score:
-                        QUIZ_MAX_SCORE
-
+                        1000
                 })
             )
             : [];
@@ -6054,19 +4880,18 @@ function loadQuizIntoBuilder(quiz) {
 
 function duplicateCurrentQuiz() {
 
-    const currentTitle =
+    const title =
         cleanText(
             quizTitle?.value
         );
 
 
-    if (!currentTitle) {
+    if (!title) {
 
         setQuizBuilderMessage(
             "ENTER OR LOAD A QUIZ FIRST.",
             "error"
         );
-
 
         return;
 
@@ -6084,7 +4909,7 @@ function duplicateCurrentQuiz() {
     if (quizTitle) {
 
         quizTitle.value =
-            `${currentTitle} COPY`;
+            `${title} COPY`;
 
     }
 
@@ -6095,7 +4920,6 @@ function duplicateCurrentQuiz() {
                 question,
                 index
             ) => ({
-
                 ...question,
 
                 local_id:
@@ -6104,19 +4928,7 @@ function duplicateCurrentQuiz() {
                     ),
 
                 sort_order:
-                    index + 1,
-
-                read_time_seconds:
-                    QUIZ_READ_TIME_SECONDS,
-
-                answer_time_seconds:
-                    normalizeQuizAnswerTime(
-                        question.answer_time_seconds
-                    ),
-
-                max_score:
-                    QUIZ_MAX_SCORE
-
+                    index + 1
             })
         );
 
@@ -6189,18 +5001,10 @@ async function deleteSavedQuiz(quiz) {
         );
 
 
-        await loadSavedQuizzes(
-            true
-        );
+        await loadSavedQuizzes();
 
     }
     catch (error) {
-
-        console.error(
-            "Delete quiz error:",
-            error
-        );
-
 
         setQuizBuilderMessage(
             error?.message ||
@@ -6219,23 +5023,15 @@ async function deleteSavedQuiz(quiz) {
 
 function clickQuizTab(name) {
 
-    const button =
-        document.querySelector(
-            `[data-quiz-subview="${name}"]`
-        );
-
-
-    if (button) {
-
-        button.click();
-
-    }
+    document.querySelector(
+        `[data-quiz-subview="${name}"]`
+    )?.click();
 
 }
 
 
 /* =====================================================
-   RENDER SAVED QUIZZES
+   SAVED QUIZZES RENDER
 ===================================================== */
 
 function renderSavedQuizzes() {
@@ -6280,9 +5076,11 @@ function renderSavedQuizzes() {
         quiz => {
 
             const fragment =
-                savedQuizCardTemplate.content.cloneNode(
-                    true
-                );
+                savedQuizCardTemplate
+                    .content
+                    .cloneNode(
+                        true
+                    );
 
 
             const title =
@@ -6321,12 +5119,14 @@ function renderSavedQuizzes() {
                 );
 
 
-            const questions =
+            const questionCount =
                 Array.isArray(
                     quiz.questions
                 )
-                    ? quiz.questions
-                    : [];
+                    ? quiz.questions.length
+                    : numberOrZero(
+                        quiz.question_count
+                    );
 
 
             if (title) {
@@ -6343,86 +5143,64 @@ function renderSavedQuizzes() {
             if (meta) {
 
                 meta.textContent =
-                    `${questions.length} ${questions.length === 1 ? "QUESTION" : "QUESTIONS"} · ${QUIZ_READ_TIME_SECONDS} SEC READ · CUSTOM ANSWER TIME`;
+                    `${questionCount} ${questionCount === 1 ? "QUESTION" : "QUESTIONS"} · 4 SEC READ · CUSTOM ANSWER TIME`;
 
             }
 
 
-            if (editButton) {
+            editButton?.addEventListener(
+                "click",
+                () => {
 
-                editButton.addEventListener(
-                    "click",
-                    () => {
-
-                        loadQuizIntoBuilder(
-                            quiz
-                        );
+                    loadQuizIntoBuilder(
+                        quiz
+                    );
 
 
-                        clickQuizTab(
-                            "builder"
-                        );
+                    clickQuizTab(
+                        "builder"
+                    );
 
-                    }
-                );
-
-            }
+                }
+            );
 
 
-            if (duplicateButton) {
+            duplicateButton?.addEventListener(
+                "click",
+                () => {
 
-                duplicateButton.addEventListener(
-                    "click",
-                    () => {
-
-                        loadQuizIntoBuilder(
-                            quiz
-                        );
+                    loadQuizIntoBuilder(
+                        quiz
+                    );
 
 
-                        duplicateCurrentQuiz();
+                    duplicateCurrentQuiz();
 
 
-                        clickQuizTab(
-                            "builder"
-                        );
+                    clickQuizTab(
+                        "builder"
+                    );
 
-                    }
-                );
-
-            }
+                }
+            );
 
 
-            if (liveButton) {
-
-                liveButton.addEventListener(
-                    "click",
-                    () => {
-
-                        selectQuizForLive(
-                            quiz
-                        );
-
-                    }
-                );
-
-            }
+            liveButton?.addEventListener(
+                "click",
+                () =>
+                    selectQuizForLive(
+                        quiz
+                    )
+            );
 
 
-            if (deleteButton) {
-
-                deleteButton.addEventListener(
-                    "click",
-                    () => {
-
-                        deleteSavedQuiz(
-                            quiz
-                        );
-
-                    }
-                );
-
-            }
+            deleteButton?.addEventListener(
+                "click",
+                () =>
+                    deleteSavedQuiz(
+                        quiz
+                    )
+            );
 
 
             savedQuizzesList.appendChild(
@@ -6457,21 +5235,20 @@ function selectQuizForLive(quiz) {
     }
 
 
-    const questions =
-        Array.isArray(
-            quiz?.questions
-        )
-            ? quiz.questions
-            : [];
-
-
-    if (liveQuizTotalQuestions) {
+    if (
+        liveQuizTotalQuestions &&
+        !liveQuizSession
+    ) {
 
         liveQuizTotalQuestions.textContent =
             String(
-                liveQuizSession
-                    ? liveQuizLastTotalQuestions
-                    : questions.length
+                Array.isArray(
+                    quiz?.questions
+                )
+                    ? quiz.questions.length
+                    : numberOrZero(
+                        quiz?.question_count
+                    )
             );
 
     }
@@ -6495,8 +5272,50 @@ function selectQuizForLive(quiz) {
 
 
 /* =====================================================
-   LIVE QUIZ STATUS + BUTTONS
+   LIVE STATUS
 ===================================================== */
+
+function currentQuestionNumber() {
+
+    return numberOrZero(
+
+        liveQuizSession?.current_question_number ??
+        liveQuizLastQuestion?.question_number ??
+        liveQuizLastQuestion?.sort_order
+
+    );
+
+}
+
+
+function liveQuestionIsOpen() {
+
+    const value =
+
+        liveQuizSession?.answers_close_at ??
+        liveQuizLastQuestion?.answers_close_at ??
+        liveQuizLastQuestion?.answer_close_at;
+
+
+    if (!value) {
+        return false;
+    }
+
+
+    const time =
+        new Date(
+            value
+        ).getTime();
+
+
+    return (
+        Number.isFinite(time) &&
+        time >
+        Date.now()
+    );
+
+}
+
 
 function updateLiveQuizStatusUI() {
 
@@ -6507,40 +5326,32 @@ function updateLiveQuizStatusUI() {
         "inactive";
 
 
-    const players =
-        liveQuizPlayers.length;
-
-
     const totalQuestions =
-        numberOrZero(
-            liveQuizLastTotalQuestions
+        liveQuizLastTotalQuestions ||
+        (
+            Array.isArray(
+                selectedLiveQuiz?.questions
+            )
+                ? selectedLiveQuiz.questions.length
+                : numberOrZero(
+                    selectedLiveQuiz?.question_count
+                )
         );
 
 
-    const currentQuestionNumber =
-        numberOrZero(
-            liveQuizSession?.current_question_number
-        );
+    const currentQuestion =
+        currentQuestionNumber();
 
 
-    const answersCloseAt =
-        liveQuizSession?.answers_close_at
-            ? new Date(
-                liveQuizSession.answers_close_at
-            ).getTime()
-            : 0;
-
-
-    const questionStillOpen =
+    const questionOpen =
         status === "live" &&
-        answersCloseAt >
-        Date.now();
+        liveQuestionIsOpen();
 
 
-    const isFinalQuestion =
+    const finalQuestion =
         status === "live" &&
         totalQuestions > 0 &&
-        currentQuestionNumber >=
+        currentQuestion >=
         totalQuestions;
 
 
@@ -6556,7 +5367,7 @@ function updateLiveQuizStatusUI() {
 
         liveQuizPlayerCount.textContent =
             String(
-                players
+                liveQuizPlayers.length
             );
 
     }
@@ -6565,43 +5376,17 @@ function updateLiveQuizStatusUI() {
     if (liveLobbyPlayerCountBadge) {
 
         liveLobbyPlayerCountBadge.textContent =
-            `${players} ${players === 1 ? "PLAYER" : "PLAYERS"}`;
+            `${liveQuizPlayers.length} ${liveQuizPlayers.length === 1 ? "PLAYER" : "PLAYERS"}`;
 
     }
 
 
     if (liveQuizTotalQuestions) {
 
-        if (liveQuizSession) {
-
-            liveQuizTotalQuestions.textContent =
-                String(
-                    totalQuestions
-                );
-
-        }
-        else if (selectedLiveQuiz) {
-
-            const selectedQuestions =
-                Array.isArray(
-                    selectedLiveQuiz.questions
-                )
-                    ? selectedLiveQuiz.questions
-                    : [];
-
-
-            liveQuizTotalQuestions.textContent =
-                String(
-                    selectedQuestions.length
-                );
-
-        }
-        else {
-
-            liveQuizTotalQuestions.textContent =
-                "0";
-
-        }
+        liveQuizTotalQuestions.textContent =
+            String(
+                totalQuestions
+            );
 
     }
 
@@ -6613,8 +5398,12 @@ function updateLiveQuizStatusUI() {
 
 
         if (
-            status === "lobby" ||
-            status === "live"
+            [
+                "lobby",
+                "live"
+            ].includes(
+                status
+            )
         ) {
 
             liveQuizStatusBadge.classList.add(
@@ -6625,9 +5414,7 @@ function updateLiveQuizStatusUI() {
 
 
         liveQuizStatusBadge.textContent =
-            status === "inactive"
-                ? "INACTIVE"
-                : status.toUpperCase();
+            status.toUpperCase();
 
     }
 
@@ -6635,17 +5422,15 @@ function updateLiveQuizStatusUI() {
     if (sidebarQuizLiveDot) {
 
         sidebarQuizLiveDot.hidden =
-            !(
-                status === "lobby" ||
-                status === "live"
+            ![
+                "lobby",
+                "live"
+            ].includes(
+                status
             );
 
     }
 
-
-    /*
-        BEFORE LOBBY
-    */
 
     if (openQuizLobbyButton) {
 
@@ -6655,10 +5440,6 @@ function updateLiveQuizStatusUI() {
 
     }
 
-
-    /*
-        LOBBY
-    */
 
     if (startQuizButton) {
 
@@ -6676,19 +5457,12 @@ function updateLiveQuizStatusUI() {
     }
 
 
-    /*
-        LIVE
-    */
-
     if (nextQuizQuestionButton) {
 
         nextQuizQuestionButton.disabled =
-
             status !== "live" ||
-
-            questionStillOpen ||
-
-            isFinalQuestion;
+            questionOpen ||
+            finalQuestion;
 
     }
 
@@ -6696,12 +5470,9 @@ function updateLiveQuizStatusUI() {
     if (finishQuizButton) {
 
         finishQuizButton.disabled =
-
             status !== "live" ||
-
-            questionStillOpen ||
-
-            !isFinalQuestion;
+            questionOpen ||
+            !finalQuestion;
 
     }
 
@@ -6745,73 +5516,76 @@ function renderLiveQuizPlayers() {
     }
 
 
-    if (!liveQuizPlayerTemplate) {
+    if (liveQuizPlayerTemplate) {
 
-        updateLiveQuizStatusUI();
+        liveQuizPlayers.forEach(
+            player => {
 
-        return;
-
-    }
-
-
-    liveQuizPlayers.forEach(
-        player => {
-
-            const fragment =
-                liveQuizPlayerTemplate.content.cloneNode(
-                    true
-                );
+                const fragment =
+                    liveQuizPlayerTemplate
+                        .content
+                        .cloneNode(
+                            true
+                        );
 
 
-            const name =
-                fragment.querySelector(
-                    "[data-player-name]"
-                );
-
-
-            const username =
-                fragment.querySelector(
-                    "[data-player-username]"
-                );
-
-
-            if (name) {
-
-                name.textContent =
-                    cleanText(
-                        player.telegram_name
-                    ) ||
-                    "Telegram Player";
-
-            }
-
-
-            if (username) {
-
-                const raw =
-                    cleanText(
-                        player.telegram_username
+                const name =
+                    fragment.querySelector(
+                        "[data-player-name]"
                     );
 
 
-                username.textContent =
-                    raw
-                        ? (
-                            raw.startsWith("@")
-                                ? raw
-                                : `@${raw}`
-                        )
-                        : "NO USERNAME";
+                const username =
+                    fragment.querySelector(
+                        "[data-player-username]"
+                    );
+
+
+                if (name) {
+
+                    name.textContent =
+                        cleanText(
+
+                            player.telegram_name ??
+                            player.name
+
+                        ) ||
+                        "Telegram Player";
+
+                }
+
+
+                if (username) {
+
+                    const value =
+                        cleanText(
+
+                            player.telegram_username ??
+                            player.username
+
+                        );
+
+
+                    username.textContent =
+                        value
+                            ? (
+                                value.startsWith("@")
+                                    ? value
+                                    : `@${value}`
+                            )
+                            : "NO USERNAME";
+
+                }
+
+
+                liveQuizPlayersList.appendChild(
+                    fragment
+                );
 
             }
+        );
 
-
-            liveQuizPlayersList.appendChild(
-                fragment
-            );
-
-        }
-    );
+    }
 
 
     updateLiveQuizStatusUI();
@@ -6820,7 +5594,7 @@ function renderLiveQuizPlayers() {
 
 
 /* =====================================================
-   LIVE QUIZ REQUEST
+   LIVE REQUEST
 ===================================================== */
 
 async function liveQuizRequest(
@@ -6863,13 +5637,11 @@ async function liveQuizRequest(
                     "POST",
 
                 headers: {
-
-                    "Authorization":
+                    Authorization:
                         `Bearer ${token}`,
 
                     "Content-Type":
                         "application/json"
-
                 },
 
                 body:
@@ -6886,7 +5658,8 @@ async function liveQuizRequest(
         );
 
 
-    let result = null;
+    let result =
+        null;
 
 
     try {
@@ -6895,12 +5668,7 @@ async function liveQuizRequest(
             await response.json();
 
     }
-    catch {
-
-        result =
-            null;
-
-    }
+    catch {}
 
 
     if (
@@ -6969,64 +5737,57 @@ function applyLiveQuizState(
 
     liveQuizLastTotalQuestions =
         numberOrZero(
-            result.total_questions
+
+            result.total_questions ??
+            result.session?.total_questions
+
         );
 
 
     liveQuizLastQuestion =
         result.question ||
+        result.current_question ||
         null;
 
 
     liveQuizLastStats =
-        result.stats &&
-        typeof result.stats === "object"
+        (
+            result.stats &&
+            typeof result.stats ===
+            "object"
+        )
             ? result.stats
             : {};
 
 
     if (liveQuizSession) {
 
-        const sessionQuizId =
-            String(
-                liveQuizSession.quiz_id ||
-                ""
-            );
-
-
-        const matchingSavedQuiz =
+        const matchingQuiz =
             savedQuizzes.find(
                 quiz =>
                     String(
                         quiz.id
                     ) ===
-                    sessionQuizId
+                    String(
+                        liveQuizSession.quiz_id
+                    )
             );
 
 
-        if (matchingSavedQuiz) {
-
-            selectedLiveQuiz =
-                matchingSavedQuiz;
-
-        }
-        else {
-
-            selectedLiveQuiz = {
-
+        selectedLiveQuiz =
+            matchingQuiz ||
+            {
                 id:
                     liveQuizSession.quiz_id,
 
                 title:
                     liveQuizSession.quiz_title ||
+                    result.quiz_title ||
                     "LIVE QUIZ",
 
                 questions:
                     []
-
             };
-
-        }
 
 
         if (liveQuizSelectedTitle) {
@@ -7038,7 +5799,11 @@ function applyLiveQuizState(
                 ) ||
 
                 cleanText(
-                    selectedLiveQuiz?.title
+                    result.quiz_title
+                ) ||
+
+                cleanText(
+                    selectedLiveQuiz.title
                 ) ||
 
                 "LIVE QUIZ";
@@ -7070,17 +5835,9 @@ async function loadLiveQuizState(
     silent = true
 ) {
 
-    if (liveQuizStateLoading) {
-        return;
-    }
-
-
-    const token =
-        getSessionToken();
-
-
     if (
-        !token ||
+        liveQuizStateLoading ||
+        !getSessionToken() ||
         sessionIsExpired()
     ) {
 
@@ -7144,18 +5901,20 @@ function startLiveQuizStatePolling() {
     }
 
 
-    loadLiveQuizState(
-        true
-    );
-
-
     liveQuizStatePollTimer =
         setInterval(
             () => {
 
-                loadLiveQuizState(
-                    true
-                );
+                if (
+                    document.visibilityState ===
+                    "visible"
+                ) {
+
+                    loadLiveQuizState(
+                        true
+                    );
+
+                }
 
             },
             LIVE_QUIZ_POLL_MS
@@ -7176,7 +5935,6 @@ async function openQuizLobby() {
             "SELECT A SAVED QUIZ FIRST.",
             "error"
         );
-
 
         return;
 
@@ -7232,7 +5990,6 @@ async function startLiveQuiz() {
             "error"
         );
 
-
         return;
 
     }
@@ -7287,7 +6044,6 @@ async function nextLiveQuizQuestion() {
             "error"
         );
 
-
         return;
 
     }
@@ -7341,7 +6097,6 @@ async function finishLiveQuiz() {
             "NO ACTIVE QUIZ.",
             "error"
         );
-
 
         return;
 
@@ -7405,6 +6160,9 @@ async function finishLiveQuiz() {
         );
 
 
+        pastQuizResultsCache.clear();
+
+
         await loadPastQuizzes();
 
     }
@@ -7433,7 +6191,6 @@ async function closeLiveQuizLobby() {
             "NO OPEN LOBBY.",
             "error"
         );
-
 
         return;
 
@@ -7513,7 +6270,7 @@ async function closeLiveQuizLobby() {
 
 
 /* =====================================================
-   CURRENT LIVE QUESTION
+   CURRENT QUESTION
 ===================================================== */
 
 function renderCurrentLiveQuestion(
@@ -7552,11 +6309,12 @@ function renderCurrentLiveQuestion(
     }
 
 
-    const currentNumber =
+    const number =
         numberOrZero(
 
             question.sort_order ??
-            question.question_number
+            question.question_number ??
+            liveQuizSession?.current_question_number
 
         );
 
@@ -7565,7 +6323,7 @@ function renderCurrentLiveQuestion(
 
         liveQuizCurrentQuestion.textContent =
             String(
-                currentNumber ||
+                number ||
                 "—"
             );
 
@@ -7575,7 +6333,7 @@ function renderCurrentLiveQuestion(
     if (currentQuizQuestionNumber) {
 
         currentQuizQuestionNumber.textContent =
-            `QUESTION ${currentNumber || ""}`;
+            `QUESTION ${number || ""}`;
 
     }
 
@@ -7583,9 +6341,14 @@ function renderCurrentLiveQuestion(
     if (currentQuizQuestionText) {
 
         currentQuizQuestionText.textContent =
+
             cleanText(
-                question.question
+
+                question.question ??
+                question.question_text
+
             ) ||
+
             "—";
 
     }
@@ -7642,69 +6405,631 @@ function renderCurrentLiveQuestion(
 
 
 /* =====================================================
-   PAST QUIZZES
+   PAST QUIZ HELPERS
+===================================================== */
+
+function formatTelegramUsername(value) {
+
+    const username =
+        cleanText(value);
+
+
+    if (!username) {
+
+        return "—";
+
+    }
+
+
+    return username.startsWith("@")
+        ? username
+        : `@${username}`;
+
+}
+
+
+function normalizePastPlayer(
+    player,
+    index = 0
+) {
+
+    return {
+        ...player,
+
+        rank:
+            numberOrZero(
+
+                player.rank ??
+                player.position ??
+                player.place
+
+            ) ||
+            index + 1,
+
+        score:
+            numberOrZero(
+
+                player.score ??
+                player.total_score ??
+                player.points
+
+            ),
+
+        correct:
+            numberOrZero(
+
+                player.correct ??
+                player.correct_count ??
+                player.correct_answers
+
+            ),
+
+        wrong:
+            numberOrZero(
+
+                player.wrong ??
+                player.wrong_count ??
+                player.wrong_answers
+
+            ),
+
+        no_answer:
+            numberOrZero(
+
+                player.no_answer ??
+                player.no_answer_count ??
+                player.unanswered ??
+                player.missed
+
+            ),
+
+        telegram_name:
+            cleanText(
+
+                player.telegram_name ??
+                player.player_name ??
+                player.name
+
+            ),
+
+        telegram_username:
+            cleanText(
+
+                player.telegram_username ??
+                player.player_username ??
+                player.username
+
+            )
+    };
+
+}
+
+
+function getInlinePastResults(session) {
+
+    const possibleResults = [
+
+        session?.results,
+        session?.players,
+        session?.leaderboard,
+        session?.final_results,
+        session?.rankings
+
+    ];
+
+
+    for (
+        const value
+        of possibleResults
+    ) {
+
+        if (
+            Array.isArray(
+                value
+            )
+        ) {
+
+            return value;
+
+        }
+
+    }
+
+
+    return [];
+
+}
+
+
+function extractPastResults(
+    result,
+    sessionId
+) {
+
+    const possibleResults = [
+
+        result?.results,
+        result?.players,
+        result?.leaderboard,
+        result?.final_results,
+        result?.rankings,
+
+        result?.session?.results,
+        result?.session?.players,
+        result?.session?.leaderboard
+
+    ];
+
+
+    for (
+        const value
+        of possibleResults
+    ) {
+
+        if (
+            Array.isArray(
+                value
+            )
+        ) {
+
+            return value;
+
+        }
+
+    }
+
+
+    if (
+        Array.isArray(
+            result?.sessions
+        )
+    ) {
+
+        const matchingSession =
+            result.sessions.find(
+                session =>
+                    String(
+                        session.id
+                    ) ===
+                    String(
+                        sessionId
+                    )
+            );
+
+
+        return getInlinePastResults(
+            matchingSession
+        );
+
+    }
+
+
+    return [];
+
+}
+
+
+function sortPastPlayers(players) {
+
+    return players
+        .map(
+            normalizePastPlayer
+        )
+        .sort(
+            (a, b) =>
+                b.score -
+                a.score ||
+                a.rank -
+                b.rank
+        )
+        .map(
+            (
+                player,
+                index
+            ) => ({
+                ...player,
+                rank:
+                    index + 1
+            })
+        );
+
+}
+
+
+/* =====================================================
+   PAST QUIZ ROW
+===================================================== */
+
+function createPastQuizResultRow(
+    player,
+    index
+) {
+
+    const row =
+        document.createElement(
+            "tr"
+        );
+
+
+    const cells = [
+
+        {
+            className:
+                "past-rank",
+
+            value:
+                index === 0
+                    ? "🥇 1"
+                    : index === 1
+                        ? "🥈 2"
+                        : index === 2
+                            ? "🥉 3"
+                            : String(
+                                index + 1
+                            )
+        },
+
+        {
+            className:
+                "past-player-name",
+
+            value:
+                cleanText(
+                    player.telegram_name
+                ) ||
+                "Telegram Player"
+        },
+
+        {
+            className:
+                "past-player-username",
+
+            value:
+                formatTelegramUsername(
+                    player.telegram_username
+                )
+        },
+
+        {
+            className:
+                "past-player-score",
+
+            value:
+                numberOrZero(
+                    player.score
+                )
+        },
+
+        {
+            className:
+                "past-player-correct",
+
+            value:
+                numberOrZero(
+                    player.correct
+                )
+        },
+
+        {
+            className:
+                "past-player-wrong",
+
+            value:
+                numberOrZero(
+                    player.wrong
+                )
+        },
+
+        {
+            className:
+                "past-player-no-answer",
+
+            value:
+                numberOrZero(
+                    player.no_answer
+                )
+        }
+
+    ];
+
+
+    cells.forEach(
+        item => {
+
+            const cell =
+                document.createElement(
+                    "td"
+                );
+
+
+            cell.className =
+                item.className;
+
+
+            cell.textContent =
+                String(
+                    item.value
+                );
+
+
+            row.appendChild(
+                cell
+            );
+
+        }
+    );
+
+
+    return row;
+
+}
+
+
+/* =====================================================
+   FETCH PAST RESULTS
+===================================================== */
+
+async function fetchPastQuizResults(session) {
+
+    const sessionId =
+        session?.id;
+
+
+    if (!sessionId) {
+
+        return [];
+
+    }
+
+
+    const cacheKey =
+        String(
+            sessionId
+        );
+
+
+    if (
+        pastQuizResultsCache.has(
+            cacheKey
+        )
+    ) {
+
+        return pastQuizResultsCache.get(
+            cacheKey
+        );
+
+    }
+
+
+    const inlineResults =
+        getInlinePastResults(
+            session
+        );
+
+
+    if (
+        inlineResults.length
+    ) {
+
+        const sorted =
+            sortPastPlayers(
+                inlineResults
+            );
+
+
+        pastQuizResultsCache.set(
+            cacheKey,
+            sorted
+        );
+
+
+        return sorted;
+
+    }
+
+
+    const result =
+        await quizAdminRequest(
+            "GET",
+            null,
+            `?history=1&session_id=${encodeURIComponent(sessionId)}`
+        );
+
+
+    const sorted =
+        sortPastPlayers(
+
+            extractPastResults(
+                result,
+                sessionId
+            )
+
+        );
+
+
+    pastQuizResultsCache.set(
+        cacheKey,
+        sorted
+    );
+
+
+    return sorted;
+
+}
+
+
+/* =====================================================
+   OPEN PAST QUIZ DETAILS
+===================================================== */
+
+async function openPastQuizDetails(
+    session,
+    details,
+    button,
+    tableBody,
+    totalElement,
+    loadingElement,
+    emptyElement
+) {
+
+    if (!details.hidden) {
+
+        details.hidden =
+            true;
+
+
+        button.textContent =
+            "VIEW RESULTS";
+
+
+        return;
+
+    }
+
+
+    details.hidden =
+        false;
+
+
+    button.textContent =
+        "HIDE RESULTS";
+
+
+    if (
+        details.dataset.loaded ===
+        "true"
+    ) {
+
+        return;
+
+    }
+
+
+    if (loadingElement) {
+
+        loadingElement.hidden =
+            false;
+
+    }
+
+
+    if (emptyElement) {
+
+        emptyElement.hidden =
+            true;
+
+    }
+
+
+    try {
+
+        const players =
+            await fetchPastQuizResults(
+                session
+            );
+
+
+        tableBody.innerHTML =
+            "";
+
+
+        players.forEach(
+            (
+                player,
+                index
+            ) => {
+
+                tableBody.appendChild(
+
+                    createPastQuizResultRow(
+                        player,
+                        index
+                    )
+
+                );
+
+            }
+        );
+
+
+        if (totalElement) {
+
+            totalElement.textContent =
+                `${players.length} ${players.length === 1 ? "PLAYER" : "PLAYERS"}`;
+
+        }
+
+
+        if (emptyElement) {
+
+            emptyElement.hidden =
+                players.length > 0;
+
+        }
+
+
+        details.dataset.loaded =
+            "true";
+
+    }
+    catch (error) {
+
+        tableBody.innerHTML =
+            "";
+
+
+        if (emptyElement) {
+
+            emptyElement.hidden =
+                false;
+
+
+            emptyElement.textContent =
+                error?.message ||
+                "COULD NOT LOAD PLAYER RESULTS.";
+
+        }
+
+    }
+    finally {
+
+        if (loadingElement) {
+
+            loadingElement.hidden =
+                true;
+
+        }
+
+    }
+
+}
+
+
+/* =====================================================
+   LOAD PAST QUIZZES
 ===================================================== */
 
 async function loadPastQuizzes() {
 
-    /*
-        This section is already prepared in the UI.
-
-        If admin-quiz does not yet return historical
-        sessions, this simply stays empty.
-    */
-
     try {
 
-        const token =
-            getSessionToken();
-
-
-        if (!token) {
-            return;
-        }
-
-
-        const response =
-            await fetch(
-                `${ADMIN_QUIZ_ENDPOINT}?history=1`,
-                {
-                    method:
-                        "GET",
-
-                    headers: {
-
-                        "Authorization":
-                            `Bearer ${token}`
-
-                    },
-
-                    cache:
-                        "no-store"
-                }
+        const result =
+            await quizAdminRequest(
+                "GET",
+                null,
+                "?history=1"
             );
 
 
-        const result =
-            await response.json();
+        pastQuizSessions =
+            Array.isArray(
+                result.sessions
+            )
+                ? result.sessions
+                : [];
 
 
-        if (
-            response.ok &&
-            result?.success
-        ) {
-
-            pastQuizSessions =
-                Array.isArray(
-                    result.sessions
-                )
-                    ? result.sessions
-                    : [];
-
-
-            renderPastQuizzes();
-
-        }
+        renderPastQuizzes();
 
     }
     catch (error) {
@@ -7718,6 +7043,10 @@ async function loadPastQuizzes() {
 
 }
 
+
+/* =====================================================
+   RENDER PAST QUIZZES
+===================================================== */
 
 function renderPastQuizzes() {
 
@@ -7761,9 +7090,11 @@ function renderPastQuizzes() {
         session => {
 
             const fragment =
-                pastQuizCardTemplate.content.cloneNode(
-                    true
-                );
+                pastQuizCardTemplate
+                    .content
+                    .cloneNode(
+                        true
+                    );
 
 
             const title =
@@ -7784,12 +7115,63 @@ function renderPastQuizzes() {
                 );
 
 
+            const toggleButton =
+                fragment.querySelector(
+                    "[data-past-quiz-toggle]"
+                );
+
+
+            const details =
+                fragment.querySelector(
+                    "[data-past-quiz-details]"
+                );
+
+
+            const tableBody =
+                fragment.querySelector(
+                    "[data-past-quiz-results-body]"
+                );
+
+
+            const playerTotal =
+                fragment.querySelector(
+                    "[data-past-quiz-player-total]"
+                );
+
+
+            const loading =
+                fragment.querySelector(
+                    "[data-past-quiz-loading]"
+                );
+
+
+            const empty =
+                fragment.querySelector(
+                    "[data-past-quiz-empty]"
+                );
+
+
+            const playerCount =
+                numberOrZero(
+
+                    session.player_count ??
+                    session.players_count ??
+                    session.total_players
+
+                );
+
+
             if (title) {
 
                 title.textContent =
+
                     cleanText(
-                        session.quiz_title
+
+                        session.quiz_title ??
+                        session.title
+
                     ) ||
+
                     "QUIZ";
 
             }
@@ -7798,7 +7180,7 @@ function renderPastQuizzes() {
             if (meta) {
 
                 meta.textContent =
-                    `${formatDate(session.finished_at)} · ${numberOrZero(session.player_count)} PLAYERS`;
+                    `${formatDate(session.finished_at)} · ${playerCount} ${playerCount === 1 ? "PLAYER" : "PLAYERS"}`;
 
             }
 
@@ -7807,29 +7189,58 @@ function renderPastQuizzes() {
 
                 const winnerUsername =
                     cleanText(
-                        session.winner_username
+
+                        session.winner_username ??
+                        session.winner?.telegram_username ??
+                        session.winner?.username
+
                     );
 
 
                 const winnerName =
                     cleanText(
-                        session.winner_name
+
+                        session.winner_name ??
+                        session.winner?.telegram_name ??
+                        session.winner?.name
+
                     );
 
 
                 winner.textContent =
                     winnerUsername
-                        ? (
-                            winnerUsername.startsWith("@")
-                                ? winnerUsername
-                                : `@${winnerUsername}`
+                        ? formatTelegramUsername(
+                            winnerUsername
                         )
-                        : (
-                            winnerName ||
-                            "—"
-                        );
+                        : winnerName ||
+                        "—";
 
             }
+
+
+            if (playerTotal) {
+
+                playerTotal.textContent =
+                    `${playerCount} ${playerCount === 1 ? "PLAYER" : "PLAYERS"}`;
+
+            }
+
+
+            toggleButton?.addEventListener(
+                "click",
+                () =>
+
+                    openPastQuizDetails(
+                        session,
+                        details,
+                        toggleButton,
+                        tableBody,
+                        playerTotal,
+                        loading,
+                        empty
+                    )
+
+            );
 
 
             pastQuizzesList.appendChild(
@@ -7843,201 +7254,217 @@ function renderPastQuizzes() {
 
 
 /* =====================================================
-   EVENTS - MEMBERS
+   MEMBER EVENTS
 ===================================================== */
 
-if (memberSearch) {
+memberSearch?.addEventListener(
+    "input",
+    () => {
 
-    memberSearch.addEventListener(
-        "input",
-        filterMembers
-    );
-
-}
+        membersCurrentPage =
+            1;
 
 
-if (membersPrevPage) {
+        renderMembers();
 
-    membersPrevPage.addEventListener(
-        "click",
-        goToPreviousMembersPage
-    );
-
-}
+    }
+);
 
 
-if (membersNextPage) {
+membersPrevPage?.addEventListener(
+    "click",
+    () => {
 
-    membersNextPage.addEventListener(
-        "click",
-        goToNextMembersPage
-    );
+        if (
+            membersCurrentPage > 1
+        ) {
 
-}
-
-
-if (refreshMembers) {
-
-    refreshMembers.addEventListener(
-        "click",
-        async () => {
-
-            if (memberSearch) {
-
-                memberSearch.value =
-                    "";
-
-            }
+            membersCurrentPage--;
 
 
-            membersCurrentPage =
-                1;
-
-
-            await loadAdminData();
+            renderMembers();
 
         }
-    );
 
-}
+    }
+);
+
+
+membersNextPage?.addEventListener(
+    "click",
+    () => {
+
+        const totalPages =
+            Math.max(
+                1,
+                Math.ceil(
+                    getFilteredMembers().length /
+                    MEMBERS_ITEMS_PER_PAGE
+                )
+            );
+
+
+        if (
+            membersCurrentPage <
+            totalPages
+        ) {
+
+            membersCurrentPage++;
+
+
+            renderMembers();
+
+        }
+
+    }
+);
+
+
+refreshMembers?.addEventListener(
+    "click",
+    async () => {
+
+        if (memberSearch) {
+
+            memberSearch.value =
+                "";
+
+        }
+
+
+        await loadAdminData();
+
+    }
+);
 
 
 /* =====================================================
-   EVENTS - CONTEST
+   CONTEST EVENTS
 ===================================================== */
 
-if (openContestPanel) {
-
-    openContestPanel.disabled =
-        true;
-
-
-    openContestPanel.addEventListener(
-        "click",
-        openContest
-    );
-
-}
+openContestPanel?.addEventListener(
+    "click",
+    () =>
+        loadContestEntries()
+);
 
 
-if (closeContestPanel) {
+contestSearch?.addEventListener(
+    "input",
+    () => {
 
-    closeContestPanel.addEventListener(
-        "click",
-        closeContest
-    );
-
-}
+        contestCurrentPage =
+            1;
 
 
-if (contestSearch) {
+        renderContestEntries();
 
-    contestSearch.addEventListener(
-        "input",
-        filterContestEntries
-    );
-
-}
+    }
+);
 
 
-if (contestSort) {
+contestSort?.addEventListener(
+    "change",
+    () => {
 
-    contestSort.addEventListener(
-        "change",
-        changeContestSort
-    );
-
-}
+        contestCurrentPage =
+            1;
 
 
-if (contestPrevPage) {
+        renderContestEntries();
 
-    contestPrevPage.addEventListener(
-        "click",
-        goToPreviousContestPage
-    );
-
-}
+    }
+);
 
 
-if (contestNextPage) {
+contestPrevPage?.addEventListener(
+    "click",
+    () => {
 
-    contestNextPage.addEventListener(
-        "click",
-        goToNextContestPage
-    );
+        if (
+            contestCurrentPage > 1
+        ) {
 
-}
+            contestCurrentPage--;
 
 
-if (contestRequirementsYes) {
-
-    contestRequirementsYes.addEventListener(
-        "click",
-        () => {
-
-            setContestRequirements(
-                true
-            );
+            renderContestEntries();
 
         }
-    );
 
-}
+    }
+);
 
 
-if (contestRequirementsNo) {
+contestNextPage?.addEventListener(
+    "click",
+    () => {
 
-    contestRequirementsNo.addEventListener(
-        "click",
-        () => {
-
-            setContestRequirements(
-                false
+        const totalPages =
+            Math.max(
+                1,
+                Math.ceil(
+                    getFilteredContestEntries().length /
+                    CONTEST_ITEMS_PER_PAGE
+                )
             );
 
+
+        if (
+            contestCurrentPage <
+            totalPages
+        ) {
+
+            contestCurrentPage++;
+
+
+            renderContestEntries();
+
         }
-    );
 
-}
-
-
-if (contestEntryForm) {
-
-    contestEntryForm.addEventListener(
-        "submit",
-        saveContestEntry
-    );
-
-}
+    }
+);
 
 
-if (contestCancelEdit) {
+contestRequirementsYes?.addEventListener(
+    "click",
+    () =>
+        setContestRequirements(
+            true
+        )
+);
 
-    contestCancelEdit.addEventListener(
-        "click",
-        resetContestForm
-    );
 
-}
+contestRequirementsNo?.addEventListener(
+    "click",
+    () =>
+        setContestRequirements(
+            false
+        )
+);
+
+
+contestEntryForm?.addEventListener(
+    "submit",
+    saveContestEntry
+);
+
+
+contestCancelEdit?.addEventListener(
+    "click",
+    resetContestForm
+);
 
 
 /* =====================================================
-   EVENTS - QUIZ BUILDER
+   QUIZ EVENTS
 ===================================================== */
 
-if (addQuizQuestionButton) {
-
-    addQuizQuestionButton.addEventListener(
-        "click",
-        () => {
-
-            openQuizQuestionEditor();
-
-        }
-    );
-
-}
+addQuizQuestionButton?.addEventListener(
+    "click",
+    () =>
+        openQuizQuestionEditor()
+);
 
 
 quizCorrectButtons.forEach(
@@ -8045,108 +7472,106 @@ quizCorrectButtons.forEach(
 
         button.addEventListener(
             "click",
-            () => {
-
+            () =>
                 selectQuizCorrectAnswer(
                     button.dataset.correctAnswer
-                );
-
-            }
+                )
         );
 
     }
 );
 
 
-if (quizSaveQuestionButton) {
-
-    quizSaveQuestionButton.addEventListener(
-        "click",
-        saveQuizQuestion
-    );
-
-}
+quizSaveQuestionButton?.addEventListener(
+    "click",
+    saveQuizQuestion
+);
 
 
-if (quizCancelQuestionButton) {
-
-    quizCancelQuestionButton.addEventListener(
-        "click",
-        closeQuizQuestionEditor
-    );
-
-}
+quizCancelQuestionButton?.addEventListener(
+    "click",
+    closeQuizQuestionEditor
+);
 
 
-if (quizDeleteQuestionButton) {
-
-    quizDeleteQuestionButton.addEventListener(
-        "click",
-        deleteCurrentQuizQuestion
-    );
-
-}
-
-
-if (quizResetBuilderButton) {
-
-    quizResetBuilderButton.addEventListener(
-        "click",
-        resetQuizBuilder
-    );
-
-}
+quizDeleteQuestionButton?.addEventListener(
+    "click",
+    () =>
+        deleteQuestionById(
+            cleanText(
+                quizQuestionEditingId?.value
+            )
+        )
+);
 
 
-if (quizBuilderForm) {
+quizResetBuilderButton?.addEventListener(
+    "click",
+    () => {
 
-    quizBuilderForm.addEventListener(
-        "submit",
-        saveQuiz
-    );
+        const hasDraft =
 
-}
+            quizDraftQuestions.length >
 
+            0 ||
 
-if (quizDuplicateCurrentButton) {
+            !!cleanText(
+                quizTitle?.value
+            ) ||
 
-    quizDuplicateCurrentButton.addEventListener(
-        "click",
-        duplicateCurrentQuiz
-    );
-
-}
-
-
-if (createQuizFromSavedButton) {
-
-    createQuizFromSavedButton.addEventListener(
-        "click",
-        () => {
-
-            const hasDraft =
-
-                quizDraftQuestions.length > 0 ||
-
-                !!cleanText(
-                    quizTitle?.value
-                );
+            !!cleanText(
+                quizDescription?.value
+            );
 
 
-            if (hasDraft) {
+        if (
+            !hasDraft ||
+            window.confirm(
+                "Start a new quiz? Unsaved changes will be cleared."
+            )
+        ) {
 
-                const confirmed =
-                    window.confirm(
-                        "Create a new quiz? Unsaved changes will be cleared."
-                    );
+            clearQuizBuilder();
+
+        }
+
+    }
+);
 
 
-                if (!confirmed) {
-                    return;
-                }
+quizBuilderForm?.addEventListener(
+    "submit",
+    saveQuiz
+);
 
-            }
 
+quizDuplicateCurrentButton?.addEventListener(
+    "click",
+    duplicateCurrentQuiz
+);
+
+
+createQuizFromSavedButton?.addEventListener(
+    "click",
+    () => {
+
+        const hasDraft =
+
+            quizDraftQuestions.length >
+
+            0 ||
+
+            !!cleanText(
+                quizTitle?.value
+            );
+
+
+        if (
+            !hasDraft ||
+            window.confirm(
+                "Create a new quiz? Unsaved changes will be cleared."
+            )
+        ) {
 
             clearQuizBuilder();
 
@@ -8156,67 +7581,47 @@ if (createQuizFromSavedButton) {
             );
 
         }
-    );
 
-}
+    }
+);
 
 
 /* =====================================================
-   EVENTS - LIVE QUIZ
+   LIVE EVENTS
 ===================================================== */
 
-if (openQuizLobbyButton) {
-
-    openQuizLobbyButton.addEventListener(
-        "click",
-        openQuizLobby
-    );
-
-}
+openQuizLobbyButton?.addEventListener(
+    "click",
+    openQuizLobby
+);
 
 
-if (startQuizButton) {
-
-    startQuizButton.addEventListener(
-        "click",
-        startLiveQuiz
-    );
-
-}
+startQuizButton?.addEventListener(
+    "click",
+    startLiveQuiz
+);
 
 
-if (nextQuizQuestionButton) {
-
-    nextQuizQuestionButton.addEventListener(
-        "click",
-        nextLiveQuizQuestion
-    );
-
-}
+nextQuizQuestionButton?.addEventListener(
+    "click",
+    nextLiveQuizQuestion
+);
 
 
-if (finishQuizButton) {
-
-    finishQuizButton.addEventListener(
-        "click",
-        finishLiveQuiz
-    );
-
-}
+finishQuizButton?.addEventListener(
+    "click",
+    finishLiveQuiz
+);
 
 
-if (closeQuizLobbyButton) {
-
-    closeQuizLobbyButton.addEventListener(
-        "click",
-        closeLiveQuizLobby
-    );
-
-}
+closeQuizLobbyButton?.addEventListener(
+    "click",
+    closeLiveQuizLobby
+);
 
 
 /* =====================================================
-   RETURN TO TAB
+   VISIBILITY
 ===================================================== */
 
 document.addEventListener(
@@ -8246,9 +7651,6 @@ document.addEventListener(
     "DOMContentLoaded",
     async () => {
 
-
-        /* CONTEST */
-
         resetContestForm();
 
 
@@ -8258,52 +7660,6 @@ document.addEventListener(
                 "newest";
 
         }
-
-
-        membersCurrentPage =
-            1;
-
-
-        /* QUIZ */
-
-        quizDraftQuestions =
-            [];
-
-
-        quizQuestionCounter =
-            0;
-
-
-        savedQuizzes =
-            [];
-
-
-        pastQuizSessions =
-            [];
-
-
-        liveQuizPlayers =
-            [];
-
-
-        liveQuizSession =
-            null;
-
-
-        selectedLiveQuiz =
-            null;
-
-
-        liveQuizLastTotalQuestions =
-            0;
-
-
-        liveQuizLastQuestion =
-            null;
-
-
-        liveQuizLastStats =
-            {};
 
 
         if (quizQuestionAnswerTime) {
@@ -8339,90 +7695,19 @@ document.addEventListener(
         updateLiveQuizStatusUI();
 
 
-        /* DEFAULT BUTTONS */
-
-        if (openQuizLobbyButton) {
-
-            openQuizLobbyButton.disabled =
-                true;
-
-        }
-
-
-        if (startQuizButton) {
-
-            startQuizButton.disabled =
-                true;
-
-        }
-
-
-        if (nextQuizQuestionButton) {
-
-            nextQuizQuestionButton.disabled =
-                true;
-
-        }
-
-
-        if (finishQuizButton) {
-
-            finishQuizButton.disabled =
-                true;
-
-        }
-
-
-        if (closeQuizLobbyButton) {
-
-            closeQuizLobbyButton.disabled =
-                true;
-
-        }
-
-
-        /*
-            LOAD ADMIN
-        */
-
         await loadAdminData();
 
 
-        /*
-            LOAD QUIZZES
-        */
-
         await loadSavedQuizzes();
 
-
-        /*
-            RESTORE EXISTING LOBBY / LIVE SESSION
-
-            This is the important fix.
-
-            If you refresh admin.html while a lobby
-            already exists in Supabase, the admin panel
-            will restore it instead of showing INACTIVE.
-        */
 
         await loadLiveQuizState(
             false
         );
 
 
-        /*
-            PAST QUIZZES
-        */
-
         await loadPastQuizzes();
 
-
-        /*
-            LIVE REFRESH
-
-            Players, answers and question status
-            refresh every second.
-        */
 
         startLiveQuizStatePolling();
 
