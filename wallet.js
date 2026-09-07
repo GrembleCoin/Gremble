@@ -182,6 +182,12 @@ const walletStatus =
     );
 
 
+const walletSection =
+    walletConnectButton?.closest(
+        ".member-wallet-section"
+    ) || null;
+
+
 /* =====================================================
    STATE
 ===================================================== */
@@ -228,6 +234,14 @@ let savedWalletVerifiedAt =
 
 let loadedSessionToken =
     "";
+
+
+let walletFeatureEnabled =
+    false;
+
+
+let walletFeatureLoaded =
+    false;
 
 
 /* =====================================================
@@ -284,6 +298,85 @@ function shortenAddress(address) {
         value.slice(-7)
     );
 }
+
+
+/* =====================================================
+   GLOBAL WALLET VISIBILITY
+===================================================== */
+
+function setWalletFeatureVisibility(
+    enabled
+) {
+
+    walletFeatureEnabled =
+        enabled === true;
+
+
+    walletFeatureLoaded =
+        true;
+
+
+    if (
+        !walletSection
+    ) {
+
+        return;
+    }
+
+
+    if (
+        walletFeatureEnabled
+    ) {
+
+        walletSection.hidden =
+            false;
+
+
+        walletSection.style.removeProperty(
+            "display"
+        );
+
+    }
+    else {
+
+        walletSection.hidden =
+            true;
+
+
+        walletSection.style.display =
+            "none";
+    }
+}
+
+
+function hideWalletFeatureUntilLoaded() {
+
+    walletFeatureEnabled =
+        false;
+
+
+    walletFeatureLoaded =
+        false;
+
+
+    if (
+        !walletSection
+    ) {
+
+        return;
+    }
+
+
+    walletSection.hidden =
+        true;
+
+
+    walletSection.style.display =
+        "none";
+}
+
+
+hideWalletFeatureUntilLoaded();
 
 
 /* =====================================================
@@ -577,6 +670,14 @@ function hideConnectButton() {
 function showConnectButton() {
 
     if (
+        !walletFeatureEnabled
+    ) {
+
+        return;
+    }
+
+
+    if (
         savedWalletAddress
     ) {
 
@@ -647,6 +748,14 @@ function showWalletBox(
     provider,
     actionText
 ) {
+
+    if (
+        !walletFeatureEnabled
+    ) {
+
+        return;
+    }
+
 
     const cleanAddress =
         cleanText(address);
@@ -787,6 +896,42 @@ function showVerifiedWallet() {
 ===================================================== */
 
 function renderWalletUi() {
+
+    if (
+        !walletFeatureLoaded ||
+        !walletFeatureEnabled
+    ) {
+
+        if (
+            walletSection
+        ) {
+
+            walletSection.hidden =
+                true;
+
+
+            walletSection.style.display =
+                "none";
+        }
+
+
+        return;
+    }
+
+
+    if (
+        walletSection
+    ) {
+
+        walletSection.hidden =
+            false;
+
+
+        walletSection.style.removeProperty(
+            "display"
+        );
+    }
+
 
     const sessionToken =
         getSessionToken();
@@ -1140,6 +1285,9 @@ async function loadSavedWalletFromProfile(
         !sessionToken
     ) {
 
+        hideWalletFeatureUntilLoaded();
+
+
         savedWalletAddress =
             "";
 
@@ -1254,6 +1402,12 @@ async function loadSavedWalletFromProfile(
         }
 
 
+        setWalletFeatureVisibility(
+            result?.wallet_visibility_enabled ===
+                true
+        );
+
+
         const member =
             result?.member ||
             result?.profile ||
@@ -1306,6 +1460,9 @@ async function loadSavedWalletFromProfile(
             "Could not load saved wallet:",
             error
         );
+
+
+        hideWalletFeatureUntilLoaded();
 
 
         return null;
@@ -1395,6 +1552,14 @@ async function verifyConnectedWallet(
     provider,
     walletAddress
 ) {
+
+    if (
+        !walletFeatureEnabled
+    ) {
+
+        return null;
+    }
+
 
     if (
         verificationInProgress
@@ -1627,6 +1792,15 @@ async function verifyConnectedWallet(
 ===================================================== */
 
 async function connectAndVerifyWallet() {
+
+    if (
+        !walletFeatureLoaded ||
+        !walletFeatureEnabled
+    ) {
+
+        return;
+    }
+
 
     if (
         connectionInProgress
@@ -1869,6 +2043,14 @@ async function disconnectLocalWallet() {
 async function changeWallet() {
 
     if (
+        !walletFeatureEnabled
+    ) {
+
+        return;
+    }
+
+
+    if (
         connectionInProgress ||
         verificationInProgress
     ) {
@@ -1903,41 +2085,33 @@ async function changeWallet() {
             controller?.disconnect
         ) {
 
-            await controller
-                .disconnect();
+            try {
+
+                await controller
+                    .disconnect();
+
+            }
+            catch (error) {
+
+                console.warn(
+                    "Could not disconnect old local wallet:",
+                    error
+                );
+            }
         }
 
-    }
-    catch (error) {
 
-        console.warn(
-            "Could not disconnect previous local wallet:",
-            error
-        );
-    }
+        localWalletAddress =
+            "";
 
 
-    localWalletAddress =
-        "";
+        localWalletProvider =
+            "";
 
 
-    localWalletProvider =
-        "";
+        activeSolanaProvider =
+            null;
 
-
-    activeSolanaProvider =
-        null;
-
-
-    renderWalletUi();
-
-
-    await sleep(
-        300
-    );
-
-
-    try {
 
         grembleWalletModal.open({
 
@@ -1948,26 +2122,6 @@ async function changeWallet() {
                 "solana"
         });
 
-    }
-    catch (error) {
-
-        console.error(
-            "Could not open wallet selector:",
-            error
-        );
-
-
-        setWalletStatus(
-            "COULD NOT OPEN WALLET SELECTOR.",
-            "error"
-        );
-
-
-        return;
-    }
-
-
-    try {
 
         const connection =
             await waitForWalletConnection();
@@ -1991,11 +2145,6 @@ async function changeWallet() {
             );
         }
 
-
-        /*
-           If user reconnects the same wallet,
-           no database change is necessary.
-        */
 
         if (
             newAddress ===
@@ -2076,12 +2225,6 @@ async function changeWallet() {
         );
 
 
-        /*
-           The old verified wallet is still stored.
-           Reload it from Supabase so UI returns to the
-           previous verified wallet if change failed.
-        */
-
         await loadSavedWalletFromProfile(
             true
         );
@@ -2105,15 +2248,17 @@ async function changeWallet() {
 
 async function walletAction() {
 
+    if (
+        !walletFeatureEnabled
+    ) {
+
+        return;
+    }
+
+
     const currentAddress =
         getConnectedWalletAddress();
 
-
-    /*
-       VERIFIED WALLET
-
-       Always allow user to replace it.
-    */
 
     if (
         savedWalletAddress
@@ -2124,12 +2269,6 @@ async function walletAction() {
         return;
     }
 
-
-    /*
-       Local wallet connected but not verified.
-
-       In this state DISCONNECT is correct.
-    */
 
     if (
         currentAddress
@@ -2152,6 +2291,9 @@ async function walletAction() {
 async function restoreWalletUi() {
 
     installWalletIcon();
+
+
+    hideWalletFeatureUntilLoaded();
 
 
     const sessionToken =
@@ -2192,6 +2334,16 @@ async function restoreWalletUi() {
     await loadSavedWalletFromProfile(
         true
     );
+
+
+    if (
+        !walletFeatureEnabled
+    ) {
+
+        renderWalletUi();
+
+        return;
+    }
 
 
     for (
@@ -2259,6 +2411,9 @@ async function watchTelegramSession() {
                 false;
 
 
+            hideWalletFeatureUntilLoaded();
+
+
             await loadSavedWalletFromProfile(
                 true
             );
@@ -2268,6 +2423,9 @@ async function watchTelegramSession() {
 
         }
         else {
+
+            hideWalletFeatureUntilLoaded();
+
 
             loadedSessionToken =
                 "";
@@ -2417,6 +2575,7 @@ try {
 
 
                     if (
+                        walletFeatureEnabled &&
                         sessionToken &&
                         provider &&
                         !verificationInProgress &&
@@ -2529,6 +2688,9 @@ window.grembleRefreshWalletUi =
             false;
 
 
+        hideWalletFeatureUntilLoaded();
+
+
         await loadSavedWalletFromProfile(
             true
         );
@@ -2545,6 +2707,9 @@ window.grembleRefreshWalletUi =
 async function startWalletSystem() {
 
     installWalletIcon();
+
+
+    hideWalletFeatureUntilLoaded();
 
 
     await restoreWalletUi();
