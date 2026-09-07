@@ -13,7 +13,7 @@
 
     <link
         rel="stylesheet"
-        href="style.css?v=104"
+        href="style.css?v=105"
     >
 </head>
 
@@ -416,11 +416,6 @@
                 </p>
 
 
-                <!--
-                    THIS INTRO IS ONLY FOR USERS
-                    WHO ARE NOT LOGGED IN.
-                -->
-
                 <div id="telegramLoginIntro">
 
                     <h2>
@@ -568,8 +563,6 @@
 
 
 
-                            <!-- CONNECT WALLET -->
-
                             <button
                                 type="button"
                                 class="wallet-connect-button"
@@ -591,8 +584,6 @@
                             </button>
 
 
-
-                            <!-- CONNECTED WALLET -->
 
                             <div
                                 class="wallet-connected-box"
@@ -641,8 +632,6 @@
 
 
 
-                            <!-- WALLET STATUS -->
-
                             <div
                                 class="wallet-status"
                                 id="walletStatus"
@@ -660,60 +649,46 @@
 
 
                         <!-- =================================================
-                             LIVE CONTEST
+                             LIVE QUIZ ENTRY
                         ================================================== -->
 
-                        <div class="live-contest-card">
+                        <div
+                            class="live-quiz-entry-card"
+                            id="liveQuizEntryCard"
+                            hidden
+                        >
 
-                            <div class="live-contest-top">
+                            <div class="live-quiz-entry-top">
 
-                                <span class="live-contest-dot"></span>
+                                <span class="live-quiz-entry-dot"></span>
 
-                                <span class="live-contest-status">
+                                <span class="live-quiz-entry-status">
                                     LIVE NOW
                                 </span>
 
                             </div>
 
-
-                            <h3>
-                                GREMBLE MEME CONTEST IS
-                                <span>LIVE! No need to connect wallet</span>
+                            <h3 id="liveQuizEntryTitle">
+                                GREMBLE LIVE QUIZ
                             </h3>
 
-
                             <p>
-                                Create one funny Gremble meme and join the contest. No need to connect wallet for this contest.
+                                The lobby is open. Join now and wait for the host.
                             </p>
 
+                            <button
+                                type="button"
+                                class="live-quiz-entry-button"
+                                id="joinLiveQuizButton"
+                            >
+                                JOIN LIVE QUIZ
+                            </button>
 
-                            <div class="live-contest-bottom">
-
-                                <div class="live-contest-date">
-
-                                    <span>🏆</span>
-
-                                    ENDS 11.09.2026 — 00:00 UTC
-
-                                </div>
-
-
-                                <a
-                                    href="https://x.com/GrembleCoin/status/2095461555919856005?s=20"
-                                    class="live-contest-button"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                >
-
-                                    VIEW CONTEST ON X
-
-                                    <span>
-                                        ↗
-                                    </span>
-
-                                </a>
-
-                            </div>
+                            <div
+                                class="live-quiz-entry-message"
+                                id="liveQuizEntryMessage"
+                                aria-live="polite"
+                            ></div>
 
                         </div>
 
@@ -1026,10 +1001,6 @@
         </div>
 
 
-        <!-- =================================================
-             GAME SELECT
-        ================================================== -->
-
         <div
             class="arcade-select"
             id="arcadeSelect"
@@ -1064,8 +1035,6 @@
 
             <div class="game-grid">
 
-
-                <!-- COIN CATCH -->
 
                 <button
                     type="button"
@@ -1123,8 +1092,6 @@
                 </button>
 
 
-
-                <!-- SURVIVAL -->
 
                 <button
                     type="button"
@@ -1193,10 +1160,6 @@
         </div>
 
 
-
-        <!-- =================================================
-             COIN CATCH GAME
-        ================================================== -->
 
         <div
             class="arcade-game-screen"
@@ -1373,10 +1336,6 @@
         </div>
 
 
-
-        <!-- =================================================
-             GREMBLE SURVIVAL
-        ================================================== -->
 
         <div
             class="arcade-game-screen"
@@ -1783,6 +1742,263 @@
 
 
 <!-- =====================================================
+     LIVE QUIZ FULL SCREEN
+===================================================== -->
+
+<section
+    class="live-quiz-screen"
+    id="liveQuizScreen"
+    hidden
+    aria-live="polite"
+>
+
+    <div class="live-quiz-screen-stars" aria-hidden="true"></div>
+
+    <div class="live-quiz-shell">
+
+        <div class="live-quiz-shell-top">
+
+            <a href="#home" class="live-quiz-logo">
+
+                <img
+                    src="gremble.png"
+                    alt="Gremble"
+                >
+
+            </a>
+
+            <div class="live-quiz-brand">
+                GREMBLE LIVE QUIZ
+            </div>
+
+        </div>
+
+
+
+        <div class="live-quiz-stage">
+
+
+            <!-- LOBBY -->
+
+            <div
+                class="live-quiz-view live-quiz-lobby-view"
+                id="liveQuizLobbyView"
+                hidden
+            >
+
+                <p class="small-green">
+                    GREMBLE LIVE QUIZ
+                </p>
+
+                <h2>
+                    YOU'RE IN.
+                </h2>
+
+                <p>
+                    WAITING FOR HOST...
+                </p>
+
+                <button
+                    type="button"
+                    class="outline-button live-quiz-leave-button"
+                    id="leaveLiveQuizButton"
+                >
+                    LEAVE LOBBY
+                </button>
+
+            </div>
+
+
+
+            <!-- QUESTION -->
+
+            <div
+                class="live-quiz-view live-quiz-question-view"
+                id="liveQuizQuestionView"
+                hidden
+            >
+
+                <div class="live-quiz-question-top">
+
+                    <span id="liveQuizQuestionNumber">
+                        QUESTION 1 / 1
+                    </span>
+
+                    <strong id="liveQuizTimer">
+                        5
+                    </strong>
+
+                </div>
+
+
+                <h2 id="liveQuizQuestionText">
+                    QUESTION
+                </h2>
+
+
+                <div class="live-quiz-answers">
+
+                    <button
+                        type="button"
+                        data-quiz-answer="A"
+                    >
+
+                        <span>A</span>
+
+                        <strong id="liveQuizAnswerA"></strong>
+
+                    </button>
+
+
+                    <button
+                        type="button"
+                        data-quiz-answer="B"
+                    >
+
+                        <span>B</span>
+
+                        <strong id="liveQuizAnswerB"></strong>
+
+                    </button>
+
+
+                    <button
+                        type="button"
+                        data-quiz-answer="C"
+                    >
+
+                        <span>C</span>
+
+                        <strong id="liveQuizAnswerC"></strong>
+
+                    </button>
+
+
+                    <button
+                        type="button"
+                        data-quiz-answer="D"
+                    >
+
+                        <span>D</span>
+
+                        <strong id="liveQuizAnswerD"></strong>
+
+                    </button>
+
+                </div>
+
+
+                <p
+                    class="live-quiz-question-note"
+                    id="liveQuizQuestionNote"
+                ></p>
+
+            </div>
+
+
+
+            <!-- RESULT BETWEEN QUESTIONS -->
+
+            <div
+                class="live-quiz-view live-quiz-result-view"
+                id="liveQuizResultView"
+                hidden
+            >
+
+                <p class="small-green">
+                    ANSWER RESULT
+                </p>
+
+                <h2 id="liveQuizResultTitle">
+                    CORRECT!
+                </h2>
+
+                <strong
+                    class="live-quiz-points"
+                    id="liveQuizResultPoints"
+                >
+                    +0 POINTS
+                </strong>
+
+                <p>
+                    WAITING FOR NEXT QUESTION...
+                </p>
+
+            </div>
+
+
+
+            <!-- WAITING -->
+
+            <div
+                class="live-quiz-view live-quiz-waiting-view"
+                id="liveQuizWaitingView"
+                hidden
+            >
+
+                <p class="small-green">
+                    GREMBLE LIVE QUIZ
+                </p>
+
+                <h2>
+                    GET READY.
+                </h2>
+
+                <p>
+                    WAITING FOR THE NEXT QUESTION...
+                </p>
+
+            </div>
+
+
+
+            <!-- FINAL TOP 5 -->
+
+            <div
+                class="live-quiz-view live-quiz-final-view"
+                id="liveQuizFinalView"
+                hidden
+            >
+
+                <p class="small-green">
+                    FINAL RESULTS
+                </p>
+
+                <h2>
+                    TOP 5
+                </h2>
+
+                <div
+                    class="live-quiz-final-list"
+                    id="liveQuizFinalList"
+                ></div>
+
+
+                <div
+                    class="live-quiz-your-result"
+                    id="liveQuizYourResult"
+                ></div>
+
+
+                <button
+                    type="button"
+                    class="main-button live-quiz-finish-button"
+                    id="closeLiveQuizButton"
+                >
+                    BACK TO WEBSITE
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
      BUY GREMBLE MODAL
 ===================================================== -->
 
@@ -1906,6 +2122,14 @@
     type="module"
     src="wallet.js?v=105"
 ></script>
+
+
+
+<!-- =====================================================
+     LIVE QUIZ PLAYER
+===================================================== -->
+
+<script src="quiz-player.js?v=100"></script>
 
 
 
@@ -2085,7 +2309,9 @@ backButtons.forEach(
             "click",
             showArcadeMenu
         );
+
     }
+
 );
 
 
@@ -2181,6 +2407,7 @@ function setupBuyLinks() {
         pumpfunBuyLink.classList.add(
             "disabled-buy-link"
         );
+
     }
 
 
@@ -2211,6 +2438,7 @@ function setupBuyLinks() {
         fomoBuyLink.classList.add(
             "disabled-buy-link"
         );
+
     }
 
 
@@ -2228,7 +2456,9 @@ function setupBuyLinks() {
 
         buyComingSoon.textContent =
             "TRADING LINKS COMING AT LAUNCH";
+
     }
+
 }
 
 
@@ -2275,6 +2505,7 @@ function closeBuyModal() {
     document.body.classList.remove(
         "buy-modal-open"
     );
+
 }
 
 
@@ -2311,8 +2542,11 @@ document.addEventListener(
         ) {
 
             closeBuyModal();
+
         }
+
     }
+
 );
 
 
@@ -2338,10 +2572,15 @@ document.addEventListener(
                 ) {
 
                     event.preventDefault();
+
                 }
+
             }
+
         );
+
     }
+
 );
 
 
@@ -2353,5 +2592,4 @@ setupBuyLinks();
 
 
 </body>
-
 </html>

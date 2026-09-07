@@ -14,21 +14,11 @@ const ADMIN_MEMBERS_ENDPOINT =
 const ADMIN_CONTEST_ENDPOINT =
     "https://tffzjqeckoezursrvcpw.supabase.co/functions/v1/admin-contest";
 
+const ADMIN_QUIZ_ENDPOINT =
+    "https://tffzjqeckoezursrvcpw.supabase.co/functions/v1/admin-quiz";
 
-/*
-    QUIZ ENDPOINTS
-
-    We will fill these after creating the
-    Supabase quiz Edge Functions.
-
-    Keeping them empty means the current
-    Members + Contest systems continue working
-    without trying to call a missing quiz backend.
-*/
-
-const ADMIN_QUIZ_ENDPOINT = "https://tffzjqeckoezursrvcpw.supabase.co/functions/v1/admin-quiz";
-
-const ADMIN_QUIZ_LIVE_ENDPOINT = "https://tffzjqeckoezursrvcpw.supabase.co/functions/v1/admin-quiz-live";
+const ADMIN_QUIZ_LIVE_ENDPOINT =
+    "https://tffzjqeckoezursrvcpw.supabase.co/functions/v1/admin-quiz-live";
 
 
 const GREMBLE_SESSION_KEY =
@@ -39,18 +29,11 @@ const GREMBLE_SESSION_EXPIRY_KEY =
 
 
 const CONTEST_ITEMS_PER_PAGE = 5;
-
 const MEMBERS_ITEMS_PER_PAGE = 10;
 
 
-/*
-    QUIZ RULES
-*/
-
 const QUIZ_READ_TIME_SECONDS = 4;
-
 const QUIZ_MAX_SCORE = 1000;
-
 const QUIZ_DEFAULT_ANSWER_TIME = 10;
 
 const QUIZ_ANSWER_TIME_OPTIONS = [
@@ -63,6 +46,9 @@ const QUIZ_ANSWER_TIME_OPTIONS = [
     15,
     20
 ];
+
+
+const LIVE_QUIZ_POLL_MS = 1000;
 
 
 /* =====================================================
@@ -636,43 +622,34 @@ let allMembers = [];
 
 let allContestEntries = [];
 
-
 let contestLoaded = false;
-
 let contestLoading = false;
-
 let contestSaving = false;
 
-
 let contestCurrentPage = 1;
-
 let membersCurrentPage = 1;
 
 
-/*
-    QUIZ STATE
-
-    Currently local admin UI state.
-
-    Once quiz backend is created,
-    Supabase becomes the source of truth.
-*/
-
 let quizDraftQuestions = [];
-
 let quizQuestionCounter = 0;
 
-
 let savedQuizzes = [];
-
 let pastQuizSessions = [];
-
 
 let selectedLiveQuiz = null;
 
 let liveQuizPlayers = [];
 
 let liveQuizSession = null;
+
+let liveQuizStatePollTimer = null;
+let liveQuizStateLoading = false;
+
+let liveQuizLastTotalQuestions = 0;
+
+let liveQuizLastQuestion = null;
+
+let liveQuizLastStats = {};
 
 
 /* =====================================================
@@ -727,13 +704,16 @@ function setAdminMessage(
         return;
     }
 
+
     adminMessage.textContent =
         message;
+
 
     adminMessage.classList.remove(
         "success",
         "error"
     );
+
 
     if (type) {
 
@@ -759,6 +739,7 @@ function setAdminIdentity(message) {
 
     }
 
+
     if (sidebarAdminIdentity) {
 
         sidebarAdminIdentity.textContent =
@@ -779,9 +760,11 @@ function normalizeXUsername(value) {
         cleanText(value)
             .toLowerCase();
 
+
     if (!username) {
         return "";
     }
+
 
     while (
         username.startsWith("@")
@@ -791,6 +774,7 @@ function normalizeXUsername(value) {
             username.slice(1);
 
     }
+
 
     return username.replace(
         /\s+/g,
@@ -822,12 +806,15 @@ function getSessionExpiry() {
             GREMBLE_SESSION_EXPIRY_KEY
         );
 
+
     if (!raw) {
         return null;
     }
 
+
     const expiry =
         Number(raw);
+
 
     return Number.isFinite(expiry)
         ? expiry
@@ -842,6 +829,7 @@ function clearLocalSession() {
         GREMBLE_SESSION_KEY
     );
 
+
     localStorage.removeItem(
         GREMBLE_SESSION_EXPIRY_KEY
     );
@@ -854,16 +842,20 @@ function sessionIsExpired() {
     const expiry =
         getSessionExpiry();
 
+
     if (!expiry) {
         return false;
     }
+
 
     const nowSeconds =
         Math.floor(
             Date.now() / 1000
         );
 
-    return expiry <= nowSeconds;
+
+    return expiry <=
+        nowSeconds;
 
 }
 
@@ -878,8 +870,10 @@ function formatDate(value) {
         return "—";
     }
 
+
     const date =
         new Date(value);
+
 
     if (
         Number.isNaN(
@@ -890,6 +884,7 @@ function formatDate(value) {
         return "—";
 
     }
+
 
     return new Intl.DateTimeFormat(
         "sk-SK",
@@ -923,9 +918,11 @@ function shortWallet(value) {
     const wallet =
         cleanText(value);
 
+
     if (!wallet) {
         return "";
     }
+
 
     if (
         wallet.length <= 14
@@ -934,6 +931,7 @@ function shortWallet(value) {
         return wallet;
 
     }
+
 
     return (
         wallet.slice(0, 6) +
@@ -956,9 +954,11 @@ async function copyText(
     const text =
         cleanText(value);
 
+
     if (!text) {
         return;
     }
+
 
     try {
 
@@ -966,13 +966,16 @@ async function copyText(
             text
         );
 
+
         if (button) {
 
             const oldText =
                 button.textContent;
 
+
             button.textContent =
                 "COPIED";
+
 
             setTimeout(
                 () => {
@@ -1009,6 +1012,7 @@ function normalizeTelegramStatus(value) {
         cleanText(value)
             .toLowerCase();
 
+
     if (
         status === "member" ||
         status === "administrator" ||
@@ -1022,6 +1026,7 @@ function normalizeTelegramStatus(value) {
 
     }
 
+
     if (
         status === "not_member" ||
         status === "left" ||
@@ -1034,6 +1039,7 @@ function normalizeTelegramStatus(value) {
         return "not_member";
 
     }
+
 
     return "unknown";
 
@@ -1080,10 +1086,12 @@ function createTelegramBadge(
             status
         );
 
+
     const badge =
         document.createElement(
             "span"
         );
+
 
     badge.className =
         "telegram-group-badge";
@@ -1096,6 +1104,7 @@ function createTelegramBadge(
         badge.classList.add(
             "member"
         );
+
 
         badge.textContent =
             type === "announcements"
@@ -1111,6 +1120,7 @@ function createTelegramBadge(
             "not-member"
         );
 
+
         badge.textContent =
             type === "announcements"
                 ? "× NOT IN ANNOUNCEMENTS"
@@ -1123,10 +1133,12 @@ function createTelegramBadge(
             "unknown"
         );
 
+
         badge.textContent =
             "UNKNOWN";
 
     }
+
 
     return badge;
 
@@ -1134,7 +1146,7 @@ function createTelegramBadge(
 
 
 /* =====================================================
-   COUNTRY FLAG
+   COUNTRY
 ===================================================== */
 
 function countryCodeToFlag(code) {
@@ -1142,6 +1154,7 @@ function countryCodeToFlag(code) {
     const normalized =
         cleanText(code)
             .toUpperCase();
+
 
     if (
         !/^[A-Z]{2}$/.test(
@@ -1152,6 +1165,7 @@ function countryCodeToFlag(code) {
         return "";
 
     }
+
 
     return String.fromCodePoint(
 
@@ -1168,10 +1182,6 @@ function countryCodeToFlag(code) {
 }
 
 
-/* =====================================================
-   COUNTRY CELL
-===================================================== */
-
 function createCountryCell(member) {
 
     const cell =
@@ -1179,10 +1189,12 @@ function createCountryCell(member) {
             "td"
         );
 
+
     const countryCode =
         cleanText(
             member.country_code
         ).toUpperCase();
+
 
     const countryName =
         cleanText(
@@ -1200,15 +1212,19 @@ function createCountryCell(member) {
                 "span"
             );
 
+
         empty.className =
             "empty-value";
+
 
         empty.textContent =
             "—";
 
+
         cell.appendChild(
             empty
         );
+
 
         return cell;
 
@@ -1220,6 +1236,7 @@ function createCountryCell(member) {
             "span"
         );
 
+
     wrapper.className =
         "country-cell";
 
@@ -1229,6 +1246,7 @@ function createCountryCell(member) {
             countryCode
         );
 
+
     if (flag) {
 
         const flagElement =
@@ -1236,11 +1254,14 @@ function createCountryCell(member) {
                 "span"
             );
 
+
         flagElement.className =
             "country-flag";
 
+
         flagElement.textContent =
             flag;
+
 
         wrapper.appendChild(
             flagElement
@@ -1254,25 +1275,31 @@ function createCountryCell(member) {
             "span"
         );
 
+
     name.className =
         "country-name";
+
 
     name.textContent =
         countryCode ||
         countryName;
+
 
     name.title =
         countryName
             ? `${countryCode} — ${countryName}`
             : countryCode;
 
+
     wrapper.appendChild(
         name
     );
 
+
     cell.appendChild(
         wrapper
     );
+
 
     return cell;
 
@@ -1290,20 +1317,24 @@ function createVerifiedWalletCell(member) {
             "td"
         );
 
+
     const walletAddress =
         cleanText(
             member.wallet_address
         );
+
 
     const badge =
         document.createElement(
             "span"
         );
 
+
     const dot =
         document.createElement(
             "span"
         );
+
 
     dot.className =
         "wallet-status-dot";
@@ -1314,12 +1345,15 @@ function createVerifiedWalletCell(member) {
         badge.className =
             "wallet-status-badge yes";
 
+
         badge.title =
             walletAddress;
+
 
         badge.appendChild(
             dot
         );
+
 
         badge.appendChild(
             document.createTextNode(
@@ -1333,9 +1367,11 @@ function createVerifiedWalletCell(member) {
         badge.className =
             "wallet-status-badge no";
 
+
         badge.appendChild(
             dot
         );
+
 
         badge.appendChild(
             document.createTextNode(
@@ -1345,9 +1381,11 @@ function createVerifiedWalletCell(member) {
 
     }
 
+
     cell.appendChild(
         badge
     );
+
 
     return cell;
 
@@ -1376,7 +1414,6 @@ function updateStats(
 
             stats.completed_profiles ??
             stats.complete_profiles ??
-
             allMembers.filter(
                 member =>
 
@@ -1519,15 +1556,18 @@ function createMemberRow(member) {
             member.telegram_name
         );
 
+
     const telegramUsername =
         cleanText(
             member.telegram_username
         );
 
+
     const xUsername =
         cleanText(
             member.x_username
         );
+
 
     const solanaAddress =
         cleanText(
@@ -1542,6 +1582,7 @@ function createMemberRow(member) {
             "td"
         );
 
+
     if (telegramName) {
 
         const value =
@@ -1549,14 +1590,18 @@ function createMemberRow(member) {
                 "span"
             );
 
+
         value.className =
             "telegram-name";
+
 
         value.textContent =
             telegramName;
 
+
         value.title =
             telegramName;
+
 
         telegramNameCell.appendChild(
             value
@@ -1570,11 +1615,14 @@ function createMemberRow(member) {
                 "span"
             );
 
+
         empty.className =
             "empty-value";
 
+
         empty.textContent =
             "—";
+
 
         telegramNameCell.appendChild(
             empty
@@ -1590,6 +1638,7 @@ function createMemberRow(member) {
             "td"
         );
 
+
     if (telegramUsername) {
 
         const value =
@@ -1597,16 +1646,20 @@ function createMemberRow(member) {
                 "span"
             );
 
+
         value.className =
             "telegram-username";
+
 
         value.textContent =
             telegramUsername.startsWith("@")
                 ? telegramUsername
                 : `@${telegramUsername}`;
 
+
         value.title =
             value.textContent;
+
 
         telegramUsernameCell.appendChild(
             value
@@ -1620,11 +1673,14 @@ function createMemberRow(member) {
                 "span"
             );
 
+
         empty.className =
             "empty-value";
 
+
         empty.textContent =
             "NO USERNAME";
+
 
         telegramUsernameCell.appendChild(
             empty
@@ -1633,12 +1689,13 @@ function createMemberRow(member) {
     }
 
 
-    /* GREMBLE CHAT */
+    /* CHAT */
 
     const chatCell =
         document.createElement(
             "td"
         );
+
 
     chatCell.appendChild(
 
@@ -1656,6 +1713,7 @@ function createMemberRow(member) {
         document.createElement(
             "td"
         );
+
 
     announcementsCell.appendChild(
 
@@ -1676,12 +1734,14 @@ function createMemberRow(member) {
             "td"
         );
 
+
     if (xUsername) {
 
         const wrapper =
             document.createElement(
                 "div"
             );
+
 
         wrapper.className =
             "wallet-cell";
@@ -1692,13 +1752,16 @@ function createMemberRow(member) {
                 "span"
             );
 
+
         value.className =
             "x-username";
+
 
         value.textContent =
             xUsername.startsWith("@")
                 ? xUsername
                 : `@${xUsername}`;
+
 
         value.title =
             value.textContent;
@@ -1709,14 +1772,18 @@ function createMemberRow(member) {
                 "button"
             );
 
+
         copyButton.type =
             "button";
+
 
         copyButton.className =
             "copy-button";
 
+
         copyButton.textContent =
             "COPY";
+
 
         copyButton.addEventListener(
             "click",
@@ -1735,9 +1802,11 @@ function createMemberRow(member) {
             value
         );
 
+
         wrapper.appendChild(
             copyButton
         );
+
 
         xUsernameCell.appendChild(
             wrapper
@@ -1751,11 +1820,14 @@ function createMemberRow(member) {
                 "span"
             );
 
+
         empty.className =
             "empty-value";
 
+
         empty.textContent =
             "NOT ADDED";
+
 
         xUsernameCell.appendChild(
             empty
@@ -1764,12 +1836,13 @@ function createMemberRow(member) {
     }
 
 
-    /* SOLANA ADDRESS */
+    /* SOLANA */
 
     const solanaCell =
         document.createElement(
             "td"
         );
+
 
     if (solanaAddress) {
 
@@ -1777,6 +1850,7 @@ function createMemberRow(member) {
             document.createElement(
                 "div"
             );
+
 
         wrapper.className =
             "wallet-cell";
@@ -1787,13 +1861,16 @@ function createMemberRow(member) {
                 "span"
             );
 
+
         address.className =
             "wallet-address";
+
 
         address.textContent =
             shortWallet(
                 solanaAddress
             );
+
 
         address.title =
             solanaAddress;
@@ -1804,14 +1881,18 @@ function createMemberRow(member) {
                 "button"
             );
 
+
         copyButton.type =
             "button";
+
 
         copyButton.className =
             "copy-button";
 
+
         copyButton.textContent =
             "COPY";
+
 
         copyButton.addEventListener(
             "click",
@@ -1830,9 +1911,11 @@ function createMemberRow(member) {
             address
         );
 
+
         wrapper.appendChild(
             copyButton
         );
+
 
         solanaCell.appendChild(
             wrapper
@@ -1846,11 +1929,14 @@ function createMemberRow(member) {
                 "span"
             );
 
+
         empty.className =
             "empty-value";
 
+
         empty.textContent =
             "NOT ADDED";
+
 
         solanaCell.appendChild(
             empty
@@ -1859,15 +1945,15 @@ function createMemberRow(member) {
     }
 
 
-    /* JOINED */
-
     const joinedCell =
         document.createElement(
             "td"
         );
 
+
     joinedCell.className =
         "date-value";
+
 
     joinedCell.textContent =
         formatDate(
@@ -1875,15 +1961,15 @@ function createMemberRow(member) {
         );
 
 
-    /* UPDATED */
-
     const updatedCell =
         document.createElement(
             "td"
         );
 
+
     updatedCell.className =
         "date-value";
+
 
     updatedCell.textContent =
         formatDate(
@@ -1891,15 +1977,11 @@ function createMemberRow(member) {
         );
 
 
-    /* COUNTRY */
-
     const countryCell =
         createCountryCell(
             member
         );
 
-
-    /* WALLET */
 
     const verifiedWalletCell =
         createVerifiedWalletCell(
@@ -1954,7 +2036,7 @@ function createMemberRow(member) {
 
 
 /* =====================================================
-   FILTER MEMBERS
+   MEMBERS
 ===================================================== */
 
 function getFilteredMembers() {
@@ -1964,6 +2046,7 @@ function getFilteredMembers() {
             memberSearch?.value
         ).toLowerCase();
 
+
     if (!search) {
 
         return [
@@ -1971,6 +2054,7 @@ function getFilteredMembers() {
         ];
 
     }
+
 
     return allMembers.filter(
         member => {
@@ -1980,15 +2064,18 @@ function getFilteredMembers() {
                     member
                 );
 
+
             const announcementsStatus =
                 getAnnouncementsStatus(
                     member
                 );
 
+
             const walletAddress =
                 cleanText(
                     member.wallet_address
                 );
+
 
             const hasWallet =
                 walletAddress
@@ -2012,7 +2099,6 @@ function getFilteredMembers() {
                 member.wallet_provider,
 
                 chatStatus,
-
                 announcementsStatus,
 
                 hasWallet
@@ -2028,7 +2114,6 @@ function getFilteredMembers() {
                         .includes(
                             search
                         )
-
             );
 
         }
@@ -2037,21 +2122,20 @@ function getFilteredMembers() {
 }
 
 
-/* =====================================================
-   RENDER MEMBERS
-===================================================== */
-
 function renderMembers() {
 
     if (!membersTableBody) {
         return;
     }
 
+
     const filteredMembers =
         getFilteredMembers();
 
+
     const totalFiltered =
         filteredMembers.length;
+
 
     const totalPages =
         Math.max(
@@ -2116,6 +2200,7 @@ function renderMembers() {
             membersEmpty.hidden =
                 false;
 
+
             membersEmpty.textContent =
                 cleanText(
                     memberSearch?.value
@@ -2135,8 +2220,10 @@ function renderMembers() {
 
         }
 
+
         const fragment =
             document.createDocumentFragment();
+
 
         pageMembers.forEach(
             member => {
@@ -2151,6 +2238,7 @@ function renderMembers() {
 
             }
         );
+
 
         membersTableBody.appendChild(
             fragment
@@ -2167,10 +2255,6 @@ function renderMembers() {
 }
 
 
-/* =====================================================
-   MEMBER PAGINATION
-===================================================== */
-
 function updateMembersPagination(
     totalFiltered,
     totalPages
@@ -2179,6 +2263,7 @@ function updateMembersPagination(
     if (!membersPagination) {
         return;
     }
+
 
     membersPagination.hidden =
         totalFiltered <=
@@ -2220,7 +2305,9 @@ function goToPreviousMembersPage() {
         return;
     }
 
+
     membersCurrentPage--;
+
 
     renderMembers();
 
@@ -2232,6 +2319,7 @@ function goToNextMembersPage() {
     const filteredMembers =
         getFilteredMembers();
 
+
     const totalPages =
         Math.max(
             1,
@@ -2241,6 +2329,7 @@ function goToNextMembersPage() {
             )
         );
 
+
     if (
         membersCurrentPage >=
         totalPages
@@ -2248,7 +2337,9 @@ function goToNextMembersPage() {
         return;
     }
 
+
     membersCurrentPage++;
+
 
     renderMembers();
 
@@ -2257,7 +2348,9 @@ function goToNextMembersPage() {
 
 function filterMembers() {
 
-    membersCurrentPage = 1;
+    membersCurrentPage =
+        1;
+
 
     renderMembers();
 
@@ -2280,6 +2373,7 @@ function showAccessError(
 
     }
 
+
     if (openContestPanel) {
 
         openContestPanel.disabled =
@@ -2294,10 +2388,12 @@ function showAccessError(
             "LOGIN REQUIRED"
         );
 
+
         setAdminMessage(
             "YOUR GREMBLE LOGIN SESSION IS MISSING OR EXPIRED. GO BACK TO THE WEBSITE AND LOG IN WITH TELEGRAM.",
             "error"
         );
+
 
         return;
 
@@ -2310,10 +2406,12 @@ function showAccessError(
             "ACCESS DENIED"
         );
 
+
         setAdminMessage(
             "THIS TELEGRAM ACCOUNT IS NOT AUTHORIZED TO OPEN THE GREMBLE ADMIN PANEL.",
             "error"
         );
+
 
         return;
 
@@ -2323,6 +2421,7 @@ function showAccessError(
     setAdminIdentity(
         "ERROR"
     );
+
 
     setAdminMessage(
         message ||
@@ -2360,9 +2459,11 @@ async function loadAdminData() {
 
         clearLocalSession();
 
+
         showAccessError(
             401
         );
+
 
         return;
 
@@ -2372,6 +2473,7 @@ async function loadAdminData() {
     setAdminIdentity(
         "VERIFYING..."
     );
+
 
     setAdminMessage(
         "VERIFYING YOUR TELEGRAM ID AND LOADING GREMBLE MEMBERS..."
@@ -2390,6 +2492,7 @@ async function loadAdminData() {
 
         refreshMembers.disabled =
             true;
+
 
         refreshMembers.textContent =
             "LOADING...";
@@ -2441,9 +2544,11 @@ async function loadAdminData() {
 
             clearLocalSession();
 
+
             showAccessError(
                 401
             );
+
 
             return;
 
@@ -2457,6 +2562,7 @@ async function loadAdminData() {
             showAccessError(
                 403
             );
+
 
             return;
 
@@ -2539,6 +2645,7 @@ async function loadAdminData() {
             error
         );
 
+
         showAccessError(
             500,
             error?.message ||
@@ -2553,6 +2660,7 @@ async function loadAdminData() {
             refreshMembers.disabled =
                 false;
 
+
             refreshMembers.textContent =
                 "REFRESH";
 
@@ -2564,7 +2672,7 @@ async function loadAdminData() {
 
 
 /* =====================================================
-   CONTEST MEMBER MATCH
+   CONTEST HELPERS
 ===================================================== */
 
 function findMemberByContestUsername(
@@ -2575,6 +2683,7 @@ function findMemberByContestUsername(
         normalizeXUsername(
             participant
         );
+
 
     if (!contestUsername) {
         return null;
@@ -2591,6 +2700,7 @@ function findMemberByContestUsername(
                         member.x_username
                     );
 
+
                 return (
                     memberXUsername &&
                     memberXUsername ===
@@ -2605,10 +2715,6 @@ function findMemberByContestUsername(
 
 }
 
-
-/* =====================================================
-   CONTEST MEMBER STATUS
-===================================================== */
 
 function getContestMemberStatus(entry) {
 
@@ -2638,6 +2744,7 @@ function getContestMemberStatus(entry) {
             member
         );
 
+
     const announcementsStatus =
         getAnnouncementsStatus(
             member
@@ -2646,6 +2753,7 @@ function getContestMemberStatus(entry) {
 
     const isInChat =
         chatStatus === "member";
+
 
     const isInAnnouncements =
         announcementsStatus ===
@@ -2709,10 +2817,6 @@ function getContestMemberStatus(entry) {
 }
 
 
-/* =====================================================
-   CREATE CONTEST MEMBER STATUS
-===================================================== */
-
 function createContestMemberStatus(entry) {
 
     const status =
@@ -2720,18 +2824,22 @@ function createContestMemberStatus(entry) {
             entry
         );
 
+
     const wrapper =
         document.createElement(
             "span"
         );
 
+
     wrapper.className =
         `contest-member-status ${status.type}`;
+
 
     wrapper.setAttribute(
         "data-tooltip",
         status.tooltip
     );
+
 
     wrapper.setAttribute(
         "aria-label",
@@ -2744,21 +2852,20 @@ function createContestMemberStatus(entry) {
             "span"
         );
 
+
     dot.className =
         "contest-member-status-dot";
+
 
     wrapper.appendChild(
         dot
     );
 
+
     return wrapper;
 
 }
 
-
-/* =====================================================
-   CONTEST MESSAGE
-===================================================== */
 
 function setContestMessage(
     message,
@@ -2769,13 +2876,16 @@ function setContestMessage(
         return;
     }
 
+
     contestFormMessage.textContent =
         message;
+
 
     contestFormMessage.classList.remove(
         "success",
         "error"
     );
+
 
     if (type) {
 
@@ -2787,10 +2897,6 @@ function setContestMessage(
 
 }
 
-
-/* =====================================================
-   CONTEST REQUIREMENTS
-===================================================== */
 
 function setContestRequirements(
     isVerified
@@ -2828,10 +2934,6 @@ function setContestRequirements(
 }
 
 
-/* =====================================================
-   CONTEST STATS
-===================================================== */
-
 function updateContestStats() {
 
     const total =
@@ -2868,10 +2970,6 @@ function updateContestStats() {
 }
 
 
-/* =====================================================
-   FILTER CONTEST
-===================================================== */
-
 function getFilteredContestEntries() {
 
     const search =
@@ -2903,6 +3001,7 @@ function getFilteredContestEntries() {
                     entry.participant
                 );
 
+
             return participant.includes(
                 normalizedSearch
             );
@@ -2912,10 +3011,6 @@ function getFilteredContestEntries() {
 
 }
 
-
-/* =====================================================
-   SORT CONTEST
-===================================================== */
 
 function sortContestEntries(entries) {
 
@@ -2941,6 +3036,7 @@ function sortContestEntries(entries) {
                 ).getTime() ||
                 0;
 
+
             const dateB =
                 new Date(
                     b.created_at
@@ -2953,6 +3049,7 @@ function sortContestEntries(entries) {
                     a.points
                 );
 
+
             const pointsB =
                 numberOrZero(
                     b.points
@@ -2963,6 +3060,7 @@ function sortContestEntries(entries) {
                 a.requirements_ok === true
                     ? 1
                     : 0;
+
 
             const rulesB =
                 b.requirements_ok === true
@@ -2991,6 +3089,7 @@ function sortContestEntries(entries) {
 
                 }
 
+
                 return dateB - dateA;
 
             }
@@ -3007,6 +3106,7 @@ function sortContestEntries(entries) {
                     return pointsA - pointsB;
 
                 }
+
 
                 return dateB - dateA;
 
@@ -3025,6 +3125,7 @@ function sortContestEntries(entries) {
 
                 }
 
+
                 return dateB - dateA;
 
             }
@@ -3041,6 +3142,7 @@ function sortContestEntries(entries) {
                     return rulesA - rulesB;
 
                 }
+
 
                 return dateB - dateA;
 
@@ -3070,20 +3172,21 @@ function createContestRow(entry) {
         );
 
 
-    /* PARTICIPANT */
-
     const participantCell =
         document.createElement(
             "td"
         );
+
 
     const participant =
         document.createElement(
             "span"
         );
 
+
     participant.className =
         "contest-participant";
+
 
     participant.textContent =
         cleanText(
@@ -3091,17 +3194,17 @@ function createContestRow(entry) {
         ) ||
         "—";
 
+
     participantCell.appendChild(
         participant
     );
 
 
-    /* MEME */
-
     const memeCell =
         document.createElement(
             "td"
         );
+
 
     const memeUrl =
         cleanText(
@@ -3116,20 +3219,26 @@ function createContestRow(entry) {
                 "a"
             );
 
+
         memeLink.className =
             "contest-link";
+
 
         memeLink.href =
             memeUrl;
 
+
         memeLink.target =
             "_blank";
+
 
         memeLink.rel =
             "noopener noreferrer";
 
+
         memeLink.textContent =
             "OPEN MEME ↗";
+
 
         memeCell.appendChild(
             memeLink
@@ -3144,15 +3253,15 @@ function createContestRow(entry) {
     }
 
 
-    /* POINTS */
-
     const pointsCell =
         document.createElement(
             "td"
         );
 
+
     pointsCell.className =
         "contest-points";
+
 
     pointsCell.textContent =
         String(
@@ -3162,17 +3271,17 @@ function createContestRow(entry) {
         );
 
 
-    /* RULES */
-
     const rulesCell =
         document.createElement(
             "td"
         );
 
+
     const rulesBadge =
         document.createElement(
             "span"
         );
+
 
     const requirementsOk =
         entry.requirements_ok === true;
@@ -3183,25 +3292,27 @@ function createContestRow(entry) {
             ? "contest-rule-badge yes"
             : "contest-rule-badge no";
 
+
     rulesBadge.textContent =
         requirementsOk
             ? "YES"
             : "NO";
+
 
     rulesCell.appendChild(
         rulesBadge
     );
 
 
-    /* ADDED */
-
     const addedCell =
         document.createElement(
             "td"
         );
 
+
     addedCell.className =
         "date-value";
+
 
     addedCell.textContent =
         formatDate(
@@ -3209,17 +3320,17 @@ function createContestRow(entry) {
         );
 
 
-    /* ACTIONS */
-
     const actionsCell =
         document.createElement(
             "td"
         );
 
+
     const actions =
         document.createElement(
             "div"
         );
+
 
     actions.className =
         "contest-actions";
@@ -3230,14 +3341,18 @@ function createContestRow(entry) {
             "button"
         );
 
+
     editButton.type =
         "button";
+
 
     editButton.className =
         "contest-action-button edit";
 
+
     editButton.textContent =
         "EDIT";
+
 
     editButton.addEventListener(
         "click",
@@ -3256,14 +3371,18 @@ function createContestRow(entry) {
             "button"
         );
 
+
     deleteButton.type =
         "button";
+
 
     deleteButton.className =
         "contest-action-button delete";
 
+
     deleteButton.textContent =
         "DELETE";
+
 
     deleteButton.addEventListener(
         "click",
@@ -3281,24 +3400,26 @@ function createContestRow(entry) {
         editButton
     );
 
+
     actions.appendChild(
         deleteButton
     );
+
 
     actionsCell.appendChild(
         actions
     );
 
 
-    /* STATUS */
-
     const statusCell =
         document.createElement(
             "td"
         );
 
+
     statusCell.className =
         "contest-member-status-cell";
+
 
     statusCell.appendChild(
 
@@ -3502,10 +3623,6 @@ function renderContestEntries() {
 }
 
 
-/* =====================================================
-   CONTEST PAGINATION
-===================================================== */
-
 function updateContestPagination(
     totalFiltered,
     totalPages
@@ -3556,7 +3673,9 @@ function goToPreviousContestPage() {
         return;
     }
 
+
     contestCurrentPage--;
+
 
     renderContestEntries();
 
@@ -3589,6 +3708,7 @@ function goToNextContestPage() {
 
     contestCurrentPage++;
 
+
     renderContestEntries();
 
 }
@@ -3596,7 +3716,9 @@ function goToNextContestPage() {
 
 function filterContestEntries() {
 
-    contestCurrentPage = 1;
+    contestCurrentPage =
+        1;
+
 
     renderContestEntries();
 
@@ -3605,7 +3727,9 @@ function filterContestEntries() {
 
 function changeContestSort() {
 
-    contestCurrentPage = 1;
+    contestCurrentPage =
+        1;
+
 
     renderContestEntries();
 
@@ -3613,7 +3737,7 @@ function changeContestSort() {
 
 
 /* =====================================================
-   RESET CONTEST FORM
+   CONTEST FORM
 ===================================================== */
 
 function resetContestForm() {
@@ -3692,10 +3816,6 @@ function resetContestForm() {
 }
 
 
-/* =====================================================
-   START CONTEST EDIT
-===================================================== */
-
 function startContestEdit(entry) {
 
     if (!entry) {
@@ -3746,8 +3866,7 @@ function startContestEdit(entry) {
 
 
     setContestRequirements(
-        entry.requirements_ok ===
-        true
+        entry.requirements_ok === true
     );
 
 
@@ -3819,6 +3938,7 @@ async function contestRequest(
 
         clearLocalSession();
 
+
         throw new Error(
             "YOUR SESSION HAS EXPIRED. LOG IN AGAIN."
         );
@@ -3852,6 +3972,7 @@ async function contestRequest(
         ] =
             "application/json";
 
+
         options.body =
             JSON.stringify(
                 body
@@ -3878,7 +3999,8 @@ async function contestRequest(
     }
     catch {
 
-        result = null;
+        result =
+            null;
 
     }
 
@@ -3888,6 +4010,7 @@ async function contestRequest(
     ) {
 
         clearLocalSession();
+
 
         throw new Error(
             "YOUR SESSION HAS EXPIRED. LOG IN AGAIN."
@@ -4063,7 +4186,9 @@ async function saveContestEntry(event) {
             "error"
         );
 
+
         contestParticipant?.focus();
+
 
         return;
 
@@ -4077,7 +4202,9 @@ async function saveContestEntry(event) {
             "error"
         );
 
+
         contestMemeUrl?.focus();
+
 
         return;
 
@@ -4109,7 +4236,9 @@ async function saveContestEntry(event) {
             "error"
         );
 
+
         contestMemeUrl?.focus();
+
 
         return;
 
@@ -4127,7 +4256,9 @@ async function saveContestEntry(event) {
             "error"
         );
 
+
         contestPoints?.focus();
+
 
         return;
 
@@ -4149,6 +4280,7 @@ async function saveContestEntry(event) {
 
         contestSubmitButton.disabled =
             true;
+
 
         contestSubmitButton.textContent =
             isEditing
@@ -4358,27 +4490,21 @@ async function deleteContestEntry(entry) {
 }
 
 
-/* =====================================================
-   OPEN CONTEST
-===================================================== */
-
 async function openContest() {
 
     if (!contestPanel) {
         return;
     }
 
+
     contestPanel.hidden =
         false;
+
 
     await loadContestEntries();
 
 }
 
-
-/* =====================================================
-   CLOSE CONTEST
-===================================================== */
 
 function closeContest() {
 
@@ -4388,7 +4514,7 @@ function closeContest() {
 
 
 /* =====================================================
-   QUIZ MESSAGE
+   QUIZ MESSAGES
 ===================================================== */
 
 function setQuizBuilderMessage(
@@ -4454,7 +4580,7 @@ function setLiveQuizMessage(
 
 
 /* =====================================================
-   VALID ANSWER TIME
+   QUIZ QUESTION TIME
 ===================================================== */
 
 function normalizeQuizAnswerTime(value) {
@@ -4480,7 +4606,7 @@ function normalizeQuizAnswerTime(value) {
 
 
 /* =====================================================
-   RESET QUESTION EDITOR
+   QUIZ QUESTION EDITOR
 ===================================================== */
 
 function resetQuizQuestionEditor() {
@@ -4552,13 +4678,11 @@ function resetQuizQuestionEditor() {
 
 
     quizCorrectButtons.forEach(
-        button => {
+        button =>
 
             button.classList.remove(
                 "active"
-            );
-
-        }
+            )
     );
 
 
@@ -4580,10 +4704,6 @@ function resetQuizQuestionEditor() {
 }
 
 
-/* =====================================================
-   CLOSE QUESTION EDITOR
-===================================================== */
-
 function closeQuizQuestionEditor() {
 
     resetQuizQuestionEditor();
@@ -4598,10 +4718,6 @@ function closeQuizQuestionEditor() {
 
 }
 
-
-/* =====================================================
-   OPEN QUESTION EDITOR
-===================================================== */
 
 function openQuizQuestionEditor(
     question = null
@@ -4704,8 +4820,10 @@ function openQuizQuestionEditor(
             quizQuestionAnswerTime.value =
                 String(
                     normalizeQuizAnswerTime(
+
                         question.answer_time_seconds ??
                         question.time_seconds
+
                     )
                 );
 
@@ -4713,18 +4831,15 @@ function openQuizQuestionEditor(
 
 
         quizCorrectButtons.forEach(
-            button => {
+            button =>
 
                 button.classList.toggle(
                     "active",
-
                     button.dataset.correctAnswer ===
                     cleanText(
                         question.correct_answer
                     ).toUpperCase()
-                );
-
-            }
+                )
         );
 
 
@@ -4742,10 +4857,6 @@ function openQuizQuestionEditor(
 
 }
 
-
-/* =====================================================
-   SELECT CORRECT ANSWER
-===================================================== */
 
 function selectQuizCorrectAnswer(answer) {
 
@@ -4778,23 +4889,20 @@ function selectQuizCorrectAnswer(answer) {
 
 
     quizCorrectButtons.forEach(
-        button => {
+        button =>
 
             button.classList.toggle(
                 "active",
-
                 button.dataset.correctAnswer ===
                 normalized
-            );
-
-        }
+            )
     );
 
 }
 
 
 /* =====================================================
-   GET QUESTION EDITOR DATA
+   GET QUESTION DATA
 ===================================================== */
 
 function getQuestionEditorData() {
@@ -4956,7 +5064,9 @@ function saveQuizQuestion() {
             }
 
 
-            quizDraftQuestions[index] = {
+            quizDraftQuestions[
+                index
+            ] = {
 
                 ...quizDraftQuestions[index],
 
@@ -4991,7 +5101,10 @@ function saveQuizQuestion() {
 
         quizDraftQuestions =
             quizDraftQuestions.map(
-                (item, index) => ({
+                (
+                    item,
+                    index
+                ) => ({
 
                     ...item,
 
@@ -5028,7 +5141,7 @@ function saveQuizQuestion() {
 
 
 /* =====================================================
-   DELETE CURRENT QUESTION
+   DELETE QUESTION
 ===================================================== */
 
 function deleteCurrentQuizQuestion() {
@@ -5082,7 +5195,10 @@ function deleteCurrentQuizQuestion() {
 
     quizDraftQuestions =
         quizDraftQuestions.map(
-            (item, index) => ({
+            (
+                item,
+                index
+            ) => ({
 
                 ...item,
 
@@ -5106,10 +5222,6 @@ function deleteCurrentQuizQuestion() {
 
 }
 
-
-/* =====================================================
-   DELETE QUESTION FROM LIST
-===================================================== */
 
 function deleteQuizQuestionFromList(
     question
@@ -5141,7 +5253,10 @@ function deleteQuizQuestionFromList(
 
     quizDraftQuestions =
         quizDraftQuestions.map(
-            (item, index) => ({
+            (
+                item,
+                index
+            ) => ({
 
                 ...item,
 
@@ -5164,7 +5279,7 @@ function deleteQuizQuestionFromList(
 
 
 /* =====================================================
-   RENDER QUESTIONS
+   RENDER QUIZ QUESTIONS
 ===================================================== */
 
 function renderQuizQuestions() {
@@ -5203,8 +5318,7 @@ function renderQuizQuestions() {
     if (quizQuestionsEmpty) {
 
         quizQuestionsEmpty.hidden =
-            quizDraftQuestions.length >
-            0;
+            quizDraftQuestions.length > 0;
 
     }
 
@@ -5215,14 +5329,15 @@ function renderQuizQuestions() {
 
 
     quizDraftQuestions.forEach(
-        (question, index) => {
+        (
+            question,
+            index
+        ) => {
 
             const fragment =
-                quizQuestionListItemTemplate
-                    .content
-                    .cloneNode(
-                        true
-                    );
+                quizQuestionListItemTemplate.content.cloneNode(
+                    true
+                );
 
 
             const title =
@@ -5388,18 +5503,16 @@ function clearQuizBuilder() {
 }
 
 
-/* =====================================================
-   RESET QUIZ BUILDER
-===================================================== */
-
 function resetQuizBuilder() {
 
     const hasDraft =
-        quizDraftQuestions.length >
-        0 ||
+
+        quizDraftQuestions.length > 0 ||
+
         !!cleanText(
             quizTitle?.value
         ) ||
+
         !!cleanText(
             quizDescription?.value
         );
@@ -5453,8 +5566,7 @@ function getQuizDraftPayload() {
 
 
     if (
-        quizDraftQuestions.length ===
-        0
+        quizDraftQuestions.length === 0
     ) {
 
         throw new Error(
@@ -5466,7 +5578,10 @@ function getQuizDraftPayload() {
 
     const questions =
         quizDraftQuestions.map(
-            (question, index) => ({
+            (
+                question,
+                index
+            ) => ({
 
                 question:
                     cleanText(
@@ -5536,23 +5651,13 @@ function getQuizDraftPayload() {
 
 
 /* =====================================================
-   GENERIC QUIZ ADMIN REQUEST
-   READY FOR FUTURE BACKEND
+   QUIZ ADMIN REQUEST
 ===================================================== */
 
 async function quizAdminRequest(
     method,
     body = null
 ) {
-
-    if (!ADMIN_QUIZ_ENDPOINT) {
-
-        throw new Error(
-            "QUIZ BACKEND IS NOT CONNECTED YET."
-        );
-
-    }
-
 
     const token =
         getSessionToken();
@@ -5572,6 +5677,7 @@ async function quizAdminRequest(
     ) {
 
         clearLocalSession();
+
 
         throw new Error(
             "YOUR SESSION HAS EXPIRED. LOG IN AGAIN."
@@ -5606,6 +5712,7 @@ async function quizAdminRequest(
         ] =
             "application/json";
 
+
         options.body =
             JSON.stringify(
                 body
@@ -5632,7 +5739,8 @@ async function quizAdminRequest(
     }
     catch {
 
-        result = null;
+        result =
+            null;
 
     }
 
@@ -5642,6 +5750,7 @@ async function quizAdminRequest(
     ) {
 
         clearLocalSession();
+
 
         throw new Error(
             "YOUR SESSION HAS EXPIRED. LOG IN AGAIN."
@@ -5694,37 +5803,11 @@ async function saveQuiz(event) {
             getQuizDraftPayload();
 
 
-        /*
-            Until the Supabase quiz backend exists,
-            do not fake a permanent save.
-
-            We still validate the complete quiz,
-            including per-question time.
-        */
-
-        if (!ADMIN_QUIZ_ENDPOINT) {
-
-            console.log(
-                "GREMBLE QUIZ READY FOR BACKEND:",
-                payload
-            );
-
-
-            setQuizBuilderMessage(
-                `QUIZ READY — ${payload.questions.length} QUESTION${payload.questions.length === 1 ? "" : "S"}. NEXT STEP IS CONNECTING THE SUPABASE QUIZ BACKEND.`,
-                "success"
-            );
-
-
-            return;
-
-        }
-
-
         if (saveQuizButton) {
 
             saveQuizButton.disabled =
                 true;
+
 
             saveQuizButton.textContent =
                 "SAVING...";
@@ -5758,9 +5841,7 @@ async function saveQuiz(event) {
         );
 
 
-        if (
-            result.quiz
-        ) {
+        if (result.quiz) {
 
             loadQuizIntoBuilder(
                 result.quiz
@@ -5810,22 +5891,7 @@ async function saveQuiz(event) {
    LOAD SAVED QUIZZES
 ===================================================== */
 
-async function loadSavedQuizzes(
-    force = false
-) {
-
-    /*
-        Backend not created yet.
-    */
-
-    if (!ADMIN_QUIZ_ENDPOINT) {
-
-        renderSavedQuizzes();
-
-        return;
-
-    }
-
+async function loadSavedQuizzes() {
 
     try {
 
@@ -5905,7 +5971,10 @@ function loadQuizIntoBuilder(quiz) {
             quiz.questions
         )
             ? quiz.questions.map(
-                (question, index) => ({
+                (
+                    question,
+                    index
+                ) => ({
 
                     ...question,
 
@@ -5924,8 +5993,10 @@ function loadQuizIntoBuilder(quiz) {
 
                     answer_time_seconds:
                         normalizeQuizAnswerTime(
+
                             question.answer_time_seconds ??
                             question.time_seconds
+
                         ),
 
                     max_score:
@@ -5978,7 +6049,7 @@ function loadQuizIntoBuilder(quiz) {
 
 
 /* =====================================================
-   DUPLICATE CURRENT QUIZ
+   DUPLICATE QUIZ
 ===================================================== */
 
 function duplicateCurrentQuiz() {
@@ -5995,6 +6066,7 @@ function duplicateCurrentQuiz() {
             "ENTER OR LOAD A QUIZ FIRST.",
             "error"
         );
+
 
         return;
 
@@ -6019,7 +6091,10 @@ function duplicateCurrentQuiz() {
 
     quizDraftQuestions =
         quizDraftQuestions.map(
-            (question, index) => ({
+            (
+                question,
+                index
+            ) => ({
 
                 ...question,
 
@@ -6103,18 +6178,6 @@ async function deleteSavedQuiz(quiz) {
     }
 
 
-    if (!ADMIN_QUIZ_ENDPOINT) {
-
-        setQuizBuilderMessage(
-            "QUIZ DELETE WILL WORK AFTER THE SUPABASE QUIZ BACKEND IS CONNECTED.",
-            "error"
-        );
-
-        return;
-
-    }
-
-
     try {
 
         await quizAdminRequest(
@@ -6144,6 +6207,27 @@ async function deleteSavedQuiz(quiz) {
             "COULD NOT DELETE QUIZ.",
             "error"
         );
+
+    }
+
+}
+
+
+/* =====================================================
+   QUIZ TAB
+===================================================== */
+
+function clickQuizTab(name) {
+
+    const button =
+        document.querySelector(
+            `[data-quiz-subview="${name}"]`
+        );
+
+
+    if (button) {
+
+        button.click();
 
     }
 
@@ -6182,8 +6266,7 @@ function renderSavedQuizzes() {
     if (savedQuizzesEmpty) {
 
         savedQuizzesEmpty.hidden =
-            savedQuizzes.length >
-            0;
+            savedQuizzes.length > 0;
 
     }
 
@@ -6197,11 +6280,9 @@ function renderSavedQuizzes() {
         quiz => {
 
             const fragment =
-                savedQuizCardTemplate
-                    .content
-                    .cloneNode(
-                        true
-                    );
+                savedQuizCardTemplate.content.cloneNode(
+                    true
+                );
 
 
             const title =
@@ -6277,6 +6358,7 @@ function renderSavedQuizzes() {
                             quiz
                         );
 
+
                         clickQuizTab(
                             "builder"
                         );
@@ -6296,6 +6378,7 @@ function renderSavedQuizzes() {
                         loadQuizIntoBuilder(
                             quiz
                         );
+
 
                         duplicateCurrentQuiz();
 
@@ -6353,34 +6436,14 @@ function renderSavedQuizzes() {
 
 
 /* =====================================================
-   QUIZ TAB HELPER
-===================================================== */
-
-function clickQuizTab(name) {
-
-    const button =
-        document.querySelector(
-            `[data-quiz-subview="${name}"]`
-        );
-
-
-    if (button) {
-
-        button.click();
-
-    }
-
-}
-
-
-/* =====================================================
-   SELECT QUIZ FOR LIVE
+   SELECT LIVE QUIZ
 ===================================================== */
 
 function selectQuizForLive(quiz) {
 
     selectedLiveQuiz =
-        quiz;
+        quiz ||
+        null;
 
 
     if (liveQuizSelectedTitle) {
@@ -6406,16 +6469,10 @@ function selectQuizForLive(quiz) {
 
         liveQuizTotalQuestions.textContent =
             String(
-                questions.length
+                liveQuizSession
+                    ? liveQuizLastTotalQuestions
+                    : questions.length
             );
-
-    }
-
-
-    if (openQuizLobbyButton) {
-
-        openQuizLobbyButton.disabled =
-            !quiz;
 
     }
 
@@ -6427,6 +6484,9 @@ function selectQuizForLive(quiz) {
     );
 
 
+    updateLiveQuizStatusUI();
+
+
     clickQuizTab(
         "control"
     );
@@ -6435,7 +6495,7 @@ function selectQuizForLive(quiz) {
 
 
 /* =====================================================
-   LIVE QUIZ STATUS
+   LIVE QUIZ STATUS + BUTTONS
 ===================================================== */
 
 function updateLiveQuizStatusUI() {
@@ -6449,6 +6509,39 @@ function updateLiveQuizStatusUI() {
 
     const players =
         liveQuizPlayers.length;
+
+
+    const totalQuestions =
+        numberOrZero(
+            liveQuizLastTotalQuestions
+        );
+
+
+    const currentQuestionNumber =
+        numberOrZero(
+            liveQuizSession?.current_question_number
+        );
+
+
+    const answersCloseAt =
+        liveQuizSession?.answers_close_at
+            ? new Date(
+                liveQuizSession.answers_close_at
+            ).getTime()
+            : 0;
+
+
+    const questionStillOpen =
+        status === "live" &&
+        answersCloseAt >
+        Date.now();
+
+
+    const isFinalQuestion =
+        status === "live" &&
+        totalQuestions > 0 &&
+        currentQuestionNumber >=
+        totalQuestions;
 
 
     if (liveQuizStatus) {
@@ -6473,6 +6566,42 @@ function updateLiveQuizStatusUI() {
 
         liveLobbyPlayerCountBadge.textContent =
             `${players} ${players === 1 ? "PLAYER" : "PLAYERS"}`;
+
+    }
+
+
+    if (liveQuizTotalQuestions) {
+
+        if (liveQuizSession) {
+
+            liveQuizTotalQuestions.textContent =
+                String(
+                    totalQuestions
+                );
+
+        }
+        else if (selectedLiveQuiz) {
+
+            const selectedQuestions =
+                Array.isArray(
+                    selectedLiveQuiz.questions
+                )
+                    ? selectedLiveQuiz.questions
+                    : [];
+
+
+            liveQuizTotalQuestions.textContent =
+                String(
+                    selectedQuestions.length
+                );
+
+        }
+        else {
+
+            liveQuizTotalQuestions.textContent =
+                "0";
+
+        }
 
     }
 
@@ -6513,11 +6642,74 @@ function updateLiveQuizStatusUI() {
 
     }
 
+
+    /*
+        BEFORE LOBBY
+    */
+
+    if (openQuizLobbyButton) {
+
+        openQuizLobbyButton.disabled =
+            status !== "inactive" ||
+            !selectedLiveQuiz;
+
+    }
+
+
+    /*
+        LOBBY
+    */
+
+    if (startQuizButton) {
+
+        startQuizButton.disabled =
+            status !== "lobby";
+
+    }
+
+
+    if (closeQuizLobbyButton) {
+
+        closeQuizLobbyButton.disabled =
+            status !== "lobby";
+
+    }
+
+
+    /*
+        LIVE
+    */
+
+    if (nextQuizQuestionButton) {
+
+        nextQuizQuestionButton.disabled =
+
+            status !== "live" ||
+
+            questionStillOpen ||
+
+            isFinalQuestion;
+
+    }
+
+
+    if (finishQuizButton) {
+
+        finishQuizButton.disabled =
+
+            status !== "live" ||
+
+            questionStillOpen ||
+
+            !isFinalQuestion;
+
+    }
+
 }
 
 
 /* =====================================================
-   LIVE PLAYER LIST
+   LIVE PLAYERS
 ===================================================== */
 
 function renderLiveQuizPlayers() {
@@ -6548,8 +6740,7 @@ function renderLiveQuizPlayers() {
     if (liveQuizPlayersEmpty) {
 
         liveQuizPlayersEmpty.hidden =
-            liveQuizPlayers.length >
-            0;
+            liveQuizPlayers.length > 0;
 
     }
 
@@ -6567,11 +6758,9 @@ function renderLiveQuizPlayers() {
         player => {
 
             const fragment =
-                liveQuizPlayerTemplate
-                    .content
-                    .cloneNode(
-                        true
-                    );
+                liveQuizPlayerTemplate.content.cloneNode(
+                    true
+                );
 
 
             const name =
@@ -6631,20 +6820,6 @@ function renderLiveQuizPlayers() {
 
 
 /* =====================================================
-   LIVE BACKEND PLACEHOLDER
-===================================================== */
-
-function quizLiveBackendNotReady() {
-
-    setLiveQuizMessage(
-        "LIVE QUIZ BACKEND IS NOT CONNECTED YET. NEXT WE CREATE THE SUPABASE QUIZ TABLES + SECURE LIVE ENDPOINTS.",
-        "error"
-    );
-
-}
-
-
-/* =====================================================
    LIVE QUIZ REQUEST
 ===================================================== */
 
@@ -6652,15 +6827,6 @@ async function liveQuizRequest(
     action,
     body = {}
 ) {
-
-    if (!ADMIN_QUIZ_LIVE_ENDPOINT) {
-
-        throw new Error(
-            "LIVE QUIZ BACKEND IS NOT CONNECTED YET."
-        );
-
-    }
-
 
     const token =
         getSessionToken();
@@ -6680,6 +6846,7 @@ async function liveQuizRequest(
     ) {
 
         clearLocalSession();
+
 
         throw new Error(
             "YOUR SESSION HAS EXPIRED. LOG IN AGAIN."
@@ -6730,7 +6897,8 @@ async function liveQuizRequest(
     }
     catch {
 
-        result = null;
+        result =
+            null;
 
     }
 
@@ -6740,6 +6908,7 @@ async function liveQuizRequest(
     ) {
 
         clearLocalSession();
+
 
         throw new Error(
             "YOUR SESSION HAS EXPIRED. LOG IN AGAIN."
@@ -6778,7 +6947,225 @@ async function liveQuizRequest(
 
 
 /* =====================================================
-   OPEN QUIZ LOBBY
+   APPLY LIVE STATE
+===================================================== */
+
+function applyLiveQuizState(
+    result = {}
+) {
+
+    liveQuizSession =
+        result.session ||
+        null;
+
+
+    liveQuizPlayers =
+        Array.isArray(
+            result.players
+        )
+            ? result.players
+            : [];
+
+
+    liveQuizLastTotalQuestions =
+        numberOrZero(
+            result.total_questions
+        );
+
+
+    liveQuizLastQuestion =
+        result.question ||
+        null;
+
+
+    liveQuizLastStats =
+        result.stats &&
+        typeof result.stats === "object"
+            ? result.stats
+            : {};
+
+
+    if (liveQuizSession) {
+
+        const sessionQuizId =
+            String(
+                liveQuizSession.quiz_id ||
+                ""
+            );
+
+
+        const matchingSavedQuiz =
+            savedQuizzes.find(
+                quiz =>
+                    String(
+                        quiz.id
+                    ) ===
+                    sessionQuizId
+            );
+
+
+        if (matchingSavedQuiz) {
+
+            selectedLiveQuiz =
+                matchingSavedQuiz;
+
+        }
+        else {
+
+            selectedLiveQuiz = {
+
+                id:
+                    liveQuizSession.quiz_id,
+
+                title:
+                    liveQuizSession.quiz_title ||
+                    "LIVE QUIZ",
+
+                questions:
+                    []
+
+            };
+
+        }
+
+
+        if (liveQuizSelectedTitle) {
+
+            liveQuizSelectedTitle.textContent =
+
+                cleanText(
+                    liveQuizSession.quiz_title
+                ) ||
+
+                cleanText(
+                    selectedLiveQuiz?.title
+                ) ||
+
+                "LIVE QUIZ";
+
+        }
+
+    }
+
+
+    renderLiveQuizPlayers();
+
+
+    renderCurrentLiveQuestion(
+        liveQuizLastQuestion,
+        liveQuizLastStats
+    );
+
+
+    updateLiveQuizStatusUI();
+
+}
+
+
+/* =====================================================
+   LOAD LIVE STATE
+===================================================== */
+
+async function loadLiveQuizState(
+    silent = true
+) {
+
+    if (liveQuizStateLoading) {
+        return;
+    }
+
+
+    const token =
+        getSessionToken();
+
+
+    if (
+        !token ||
+        sessionIsExpired()
+    ) {
+
+        return;
+
+    }
+
+
+    liveQuizStateLoading =
+        true;
+
+
+    try {
+
+        const result =
+            await liveQuizRequest(
+                "get_state"
+            );
+
+
+        applyLiveQuizState(
+            result
+        );
+
+    }
+    catch (error) {
+
+        if (!silent) {
+
+            setLiveQuizMessage(
+                error?.message ||
+                "COULD NOT LOAD LIVE QUIZ STATE.",
+                "error"
+            );
+
+        }
+
+    }
+    finally {
+
+        liveQuizStateLoading =
+            false;
+
+    }
+
+}
+
+
+/* =====================================================
+   LIVE POLLING
+===================================================== */
+
+function startLiveQuizStatePolling() {
+
+    if (liveQuizStatePollTimer) {
+
+        clearInterval(
+            liveQuizStatePollTimer
+        );
+
+    }
+
+
+    loadLiveQuizState(
+        true
+    );
+
+
+    liveQuizStatePollTimer =
+        setInterval(
+            () => {
+
+                loadLiveQuizState(
+                    true
+                );
+
+            },
+            LIVE_QUIZ_POLL_MS
+        );
+
+}
+
+
+/* =====================================================
+   OPEN LOBBY
 ===================================================== */
 
 async function openQuizLobby() {
@@ -6790,14 +7177,6 @@ async function openQuizLobby() {
             "error"
         );
 
-        return;
-
-    }
-
-
-    if (!ADMIN_QUIZ_LIVE_ENDPOINT) {
-
-        quizLiveBackendNotReady();
 
         return;
 
@@ -6816,22 +7195,15 @@ async function openQuizLobby() {
             );
 
 
-        liveQuizSession =
-            result.session ||
-            null;
+        applyLiveQuizState(
+            result
+        );
 
 
-        liveQuizPlayers =
-            Array.isArray(
-                result.players
-            )
-                ? result.players
-                : [];
-
-
-        renderLiveQuizPlayers();
-
-        updateLiveQuizStatusUI();
+        setLiveQuizMessage(
+            "LOBBY OPEN. WAITING FOR PLAYERS.",
+            "success"
+        );
 
     }
     catch (error) {
@@ -6848,19 +7220,10 @@ async function openQuizLobby() {
 
 
 /* =====================================================
-   START LIVE QUIZ
+   START QUIZ
 ===================================================== */
 
 async function startLiveQuiz() {
-
-    if (!ADMIN_QUIZ_LIVE_ENDPOINT) {
-
-        quizLiveBackendNotReady();
-
-        return;
-
-    }
-
 
     if (!liveQuizSession?.id) {
 
@@ -6868,6 +7231,7 @@ async function startLiveQuiz() {
             "OPEN THE LOBBY FIRST.",
             "error"
         );
+
 
         return;
 
@@ -6886,12 +7250,15 @@ async function startLiveQuiz() {
             );
 
 
-        liveQuizSession =
-            result.session ||
-            liveQuizSession;
+        applyLiveQuizState(
+            result
+        );
 
 
-        updateLiveQuizStatusUI();
+        setLiveQuizMessage(
+            "QUIZ STARTED. QUESTION 1 IS LIVE.",
+            "success"
+        );
 
     }
     catch (error) {
@@ -6913,21 +7280,13 @@ async function startLiveQuiz() {
 
 async function nextLiveQuizQuestion() {
 
-    if (!ADMIN_QUIZ_LIVE_ENDPOINT) {
-
-        quizLiveBackendNotReady();
-
-        return;
-
-    }
-
-
     if (!liveQuizSession?.id) {
 
         setLiveQuizMessage(
             "NO ACTIVE QUIZ.",
             "error"
         );
+
 
         return;
 
@@ -6946,12 +7305,15 @@ async function nextLiveQuizQuestion() {
             );
 
 
-        liveQuizSession =
-            result.session ||
-            liveQuizSession;
+        applyLiveQuizState(
+            result
+        );
 
 
-        updateLiveQuizStatusUI();
+        setLiveQuizMessage(
+            `QUESTION ${numberOrZero(result.session?.current_question_number)} IS LIVE.`,
+            "success"
+        );
 
     }
     catch (error) {
@@ -6973,21 +7335,13 @@ async function nextLiveQuizQuestion() {
 
 async function finishLiveQuiz() {
 
-    if (!ADMIN_QUIZ_LIVE_ENDPOINT) {
-
-        quizLiveBackendNotReady();
-
-        return;
-
-    }
-
-
     if (!liveQuizSession?.id) {
 
         setLiveQuizMessage(
             "NO ACTIVE QUIZ.",
             "error"
         );
+
 
         return;
 
@@ -7019,10 +7373,36 @@ async function finishLiveQuiz() {
 
         liveQuizSession =
             result.session ||
-            liveQuizSession;
+            null;
+
+
+        liveQuizPlayers =
+            [];
+
+
+        liveQuizLastQuestion =
+            null;
+
+
+        liveQuizLastStats =
+            {};
+
+
+        renderLiveQuizPlayers();
+
+
+        renderCurrentLiveQuestion(
+            null
+        );
 
 
         updateLiveQuizStatusUI();
+
+
+        setLiveQuizMessage(
+            "QUIZ FINISHED. FINAL RESULTS ARE AVAILABLE TO PLAYERS.",
+            "success"
+        );
 
 
         await loadPastQuizzes();
@@ -7047,21 +7427,13 @@ async function finishLiveQuiz() {
 
 async function closeLiveQuizLobby() {
 
-    if (!ADMIN_QUIZ_LIVE_ENDPOINT) {
-
-        quizLiveBackendNotReady();
-
-        return;
-
-    }
-
-
     if (!liveQuizSession?.id) {
 
         setLiveQuizMessage(
             "NO OPEN LOBBY.",
             "error"
         );
+
 
         return;
 
@@ -7093,13 +7465,38 @@ async function closeLiveQuizLobby() {
         liveQuizSession =
             null;
 
+
         liveQuizPlayers =
             [];
 
 
+        liveQuizLastTotalQuestions =
+            0;
+
+
+        liveQuizLastQuestion =
+            null;
+
+
+        liveQuizLastStats =
+            {};
+
+
         renderLiveQuizPlayers();
 
+
+        renderCurrentLiveQuestion(
+            null
+        );
+
+
         updateLiveQuizStatusUI();
+
+
+        setLiveQuizMessage(
+            "LOBBY CLOSED.",
+            "success"
+        );
 
     }
     catch (error) {
@@ -7116,7 +7513,7 @@ async function closeLiveQuizLobby() {
 
 
 /* =====================================================
-   UPDATE LIVE QUESTION UI
+   CURRENT LIVE QUESTION
 ===================================================== */
 
 function renderCurrentLiveQuestion(
@@ -7133,12 +7530,14 @@ function renderCurrentLiveQuestion(
 
         }
 
+
         if (liveQuizCurrentQuestion) {
 
             liveQuizCurrentQuestion.textContent =
                 "—";
 
         }
+
 
         return;
 
@@ -7155,8 +7554,10 @@ function renderCurrentLiveQuestion(
 
     const currentNumber =
         numberOrZero(
+
             question.sort_order ??
             question.question_number
+
         );
 
 
@@ -7164,7 +7565,8 @@ function renderCurrentLiveQuestion(
 
         liveQuizCurrentQuestion.textContent =
             String(
-                currentNumber || "—"
+                currentNumber ||
+                "—"
             );
 
     }
@@ -7240,23 +7642,17 @@ function renderCurrentLiveQuestion(
 
 
 /* =====================================================
-   PAST QUIZ REQUEST PLACEHOLDER
+   PAST QUIZZES
 ===================================================== */
 
 async function loadPastQuizzes() {
 
     /*
-        This will come from the quiz backend later.
+        This section is already prepared in the UI.
+
+        If admin-quiz does not yet return historical
+        sessions, this simply stays empty.
     */
-
-    if (!ADMIN_QUIZ_ENDPOINT) {
-
-        renderPastQuizzes();
-
-        return;
-
-    }
-
 
     try {
 
@@ -7323,10 +7719,6 @@ async function loadPastQuizzes() {
 }
 
 
-/* =====================================================
-   RENDER PAST QUIZZES
-===================================================== */
-
 function renderPastQuizzes() {
 
     if (!pastQuizzesList) {
@@ -7355,8 +7747,7 @@ function renderPastQuizzes() {
     if (pastQuizzesEmpty) {
 
         pastQuizzesEmpty.hidden =
-            pastQuizSessions.length >
-            0;
+            pastQuizSessions.length > 0;
 
     }
 
@@ -7370,11 +7761,9 @@ function renderPastQuizzes() {
         session => {
 
             const fragment =
-                pastQuizCardTemplate
-                    .content
-                    .cloneNode(
-                        true
-                    );
+                pastQuizCardTemplate.content.cloneNode(
+                    true
+                );
 
 
             const title =
@@ -7421,6 +7810,7 @@ function renderPastQuizzes() {
                         session.winner_username
                     );
 
+
                 const winnerName =
                     cleanText(
                         session.winner_name
@@ -7453,7 +7843,7 @@ function renderPastQuizzes() {
 
 
 /* =====================================================
-   MEMBER EVENTS
+   EVENTS - MEMBERS
 ===================================================== */
 
 if (memberSearch) {
@@ -7499,8 +7889,10 @@ if (refreshMembers) {
 
             }
 
+
             membersCurrentPage =
                 1;
+
 
             await loadAdminData();
 
@@ -7511,7 +7903,7 @@ if (refreshMembers) {
 
 
 /* =====================================================
-   CONTEST EVENTS
+   EVENTS - CONTEST
 ===================================================== */
 
 if (openContestPanel) {
@@ -7631,7 +8023,7 @@ if (contestCancelEdit) {
 
 
 /* =====================================================
-   QUIZ BUILDER EVENTS
+   EVENTS - QUIZ BUILDER
 ===================================================== */
 
 if (addQuizQuestionButton) {
@@ -7726,10 +8118,6 @@ if (quizDuplicateCurrentButton) {
 }
 
 
-/* =====================================================
-   SAVED QUIZ EVENTS
-===================================================== */
-
 if (createQuizFromSavedButton) {
 
     createQuizFromSavedButton.addEventListener(
@@ -7737,8 +8125,9 @@ if (createQuizFromSavedButton) {
         () => {
 
             const hasDraft =
-                quizDraftQuestions.length >
-                0 ||
+
+                quizDraftQuestions.length > 0 ||
+
                 !!cleanText(
                     quizTitle?.value
                 );
@@ -7773,7 +8162,7 @@ if (createQuizFromSavedButton) {
 
 
 /* =====================================================
-   LIVE QUIZ EVENTS
+   EVENTS - LIVE QUIZ
 ===================================================== */
 
 if (openQuizLobbyButton) {
@@ -7827,17 +8216,38 @@ if (closeQuizLobbyButton) {
 
 
 /* =====================================================
+   RETURN TO TAB
+===================================================== */
+
+document.addEventListener(
+    "visibilitychange",
+    () => {
+
+        if (
+            document.visibilityState ===
+            "visible"
+        ) {
+
+            loadLiveQuizState(
+                true
+            );
+
+        }
+
+    }
+);
+
+
+/* =====================================================
    START
 ===================================================== */
 
 document.addEventListener(
     "DOMContentLoaded",
-    () => {
+    async () => {
 
 
-        /* =================================================
-           EXISTING SYSTEM
-        ================================================== */
+        /* CONTEST */
 
         resetContestForm();
 
@@ -7854,9 +8264,7 @@ document.addEventListener(
             1;
 
 
-        /* =================================================
-           QUIZ DEFAULT STATE
-        ================================================== */
+        /* QUIZ */
 
         quizDraftQuestions =
             [];
@@ -7884,6 +8292,18 @@ document.addEventListener(
 
         selectedLiveQuiz =
             null;
+
+
+        liveQuizLastTotalQuestions =
+            0;
+
+
+        liveQuizLastQuestion =
+            null;
+
+
+        liveQuizLastStats =
+            {};
 
 
         if (quizQuestionAnswerTime) {
@@ -7919,9 +8339,7 @@ document.addEventListener(
         updateLiveQuizStatusUI();
 
 
-        /* =================================================
-           LIVE BUTTON DEFAULT STATE
-        ================================================== */
+        /* DEFAULT BUTTONS */
 
         if (openQuizLobbyButton) {
 
@@ -7963,23 +8381,50 @@ document.addEventListener(
         }
 
 
-        /* =================================================
-           LOAD SECURE ADMIN DATA
-        ================================================== */
+        /*
+            LOAD ADMIN
+        */
 
-        loadAdminData();
+        await loadAdminData();
 
 
         /*
-            Safe to call now.
-
-            Because ADMIN_QUIZ_ENDPOINT is currently empty,
-            these do not make any network requests.
+            LOAD QUIZZES
         */
 
-        loadSavedQuizzes();
+        await loadSavedQuizzes();
 
-        loadPastQuizzes();
+
+        /*
+            RESTORE EXISTING LOBBY / LIVE SESSION
+
+            This is the important fix.
+
+            If you refresh admin.html while a lobby
+            already exists in Supabase, the admin panel
+            will restore it instead of showing INACTIVE.
+        */
+
+        await loadLiveQuizState(
+            false
+        );
+
+
+        /*
+            PAST QUIZZES
+        */
+
+        await loadPastQuizzes();
+
+
+        /*
+            LIVE REFRESH
+
+            Players, answers and question status
+            refresh every second.
+        */
+
+        startLiveQuizStatePolling();
 
     }
 );
