@@ -26,7 +26,7 @@ const ADMIN_CONTEST_ENDPOINT =
     without trying to call a missing quiz backend.
 */
 
-const ADMIN_QUIZ_ENDPOINT = "";
+const ADMIN_QUIZ_ENDPOINT = "https://tffzjqeckoezursrvcpw.supabase.co/functions/v1/admin-quiz";
 
 const ADMIN_QUIZ_LIVE_ENDPOINT = "";
 
