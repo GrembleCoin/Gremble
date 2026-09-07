@@ -1086,19 +1086,13 @@ button:disabled{
     box-shadow:0 0 10px currentColor
 }
 
-/* X FOUND + TELEGRAM = GREEN */
-
 .contest-member-status.verified{
     color:var(--green)
 }
 
-/* X FOUND BUT NOT TELEGRAM = ORANGE */
-
 .contest-member-status.registered{
     color:#ffae42
 }
-
-/* X NOT FOUND = RED */
 
 .contest-member-status.not-found{
     color:#ff5964
@@ -1131,7 +1125,7 @@ button:disabled{
     color:#ff717b
 }
 
-/* X NAME - BLACK + STRONG */
+/* X NAME */
 
 .contest-participant-name{
     display:inline-flex;
@@ -2225,15 +2219,25 @@ button:disabled{
     <div class="sidebar-bottom">
 
         <div class="sidebar-wall">
-            <img src="wall.jpg" alt="">
+            <img src="wall.png" alt="">
         </div>
 
-        <a href="index.html" class="sidebar-web-button">
+        <a href="https://gremblecoin.com" class="sidebar-web-button">
 
             <span class="sidebar-web-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                >
                     <circle cx="12" cy="12" r="9"></circle>
                     <path d="M3 12h18"></path>
+                    <path d="M12 3a15 15 0 0 1 0 18"></path>
+                    <path d="M12 3a15 15 0 0 0 0 18"></path>
                 </svg>
             </span>
 
@@ -2303,8 +2307,6 @@ button:disabled{
     id="adminDashboard"
     hidden
 >
-
-<!-- DASHBOARD -->
 
 <section
     class="admin-view"
@@ -2409,8 +2411,6 @@ button:disabled{
     </div>
 
 </section>
-
-<!-- MEMBERS -->
 
 <section
     class="admin-view"
@@ -2532,8 +2532,6 @@ button:disabled{
     </section>
 
 </section>
-
-<!-- CONTEST -->
 
 <section
     class="admin-view"
@@ -2793,8 +2791,6 @@ button:disabled{
 
 </section>
 
-<!-- QUIZ -->
-
 <section
     class="admin-view"
     id="adminViewQuiz"
@@ -2845,8 +2841,6 @@ button:disabled{
         </button>
 
     </div>
-
-    <!-- BUILDER -->
 
     <section
         class="quiz-subview"
@@ -3200,8 +3194,6 @@ button:disabled{
 
     </section>
 
-    <!-- SAVED -->
-
     <section
         class="quiz-subview"
         data-quiz-subview-name="saved"
@@ -3244,8 +3236,6 @@ button:disabled{
         </section>
 
     </section>
-
-    <!-- LIVE CONTROL -->
 
     <section
         class="quiz-subview"
@@ -3307,12 +3297,6 @@ button:disabled{
                     </div>
 
                 </div>
-
-                <!--
-                    IMPORTANT:
-                    THESE IDS MATCH THE EXISTING ADMIN.JS.
-                    DO NOT RENAME THEM.
-                -->
 
                 <div class="live-control-buttons">
 
@@ -3458,8 +3442,6 @@ button:disabled{
 
 </section>
 
-<!-- PAST QUIZZES -->
-
 <section
     class="admin-view"
     id="adminViewPastQuizzes"
@@ -3535,8 +3517,6 @@ button:disabled{
 </main>
 </div>
 
-<!-- QUESTION TEMPLATE -->
-
 <template id="quizQuestionListItemTemplate">
 
     <div class="quiz-question-item">
@@ -3576,8 +3556,6 @@ button:disabled{
     </div>
 
 </template>
-
-<!-- SAVED QUIZ TEMPLATE -->
 
 <template id="savedQuizCardTemplate">
 
@@ -3627,8 +3605,6 @@ button:disabled{
 
 </template>
 
-<!-- LIVE PLAYER TEMPLATE -->
-
 <template id="liveQuizPlayerTemplate">
 
     <div class="lobby-player-row">
@@ -3654,8 +3630,6 @@ button:disabled{
     </div>
 
 </template>
-
-<!-- PAST QUIZ TEMPLATE -->
 
 <template id="pastQuizCardTemplate">
 
@@ -3771,11 +3745,7 @@ button:disabled{
 
 </template>
 
-<!-- EXISTING ADMIN LOGIC -->
-
 <script src="admin.js?v=118"></script>
-
-<!-- PAGE NAVIGATION ONLY -->
 
 <script>
 (() => {
@@ -4058,8 +4028,6 @@ button:disabled{
 })();
 </script>
 
-<!-- CONTEST VISUALS ONLY -->
-
 <script>
 (() => {
 
@@ -4072,44 +4040,52 @@ button:disabled{
         return;
     }
 
+    let contestVisualsRunning =
+        false;
+
     function applyContestVisuals(){
 
-        const rows =
-            contestTableBody.querySelectorAll(
-                "tr"
-            );
+        if(contestVisualsRunning){
+            return;
+        }
 
-        rows.forEach(
-            row => {
+        contestVisualsRunning =
+            true;
 
-                const cells =
-                    row.querySelectorAll(
-                        "td"
-                    );
+        try{
 
-                if(
-                    !cells ||
-                    cells.length < 4
-                ){
-                    return;
-                }
+            const rows =
+                contestTableBody.querySelectorAll(
+                    "tr"
+                );
 
-                const participantCell =
-                    cells[0];
+            rows.forEach(
+                row => {
 
-                const rulesCell =
-                    cells[3];
-
-                /* X USERNAME */
-
-                if(participantCell){
-
-                    let participant =
-                        participantCell.querySelector(
-                            ".contest-participant-name"
+                    const cells =
+                        row.querySelectorAll(
+                            "td"
                         );
 
-                    if(!participant){
+                    if(
+                        !cells ||
+                        cells.length < 4
+                    ){
+                        return;
+                    }
+
+                    const participantCell =
+                        cells[0];
+
+                    const rulesCell =
+                        cells[3];
+
+                    if(
+                        participantCell &&
+                        !participantCell.querySelector(
+                            ".contest-participant-name"
+                        )
+                    ){
 
                         const participantText =
                             participantCell
@@ -4121,7 +4097,7 @@ button:disabled{
                             participantCell.textContent =
                                 "";
 
-                            participant =
+                            const participant =
                                 document.createElement(
                                     "span"
                                 );
@@ -4140,37 +4116,38 @@ button:disabled{
 
                     }
 
-                }
-
-                /* RULES YES / NO */
-
-                if(rulesCell){
-
-                    const value =
-                        rulesCell
-                            .textContent
-                            .trim()
-                            .toUpperCase();
-
                     if(
-                        value === "YES" ||
-                        value === "NO"
+                        rulesCell &&
+                        !rulesCell.querySelector(
+                            ".contest-rule-visual"
+                        )
                     ){
 
-                        let badge =
-                            rulesCell.querySelector(
-                                ".contest-rule-visual"
-                            );
+                        const value =
+                            rulesCell
+                                .textContent
+                                .trim()
+                                .toUpperCase();
 
-                        if(!badge){
+                        if(
+                            value === "YES" ||
+                            value === "NO"
+                        ){
 
                             rulesCell.textContent =
                                 "";
 
-                            badge =
+                            const badge =
                                 document.createElement(
                                     "span"
                                 );
+
+                            badge.className =
+                                "contest-rule-visual " +
+                                value.toLowerCase();
+
+                            badge.textContent =
+                                value;
 
                             rulesCell.appendChild(
                                 badge
@@ -4178,25 +4155,47 @@ button:disabled{
 
                         }
 
-                        badge.className =
-                            "contest-rule-visual " +
-                            value.toLowerCase();
-
-                        badge.textContent =
-                            value;
-
                     }
 
                 }
+            );
 
-            }
-        );
+        }
+        finally{
+
+            contestVisualsRunning =
+                false;
+
+        }
+
+    }
+
+    let contestVisualFrame =
+        0;
+
+    function scheduleContestVisuals(){
+
+        if(contestVisualFrame){
+            return;
+        }
+
+        contestVisualFrame =
+            requestAnimationFrame(
+                () => {
+
+                    contestVisualFrame =
+                        0;
+
+                    applyContestVisuals();
+
+                }
+            );
 
     }
 
     const observer =
         new MutationObserver(
-            applyContestVisuals
+            scheduleContestVisuals
         );
 
     observer.observe(
