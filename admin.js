@@ -4181,9 +4181,15 @@ function getQuestionEditorData() {
 
 
     const correctAnswer =
-        cleanText(
-            quizCorrectAnswer?.value
-        ).toUpperCase();
+    cleanText(
+        quizCorrectAnswer?.value ||
+        quizCorrectButtons.find(
+            button =>
+                button.classList.contains(
+                    "active"
+                )
+        )?.dataset.correctAnswer
+    ).toUpperCase();
 
 
     const answerTime =
