@@ -4267,7 +4267,10 @@ function getQuestionEditorData() {
    SAVE QUESTION
 ===================================================== */
 
-function saveQuizQuestion() {
+function saveQuizQuestion(event) {
+
+    event?.preventDefault();
+    event?.stopPropagation();
 
     try {
 
