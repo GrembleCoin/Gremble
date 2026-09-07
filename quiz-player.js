@@ -704,6 +704,7 @@ function renderQuestionContent(
 
    IMPORTANT:
    We do NOT show the 4 second reading timer.
+   We also completely hide all answers.
 ===================================================== */
 
 function renderReadingState(
@@ -727,6 +728,9 @@ function renderReadingState(
 
     liveQuizAnswerButtons.forEach(
         button => {
+
+            button.hidden =
+                true;
 
             button.classList.add(
                 "locked"
@@ -793,6 +797,10 @@ function renderAnsweringState(
 
     liveQuizAnswerButtons.forEach(
         button => {
+
+            button.hidden =
+                false;
+
 
             const answer =
                 quizCleanText(
