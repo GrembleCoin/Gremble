@@ -9,6 +9,7 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
+
 body{
     min-height:100vh;
     background:
@@ -334,8 +335,6 @@ a{color:inherit;text-decoration:none}
     padding-top:18px
 }
 
-/* WALL IMAGE */
-
 .sidebar-wall{
     position:relative;
     width:calc(100% + 36px);
@@ -371,8 +370,6 @@ a{color:inherit;text-decoration:none}
     opacity:.82;
     filter:saturate(.86) brightness(.72) contrast(1.06)
 }
-
-/* GREMBLE WEB */
 
 .sidebar-web-button{
     min-height:62px;
@@ -650,7 +647,7 @@ a{color:inherit;text-decoration:none}
     font-size:10px
 }
 
-/* WALLET VISIBILITY CONTROL */
+/* WALLET */
 
 .wallet-control-box{
     margin-top:12px;
@@ -723,8 +720,7 @@ a{color:inherit;text-decoration:none}
 
 .wallet-visibility-switch.enabled{
     border-color:rgba(101,255,131,.42);
-    background:rgba(101,255,131,.14);
-    box-shadow:0 0 18px rgba(101,255,131,.08)
+    background:rgba(101,255,131,.14)
 }
 
 .wallet-visibility-switch.enabled::after{
@@ -776,7 +772,7 @@ a{color:inherit;text-decoration:none}
     font-weight:900
 }
 
-/* PAGE HEADERS */
+/* PAGE */
 
 .page-header{
     margin-bottom:18px
@@ -804,7 +800,7 @@ a{color:inherit;text-decoration:none}
     line-height:1.6
 }
 
-/* GENERIC ADMIN CARD */
+/* CARD */
 
 .admin-card{
     border:1px solid rgba(101,255,131,.1);
@@ -813,7 +809,8 @@ a{color:inherit;text-decoration:none}
     overflow:hidden
 }
 
-.admin-card-header{
+.admin-card-header,
+.card-header{
     padding:17px 18px;
     display:flex;
     align-items:center;
@@ -822,13 +819,15 @@ a{color:inherit;text-decoration:none}
     border-bottom:1px solid rgba(255,255,255,.04)
 }
 
-.admin-card-header span{
+.admin-card-header span,
+.card-header span{
     color:#6c796f;
     font-size:7px;
     font-weight:900
 }
 
-.admin-card-header h2{
+.admin-card-header h2,
+.card-header h2{
     margin-top:5px;
     font-size:17px
 }
@@ -989,8 +988,11 @@ button:disabled{
     font-weight:800
 }
 
-.member-telegram-username{
-    color:var(--green)
+.member-telegram-username,
+.telegram-username,
+.x-username{
+    color:var(--green);
+    font-weight:800
 }
 
 .member-address{
@@ -998,31 +1000,6 @@ button:disabled{
     overflow:hidden;
     text-overflow:ellipsis
 }
-
-.member-status{
-    display:inline-flex;
-    align-items:center;
-    gap:5px;
-    font-size:7px;
-    font-weight:900
-}
-
-.member-status.yes{
-    color:var(--green)
-}
-
-.member-status.no{
-    color:#ff717b
-}
-
-.member-status-dot{
-    width:6px;
-    height:6px;
-    border-radius:50%;
-    background:currentColor
-}
-
-/* MEMBERS VISUAL STATUS BADGES */
 
 .telegram-group-badge,
 .wallet-status-badge{
@@ -1033,7 +1010,6 @@ button:disabled{
     border-radius:999px;
     font-size:7px;
     font-weight:900;
-    line-height:1;
     white-space:nowrap
 }
 
@@ -1060,7 +1036,6 @@ button:disabled{
 .wallet-status-dot{
     width:7px;
     height:7px;
-    flex:0 0 7px;
     border-radius:50%;
     background:currentColor;
     box-shadow:0 0 8px currentColor
@@ -1077,11 +1052,6 @@ button:disabled{
     font-weight:900
 }
 
-.copy-button:hover{
-    border-color:rgba(101,255,131,.32);
-    background:rgba(101,255,131,.09)
-}
-
 .wallet-cell{
     display:flex;
     align-items:center;
@@ -1092,27 +1062,20 @@ button:disabled{
     color:#aab6ae
 }
 
-.telegram-username,
-.x-username{
-    color:var(--green);
-    font-weight:800
-}
-
 .country-cell{
     display:inline-flex;
     align-items:center;
     gap:6px
 }
 
-/* CONTEST MEMBER VERIFICATION DOT */
+/* CONTEST STATUS */
 
 .contest-member-status{
     display:inline-flex;
     width:24px;
     height:24px;
     align-items:center;
-    justify-content:center;
-    border-radius:50%
+    justify-content:center
 }
 
 .contest-member-status-dot{
@@ -1123,16 +1086,61 @@ button:disabled{
     box-shadow:0 0 10px currentColor
 }
 
+/* X FOUND + TELEGRAM = GREEN */
+
 .contest-member-status.verified{
     color:var(--green)
 }
+
+/* X FOUND BUT NOT TELEGRAM = ORANGE */
 
 .contest-member-status.registered{
     color:#ffae42
 }
 
+/* X NOT FOUND = RED */
+
 .contest-member-status.not-found{
     color:#ff5964
+}
+
+/* CONTEST RULES YES / NO */
+
+.contest-rule-visual{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-width:48px;
+    min-height:26px;
+    padding:0 10px;
+    border-radius:999px;
+    font-size:7px;
+    font-weight:900;
+    white-space:nowrap
+}
+
+.contest-rule-visual.yes{
+    border:1px solid rgba(101,255,131,.42);
+    background:rgba(101,255,131,.09);
+    color:var(--green)
+}
+
+.contest-rule-visual.no{
+    border:1px solid rgba(255,101,112,.42);
+    background:rgba(255,101,112,.08);
+    color:#ff717b
+}
+
+/* X NAME - BLACK + STRONG */
+
+.contest-participant-name{
+    display:inline-flex;
+    align-items:center;
+    padding:6px 9px;
+    border-radius:7px;
+    background:var(--green);
+    color:#000!important;
+    font-weight:900!important
 }
 
 .members-empty,
@@ -1396,7 +1404,7 @@ button:disabled{
     color:#ff747d
 }
 
-/* QUIZ TABS */
+/* QUIZ */
 
 .quiz-tabs{
     display:flex;
@@ -1407,8 +1415,7 @@ button:disabled{
     max-width:100%;
     border:1px solid rgba(101,255,131,.09);
     border-radius:12px;
-    background:rgba(4,13,9,.65);
-    overflow:auto
+    background:rgba(4,13,9,.65)
 }
 
 .quiz-tab-button{
@@ -1419,8 +1426,7 @@ button:disabled{
     background:transparent;
     color:#78857d;
     font-size:7px;
-    font-weight:900;
-    white-space:nowrap
+    font-weight:900
 }
 
 .quiz-tab-button.active{
@@ -1428,8 +1434,6 @@ button:disabled{
     background:rgba(101,255,131,.07);
     color:var(--green)
 }
-
-/* QUIZ BUILDER */
 
 .quiz-layout{
     display:grid;
@@ -1671,8 +1675,6 @@ button:disabled{
     gap:5px
 }
 
-/* SAVED QUIZZES */
-
 .saved-quizzes-list{
     padding:16px;
     display:grid;
@@ -1886,7 +1888,14 @@ button:disabled{
     font-size:11px
 }
 
-.past-quiz-toggle{
+.past-quiz-actions{
+    display:flex;
+    align-items:center;
+    gap:8px
+}
+
+.past-quiz-toggle,
+.past-quiz-page-button{
     min-height:38px;
     padding:0 13px;
     border:1px solid rgba(101,255,131,.2);
@@ -1894,18 +1903,7 @@ button:disabled{
     background:rgba(101,255,131,.05);
     color:var(--green);
     font-size:7px;
-    font-weight:900;
-    white-space:nowrap
-}
-
-.past-quiz-toggle:hover{
-    background:rgba(101,255,131,.1)
-}
-
-.past-quiz-actions{
-    display:flex;
-    align-items:center;
-    gap:8px
+    font-weight:900
 }
 
 .past-quiz-delete{
@@ -1916,12 +1914,7 @@ button:disabled{
     background:rgba(255,89,100,.055);
     color:#ff717b;
     font-size:7px;
-    font-weight:900;
-    white-space:nowrap
-}
-
-.past-quiz-delete:hover{
-    background:rgba(255,89,100,.1)
+    font-weight:900
 }
 
 .past-quiz-pagination{
@@ -1931,17 +1924,6 @@ button:disabled{
     align-items:center;
     justify-content:center;
     gap:10px
-}
-
-.past-quiz-page-button{
-    min-width:90px;
-    min-height:34px;
-    border:1px solid rgba(101,255,131,.13);
-    border-radius:9px;
-    background:rgba(101,255,131,.035);
-    color:var(--green);
-    font-size:7px;
-    font-weight:900
 }
 
 .past-quiz-page-info{
@@ -1962,19 +1944,7 @@ button:disabled{
     display:flex;
     align-items:center;
     justify-content:space-between;
-    gap:12px;
-    border-bottom:1px solid rgba(255,255,255,.04)
-}
-
-.past-quiz-details-head strong{
-    color:#f0f5f2;
-    font-size:10px
-}
-
-.past-quiz-details-head span{
-    color:#68766d;
-    font-size:7px;
-    font-weight:900
+    gap:12px
 }
 
 .past-quiz-table-wrap{
@@ -1988,54 +1958,29 @@ button:disabled{
     border-collapse:collapse
 }
 
-.past-quiz-table th{
+.past-quiz-table th,
+.past-quiz-table td{
     padding:13px 15px;
     text-align:left;
-    color:#657269;
-    background:rgba(255,255,255,.012);
-    font-size:7px;
-    font-weight:900;
     white-space:nowrap
 }
 
 .past-quiz-table td{
-    padding:15px;
-    border-top:1px solid rgba(255,255,255,.04);
-    color:#cbd5cf;
-    font-size:9px;
-    white-space:nowrap
+    border-top:1px solid rgba(255,255,255,.04)
 }
 
-.past-quiz-table tr:hover td{
-    background:rgba(101,255,131,.018)
+.past-player-score,
+.past-player-correct,
+.past-player-username{
+    color:var(--green)
 }
 
-.past-rank{
-    color:#f4f7f5;
-    font-weight:900
+.past-player-wrong{
+    color:#ff717b
 }
 
-.past-player-name{
-    color:#f4f7f5;
-    font-weight:800
-}
-
-.past-player-username,
-.past-player-score{
-    color:var(--green);
-    font-weight:900
-}
-
-.past-player-correct{color:var(--green)}
-.past-player-wrong{color:#ff717b}
-.past-player-no-answer{color:var(--yellow)}
-
-.past-quiz-table-loading,
-.past-quiz-table-empty{
-    padding:28px 16px;
-    text-align:center;
-    color:#69766e;
-    font-size:8px
+.past-player-no-answer{
+    color:var(--yellow)
 }
 
 .past-quizzes-empty{
@@ -2045,8 +1990,6 @@ button:disabled{
     text-align:center;
     color:#657269
 }
-
-/* MOBILE */
 
 @media(max-width:1050px){
     .stats-grid{
@@ -2112,14 +2055,6 @@ button:disabled{
     .past-quiz-summary{
         grid-template-columns:1fr
     }
-
-    .past-quiz-result{
-        text-align:left
-    }
-
-    .sidebar-wall{
-        height:165px
-    }
 }
 
 @media(max-width:520px){
@@ -2166,7 +2101,7 @@ button:disabled{
                 ACCESS
             </div>
 
-            <span class="sidebar-access-shield" aria-hidden="true">
+            <span class="sidebar-access-shield">
                 <svg
                     viewBox="0 0 24 24"
                     fill="none"
@@ -2199,17 +2134,11 @@ button:disabled{
             data-admin-view="dashboard"
         >
             <span class="sidebar-nav-icon">
-                <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke-width="1.8"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                >
-                    <rect x="3" y="3" width="7" height="7" rx="1"></rect>
-                    <rect x="14" y="3" width="7" height="7" rx="1"></rect>
-                    <rect x="3" y="14" width="7" height="7" rx="1"></rect>
-                    <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8">
+                    <rect x="3" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="3" width="7" height="7"></rect>
+                    <rect x="3" y="14" width="7" height="7"></rect>
+                    <rect x="14" y="14" width="7" height="7"></rect>
                 </svg>
             </span>
 
@@ -2224,17 +2153,9 @@ button:disabled{
             data-admin-view="members"
         >
             <span class="sidebar-nav-icon">
-                <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke-width="1.8"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                >
-                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8">
                     <circle cx="9" cy="7" r="4"></circle>
-                    <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
-                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
                 </svg>
             </span>
 
@@ -2250,18 +2171,10 @@ button:disabled{
             id="openContestPanel"
         >
             <span class="sidebar-nav-icon">
-                <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke-width="1.8"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                >
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8">
                     <path d="M8 21h8"></path>
                     <path d="M12 17v4"></path>
                     <path d="M7 4h10v5a5 5 0 0 1-10 0V4z"></path>
-                    <path d="M7 6H4v2a4 4 0 0 0 4 4"></path>
-                    <path d="M17 6h3v2a4 4 0 0 1-4 4"></path>
                 </svg>
             </span>
 
@@ -2278,16 +2191,9 @@ button:disabled{
             <span class="sidebar-live-dot"></span>
 
             <span class="sidebar-nav-icon">
-                <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke-width="1.8"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                >
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8">
                     <circle cx="12" cy="12" r="9"></circle>
                     <path d="M9.7 9a2.6 2.6 0 1 1 4.5 1.8c-1.1.8-2.2 1.3-2.2 3"></path>
-                    <path d="M12 17h.01"></path>
                 </svg>
             </span>
 
@@ -2302,13 +2208,7 @@ button:disabled{
             data-admin-view="past-quizzes"
         >
             <span class="sidebar-nav-icon">
-                <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke-width="1.8"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                >
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8">
                     <path d="M3 12a9 9 0 1 0 3-6.7"></path>
                     <path d="M3 4v6h6"></path>
                     <path d="M12 7v5l3 2"></path>
@@ -2325,29 +2225,15 @@ button:disabled{
     <div class="sidebar-bottom">
 
         <div class="sidebar-wall">
-            <img
-                src="wall.jpg"
-                alt=""
-            >
+            <img src="wall.jpg" alt="">
         </div>
 
-        <a
-            href="index.html"
-            class="sidebar-web-button"
-        >
+        <a href="index.html" class="sidebar-web-button">
+
             <span class="sidebar-web-icon">
-                <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="1.8"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
                     <circle cx="12" cy="12" r="9"></circle>
                     <path d="M3 12h18"></path>
-                    <path d="M12 3a15 15 0 0 1 0 18"></path>
-                    <path d="M12 3a15 15 0 0 0 0 18"></path>
                 </svg>
             </span>
 
@@ -2356,19 +2242,6 @@ button:disabled{
                 <span>OPEN WEBSITE</span>
             </span>
 
-            <span class="sidebar-web-arrow">
-                <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="1.8"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                >
-                    <path d="M7 17L17 7"></path>
-                    <path d="M7 7h10v10"></path>
-                </svg>
-            </span>
         </a>
 
     </div>
@@ -2377,1232 +2250,994 @@ button:disabled{
 
 <main class="admin-main">
 
-    <header class="admin-topbar">
+<header class="admin-topbar">
 
-        <div class="topbar-left">
+    <div class="topbar-left">
 
-            <button
-                type="button"
-                class="mobile-menu-button"
-                id="adminMobileMenuButton"
+        <button
+            type="button"
+            class="mobile-menu-button"
+            id="adminMobileMenuButton"
+        >
+            ☰
+        </button>
+
+        <div>
+
+            <div
+                class="topbar-page-label"
+                id="adminPageLabel"
             >
-                ☰
-            </button>
+                GREMBLE ADMIN
+            </div>
 
-            <div>
-                <div
-                    class="topbar-page-label"
-                    id="adminPageLabel"
-                >
-                    GREMBLE ADMIN
-                </div>
-
-                <div
-                    class="topbar-page-title"
-                    id="adminPageTitle"
-                >
-                    Dashboard
-                </div>
+            <div
+                class="topbar-page-title"
+                id="adminPageTitle"
+            >
+                Dashboard
             </div>
 
         </div>
 
-        <div class="topbar-admin-pill">
-            <span class="topbar-admin-dot"></span>
-            <span id="adminIdentity">
-                CHECKING...
-            </span>
-        </div>
-
-    </header>
-
-    <div
-        class="admin-message"
-        id="adminMessage"
-    >
-        CHECKING ADMIN ACCESS...
     </div>
 
-    <section
-        class="admin-dashboard"
-        id="adminDashboard"
-        hidden
-    >
+    <div class="topbar-admin-pill">
+        <span class="topbar-admin-dot"></span>
+        <span id="adminIdentity">
+            CHECKING...
+        </span>
+    </div>
 
-        <section
-            class="admin-view"
-            id="adminViewDashboard"
-            data-view-name="dashboard"
-        >
+</header>
 
-            <div class="dashboard-hero">
+<div
+    class="admin-message"
+    id="adminMessage"
+>
+    CHECKING ADMIN ACCESS...
+</div>
 
-                <section class="dashboard-founder-card">
+<section
+    class="admin-dashboard"
+    id="adminDashboard"
+    hidden
+>
 
-                    <div class="founder-tag">
-                        GREMBLE // FOUNDER MODE
-                    </div>
+<!-- DASHBOARD -->
 
-                    <h1>
-                        BUILD QUIETLY.<br>
-                        <span>WATCH EVERYTHING.</span>
-                    </h1>
+<section
+    class="admin-view"
+    id="adminViewDashboard"
+    data-view-name="dashboard"
+>
 
-                </section>
+    <div class="dashboard-hero">
 
-                <aside class="private-access-card">
+        <section class="dashboard-founder-card">
 
-                    <div class="private-access-label">
-                        PRIVATE ACCESS
-                    </div>
-
-                    <h2>
-                        YOUR GREMBLE CONTROL ROOM.
-                    </h2>
-
-                    <div class="private-id-box">
-                        <small>CURRENT ACCESS</small>
-                        <strong id="dashboardAdminIdentity">
-                            VERIFIED ADMIN
-                        </strong>
-                    </div>
-
-                    <div class="wallet-control-box">
-
-                        <div class="wallet-control-copy">
-                            <small>MEMBER WALLET CONNECTION</small>
-                            <strong>
-                                Show wallet connection on member profile
-                            </strong>
-                            <span
-                                id="walletVisibilityStatus"
-                                class="disabled"
-                            >
-                                DISABLED
-                            </span>
-                        </div>
-
-                        <button
-                            type="button"
-                            class="wallet-visibility-switch"
-                            id="walletVisibilityToggle"
-                            aria-label="Toggle member wallet visibility"
-                            aria-pressed="false"
-                        ></button>
-
-                    </div>
-
-                </aside>
-
+            <div class="founder-tag">
+                GREMBLE // FOUNDER MODE
             </div>
 
-            <div class="stats-grid">
-
-                <article class="stat-card">
-                    <span>TOTAL MEMBERS</span>
-                    <strong id="statTotalMembers">0</strong>
-                    <small>REGISTERED</small>
-                </article>
-
-                <article class="stat-card">
-                    <span>COMPLETED PROFILES</span>
-                    <strong id="statCompletedProfiles">0</strong>
-                    <small>X + SOLANA</small>
-                </article>
-
-                <article class="stat-card">
-                    <span>GREMBLE CHAT</span>
-                    <strong id="statTelegramChatMembers">0</strong>
-                    <small>MEMBERS</small>
-                </article>
-
-                <article class="stat-card">
-                    <span>ANNOUNCEMENTS</span>
-                    <strong id="statTelegramAnnouncementsMembers">0</strong>
-                    <small>MEMBERS</small>
-                </article>
-
-                <article class="stat-card">
-                    <span>CONNECTED WALLETS</span>
-                    <strong id="statMembersWithWallet">0</strong>
-                    <small>WALLET CONNECTED</small>
-                </article>
-
-            </div>
+            <h1>
+                BUILD QUIETLY.<br>
+                <span>WATCH EVERYTHING.</span>
+            </h1>
 
         </section>
 
-        <section
-            class="admin-view"
-            id="adminViewMembers"
-            data-view-name="members"
+        <aside class="private-access-card">
+
+            <div class="private-access-label">
+                PRIVATE ACCESS
+            </div>
+
+            <h2>
+                YOUR GREMBLE CONTROL ROOM.
+            </h2>
+
+            <div class="private-id-box">
+                <small>CURRENT ACCESS</small>
+                <strong id="dashboardAdminIdentity">
+                    VERIFIED ADMIN
+                </strong>
+            </div>
+
+            <div class="wallet-control-box">
+
+                <div class="wallet-control-copy">
+                    <small>MEMBER WALLET CONNECTION</small>
+                    <strong>
+                        Show wallet connection on member profile
+                    </strong>
+
+                    <span
+                        id="walletVisibilityStatus"
+                        class="disabled"
+                    >
+                        DISABLED
+                    </span>
+                </div>
+
+                <button
+                    type="button"
+                    class="wallet-visibility-switch"
+                    id="walletVisibilityToggle"
+                    aria-label="Toggle member wallet visibility"
+                    aria-pressed="false"
+                ></button>
+
+            </div>
+
+        </aside>
+
+    </div>
+
+    <div class="stats-grid">
+
+        <article class="stat-card">
+            <span>TOTAL MEMBERS</span>
+            <strong id="statTotalMembers">0</strong>
+            <small>REGISTERED</small>
+        </article>
+
+        <article class="stat-card">
+            <span>COMPLETED PROFILES</span>
+            <strong id="statCompletedProfiles">0</strong>
+            <small>X + SOLANA</small>
+        </article>
+
+        <article class="stat-card">
+            <span>GREMBLE CHAT</span>
+            <strong id="statTelegramChatMembers">0</strong>
+            <small>MEMBERS</small>
+        </article>
+
+        <article class="stat-card">
+            <span>ANNOUNCEMENTS</span>
+            <strong id="statTelegramAnnouncementsMembers">0</strong>
+            <small>MEMBERS</small>
+        </article>
+
+        <article class="stat-card">
+            <span>CONNECTED WALLETS</span>
+            <strong id="statMembersWithWallet">0</strong>
+            <small>WALLET CONNECTED</small>
+        </article>
+
+    </div>
+
+</section>
+
+<!-- MEMBERS -->
+
+<section
+    class="admin-view"
+    id="adminViewMembers"
+    data-view-name="members"
+    hidden
+>
+
+    <div class="page-header">
+
+        <div class="page-eyebrow">
+            GREMBLE MEMBERS
+        </div>
+
+        <h1 class="page-title">
+            Registered People
+        </h1>
+
+        <p class="page-description">
+            All registered Gremble members and their profile information.
+        </p>
+
+    </div>
+
+    <section class="members-panel">
+
+        <div class="members-panel-top">
+
+            <div class="members-panel-title">
+                <span>MEMBERS DATABASE</span>
+                <h2>Community</h2>
+            </div>
+
+            <div class="members-tools">
+
+                <input
+                    type="search"
+                    class="member-search"
+                    id="memberSearch"
+                    placeholder="Search Telegram, X, country, wallet or group status..."
+                >
+
+                <button
+                    type="button"
+                    class="refresh-button"
+                    id="refreshMembers"
+                >
+                    REFRESH
+                </button>
+
+            </div>
+
+        </div>
+
+        <div class="members-table-wrap">
+
+            <table class="members-table">
+
+                <thead>
+                    <tr>
+                        <th>TELEGRAM NAME</th>
+                        <th>TELEGRAM USERNAME</th>
+                        <th>GREMBLE CHAT</th>
+                        <th>GREMBLE ANNOUNCEMENTS</th>
+                        <th>X USERNAME</th>
+                        <th>SOLANA ADDRESS</th>
+                        <th>JOINED</th>
+                        <th>UPDATED</th>
+                        <th>COUNTRY</th>
+                        <th>WALLET</th>
+                    </tr>
+                </thead>
+
+                <tbody id="membersTableBody"></tbody>
+
+            </table>
+
+        </div>
+
+        <div
+            class="members-empty"
+            id="membersEmpty"
+            hidden
+        >
+            NO MEMBERS FOUND.
+        </div>
+
+        <div
+            class="members-pagination"
+            id="membersPagination"
             hidden
         >
 
-            <div class="page-header">
-                <div class="page-eyebrow">
-                    GREMBLE MEMBERS
-                </div>
+            <button
+                type="button"
+                class="members-page-button"
+                id="membersPrevPage"
+            >
+                ‹ PREVIOUS
+            </button>
 
-                <h1 class="page-title">
-                    Registered People
-                </h1>
+            <span
+                class="members-page-info"
+                id="membersPageInfo"
+            >
+                1 OF 1
+            </span>
 
-                <p class="page-description">
-                    All registered Gremble members and their profile information.
-                </p>
+            <button
+                type="button"
+                class="members-page-button"
+                id="membersNextPage"
+            >
+                NEXT ›
+            </button>
+
+        </div>
+
+    </section>
+
+</section>
+
+<!-- CONTEST -->
+
+<section
+    class="admin-view"
+    id="adminViewContest"
+    data-view-name="contest"
+    hidden
+>
+
+    <section
+        class="contest-panel"
+        id="contestPanel"
+    >
+
+        <div class="contest-panel-header">
+
+            <div class="contest-title-copy">
+                <span>PRIVATE ADMIN AREA</span>
+                <h2>MEME CONTEST</h2>
             </div>
 
-            <section class="members-panel">
+            <button
+                type="button"
+                class="contest-close-button"
+                id="closeContestPanel"
+            >
+                CLOSE
+            </button>
 
-                <div class="members-panel-top">
+        </div>
 
-                    <div class="members-panel-title">
-                        <span>MEMBERS DATABASE</span>
-                        <h2>Community</h2>
-                    </div>
+        <div class="contest-stats">
 
-                    <div class="members-tools">
+            <div class="contest-stat-card">
+                <span>TOTAL ENTRIES</span>
+                <strong id="contestTotalEntries">0</strong>
+                <small>PARTICIPANTS</small>
+            </div>
 
-                        <input
-                            type="search"
-                            class="member-search"
-                            id="memberSearch"
-                            placeholder="Search members..."
-                        >
+            <div class="contest-stat-card">
+                <span>VERIFIED</span>
+                <strong id="contestVerifiedEntries">0</strong>
+                <small>REQUIREMENTS OK</small>
+            </div>
+
+        </div>
+
+        <div class="contest-body">
+
+            <div class="contest-form-card">
+
+                <div class="contest-form-title">
+                    ADD NEW ENTRY
+                </div>
+
+                <form
+                    class="contest-form"
+                    id="contestEntryForm"
+                >
+
+                    <input
+                        type="hidden"
+                        id="contestEntryId"
+                    >
+
+                    <label for="contestParticipant">
+                        X USERNAME
+                    </label>
+
+                    <input
+                        type="text"
+                        id="contestParticipant"
+                        placeholder="@username"
+                        autocomplete="off"
+                    >
+
+                    <label for="contestMemeUrl">
+                        MEME LINK
+                    </label>
+
+                    <input
+                        type="url"
+                        id="contestMemeUrl"
+                        placeholder="https://x.com/..."
+                    >
+
+                    <label for="contestPoints">
+                        POINTS
+                    </label>
+
+                    <input
+                        type="number"
+                        id="contestPoints"
+                        min="0"
+                        max="100000"
+                        value="0"
+                    >
+
+                    <label>
+                        REQUIREMENTS
+                    </label>
+
+                    <input
+                        type="hidden"
+                        id="contestRequirementsValue"
+                        value="false"
+                    >
+
+                    <div class="contest-requirements">
 
                         <button
                             type="button"
-                            class="refresh-button"
-                            id="refreshMembers"
+                            class="contest-rule-button yes"
+                            id="contestRequirementsYes"
                         >
-                            REFRESH
+                            YES
+                        </button>
+
+                        <button
+                            type="button"
+                            class="contest-rule-button no active"
+                            id="contestRequirementsNo"
+                        >
+                            NO
                         </button>
 
                     </div>
 
+                    <button
+                        type="submit"
+                        class="contest-submit-button"
+                        id="contestSubmitButton"
+                    >
+                        + ADD PARTICIPANT
+                    </button>
+
+                    <button
+                        type="button"
+                        class="contest-cancel-edit"
+                        id="contestCancelEdit"
+                        hidden
+                    >
+                        CANCEL EDIT
+                    </button>
+
+                    <div
+                        class="contest-form-message"
+                        id="contestFormMessage"
+                    ></div>
+
+                </form>
+
+            </div>
+
+            <div class="contest-list-card">
+
+                <div class="contest-list-top">
+
+                    <div class="contest-list-title">
+                        <strong>PARTICIPANTS</strong>
+
+                        <span id="contestEntriesLabel">
+                            0 ENTRIES
+                        </span>
+                    </div>
+
+                    <div class="contest-tools">
+
+                        <input
+                            type="search"
+                            class="contest-search"
+                            id="contestSearch"
+                            placeholder="Search..."
+                        >
+
+                        <select
+                            class="contest-sort"
+                            id="contestSort"
+                        >
+                            <option value="newest">NEWEST</option>
+                            <option value="oldest">OLDEST</option>
+                            <option value="points-high">POINTS HIGH</option>
+                            <option value="points-low">POINTS LOW</option>
+                            <option value="rules-yes">RULES YES</option>
+                            <option value="rules-no">RULES NO</option>
+                        </select>
+
+                    </div>
+
                 </div>
 
-                <div class="members-table-wrap">
+                <div class="contest-table-wrap">
 
-                    <table class="members-table">
+                    <table class="contest-table">
 
                         <thead>
                             <tr>
-                                <th>TELEGRAM NAME</th>
-                                <th>TELEGRAM USERNAME</th>
-                                <th class="chat-header">GREMBLE CHAT</th>
-                                <th class="announcements-header">GREMBLE ANNOUNCEMENTS</th>
-                                <th>X USERNAME</th>
-                                <th>SOLANA ADDRESS</th>
-                                <th>JOINED</th>
-                                <th>UPDATED</th>
-                                <th>COUNTRY</th>
-                                <th>WALLET</th>
+                                <th>PARTICIPANT</th>
+                                <th>MEME</th>
+                                <th>POINTS</th>
+                                <th>RULES</th>
+                                <th>ADDED</th>
+                                <th>ACTIONS</th>
+                                <th>STATUS</th>
                             </tr>
                         </thead>
 
-                        <tbody id="membersTableBody"></tbody>
+                        <tbody id="contestTableBody"></tbody>
 
                     </table>
 
                 </div>
 
                 <div
-                    class="members-empty"
-                    id="membersEmpty"
+                    class="contest-empty"
+                    id="contestEmpty"
                     hidden
                 >
-                    NO MEMBERS FOUND.
+                    NO CONTEST ENTRIES YET.
                 </div>
 
                 <div
-                    class="members-pagination"
-                    id="membersPagination"
+                    class="contest-pagination"
+                    id="contestPagination"
                     hidden
                 >
 
                     <button
                         type="button"
-                        class="members-page-button"
-                        id="membersPrevPage"
+                        class="contest-page-button"
+                        id="contestPrevPage"
                     >
                         ‹ PREVIOUS
                     </button>
 
                     <span
-                        class="members-page-info"
-                        id="membersPageInfo"
+                        class="contest-page-info"
+                        id="contestPageInfo"
                     >
                         1 OF 1
                     </span>
 
                     <button
                         type="button"
-                        class="members-page-button"
-                        id="membersNextPage"
+                        class="contest-page-button"
+                        id="contestNextPage"
                     >
                         NEXT ›
                     </button>
 
                 </div>
 
-            </section>
-
-        </section>
-
-        <!-- CONTEST -->
-
-        <section
-            class="admin-view"
-            id="adminViewContest"
-            data-view-name="contest"
-            hidden
-        >
-
-            <section
-                class="contest-panel"
-                id="contestPanel"
-            >
-
-                <div class="contest-panel-header">
-
-                    <div class="contest-panel-title">
-
-                        <div class="contest-title-copy">
-                            <span>PRIVATE ADMIN AREA</span>
-                            <h2>MEME CONTEST</h2>
-                        </div>
-
-                    </div>
-
-                    <button
-                        type="button"
-                        class="contest-close-button"
-                        id="closeContestPanel"
-                    >
-                        CLOSE
-                    </button>
-
-                </div>
-
-                <div class="contest-stats">
-
-                    <div class="contest-stat-card">
-                        <span>TOTAL ENTRIES</span>
-                        <strong id="contestTotalEntries">0</strong>
-                        <small>PARTICIPANTS</small>
-                    </div>
-
-                    <div class="contest-stat-card">
-                        <span>VERIFIED</span>
-                        <strong id="contestVerifiedEntries">0</strong>
-                        <small>REQUIREMENTS OK</small>
-                    </div>
-
-                </div>
-
-                <div class="contest-body">
-
-                    <div class="contest-form-card">
-
-                        <div class="contest-form-title">
-                            ADD NEW ENTRY
-                        </div>
-
-                        <form
-                            class="contest-form"
-                            id="contestEntryForm"
-                        >
-
-                            <input
-                                type="hidden"
-                                id="contestEntryId"
-                            >
-
-                            <label for="contestParticipant">
-                                X USERNAME
-                            </label>
-
-                            <input
-                                type="text"
-                                id="contestParticipant"
-                                placeholder="@username"
-                                autocomplete="off"
-                            >
-
-                            <label for="contestMemeUrl">
-                                MEME LINK
-                            </label>
-
-                            <input
-                                type="url"
-                                id="contestMemeUrl"
-                                placeholder="https://x.com/..."
-                            >
-
-                            <label for="contestPoints">
-                                POINTS
-                            </label>
-
-                            <input
-                                type="number"
-                                id="contestPoints"
-                                min="0"
-                                max="100000"
-                                value="0"
-                            >
-
-                            <label>
-                                REQUIREMENTS
-                            </label>
-
-                            <input
-                                type="hidden"
-                                id="contestRequirementsValue"
-                                value="false"
-                            >
-
-                            <div class="contest-requirements">
-
-                                <button
-                                    type="button"
-                                    class="contest-rule-button yes"
-                                    id="contestRequirementsYes"
-                                >
-                                    YES
-                                </button>
-
-                                <button
-                                    type="button"
-                                    class="contest-rule-button no active"
-                                    id="contestRequirementsNo"
-                                >
-                                    NO
-                                </button>
-
-                            </div>
-
-                            <button
-                                type="submit"
-                                class="contest-submit-button"
-                                id="contestSubmitButton"
-                            >
-                                + ADD PARTICIPANT
-                            </button>
-
-                            <button
-                                type="button"
-                                class="contest-cancel-edit"
-                                id="contestCancelEdit"
-                                hidden
-                            >
-                                CANCEL EDIT
-                            </button>
-
-                            <div
-                                class="contest-form-message"
-                                id="contestFormMessage"
-                            ></div>
-
-                        </form>
-
-                    </div>
-
-                    <div class="contest-list-card">
-
-                        <div class="contest-list-top">
-
-                            <div class="contest-list-title">
-                                <strong>PARTICIPANTS</strong>
-                                <span id="contestEntriesLabel">
-                                    0 ENTRIES
-                                </span>
-                            </div>
-
-                            <div class="contest-tools">
-
-                                <input
-                                    type="search"
-                                    class="contest-search"
-                                    id="contestSearch"
-                                    placeholder="Search..."
-                                >
-
-                                <select
-                                    class="contest-sort"
-                                    id="contestSort"
-                                >
-                                    <option value="newest">NEWEST</option>
-                                    <option value="oldest">OLDEST</option>
-                                    <option value="points-high">POINTS HIGH</option>
-                                    <option value="points-low">POINTS LOW</option>
-                                    <option value="rules-yes">RULES YES</option>
-                                    <option value="rules-no">RULES NO</option>
-                                </select>
-
-                            </div>
-
-                        </div>
-
-                        <div class="contest-table-wrap">
-
-                            <table class="contest-table">
-
-                                <thead>
-                                    <tr>
-                                        <th>PARTICIPANT</th>
-                                        <th>MEME</th>
-                                        <th>POINTS</th>
-                                        <th>RULES</th>
-                                        <th>ADDED</th>
-                                        <th>ACTIONS</th>
-                                        <th>STATUS</th>
-                                    </tr>
-                                </thead>
-
-                                <tbody id="contestTableBody"></tbody>
-
-                            </table>
-
-                        </div>
-
-                        <div
-                            class="contest-empty"
-                            id="contestEmpty"
-                            hidden
-                        >
-                            NO CONTEST ENTRIES YET.
-                        </div>
-
-                        <div
-                            class="contest-pagination"
-                            id="contestPagination"
-                            hidden
-                        >
-
-                            <button
-                                type="button"
-                                class="contest-page-button"
-                                id="contestPrevPage"
-                            >
-                                ‹ PREVIOUS
-                            </button>
-
-                            <span
-                                class="contest-page-info"
-                                id="contestPageInfo"
-                            >
-                                1 OF 1
-                            </span>
-
-                            <button
-                                type="button"
-                                class="contest-page-button"
-                                id="contestNextPage"
-                            >
-                                NEXT ›
-                            </button>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </section>
-
-        </section>
-
-        <!-- QUIZ -->
-
-        <section
-            class="admin-view"
-            id="adminViewQuiz"
-            data-view-name="quiz"
-            hidden
-        >
-
-            <div class="page-header">
-
-                <div class="page-eyebrow">
-                    LIVE QUIZ
-                </div>
-
-                <h1 class="page-title">
-                    Quiz Control Room
-                </h1>
-
-                <p class="page-description">
-                    Build quizzes, save them and control live Gremble quiz sessions.
-                </p>
-
             </div>
 
-            <div class="quiz-tabs">
+        </div>
 
-                <button
-                    type="button"
-                    class="quiz-tab-button active"
-                    data-quiz-subview="builder"
-                >
-                    QUIZ BUILDER
-                </button>
+    </section>
 
-                <button
-                    type="button"
-                    class="quiz-tab-button"
-                    data-quiz-subview="saved"
-                >
-                    SAVED QUIZZES
-                </button>
+</section>
 
-                <button
-                    type="button"
-                    class="quiz-tab-button"
-                    data-quiz-subview="control"
-                >
-                    LIVE CONTROL
-                </button>
+<!-- QUIZ -->
 
-            </div>
+<section
+    class="admin-view"
+    id="adminViewQuiz"
+    data-view-name="quiz"
+    hidden
+>
 
-            <section
-                class="quiz-subview"
-                data-quiz-subview-name="builder"
-            >
+    <div class="page-header">
 
-                <div class="quiz-layout">
+        <div class="page-eyebrow">
+            LIVE QUIZ
+        </div>
 
-                    <div class="quiz-column">
+        <h1 class="page-title">
+            Quiz Control Room
+        </h1>
 
-                        <section class="admin-card quiz-builder-card">
+        <p class="page-description">
+            Build quizzes, save them and control live Gremble quiz sessions.
+        </p>
 
-                            <div class="quiz-builder-heading">
+    </div>
 
-                                <div>
-                                    <span>QUIZ BUILDER</span>
-                                    <h2>Create Quiz</h2>
-                                </div>
-
-                                <button
-                                    type="button"
-                                    class="ghost-button"
-                                    id="quizResetBuilderButton"
-                                >
-                                    NEW QUIZ
-                                </button>
-
-                            </div>
-
-                            <form id="quizBuilderForm">
-
-                                <input
-                                    type="hidden"
-                                    id="quizEditingId"
-                                >
-
-                                <div class="quiz-form-grid">
+    <div class="quiz-tabs">
 
-                                    <div class="quiz-field">
+        <button
+            type="button"
+            class="quiz-tab-button active"
+            data-quiz-subview="builder"
+        >
+            QUIZ BUILDER
+        </button>
 
-                                        <label for="quizTitle">
-                                            QUIZ TITLE
-                                        </label>
+        <button
+            type="button"
+            class="quiz-tab-button"
+            data-quiz-subview="saved"
+        >
+            SAVED QUIZZES
+        </button>
 
-                                        <input
-                                            type="text"
-                                            class="quiz-input"
-                                            id="quizTitle"
-                                            placeholder="Example: Gremble Quiz #1"
-                                        >
-
-                                    </div>
+        <button
+            type="button"
+            class="quiz-tab-button"
+            data-quiz-subview="control"
+        >
+            LIVE CONTROL
+        </button>
 
-                                    <div class="quiz-field">
+    </div>
 
-                                        <label for="quizDescription">
-                                            DESCRIPTION
-                                        </label>
+    <!-- BUILDER -->
 
-                                        <textarea
-                                            class="quiz-textarea"
-                                            id="quizDescription"
-                                            placeholder="Short quiz description..."
-                                        ></textarea>
+    <section
+        class="quiz-subview"
+        data-quiz-subview-name="builder"
+    >
 
-                                    </div>
+        <div class="quiz-layout">
 
-                                </div>
+            <div class="quiz-column">
 
-                                <div class="quiz-question-section">
-
-                                    <div class="quiz-question-section-header">
+                <section class="admin-card quiz-builder-card">
 
-                                        <div>
-                                            <h3>Questions</h3>
-
-                                            <span id="quizQuestionCount">
-                                                0 QUESTIONS
-                                            </span>
-                                        </div>
-
-                                        <button
-                                            type="button"
-                                            class="secondary-button"
-                                            id="addQuizQuestionButton"
-                                        >
-                                            + ADD QUESTION
-                                        </button>
-
-                                    </div>
-
-                                    <div
-                                        class="quiz-question-list"
-                                        id="quizQuestionList"
-                                    >
-
-                                        <div
-                                            class="quiz-question-empty"
-                                            id="quizQuestionsEmpty"
-                                        >
-                                            NO QUESTIONS ADDED YET.
-                                        </div>
-
-                                    </div>
-
-                                    <div
-                                        class="quiz-question-editor"
-                                        id="quizQuestionEditor"
-                                        hidden
-                                    >
-
-                                        <input
-                                            type="hidden"
-                                            id="quizQuestionEditingId"
-                                        >
-
-                                        <div class="quiz-editor-title">
-                                            <strong id="quizQuestionEditorTitle">
-                                                Add Question
-                                            </strong>
-                                        </div>
-
-                                        <div class="quiz-read-time-box">
-
-                                            <div class="quiz-read-time-copy">
-                                                <span>READ TIME</span>
-                                                <strong>
-                                                    Fixed before answers unlock
-                                                </strong>
-                                            </div>
-
-                                            <div class="quiz-read-time-value">
-                                                4 SEC
-                                            </div>
-
-                                        </div>
-
-                                        <div class="quiz-field">
-
-                                            <label for="quizQuestionText">
-                                                QUESTION
-                                            </label>
-
-                                            <textarea
-                                                class="quiz-textarea"
-                                                id="quizQuestionText"
-                                                placeholder="Write the question..."
-                                            ></textarea>
-
-                                        </div>
-
-                                        <div class="quiz-option-grid">
-
-                                            <div class="quiz-option-row">
-
-                                                <div class="quiz-option-letter">A</div>
-
-                                                <input
-                                                    type="text"
-                                                    class="quiz-input"
-                                                    id="quizAnswerA"
-                                                    placeholder="Answer A"
-                                                >
-
-                                                <button
-                                                    type="button"
-                                                    class="quiz-correct-button"
-                                                    data-correct-answer="A"
-                                                >
-                                                    CORRECT
-                                                </button>
-
-                                            </div>
-
-                                            <div class="quiz-option-row">
-
-                                                <div class="quiz-option-letter">B</div>
-
-                                                <input
-                                                    type="text"
-                                                    class="quiz-input"
-                                                    id="quizAnswerB"
-                                                    placeholder="Answer B"
-                                                >
-
-                                                <button
-                                                    type="button"
-                                                    class="quiz-correct-button"
-                                                    data-correct-answer="B"
-                                                >
-                                                    CORRECT
-                                                </button>
-
-                                            </div>
-
-                                            <div class="quiz-option-row">
-
-                                                <div class="quiz-option-letter">C</div>
-
-                                                <input
-                                                    type="text"
-                                                    class="quiz-input"
-                                                    id="quizAnswerC"
-                                                    placeholder="Answer C"
-                                                >
-
-                                                <button
-                                                    type="button"
-                                                    class="quiz-correct-button"
-                                                    data-correct-answer="C"
-                                                >
-                                                    CORRECT
-                                                </button>
-
-                                            </div>
-
-                                            <div class="quiz-option-row">
-
-                                                <div class="quiz-option-letter">D</div>
-
-                                                <input
-                                                    type="text"
-                                                    class="quiz-input"
-                                                    id="quizAnswerD"
-                                                    placeholder="Answer D"
-                                                >
-
-                                                <button
-                                                    type="button"
-                                                    class="quiz-correct-button"
-                                                    data-correct-answer="D"
-                                                >
-                                                    CORRECT
-                                                </button>
-
-                                            </div>
-
-                                        </div>
-
-                                        <div class="quiz-question-time-box">
-
-                                            <div class="quiz-field">
-
-                                                <label for="quizQuestionAnswerTime">
-                                                    ANSWER TIME
-                                                </label>
+                    <div class="quiz-builder-heading">
 
-                                                <select
-                                                    class="quiz-select"
-                                                    id="quizQuestionAnswerTime"
-                                                >
-                                                    <option value="5">5 seconds</option>
-                                                    <option value="6">6 seconds</option>
-                                                    <option value="7">7 seconds</option>
-                                                    <option value="8">8 seconds</option>
-                                                    <option value="9">9 seconds</option>
-                                                    <option value="10" selected>10 seconds</option>
-                                                    <option value="15">15 seconds</option>
-                                                    <option value="20">20 seconds</option>
-                                                </select>
-
-                                            </div>
-
-                                        </div>
-
-                                        <div class="quiz-editor-actions">
-
-                                            <button
-                                                type="button"
-                                                class="danger-button"
-                                                id="quizDeleteQuestionButton"
-                                                hidden
-                                            >
-                                                DELETE QUESTION
-                                            </button>
-
-                                            <button
-                                                type="button"
-                                                class="ghost-button"
-                                                id="quizCancelQuestionButton"
-                                            >
-                                                CANCEL
-                                            </button>
-
-                                            <button
-                                                type="button"
-                                                class="primary-button"
-                                                id="quizSaveQuestionButton"
-                                            >
-                                                SAVE QUESTION
-                                            </button>
-
-                                        </div>
-
-                                    </div>
-
-                                </div>
-
-                                <div class="quiz-builder-actions">
-
-                                    <button
-                                        type="submit"
-                                        class="primary-button"
-                                        id="saveQuizButton"
-                                    >
-                                        SAVE QUIZ
-                                    </button>
-
-                                </div>
-
-                                <div
-                                    class="quiz-builder-message"
-                                    id="quizBuilderMessage"
-                                ></div>
-
-                            </form>
-
-                        </section>
-
-                    </div>
-
-                    <div class="quiz-column">
-
-                        <section class="admin-card">
-
-                            <div class="admin-card-header">
-
-                                <div>
-                                    <span>QUIZ SUMMARY</span>
-                                    <h2>Current Draft</h2>
-                                </div>
-
-                            </div>
-
-                            <div
-                                class="saved-quizzes-list"
-                                id="quizDraftSummary"
-                            >
-                            </div>
-
-                        </section>
-
-                    </div>
-
-                </div>
-
-            </section>
-
-            <section
-                class="quiz-subview"
-                data-quiz-subview-name="saved"
-                hidden
-            >
-
-                <section class="admin-card">
-
-                    <div class="card-header">
-
-                        <div class="card-title-wrap">
-                            <span>SAVED QUIZZES</span>
-                            <h2>Quiz Library</h2>
+                        <div>
+                            <span>QUIZ BUILDER</span>
+                            <h2>Create Quiz</h2>
                         </div>
 
                         <button
                             type="button"
-                            class="primary-button"
-                            id="createQuizFromSavedButton"
+                            class="ghost-button"
+                            id="quizResetBuilderButton"
                         >
-                            + CREATE QUIZ
+                            NEW QUIZ
                         </button>
+
+                    </div>
+
+                    <form id="quizBuilderForm">
+
+                        <input
+                            type="hidden"
+                            id="quizEditingId"
+                        >
+
+                        <div class="quiz-form-grid">
+
+                            <div class="quiz-field">
+
+                                <label for="quizTitle">
+                                    QUIZ TITLE
+                                </label>
+
+                                <input
+                                    type="text"
+                                    class="quiz-input"
+                                    id="quizTitle"
+                                    placeholder="Example: Gremble Quiz #1"
+                                >
+
+                            </div>
+
+                            <div class="quiz-field">
+
+                                <label for="quizDescription">
+                                    DESCRIPTION
+                                </label>
+
+                                <textarea
+                                    class="quiz-textarea"
+                                    id="quizDescription"
+                                    placeholder="Short quiz description..."
+                                ></textarea>
+
+                            </div>
+
+                        </div>
+
+                        <div class="quiz-question-section">
+
+                            <div class="quiz-question-section-header">
+
+                                <div>
+                                    <h3>Questions</h3>
+
+                                    <span id="quizQuestionCount">
+                                        0 QUESTIONS
+                                    </span>
+                                </div>
+
+                                <button
+                                    type="button"
+                                    class="secondary-button"
+                                    id="addQuizQuestionButton"
+                                >
+                                    + ADD QUESTION
+                                </button>
+
+                            </div>
+
+                            <div
+                                class="quiz-question-list"
+                                id="quizQuestionList"
+                            >
+
+                                <div
+                                    class="quiz-question-empty"
+                                    id="quizQuestionsEmpty"
+                                >
+                                    NO QUESTIONS ADDED YET.
+                                </div>
+
+                            </div>
+
+                            <div
+                                class="quiz-question-editor"
+                                id="quizQuestionEditor"
+                                hidden
+                            >
+
+                                <input
+                                    type="hidden"
+                                    id="quizQuestionEditingId"
+                                >
+
+                                <div class="quiz-editor-title">
+                                    <strong id="quizQuestionEditorTitle">
+                                        Add Question
+                                    </strong>
+                                </div>
+
+                                <div class="quiz-read-time-box">
+
+                                    <div class="quiz-read-time-copy">
+                                        <span>READ TIME</span>
+                                        <strong>Fixed before answers unlock</strong>
+                                    </div>
+
+                                    <div class="quiz-read-time-value">
+                                        4 SEC
+                                    </div>
+
+                                </div>
+
+                                <div class="quiz-field">
+
+                                    <label for="quizQuestionText">
+                                        QUESTION
+                                    </label>
+
+                                    <textarea
+                                        class="quiz-textarea"
+                                        id="quizQuestionText"
+                                        placeholder="Write the question..."
+                                    ></textarea>
+
+                                </div>
+
+                                <div class="quiz-option-grid">
+
+                                    <div class="quiz-option-row">
+
+                                        <div class="quiz-option-letter">
+                                            A
+                                        </div>
+
+                                        <input
+                                            type="text"
+                                            class="quiz-input"
+                                            id="quizAnswerA"
+                                            placeholder="Answer A"
+                                        >
+
+                                        <button
+                                            type="button"
+                                            class="quiz-correct-button"
+                                            data-correct-answer="A"
+                                        >
+                                            CORRECT
+                                        </button>
+
+                                    </div>
+
+                                    <div class="quiz-option-row">
+
+                                        <div class="quiz-option-letter">
+                                            B
+                                        </div>
+
+                                        <input
+                                            type="text"
+                                            class="quiz-input"
+                                            id="quizAnswerB"
+                                            placeholder="Answer B"
+                                        >
+
+                                        <button
+                                            type="button"
+                                            class="quiz-correct-button"
+                                            data-correct-answer="B"
+                                        >
+                                            CORRECT
+                                        </button>
+
+                                    </div>
+
+                                    <div class="quiz-option-row">
+
+                                        <div class="quiz-option-letter">
+                                            C
+                                        </div>
+
+                                        <input
+                                            type="text"
+                                            class="quiz-input"
+                                            id="quizAnswerC"
+                                            placeholder="Answer C"
+                                        >
+
+                                        <button
+                                            type="button"
+                                            class="quiz-correct-button"
+                                            data-correct-answer="C"
+                                        >
+                                            CORRECT
+                                        </button>
+
+                                    </div>
+
+                                    <div class="quiz-option-row">
+
+                                        <div class="quiz-option-letter">
+                                            D
+                                        </div>
+
+                                        <input
+                                            type="text"
+                                            class="quiz-input"
+                                            id="quizAnswerD"
+                                            placeholder="Answer D"
+                                        >
+
+                                        <button
+                                            type="button"
+                                            class="quiz-correct-button"
+                                            data-correct-answer="D"
+                                        >
+                                            CORRECT
+                                        </button>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="quiz-question-time-box">
+
+                                    <div class="quiz-field">
+
+                                        <label for="quizQuestionAnswerTime">
+                                            ANSWER TIME
+                                        </label>
+
+                                        <select
+                                            class="quiz-select"
+                                            id="quizQuestionAnswerTime"
+                                        >
+                                            <option value="5">5 seconds</option>
+                                            <option value="6">6 seconds</option>
+                                            <option value="7">7 seconds</option>
+                                            <option value="8">8 seconds</option>
+                                            <option value="9">9 seconds</option>
+                                            <option value="10" selected>10 seconds</option>
+                                            <option value="15">15 seconds</option>
+                                            <option value="20">20 seconds</option>
+                                        </select>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="quiz-editor-actions">
+
+                                    <button
+                                        type="button"
+                                        class="danger-button"
+                                        id="quizDeleteQuestionButton"
+                                        hidden
+                                    >
+                                        DELETE QUESTION
+                                    </button>
+
+                                    <button
+                                        type="button"
+                                        class="ghost-button"
+                                        id="quizCancelQuestionButton"
+                                    >
+                                        CANCEL
+                                    </button>
+
+                                    <button
+                                        type="button"
+                                        class="primary-button"
+                                        id="quizSaveQuestionButton"
+                                    >
+                                        SAVE QUESTION
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="quiz-builder-actions">
+
+                            <button
+                                type="submit"
+                                class="primary-button"
+                                id="saveQuizButton"
+                            >
+                                SAVE QUIZ
+                            </button>
+
+                        </div>
+
+                        <div
+                            class="quiz-builder-message"
+                            id="quizBuilderMessage"
+                        ></div>
+
+                    </form>
+
+                </section>
+
+            </div>
+
+            <div class="quiz-column">
+
+                <section class="admin-card">
+
+                    <div class="admin-card-header">
+
+                        <div>
+                            <span>QUIZ SUMMARY</span>
+                            <h2>Current Draft</h2>
+                        </div>
 
                     </div>
 
                     <div
                         class="saved-quizzes-list"
-                        id="savedQuizzesList"
-                    >
-
-                        <div
-                            class="saved-quizzes-empty"
-                            id="savedQuizzesEmpty"
-                        >
-                            NO SAVED QUIZZES YET.
-                        </div>
-
-                    </div>
+                        id="quizDraftSummary"
+                    ></div>
 
                 </section>
 
-            </section>
+            </div>
 
-            <section
-                class="quiz-subview"
-                data-quiz-subview-name="control"
-                hidden
-            >
+        </div>
 
-                <div class="live-control-grid">
+    </section>
 
-                    <section class="admin-card live-control-card">
+    <!-- SAVED -->
 
-                        <div class="card-header">
+    <section
+        class="quiz-subview"
+        data-quiz-subview-name="saved"
+        hidden
+    >
 
-                            <div class="card-title-wrap">
-                                <span>LIVE SESSION</span>
+        <section class="admin-card">
 
-                                <h2 id="liveQuizSelectedTitle">
-                                    NO QUIZ SELECTED
-                                </h2>
-                            </div>
+            <div class="card-header">
 
-                            <span
-                                class="live-status-badge"
-                                id="liveQuizStatusBadge"
-                            >
-                                INACTIVE
-                            </span>
-
-                        </div>
-
-                        <div class="live-control-status">
-
-                            <div class="live-control-stat">
-                                <span>STATUS</span>
-                                <strong id="liveQuizStatus">INACTIVE</strong>
-                            </div>
-
-                            <div class="live-control-stat">
-                                <span>PLAYERS</span>
-                                <strong id="liveQuizPlayerCount">0</strong>
-                            </div>
-
-                            <div class="live-control-stat">
-                                <span>QUESTION</span>
-                                <strong id="liveQuizCurrentQuestion">—</strong>
-                            </div>
-
-                            <div class="live-control-stat">
-                                <span>TOTAL QUESTIONS</span>
-                                <strong id="liveQuizTotalQuestions">0</strong>
-                            </div>
-
-                        </div>
-
-                        <div class="live-control-buttons">
-
-                            <button
-                                type="button"
-                                class="primary-button"
-                                id="selectQuizForLiveButton"
-                            >
-                                SELECT QUIZ
-                            </button>
-
-                            <button
-                                type="button"
-                                class="primary-button"
-                                id="startLiveQuizButton"
-                                disabled
-                            >
-                                START QUIZ
-                            </button>
-
-                            <button
-                                type="button"
-                                class="secondary-button"
-                                id="nextLiveQuizQuestionButton"
-                                disabled
-                            >
-                                NEXT QUESTION
-                            </button>
-
-                            <button
-                                type="button"
-                                class="danger-button"
-                                id="finishLiveQuizButton"
-                                disabled
-                            >
-                                FINISH QUIZ
-                            </button>
-
-                        </div>
-
-                        <div
-                            class="current-question-box"
-                            id="liveCurrentQuestionBox"
-                            hidden
-                        >
-
-                            <span class="page-eyebrow">
-                                CURRENT QUESTION
-                            </span>
-
-                            <h3 id="liveCurrentQuestionText">
-                                —
-                            </h3>
-
-                            <div class="current-question-stats">
-
-                                <div class="current-question-stat">
-                                    <span>ANSWERS</span>
-                                    <strong id="liveQuizAnswerCount">0</strong>
-                                </div>
-
-                                <div class="current-question-stat">
-                                    <span>CORRECT</span>
-                                    <strong id="liveQuizCorrectCount">0</strong>
-                                </div>
-
-                                <div class="current-question-stat">
-                                    <span>WRONG</span>
-                                    <strong id="liveQuizWrongCount">0</strong>
-                                </div>
-
-                                <div class="current-question-stat">
-                                    <span>NO ANSWER</span>
-                                    <strong id="liveQuizNoAnswerCount">0</strong>
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                        <div
-                            class="live-quiz-message"
-                            id="liveQuizMessage"
-                        ></div>
-
-                    </section>
-
-                    <section class="admin-card">
-
-                        <div class="card-header">
-
-                            <div class="card-title-wrap">
-                                <span>LOBBY</span>
-                                <h2>Players</h2>
-                            </div>
-
-                            <span
-                                class="live-status-badge lobby"
-                                id="liveLobbyPlayerCountBadge"
-                            >
-                                0 PLAYERS
-                            </span>
-
-                        </div>
-
-                        <div
-                            class="lobby-player-list"
-                            id="liveQuizPlayersList"
-                        >
-
-                            <div
-                                class="lobby-player-empty"
-                                id="liveQuizPlayersEmpty"
-                            >
-                                NO PLAYERS IN LOBBY.
-                            </div>
-
-                        </div>
-
-                    </section>
-
+                <div class="card-title-wrap">
+                    <span>SAVED QUIZZES</span>
+                    <h2>Quiz Library</h2>
                 </div>
 
-            </section>
-
-        </section>
-
-        <!-- PAST QUIZZES -->
-
-        <section
-            class="admin-view"
-            id="adminViewPastQuizzes"
-            data-view-name="past-quizzes"
-            hidden
-        >
-
-            <div class="page-header">
-
-                <div class="page-eyebrow">
-                    QUIZ HISTORY
-                </div>
-
-                <h1 class="page-title">
-                    Past Quizzes
-                </h1>
-
-                <p class="page-description">
-                    Finished quiz sessions, winners and complete results of every player.
-                </p>
+                <button
+                    type="button"
+                    class="primary-button"
+                    id="createQuizFromSavedButton"
+                >
+                    + CREATE QUIZ
+                </button>
 
             </div>
 
             <div
-                class="past-quizzes-list"
-                id="pastQuizzesList"
+                class="saved-quizzes-list"
+                id="savedQuizzesList"
             >
 
                 <div
-                    class="past-quizzes-empty"
-                    id="pastQuizzesEmpty"
+                    class="saved-quizzes-empty"
+                    id="savedQuizzesEmpty"
                 >
-                    NO FINISHED QUIZZES YET.
+                    NO SAVED QUIZZES YET.
                 </div>
-
-            </div>
-
-            <div
-                class="past-quiz-pagination"
-                id="pastQuizPagination"
-                hidden
-            >
-
-                <button
-                    type="button"
-                    class="past-quiz-page-button"
-                    id="pastQuizPrevPage"
-                >
-                    PREVIOUS
-                </button>
-
-                <span
-                    class="past-quiz-page-info"
-                    id="pastQuizPageInfo"
-                >
-                    1 OF 1
-                </span>
-
-                <button
-                    type="button"
-                    class="past-quiz-page-button"
-                    id="pastQuizNextPage"
-                >
-                    NEXT
-                </button>
 
             </div>
 
@@ -3610,8 +3245,294 @@ button:disabled{
 
     </section>
 
-</main>
+    <!-- LIVE CONTROL -->
 
+    <section
+        class="quiz-subview"
+        data-quiz-subview-name="control"
+        hidden
+    >
+
+        <div class="live-control-grid">
+
+            <section class="admin-card live-control-card">
+
+                <div class="card-header">
+
+                    <div class="card-title-wrap">
+                        <span>LIVE SESSION</span>
+
+                        <h2 id="liveQuizSelectedTitle">
+                            NO QUIZ SELECTED
+                        </h2>
+                    </div>
+
+                    <span
+                        class="live-status-badge"
+                        id="liveQuizStatusBadge"
+                    >
+                        INACTIVE
+                    </span>
+
+                </div>
+
+                <div class="live-control-status">
+
+                    <div class="live-control-stat">
+                        <span>STATUS</span>
+                        <strong id="liveQuizStatus">
+                            INACTIVE
+                        </strong>
+                    </div>
+
+                    <div class="live-control-stat">
+                        <span>PLAYERS</span>
+                        <strong id="liveQuizPlayerCount">
+                            0
+                        </strong>
+                    </div>
+
+                    <div class="live-control-stat">
+                        <span>QUESTION</span>
+                        <strong id="liveQuizCurrentQuestion">
+                            —
+                        </strong>
+                    </div>
+
+                    <div class="live-control-stat">
+                        <span>TOTAL QUESTIONS</span>
+                        <strong id="liveQuizTotalQuestions">
+                            0
+                        </strong>
+                    </div>
+
+                </div>
+
+                <!--
+                    IMPORTANT:
+                    THESE IDS MATCH THE EXISTING ADMIN.JS.
+                    DO NOT RENAME THEM.
+                -->
+
+                <div class="live-control-buttons">
+
+                    <button
+                        type="button"
+                        class="secondary-button"
+                        id="selectQuizForLiveButton"
+                    >
+                        SELECT QUIZ
+                    </button>
+
+                    <button
+                        type="button"
+                        class="primary-button"
+                        id="openQuizLobbyButton"
+                        disabled
+                    >
+                        OPEN LOBBY
+                    </button>
+
+                    <button
+                        type="button"
+                        class="primary-button"
+                        id="startQuizButton"
+                        disabled
+                    >
+                        START QUIZ
+                    </button>
+
+                    <button
+                        type="button"
+                        class="secondary-button"
+                        id="nextQuizQuestionButton"
+                        disabled
+                    >
+                        NEXT QUESTION
+                    </button>
+
+                    <button
+                        type="button"
+                        class="primary-button"
+                        id="finishQuizButton"
+                        disabled
+                    >
+                        FINISH QUIZ
+                    </button>
+
+                    <button
+                        type="button"
+                        class="danger-button"
+                        id="closeQuizLobbyButton"
+                        disabled
+                    >
+                        CLOSE LOBBY
+                    </button>
+
+                </div>
+
+                <div
+                    class="current-question-box"
+                    id="liveCurrentQuestionControl"
+                    hidden
+                >
+
+                    <span id="currentQuizQuestionNumber">
+                        QUESTION
+                    </span>
+
+                    <h3 id="currentQuizQuestionText">
+                        —
+                    </h3>
+
+                    <div class="current-question-stats">
+
+                        <div class="current-question-stat">
+                            <span>ANSWERED</span>
+                            <strong id="liveQuizAnsweredCount">0</strong>
+                        </div>
+
+                        <div class="current-question-stat">
+                            <span>CORRECT</span>
+                            <strong id="liveQuizCorrectCount">0</strong>
+                        </div>
+
+                        <div class="current-question-stat">
+                            <span>WRONG</span>
+                            <strong id="liveQuizWrongCount">0</strong>
+                        </div>
+
+                        <div class="current-question-stat">
+                            <span>NO ANSWER</span>
+                            <strong id="liveQuizNoAnswerCount">0</strong>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div
+                    class="live-quiz-message"
+                    id="liveQuizMessage"
+                ></div>
+
+            </section>
+
+            <section class="admin-card">
+
+                <div class="card-header">
+
+                    <div class="card-title-wrap">
+                        <span>LOBBY</span>
+                        <h2>Players</h2>
+                    </div>
+
+                    <span
+                        class="live-status-badge lobby"
+                        id="liveLobbyPlayerCountBadge"
+                    >
+                        0 PLAYERS
+                    </span>
+
+                </div>
+
+                <div
+                    class="lobby-player-list"
+                    id="liveQuizPlayersList"
+                >
+
+                    <div
+                        class="lobby-player-empty"
+                        id="liveQuizPlayersEmpty"
+                    >
+                        NO PLAYERS IN LOBBY.
+                    </div>
+
+                </div>
+
+            </section>
+
+        </div>
+
+    </section>
+
+</section>
+
+<!-- PAST QUIZZES -->
+
+<section
+    class="admin-view"
+    id="adminViewPastQuizzes"
+    data-view-name="past-quizzes"
+    hidden
+>
+
+    <div class="page-header">
+
+        <div class="page-eyebrow">
+            QUIZ HISTORY
+        </div>
+
+        <h1 class="page-title">
+            Past Quizzes
+        </h1>
+
+        <p class="page-description">
+            Finished quiz sessions, winners and complete results of every player.
+        </p>
+
+    </div>
+
+    <div
+        class="past-quizzes-list"
+        id="pastQuizzesList"
+    >
+
+        <div
+            class="past-quizzes-empty"
+            id="pastQuizzesEmpty"
+        >
+            NO FINISHED QUIZZES YET.
+        </div>
+
+    </div>
+
+    <div
+        class="past-quiz-pagination"
+        id="pastQuizPagination"
+        hidden
+    >
+
+        <button
+            type="button"
+            class="past-quiz-page-button"
+            id="pastQuizPrevPage"
+        >
+            PREVIOUS
+        </button>
+
+        <span
+            class="past-quiz-page-info"
+            id="pastQuizPageInfo"
+        >
+            1 OF 1
+        </span>
+
+        <button
+            type="button"
+            class="past-quiz-page-button"
+            id="pastQuizNextPage"
+        >
+            NEXT
+        </button>
+
+    </div>
+
+</section>
+
+</section>
+
+</main>
 </div>
 
 <!-- QUESTION TEMPLATE -->
@@ -3706,6 +3627,34 @@ button:disabled{
 
 </template>
 
+<!-- LIVE PLAYER TEMPLATE -->
+
+<template id="liveQuizPlayerTemplate">
+
+    <div class="lobby-player-row">
+
+        <div>
+
+            <div
+                class="lobby-player-name"
+                data-player-name
+            >
+                PLAYER
+            </div>
+
+            <div
+                class="lobby-player-username"
+                data-player-username
+            >
+                @username
+            </div>
+
+        </div>
+
+    </div>
+
+</template>
+
 <!-- PAST QUIZ TEMPLATE -->
 
 <template id="pastQuizCardTemplate">
@@ -3781,7 +3730,6 @@ button:disabled{
                 <table class="past-quiz-table">
 
                     <thead>
-
                         <tr>
                             <th>RANK</th>
                             <th>PLAYER</th>
@@ -3791,7 +3739,6 @@ button:disabled{
                             <th>WRONG</th>
                             <th>NO ANSWER</th>
                         </tr>
-
                     </thead>
 
                     <tbody
@@ -3824,7 +3771,11 @@ button:disabled{
 
 </template>
 
+<!-- EXISTING ADMIN LOGIC -->
+
 <script src="admin.js?v=118"></script>
+
+<!-- PAGE NAVIGATION ONLY -->
 
 <script>
 (() => {
@@ -3865,34 +3816,34 @@ button:disabled{
 
     const viewTitles = {
 
-        dashboard: {
-            label: "GREMBLE ADMIN",
-            title: "Dashboard"
+        dashboard:{
+            label:"GREMBLE ADMIN",
+            title:"Dashboard"
         },
 
-        members: {
-            label: "MEMBERS",
-            title: "Registered People"
+        members:{
+            label:"MEMBERS",
+            title:"Registered People"
         },
 
-        contest: {
-            label: "MEME CONTEST",
-            title: "Contest Participants"
+        contest:{
+            label:"MEME CONTEST",
+            title:"Contest Participants"
         },
 
-        quiz: {
-            label: "LIVE QUIZ",
-            title: "Quiz Control Room"
+        quiz:{
+            label:"LIVE QUIZ",
+            title:"Quiz Control Room"
         },
 
-        "past-quizzes": {
-            label: "QUIZ HISTORY",
-            title: "Past Quizzes"
+        "past-quizzes":{
+            label:"QUIZ HISTORY",
+            title:"Past Quizzes"
         }
 
     };
 
-    function openAdminView(name) {
+    function openAdminView(name){
 
         views.forEach(
             view => {
@@ -3920,33 +3871,28 @@ button:disabled{
             viewTitles[name] ||
             viewTitles.dashboard;
 
-        if (pageTitle) {
-
+        if(pageTitle){
             pageTitle.textContent =
                 info.title;
-
         }
 
-        if (pageLabel) {
-
+        if(pageLabel){
             pageLabel.textContent =
                 info.label;
-
         }
 
         sidebar?.classList.remove(
             "mobile-open"
         );
 
-        try {
+        try{
 
             sessionStorage.setItem(
                 "gremble_admin_view",
                 name
             );
 
-        }
-        catch {}
+        }catch{}
 
     }
 
@@ -3960,12 +3906,8 @@ button:disabled{
                     const name =
                         button.dataset.adminView;
 
-                    if (name) {
-
-                        openAdminView(
-                            name
-                        );
-
+                    if(name){
+                        openAdminView(name);
                     }
 
                 }
@@ -3985,21 +3927,20 @@ button:disabled{
         }
     );
 
-    const closeContestPanel =
-        document.getElementById(
+    document
+        .getElementById(
             "closeContestPanel"
+        )
+        ?.addEventListener(
+            "click",
+            () => {
+
+                openAdminView(
+                    "dashboard"
+                );
+
+            }
         );
-
-    closeContestPanel?.addEventListener(
-        "click",
-        () => {
-
-            openAdminView(
-                "dashboard"
-            );
-
-        }
-    );
 
     const quizTabButtons =
         Array.from(
@@ -4015,7 +3956,7 @@ button:disabled{
             )
         );
 
-    function openQuizSubview(name) {
+    function openQuizSubview(name){
 
         quizSubviews.forEach(
             view => {
@@ -4091,7 +4032,7 @@ button:disabled{
     let savedView =
         "dashboard";
 
-    try {
+    try{
 
         savedView =
             sessionStorage.getItem(
@@ -4099,14 +4040,11 @@ button:disabled{
             ) ||
             "dashboard";
 
-    }
-    catch {}
+    }catch{}
 
-    if (!viewTitles[savedView]) {
-
+    if(!viewTitles[savedView]){
         savedView =
             "dashboard";
-
     }
 
     openAdminView(
@@ -4116,6 +4054,160 @@ button:disabled{
     openQuizSubview(
         "builder"
     );
+
+})();
+</script>
+
+<!-- CONTEST VISUALS ONLY -->
+
+<script>
+(() => {
+
+    const contestTableBody =
+        document.getElementById(
+            "contestTableBody"
+        );
+
+    if(!contestTableBody){
+        return;
+    }
+
+    function applyContestVisuals(){
+
+        const rows =
+            contestTableBody.querySelectorAll(
+                "tr"
+            );
+
+        rows.forEach(
+            row => {
+
+                const cells =
+                    row.querySelectorAll(
+                        "td"
+                    );
+
+                if(
+                    !cells ||
+                    cells.length < 4
+                ){
+                    return;
+                }
+
+                const participantCell =
+                    cells[0];
+
+                const rulesCell =
+                    cells[3];
+
+                /* X USERNAME */
+
+                if(participantCell){
+
+                    let participant =
+                        participantCell.querySelector(
+                            ".contest-participant-name"
+                        );
+
+                    if(!participant){
+
+                        const participantText =
+                            participantCell
+                                .textContent
+                                .trim();
+
+                        if(participantText){
+
+                            participantCell.textContent =
+                                "";
+
+                            participant =
+                                document.createElement(
+                                    "span"
+                                );
+
+                            participant.className =
+                                "contest-participant-name";
+
+                            participant.textContent =
+                                participantText;
+
+                            participantCell.appendChild(
+                                participant
+                            );
+
+                        }
+
+                    }
+
+                }
+
+                /* RULES YES / NO */
+
+                if(rulesCell){
+
+                    const value =
+                        rulesCell
+                            .textContent
+                            .trim()
+                            .toUpperCase();
+
+                    if(
+                        value === "YES" ||
+                        value === "NO"
+                    ){
+
+                        let badge =
+                            rulesCell.querySelector(
+                                ".contest-rule-visual"
+                            );
+
+                        if(!badge){
+
+                            rulesCell.textContent =
+                                "";
+
+                            badge =
+                                document.createElement(
+                                    "span"
+                                );
+
+                            rulesCell.appendChild(
+                                badge
+                            );
+
+                        }
+
+                        badge.className =
+                            "contest-rule-visual " +
+                            value.toLowerCase();
+
+                        badge.textContent =
+                            value;
+
+                    }
+
+                }
+
+            }
+        );
+
+    }
+
+    const observer =
+        new MutationObserver(
+            applyContestVisuals
+        );
+
+    observer.observe(
+        contestTableBody,
+        {
+            childList:true,
+            subtree:true
+        }
+    );
+
+    applyContestVisuals();
 
 })();
 </script>
