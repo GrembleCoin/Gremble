@@ -28,7 +28,7 @@ const ADMIN_CONTEST_ENDPOINT =
 
 const ADMIN_QUIZ_ENDPOINT = "https://tffzjqeckoezursrvcpw.supabase.co/functions/v1/admin-quiz";
 
-const ADMIN_QUIZ_LIVE_ENDPOINT = "";
+const ADMIN_QUIZ_LIVE_ENDPOINT = "https://tffzjqeckoezursrvcpw.supabase.co/functions/v1/admin-quiz-live";
 
 
 const GREMBLE_SESSION_KEY =
