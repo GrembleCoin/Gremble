@@ -527,154 +527,82 @@ a{color:inherit;text-decoration:none}
 .admin-message{
     margin-bottom:20px;
     padding:15px 17px;
-    border:1px solid rgba(255,255,255,.065);
-    border-radius:14px;
-    background:rgba(255,255,255,.02);
-    color:#859188;
-    font-size:10px
+    border:1px solid rgba(101,255,131,.1);
+    border-radius:13px;
+    background:rgba(101,255,131,.025);
+    color:#849188;
+    font-size:9px;
+    font-weight:800
 }
 
 .admin-message.success{
-    border-color:rgba(101,255,131,.17);
+    border-color:rgba(101,255,131,.2);
     color:var(--green)
 }
 
 .admin-message.error{
-    border-color:rgba(255,89,100,.22);
-    color:#ff717b
+    border-color:rgba(255,101,112,.22);
+    color:#ff7b84
 }
 
-/* COMMON */
+/* DASHBOARD */
 
-.admin-view[hidden]{
-    display:none!important
+.admin-dashboard{
+    display:block
 }
 
-.page-header{
-    margin-bottom:18px
+.admin-view{
+    animation:adminViewIn .16s ease
 }
 
-.page-eyebrow{
+@keyframes adminViewIn{
+    from{opacity:.4;transform:translateY(3px)}
+    to{opacity:1;transform:none}
+}
+
+.dashboard-hero{
+    display:grid;
+    grid-template-columns:minmax(0,1.45fr) minmax(300px,.55fr);
+    gap:16px;
+    margin-bottom:16px
+}
+
+.dashboard-founder-card,
+.private-access-card{
+    min-height:205px;
+    padding:28px;
+    border:1px solid rgba(101,255,131,.11);
+    border-radius:20px;
+    background:linear-gradient(
+        135deg,
+        rgba(5,18,11,.9),
+        rgba(3,11,7,.82)
+    );
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.02)
+}
+
+.dashboard-founder-card{
+    display:flex;
+    flex-direction:column;
+    justify-content:flex-end;
+    background:
+        radial-gradient(circle at 85% 20%,rgba(101,255,131,.08),transparent 30%),
+        linear-gradient(135deg,rgba(5,18,11,.92),rgba(3,11,7,.86))
+}
+
+.founder-tag{
+    margin-bottom:15px;
     color:var(--green);
     font-size:8px;
     font-weight:900;
     letter-spacing:2.2px
 }
 
-.page-title{
-    margin-top:8px;
-    color:#f1f5f2;
-    font-size:clamp(29px,3vw,44px);
-    line-height:1
-}
-
-.page-description{
-    max-width:720px;
-    margin-top:10px;
-    color:#7e8b83;
-    font-size:11px;
-    line-height:1.7
-}
-
-.admin-card{
-    border:1px solid rgba(101,255,131,.1);
-    border-radius:18px;
-    background:rgba(4,13,9,.78)
-}
-
-.card-header{
-    min-height:62px;
-    padding:16px 18px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:12px;
-    border-bottom:1px solid rgba(255,255,255,.045)
-}
-
-.card-title-wrap span{
-    color:var(--green);
-    font-size:7px;
-    font-weight:900;
-    letter-spacing:1.8px
-}
-
-.card-title-wrap h2{
-    margin-top:5px;
-    font-size:18px
-}
-
-.primary-button,
-.secondary-button,
-.danger-button,
-.ghost-button{
-    min-height:42px;
-    padding:0 15px;
-    border-radius:11px;
-    font-size:9px;
-    font-weight:900
-}
-
-.primary-button{
-    border:1px solid rgba(101,255,131,.52);
-    background:var(--green);
-    color:#021007
-}
-
-.secondary-button{
-    border:1px solid rgba(101,255,131,.2);
-    background:rgba(101,255,131,.055);
-    color:var(--green)
-}
-
-.ghost-button{
-    border:1px solid rgba(255,255,255,.07);
-    background:rgba(255,255,255,.025);
-    color:#9aa79e
-}
-
-.danger-button{
-    border:1px solid rgba(255,89,100,.28);
-    background:rgba(255,89,100,.06);
-    color:#ff747d
-}
-
-button:disabled{
-    opacity:.34;
-    cursor:not-allowed
-}
-
-/* DASHBOARD */
-
-.dashboard-hero{
-    display:grid;
-    grid-template-columns:minmax(0,1.3fr) minmax(280px,.7fr);
-    gap:16px;
-    margin-bottom:18px
-}
-
-.dashboard-founder-card{
-    min-height:300px;
-    padding:34px;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    border:1px solid rgba(101,255,131,.12);
-    border-radius:22px;
-    background:linear-gradient(145deg,rgba(8,24,14,.95),rgba(2,9,6,.97))
-}
-
-.founder-tag{
-    color:var(--green);
-    font-size:9px;
-    font-weight:900;
-    letter-spacing:3px
-}
-
 .dashboard-founder-card h1{
-    margin-top:18px;
-    font-size:clamp(46px,6vw,80px);
-    line-height:.95
+    max-width:700px;
+    font-size:clamp(36px,5vw,70px);
+    line-height:.95;
+    letter-spacing:-3px
 }
 
 .dashboard-founder-card h1 span{
@@ -682,34 +610,34 @@ button:disabled{
 }
 
 .private-access-card{
-    padding:27px;
-    border:1px solid rgba(101,255,131,.12);
-    border-radius:22px;
-    background:rgba(3,14,8,.84)
+    display:flex;
+    flex-direction:column;
+    justify-content:center
 }
 
 .private-access-label{
-    color:#89968e;
-    font-size:8px;
+    color:#65736a;
+    font-size:7px;
     font-weight:900;
     letter-spacing:2px
 }
 
 .private-access-card h2{
-    margin-top:18px;
-    font-size:25px
+    margin-top:8px;
+    font-size:20px
 }
 
 .private-id-box{
-    margin-top:23px;
+    margin-top:20px;
     padding:14px;
-    border:1px solid var(--green-border);
+    border:1px solid rgba(101,255,131,.14);
     border-radius:12px;
-    background:rgba(101,255,131,.025)
+    background:rgba(101,255,131,.035)
 }
 
 .private-id-box small{
-    color:#627067;
+    display:block;
+    color:#6d7a72;
     font-size:7px;
     font-weight:900
 }
@@ -721,20 +649,109 @@ button:disabled{
     font-size:10px
 }
 
+/* WALLET VISIBILITY CONTROL */
+
+.wallet-control-box{
+    margin-top:12px;
+    padding:14px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:14px;
+    border:1px solid rgba(101,255,131,.14);
+    border-radius:12px;
+    background:rgba(101,255,131,.025)
+}
+
+.wallet-control-copy{
+    min-width:0
+}
+
+.wallet-control-copy small{
+    display:block;
+    color:#6d7a72;
+    font-size:7px;
+    font-weight:900
+}
+
+.wallet-control-copy strong{
+    display:block;
+    margin-top:5px;
+    color:#f0f5f2;
+    font-size:10px
+}
+
+.wallet-control-copy span{
+    display:block;
+    margin-top:5px;
+    color:#75827a;
+    font-size:7px;
+    font-weight:900
+}
+
+.wallet-control-copy span.enabled{
+    color:var(--green)
+}
+
+.wallet-control-copy span.disabled{
+    color:#ff7b84
+}
+
+.wallet-visibility-switch{
+    position:relative;
+    width:54px;
+    height:29px;
+    flex:0 0 54px;
+    border:1px solid rgba(255,255,255,.1);
+    border-radius:999px;
+    background:rgba(255,255,255,.055);
+    transition:.18s ease
+}
+
+.wallet-visibility-switch::after{
+    content:"";
+    position:absolute;
+    top:4px;
+    left:4px;
+    width:19px;
+    height:19px;
+    border-radius:50%;
+    background:#77847c;
+    transition:.18s ease
+}
+
+.wallet-visibility-switch.enabled{
+    border-color:rgba(101,255,131,.42);
+    background:rgba(101,255,131,.14);
+    box-shadow:0 0 18px rgba(101,255,131,.08)
+}
+
+.wallet-visibility-switch.enabled::after{
+    left:29px;
+    background:var(--green);
+    box-shadow:0 0 10px rgba(101,255,131,.55)
+}
+
+.wallet-visibility-switch:disabled{
+    cursor:not-allowed;
+    opacity:.55
+}
+
 /* STATS */
 
 .stats-grid{
     display:grid;
     grid-template-columns:repeat(5,minmax(0,1fr));
-    gap:12px
+    gap:12px;
+    margin-bottom:20px
 }
 
 .stat-card{
-    min-height:122px;
-    padding:19px;
+    min-height:118px;
+    padding:18px;
     border:1px solid rgba(101,255,131,.09);
-    border-radius:16px;
-    background:rgba(5,15,10,.72)
+    border-radius:15px;
+    background:rgba(4,13,9,.75)
 }
 
 .stat-card span{
@@ -745,188 +762,277 @@ button:disabled{
 
 .stat-card strong{
     display:block;
-    margin-top:9px;
-    font-size:31px
+    margin-top:12px;
+    color:#f4f8f5;
+    font-size:29px
 }
 
 .stat-card small{
     display:block;
-    margin-top:7px;
+    margin-top:6px;
     color:var(--green);
-    font-size:8px
+    font-size:7px;
+    font-weight:900
+}
+
+/* PAGE HEADERS */
+
+.page-header{
+    margin-bottom:18px
+}
+
+.page-eyebrow{
+    color:var(--green);
+    font-size:8px;
+    font-weight:900;
+    letter-spacing:2px
+}
+
+.page-title{
+    margin-top:8px;
+    color:#f4f7f5;
+    font-size:34px;
+    letter-spacing:-1px
+}
+
+.page-description{
+    max-width:720px;
+    margin-top:9px;
+    color:#78857d;
+    font-size:11px;
+    line-height:1.6
+}
+
+/* GENERIC ADMIN CARD */
+
+.admin-card{
+    border:1px solid rgba(101,255,131,.1);
+    border-radius:16px;
+    background:rgba(4,13,9,.78);
+    overflow:hidden
+}
+
+.admin-card-header{
+    padding:17px 18px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:14px;
+    border-bottom:1px solid rgba(255,255,255,.04)
+}
+
+.admin-card-header span{
+    color:#6c796f;
+    font-size:7px;
+    font-weight:900
+}
+
+.admin-card-header h2{
+    margin-top:5px;
+    font-size:17px
+}
+
+/* BUTTONS */
+
+.primary-button,
+.secondary-button,
+.ghost-button,
+.danger-button{
+    min-height:38px;
+    padding:0 13px;
+    border-radius:9px;
+    font-size:7px;
+    font-weight:900;
+    transition:.15s ease
+}
+
+.primary-button{
+    border:1px solid rgba(101,255,131,.28);
+    background:rgba(101,255,131,.11);
+    color:var(--green)
+}
+
+.primary-button:hover{
+    background:rgba(101,255,131,.17)
+}
+
+.secondary-button{
+    border:1px solid rgba(101,255,131,.13);
+    background:rgba(101,255,131,.035);
+    color:#c7d2cb
+}
+
+.ghost-button{
+    border:1px solid rgba(255,255,255,.07);
+    background:rgba(255,255,255,.025);
+    color:#849087
+}
+
+.danger-button{
+    border:1px solid rgba(255,101,112,.18);
+    background:rgba(255,101,112,.045);
+    color:#ff737d
+}
+
+button:disabled{
+    cursor:not-allowed;
+    opacity:.42
 }
 
 /* MEMBERS */
 
 .members-panel{
-    overflow:hidden;
     border:1px solid rgba(101,255,131,.1);
-    border-radius:18px;
-    background:rgba(4,12,8,.78)
+    border-radius:16px;
+    background:rgba(4,13,9,.78);
+    overflow:hidden
 }
 
 .members-panel-top{
-    padding:20px;
+    padding:16px 18px;
     display:flex;
     align-items:center;
     justify-content:space-between;
-    gap:18px
+    gap:16px;
+    border-bottom:1px solid rgba(255,255,255,.04)
 }
 
 .members-panel-title span{
-    color:var(--green);
+    color:#6b786f;
     font-size:7px;
     font-weight:900
 }
 
 .members-panel-title h2{
     margin-top:5px;
-    font-size:22px
+    font-size:17px
 }
 
 .members-tools{
     display:flex;
-    gap:9px
+    align-items:center;
+    gap:8px
 }
 
-.member-search{
-    width:370px;
-    max-width:100%;
-    min-height:42px;
-    padding:0 13px;
-    border:1px solid rgba(101,255,131,.12);
-    border-radius:11px;
-    background:rgba(0,5,3,.66);
-    color:#eef4f0;
-    font-size:10px
+.member-search,
+.contest-search,
+.contest-sort,
+.quiz-input,
+.quiz-textarea,
+.quiz-select{
+    border:1px solid rgba(101,255,131,.11);
+    border-radius:9px;
+    background:rgba(0,6,3,.58);
+    color:#e7ede9
+}
+
+.member-search,
+.contest-search{
+    width:210px;
+    min-height:38px;
+    padding:0 11px;
+    font-size:9px
 }
 
 .refresh-button{
-    min-height:42px;
-    padding:0 14px;
-    border:1px solid rgba(101,255,131,.15);
-    border-radius:11px;
-    background:rgba(101,255,131,.04);
+    min-height:38px;
+    padding:0 12px;
+    border:1px solid rgba(101,255,131,.16);
+    border-radius:9px;
+    background:rgba(101,255,131,.05);
     color:var(--green);
-    font-size:8px;
-    font-weight:900
-}
-
-.members-table-wrap{
-    width:100%;
-    overflow-x:auto;
-    border-top:1px solid rgba(255,255,255,.045)
-}
-
-.members-table{
-    width:100%;
-    min-width:1500px;
-    border-collapse:collapse
-}
-
-.members-table th,
-.members-table td{
-    padding:14px 16px;
-    text-align:left;
-    white-space:nowrap
-}
-
-.members-table th{
-    color:#627067;
-    font-size:7px
-}
-
-.members-table td{
-    border-top:1px solid rgba(255,255,255,.04);
-    color:#cbd5cf;
-    font-size:10px
-}
-
-.telegram-name{
-    color:#f4f7f5;
-    font-weight:800
-}
-
-.telegram-username,
-.x-username{
-    color:var(--green)
-}
-
-.wallet-cell{
-    display:flex;
-    align-items:center;
-    gap:7px
-}
-
-.wallet-address{
-    color:#aab6ae
-}
-
-.copy-button{
-    padding:6px 8px;
-    border:1px solid rgba(101,255,131,.12);
-    border-radius:7px;
-    background:rgba(101,255,131,.035);
-    color:var(--green);
-    font-size:6px;
-    font-weight:900
-}
-
-.telegram-group-badge,
-.wallet-status-badge{
-    display:inline-flex;
-    align-items:center;
-    gap:6px;
-    padding:7px 9px;
-    border-radius:999px;
     font-size:7px;
     font-weight:900
 }
 
-.telegram-group-badge.member,
-.wallet-status-badge.yes{
-    border:1px solid rgba(101,255,131,.25);
-    background:rgba(101,255,131,.07);
+.members-table-wrap,
+.contest-table-wrap{
+    width:100%;
+    overflow:auto
+}
+
+.members-table,
+.contest-table{
+    width:100%;
+    min-width:1180px;
+    border-collapse:collapse
+}
+
+.members-table th,
+.contest-table th{
+    padding:13px 14px;
+    text-align:left;
+    color:#657269;
+    background:rgba(255,255,255,.012);
+    font-size:7px;
+    font-weight:900;
+    white-space:nowrap
+}
+
+.members-table td,
+.contest-table td{
+    padding:14px;
+    border-top:1px solid rgba(255,255,255,.04);
+    color:#c7d1cb;
+    font-size:9px;
+    white-space:nowrap
+}
+
+.members-table tr:hover td,
+.contest-table tr:hover td{
+    background:rgba(101,255,131,.018)
+}
+
+.member-telegram-name{
+    color:#f3f7f4;
+    font-weight:800
+}
+
+.member-telegram-username{
     color:var(--green)
 }
 
-.telegram-group-badge.not-member,
-.wallet-status-badge.no{
-    border:1px solid rgba(255,89,100,.24);
-    background:rgba(255,89,100,.06);
+.member-address{
+    max-width:190px;
+    overflow:hidden;
+    text-overflow:ellipsis
+}
+
+.member-status{
+    display:inline-flex;
+    align-items:center;
+    gap:5px;
+    font-size:7px;
+    font-weight:900
+}
+
+.member-status.yes{
+    color:var(--green)
+}
+
+.member-status.no{
     color:#ff717b
 }
 
-.telegram-group-badge.unknown{
-    color:var(--yellow)
-}
-
-.wallet-status-dot{
-    width:7px;
-    height:7px;
+.member-status-dot{
+    width:6px;
+    height:6px;
     border-radius:50%;
     background:currentColor
 }
 
-.country-cell{
-    display:inline-flex;
-    align-items:center;
-    gap:6px
-}
-
 .members-empty,
-.contest-empty,
-.saved-quizzes-empty,
-.lobby-player-empty{
-    padding:40px 20px;
+.contest-empty{
+    padding:45px 20px;
     text-align:center;
-    color:#657269;
+    color:#68766d;
     font-size:9px
 }
 
 .members-pagination,
 .contest-pagination{
     min-height:58px;
+    padding:12px 16px;
     display:flex;
     align-items:center;
     justify-content:center;
@@ -938,71 +1044,79 @@ button:disabled{
 .contest-page-button{
     min-width:90px;
     min-height:34px;
-    border:1px solid rgba(101,255,131,.13);
-    border-radius:9px;
+    border:1px solid rgba(101,255,131,.12);
+    border-radius:8px;
     background:rgba(101,255,131,.035);
     color:var(--green);
     font-size:7px;
     font-weight:900
 }
 
+.members-page-info,
+.contest-page-info{
+    min-width:70px;
+    text-align:center;
+    color:#7b887f;
+    font-size:8px;
+    font-weight:900
+}
+
 /* CONTEST */
 
 .contest-panel{
-    overflow:hidden;
-    border:1px solid rgba(101,255,131,.12);
-    border-radius:18px;
-    background:rgba(4,12,8,.82)
+    border:1px solid rgba(101,255,131,.1);
+    border-radius:17px;
+    background:rgba(4,13,9,.8);
+    overflow:hidden
 }
 
 .contest-panel-header{
-    padding:16px 18px;
+    padding:17px 18px;
     display:flex;
+    align-items:center;
     justify-content:space-between;
-    align-items:center;
-    border-bottom:1px solid rgba(255,255,255,.045)
-}
-
-.contest-panel-title{
-    display:flex;
-    align-items:center;
-    gap:11px
+    border-bottom:1px solid rgba(255,255,255,.04)
 }
 
 .contest-title-copy span{
-    color:var(--green);
+    color:#6c796f;
     font-size:7px;
     font-weight:900
 }
 
 .contest-title-copy h2{
-    margin-top:4px
+    margin-top:5px;
+    font-size:18px
 }
 
 .contest-close-button{
-    min-height:36px;
-    padding:0 12px;
+    min-height:35px;
+    padding:0 11px;
     border:1px solid rgba(255,255,255,.07);
-    border-radius:9px;
+    border-radius:8px;
     background:rgba(255,255,255,.02);
-    color:#839087
+    color:#77847c;
+    font-size:7px;
+    font-weight:900
 }
 
 .contest-stats{
+    padding:15px 18px;
     display:grid;
-    grid-template-columns:repeat(2,minmax(0,1fr));
-    gap:12px;
-    padding:18px 18px 0
+    grid-template-columns:repeat(2,minmax(0,180px));
+    gap:10px;
+    border-bottom:1px solid rgba(255,255,255,.04)
 }
 
 .contest-stat-card{
-    padding:16px;
+    padding:13px;
     border:1px solid rgba(101,255,131,.08);
-    border-radius:13px
+    border-radius:10px;
+    background:rgba(101,255,131,.02)
 }
 
 .contest-stat-card span{
-    color:#657269;
+    color:#66736a;
     font-size:7px;
     font-weight:900
 }
@@ -1010,53 +1124,53 @@ button:disabled{
 .contest-stat-card strong{
     display:block;
     margin-top:7px;
-    font-size:26px
+    font-size:21px
+}
+
+.contest-stat-card small{
+    display:block;
+    margin-top:4px;
+    color:var(--green);
+    font-size:6px
 }
 
 .contest-body{
-    padding:18px;
     display:grid;
-    grid-template-columns:minmax(280px,.36fr) minmax(0,.64fr);
-    gap:15px
-}
-
-.contest-form-card,
-.contest-list-card{
-    border:1px solid rgba(101,255,131,.08);
-    border-radius:15px;
-    background:rgba(0,8,5,.4)
+    grid-template-columns:310px minmax(0,1fr)
 }
 
 .contest-form-card{
-    padding:17px
+    padding:18px;
+    border-right:1px solid rgba(255,255,255,.04)
 }
 
 .contest-form-title{
-    color:var(--green);
-    font-size:8px;
+    margin-bottom:15px;
+    color:#f0f5f2;
+    font-size:11px;
     font-weight:900
 }
 
 .contest-form{
-    margin-top:15px;
     display:grid;
-    gap:9px
+    gap:8px
 }
 
 .contest-form label{
-    color:#69766e;
+    margin-top:5px;
+    color:#68756d;
     font-size:7px;
     font-weight:900
 }
 
 .contest-form input{
     width:100%;
-    min-height:42px;
-    padding:0 12px;
+    min-height:39px;
+    padding:0 10px;
     border:1px solid rgba(101,255,131,.1);
-    border-radius:10px;
-    background:rgba(0,5,3,.7);
-    color:#eef4f0
+    border-radius:8px;
+    background:rgba(0,6,3,.55);
+    color:#e8eeea
 }
 
 .contest-requirements{
@@ -1066,54 +1180,60 @@ button:disabled{
 }
 
 .contest-rule-button{
-    min-height:40px;
-    border-radius:10px;
-    font-size:8px;
+    min-height:38px;
+    border:1px solid rgba(255,255,255,.07);
+    border-radius:8px;
+    background:rgba(255,255,255,.02);
+    color:#78857d;
+    font-size:7px;
     font-weight:900
 }
 
-.contest-rule-button.yes{
-    border:1px solid rgba(101,255,131,.22);
-    background:rgba(101,255,131,.05);
+.contest-rule-button.yes.active{
+    border-color:rgba(101,255,131,.24);
+    background:rgba(101,255,131,.08);
     color:var(--green)
 }
 
-.contest-rule-button.no{
-    border:1px solid rgba(255,89,100,.22);
-    background:rgba(255,89,100,.04);
-    color:#ff717b
+.contest-rule-button.no.active{
+    border-color:rgba(255,101,112,.2);
+    background:rgba(255,101,112,.06);
+    color:#ff747d
 }
 
 .contest-submit-button{
-    min-height:43px;
+    min-height:40px;
     margin-top:7px;
-    border:1px solid rgba(101,255,131,.4);
-    border-radius:10px;
-    background:rgba(101,255,131,.08);
+    border:1px solid rgba(101,255,131,.25);
+    border-radius:9px;
+    background:rgba(101,255,131,.1);
     color:var(--green);
     font-size:8px;
     font-weight:900
 }
 
 .contest-cancel-edit{
-    min-height:38px;
-    border:1px solid rgba(255,255,255,.07);
-    border-radius:10px;
-    background:rgba(255,255,255,.02);
-    color:#87938b
+    min-height:36px;
+    border:1px solid rgba(255,255,255,.06);
+    border-radius:8px;
+    background:transparent;
+    color:#77847c;
+    font-size:7px;
+    font-weight:900
 }
 
 .contest-form-message{
-    min-height:16px;
-    color:#77857d;
-    font-size:8px
+    min-height:17px;
+    color:#6d7a72;
+    font-size:7px
 }
 
-.contest-form-message.success{color:var(--green)}
-.contest-form-message.error{color:#ff717b}
+.contest-list-card{
+    min-width:0
+}
 
 .contest-list-top{
-    padding:13px 15px;
+    padding:15px;
     display:flex;
     align-items:center;
     justify-content:space-between;
@@ -1121,252 +1241,186 @@ button:disabled{
     border-bottom:1px solid rgba(255,255,255,.04)
 }
 
+.contest-list-title strong{
+    font-size:10px
+}
+
 .contest-list-title span{
     display:block;
     margin-top:4px;
-    color:#657269;
+    color:#68766d;
     font-size:7px
 }
 
 .contest-tools{
     display:flex;
-    gap:8px
+    gap:7px
 }
 
-.contest-search,
 .contest-sort{
-    min-height:39px;
-    padding:0 12px;
-    border:1px solid rgba(101,255,131,.11);
-    border-radius:10px;
-    background:rgba(0,5,3,.7);
-    color:#eef4f0;
-    font-size:9px
-}
-
-.contest-table-wrap{
-    width:100%;
-    overflow-x:auto
-}
-
-.contest-table{
-    width:100%;
-    min-width:850px;
-    border-collapse:collapse
-}
-
-.contest-table th,
-.contest-table td{
-    padding:13px;
-    text-align:left
-}
-
-.contest-table th{
-    color:#657269;
-    font-size:7px
-}
-
-.contest-table td{
-    border-top:1px solid rgba(255,255,255,.04);
-    font-size:9px
-}
-
-.contest-participant,
-.contest-points{
-    color:var(--green);
-    font-weight:900
-}
-
-.contest-rule-badge{
-    padding:5px 8px;
-    border-radius:999px;
-    font-size:7px;
-    font-weight:900
-}
-
-.contest-rule-badge.yes{color:var(--green)}
-.contest-rule-badge.no{color:#ff717b}
-
-.contest-actions{
-    display:flex;
-    gap:5px
+    min-height:38px;
+    padding:0 9px;
+    font-size:8px
 }
 
 .contest-action-button{
-    min-height:29px;
+    min-height:30px;
     padding:0 8px;
+    border:1px solid rgba(255,255,255,.06);
     border-radius:7px;
-    background:transparent;
+    background:rgba(255,255,255,.02);
+    color:#8a978e;
     font-size:6px;
     font-weight:900
 }
 
-.contest-action-button.edit{
-    border:1px solid rgba(101,255,131,.16);
+.contest-action-button.open{
     color:var(--green)
 }
 
 .contest-action-button.delete{
-    border:1px solid rgba(255,89,100,.17);
-    color:#ff717b
+    color:#ff747d
 }
 
-.contest-member-status{
-    display:inline-flex;
-    width:21px;
-    height:21px;
-    align-items:center;
-    justify-content:center
-}
-
-.contest-member-status-dot{
-    width:9px;
-    height:9px;
-    border-radius:50%
-}
-
-.contest-member-status.verified .contest-member-status-dot{
-    background:var(--green)
-}
-
-.contest-member-status.registered .contest-member-status-dot{
-    background:#ffae42
-}
-
-.contest-member-status.not-found .contest-member-status-dot{
-    background:#ff5964
-}
-
-/* QUIZ */
+/* QUIZ TABS */
 
 .quiz-tabs{
-    margin-bottom:16px;
     display:flex;
     gap:7px;
-    padding:5px;
+    margin-bottom:14px;
+    padding:6px;
+    width:max-content;
+    max-width:100%;
     border:1px solid rgba(101,255,131,.09);
-    border-radius:13px;
-    background:rgba(4,13,9,.65)
+    border-radius:12px;
+    background:rgba(4,13,9,.65);
+    overflow:auto
 }
 
 .quiz-tab-button{
-    min-height:39px;
+    min-height:38px;
     padding:0 14px;
     border:1px solid transparent;
-    border-radius:9px;
+    border-radius:8px;
     background:transparent;
-    color:#77857c;
-    font-size:8px;
-    font-weight:900
+    color:#78857d;
+    font-size:7px;
+    font-weight:900;
+    white-space:nowrap
 }
 
 .quiz-tab-button.active{
     border-color:rgba(101,255,131,.18);
-    background:rgba(101,255,131,.075);
+    background:rgba(101,255,131,.07);
     color:var(--green)
 }
 
+/* QUIZ BUILDER */
+
 .quiz-layout{
     display:grid;
-    grid-template-columns:minmax(0,1fr) minmax(300px,.7fr);
+    grid-template-columns:minmax(0,1.2fr) minmax(320px,.8fr);
     gap:15px
 }
 
 .quiz-column{
-    display:grid;
-    align-content:start;
-    gap:15px
+    min-width:0
 }
 
 .quiz-builder-card{
     padding:18px
 }
 
-.quiz-builder-heading{
-    margin-bottom:17px;
+.quiz-builder-heading,
+.quiz-question-section-header{
     display:flex;
+    align-items:center;
     justify-content:space-between;
     gap:12px
 }
 
 .quiz-builder-heading span{
-    color:var(--green);
+    color:#68766d;
     font-size:7px;
     font-weight:900
 }
 
 .quiz-builder-heading h2{
-    margin-top:4px
-}
-
-.quiz-form-grid,
-.quiz-field{
-    display:grid;
-    gap:8px
+    margin-top:5px;
+    font-size:17px
 }
 
 .quiz-form-grid{
-    gap:13px
+    margin-top:17px;
+    display:grid;
+    gap:12px
+}
+
+.quiz-field{
+    display:grid;
+    gap:7px
 }
 
 .quiz-field label{
-    color:#69766e;
+    color:#68766d;
     font-size:7px;
     font-weight:900
 }
 
 .quiz-input,
-.quiz-textarea,
 .quiz-select{
     width:100%;
-    border:1px solid rgba(101,255,131,.11);
-    border-radius:10px;
-    background:rgba(0,5,3,.69);
-    color:#eef4f0
-}
-
-.quiz-input,
-.quiz-select{
-    min-height:43px;
-    padding:0 12px
+    min-height:40px;
+    padding:0 11px;
+    font-size:9px
 }
 
 .quiz-textarea{
-    min-height:82px;
-    padding:12px;
-    resize:vertical
+    width:100%;
+    min-height:88px;
+    padding:11px;
+    resize:vertical;
+    font-size:9px;
+    line-height:1.5
 }
 
 .quiz-question-section{
-    margin-top:19px
+    margin-top:17px;
+    padding-top:17px;
+    border-top:1px solid rgba(255,255,255,.04)
 }
 
-.quiz-question-section-header{
-    margin-bottom:12px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:10px
+.quiz-question-section-header h3{
+    font-size:13px
+}
+
+.quiz-question-section-header span{
+    display:block;
+    margin-top:4px;
+    color:#68766d;
+    font-size:7px
 }
 
 .quiz-question-list{
+    margin-top:12px;
     display:grid;
     gap:8px
 }
 
 .quiz-question-empty{
     padding:30px 15px;
-    border:1px dashed rgba(101,255,131,.14);
-    border-radius:12px;
+    border:1px dashed rgba(101,255,131,.1);
+    border-radius:11px;
     text-align:center;
-    color:#657269
+    color:#657269;
+    font-size:8px
 }
 
 .quiz-question-editor{
-    margin-top:12px;
-    padding:16px;
-    border:1px solid rgba(101,255,131,.12);
-    border-radius:13px;
+    margin-top:13px;
+    padding:15px;
+    border:1px solid rgba(101,255,131,.13);
+    border-radius:12px;
     background:rgba(101,255,131,.018)
 }
 
@@ -1732,6 +1786,56 @@ button:disabled{
 
 .past-quiz-toggle:hover{
     background:rgba(101,255,131,.1)
+}
+
+.past-quiz-actions{
+    display:flex;
+    align-items:center;
+    gap:8px
+}
+
+.past-quiz-delete{
+    min-height:38px;
+    padding:0 13px;
+    border:1px solid rgba(255,89,100,.25);
+    border-radius:9px;
+    background:rgba(255,89,100,.055);
+    color:#ff717b;
+    font-size:7px;
+    font-weight:900;
+    white-space:nowrap
+}
+
+.past-quiz-delete:hover{
+    background:rgba(255,89,100,.1)
+}
+
+.past-quiz-pagination{
+    margin-top:14px;
+    min-height:54px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px
+}
+
+.past-quiz-page-button{
+    min-width:90px;
+    min-height:34px;
+    border:1px solid rgba(101,255,131,.13);
+    border-radius:9px;
+    background:rgba(101,255,131,.035);
+    color:var(--green);
+    font-size:7px;
+    font-weight:900
+}
+
+.past-quiz-page-info{
+    min-width:70px;
+    text-align:center;
+    color:#7c8981;
+    font-size:8px;
+    font-weight:900
 }
 
 .past-quiz-details{
@@ -2249,6 +2353,26 @@ button:disabled{
             <div class="private-id-box">
                 <small>STATUS</small>
                 <strong>TELEGRAM VERIFIED</strong>
+            </div>
+
+            <div class="wallet-control-box">
+
+                <div class="wallet-control-copy">
+                    <small>MEMBER FEATURE</small>
+                    <strong>WALLET CONNECTION</strong>
+                    <span id="walletVisibilityStatus">LOADING...</span>
+                </div>
+
+                <button
+                    type="button"
+                    class="wallet-visibility-switch"
+                    id="walletVisibilitySwitch"
+                    role="switch"
+                    aria-checked="false"
+                    aria-label="Toggle wallet connection visibility"
+                    disabled
+                ></button>
+
             </div>
 
         </section>
@@ -2887,6 +3011,7 @@ button:disabled{
                                 <div class="quiz-option-grid">
 
                                     <div class="quiz-option-row">
+
                                         <div class="quiz-option-letter">A</div>
 
                                         <input
@@ -2903,9 +3028,11 @@ button:disabled{
                                         >
                                             CORRECT
                                         </button>
+
                                     </div>
 
                                     <div class="quiz-option-row">
+
                                         <div class="quiz-option-letter">B</div>
 
                                         <input
@@ -2922,9 +3049,11 @@ button:disabled{
                                         >
                                             CORRECT
                                         </button>
+
                                     </div>
 
                                     <div class="quiz-option-row">
+
                                         <div class="quiz-option-letter">C</div>
 
                                         <input
@@ -2941,9 +3070,11 @@ button:disabled{
                                         >
                                             CORRECT
                                         </button>
+
                                     </div>
 
                                     <div class="quiz-option-row">
+
                                         <div class="quiz-option-letter">D</div>
 
                                         <input
@@ -2960,6 +3091,7 @@ button:disabled{
                                         >
                                             CORRECT
                                         </button>
+
                                     </div>
 
                                 </div>
@@ -2998,7 +3130,7 @@ button:disabled{
                                         id="quizDeleteQuestionButton"
                                         hidden
                                     >
-                                        DELETE
+                                        DELETE QUESTION
                                     </button>
 
                                     <button
@@ -3026,15 +3158,6 @@ button:disabled{
                         <div class="quiz-builder-actions">
 
                             <button
-                                type="button"
-                                class="secondary-button"
-                                id="quizDuplicateCurrentButton"
-                                hidden
-                            >
-                                DUPLICATE
-                            </button>
-
-                            <button
                                 type="submit"
                                 class="primary-button"
                                 id="saveQuizButton"
@@ -3055,11 +3178,33 @@ button:disabled{
 
             </div>
 
+            <div class="quiz-column">
+
+                <section class="admin-card">
+
+                    <div class="admin-card-header">
+
+                        <div>
+                            <span>QUIZ SUMMARY</span>
+                            <h2>Current Draft</h2>
+                        </div>
+
+                    </div>
+
+                    <div
+                        class="saved-quizzes-list"
+                        id="quizDraftSummary"
+                    >
+                    </div>
+
+                </section>
+
+            </div>
+
         </div>
 
     </section>
-
-    <!-- SAVED QUIZZES -->
+        <!-- SAVED QUIZZES -->
 
     <section
         class="quiz-subview"
@@ -3342,6 +3487,37 @@ button:disabled{
 
     </div>
 
+    <div
+        class="past-quiz-pagination"
+        id="pastQuizPagination"
+        hidden
+    >
+
+        <button
+            type="button"
+            class="past-quiz-page-button"
+            id="pastQuizPrevPage"
+        >
+            PREVIOUS
+        </button>
+
+        <span
+            class="past-quiz-page-info"
+            id="pastQuizPageInfo"
+        >
+            1 OF 1
+        </span>
+
+        <button
+            type="button"
+            class="past-quiz-page-button"
+            id="pastQuizNextPage"
+        >
+            NEXT
+        </button>
+
+    </div>
+
 </section>
 
 </section>
@@ -3512,13 +3688,25 @@ button:disabled{
 
             </div>
 
-            <button
-                type="button"
-                class="past-quiz-toggle"
-                data-past-quiz-toggle
-            >
-                VIEW RESULTS
-            </button>
+            <div class="past-quiz-actions">
+
+                <button
+                    type="button"
+                    class="past-quiz-toggle"
+                    data-past-quiz-toggle
+                >
+                    VIEW RESULTS
+                </button>
+
+                <button
+                    type="button"
+                    class="past-quiz-delete"
+                    data-past-quiz-delete
+                >
+                    DELETE
+                </button>
+
+            </div>
 
         </div>
 
@@ -3588,7 +3776,7 @@ button:disabled{
 
 </template>
 
-<script src="admin.js?v=115"></script>
+<script src="admin.js?v=116"></script>
 
 <script>
 (() => {
