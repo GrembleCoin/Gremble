@@ -41,8 +41,20 @@ import {
 
 
 import {
-    solana
+    EthersAdapter
+} from "https://esm.sh/@reown/appkit-adapter-ethers@1.8.23?bundle";
+
+
+import {
+    solana,
+    mainnet,
+    bsc
 } from "https://esm.sh/@reown/appkit@1.8.23/networks?bundle";
+
+
+import {
+    BrowserProvider
+} from "https://esm.sh/ethers@6?bundle";
 
 
 import bs58 from "https://esm.sh/bs58@6.0.0?bundle";
@@ -81,6 +93,7 @@ const metadata = {
     ]
 };
 
+
 /* =====================================================
    APPKIT
 ===================================================== */
@@ -88,22 +101,31 @@ const metadata = {
 const solanaAdapter =
     new SolanaAdapter();
 
+
+const ethersAdapter =
+    new EthersAdapter();
+
+
 const grembleWalletModal =
     createAppKit({
 
         adapters: [
-            solanaAdapter
+            solanaAdapter,
+            ethersAdapter
         ],
 
         networks: [
-            solana
+            solana,
+            mainnet,
+            bsc
         ],
 
         defaultNetwork:
-            solana,
+            mainnet,
 
         defaultAccountTypes: {
-            solana: "eoa"
+            solana: "eoa",
+            eip155: "eoa"
         },
 
         projectId:
@@ -211,8 +233,12 @@ let localWalletProvider =
     "";
 
 
-let activeSolanaProvider =
+let activeWalletProvider =
     null;
+
+
+let activeWalletNamespace =
+    "";
 
 
 let savedWalletAddress =
@@ -512,13 +538,39 @@ function setWalletStatus(
    REOWN PROVIDER
 ===================================================== */
 
-function getSolanaProvider() {
+function getWalletNamespaceFromAddress(
+    address
+) {
+
+    const cleanAddress =
+        cleanText(
+            address
+        );
+
 
     if (
-        activeSolanaProvider
+        !cleanAddress
     ) {
 
-        return activeSolanaProvider;
+        return "";
+    }
+
+
+    return cleanAddress
+        .toLowerCase()
+        .startsWith("0x")
+            ? "eip155"
+            : "solana";
+}
+
+
+function getWalletProvider() {
+
+    if (
+        activeWalletProvider
+    ) {
+
+        return activeWalletProvider;
     }
 
 
@@ -533,8 +585,19 @@ function getSolanaProvider() {
             provider
         ) {
 
-            activeSolanaProvider =
+            activeWalletProvider =
                 provider;
+
+
+            if (
+                !activeWalletNamespace
+            ) {
+
+                activeWalletNamespace =
+                    getWalletNamespaceFromAddress(
+                        getModalAddress()
+                    );
+            }
 
 
             return provider;
@@ -544,7 +607,7 @@ function getSolanaProvider() {
     catch (error) {
 
         console.warn(
-            "Could not read active Solana provider:",
+            "Could not read active wallet provider:",
             error
         );
     }
@@ -566,6 +629,7 @@ function getModalAddress() {
             grembleWalletModal
                 .getAddress();
 
+
         if (
             typeof address !== "string"
         ) {
@@ -573,8 +637,10 @@ function getModalAddress() {
             return "";
         }
 
+
         const cleanAddress =
             address.trim();
+
 
         if (
             !cleanAddress
@@ -583,15 +649,17 @@ function getModalAddress() {
             return "";
         }
 
+
         return cleanAddress;
 
     }
     catch (error) {
 
         console.warn(
-            "Could not read Solana wallet address:",
+            "Could not read wallet address:",
             error
         );
+
 
         return "";
     }
@@ -962,11 +1030,14 @@ function renderWalletUi() {
         savedWalletAddress =
             "";
 
+
         savedWalletProvider =
             "";
 
+
         savedWalletVerifiedAt =
             "";
+
 
         profileLoaded =
             false;
@@ -1309,14 +1380,18 @@ async function loadSavedWalletFromProfile(
         savedWalletAddress =
             "";
 
+
         savedWalletProvider =
             "";
+
 
         savedWalletVerifiedAt =
             "";
 
+
         profileLoaded =
             false;
+
 
         loadedSessionToken =
             "";
@@ -1519,7 +1594,7 @@ async function waitForWalletConnection(
 
 
         const provider =
-            getSolanaProvider();
+            getWalletProvider();
 
 
         if (
@@ -1576,28 +1651,36 @@ async function verifyConnectedWallet(
             walletAddress
         );
 
+
     if (
         !cleanWalletAddress
     ) {
 
         throw new Error(
-            "No Solana wallet address received."
+            "No wallet address received."
         );
     }
 
-    if (
-        cleanWalletAddress
-            .toLowerCase()
-            .startsWith("0x")
-    ) {
-
-        throw new Error(
-            "EVM wallet detected. Please connect a Solana wallet."
-        );
-    }
 
     walletAddress =
         cleanWalletAddress;
+
+
+    const walletNamespace =
+        getWalletNamespaceFromAddress(
+            walletAddress
+        );
+
+
+    if (
+        walletNamespace !== "solana" &&
+        walletNamespace !== "eip155"
+    ) {
+
+        throw new Error(
+            "Unsupported wallet network."
+        );
+    }
 
 
     if (
@@ -1668,17 +1751,46 @@ async function verifyConnectedWallet(
         );
 
 
-        const signatureResult =
-            await provider
-                .signMessage(
-                    encodedMessage
+        let signature =
+            "";
+
+
+        if (
+            walletNamespace === "solana"
+        ) {
+
+            const signatureResult =
+                await provider
+                    .signMessage(
+                        encodedMessage
+                    );
+
+
+            signature =
+                signatureToBase58(
+                    signatureResult
+                );
+
+        }
+        else {
+
+            const ethersProvider =
+                new BrowserProvider(
+                    provider
                 );
 
 
-        const signature =
-            signatureToBase58(
-                signatureResult
-            );
+            const signer =
+                await ethersProvider
+                    .getSigner();
+
+
+            signature =
+                await signer
+                    .signMessage(
+                        message
+                    );
+        }
 
 
         const providerName =
@@ -1720,6 +1832,9 @@ async function verifyConnectedWallet(
 
                             wallet_provider:
                                 providerName,
+
+                            wallet_namespace:
+                                walletNamespace,
 
                             signature,
 
@@ -1891,7 +2006,7 @@ async function connectAndVerifyWallet() {
 
 
         let provider =
-            getSolanaProvider();
+            getWalletProvider();
 
 
         if (
@@ -1908,10 +2023,7 @@ async function connectAndVerifyWallet() {
             grembleWalletModal.open({
 
                 view:
-                    "Connect",
-
-                namespace:
-                    "solana"
+                    "Connect"
             });
 
 
@@ -2040,8 +2152,12 @@ async function disconnectLocalWallet() {
             "";
 
 
-        activeSolanaProvider =
+        activeWalletProvider =
             null;
+
+
+        activeWalletNamespace =
+            "";
 
 
         renderWalletUi();
@@ -2156,17 +2272,18 @@ async function changeWallet() {
             "";
 
 
-        activeSolanaProvider =
+        activeWalletProvider =
             null;
+
+
+        activeWalletNamespace =
+            "";
 
 
         grembleWalletModal.open({
 
             view:
-                "Connect",
-
-            namespace:
-                "solana"
+                "Connect"
         });
 
 
@@ -2354,14 +2471,18 @@ async function restoreWalletUi() {
         loadedSessionToken =
             "";
 
+
         profileLoaded =
             false;
+
 
         savedWalletAddress =
             "";
 
+
         savedWalletProvider =
             "";
+
 
         savedWalletVerifiedAt =
             "";
@@ -2477,14 +2598,18 @@ async function watchTelegramSession() {
             loadedSessionToken =
                 "";
 
+
             profileLoaded =
                 false;
+
 
             savedWalletAddress =
                 "";
 
+
             savedWalletProvider =
                 "";
+
 
             savedWalletVerifiedAt =
                 "";
@@ -2506,22 +2631,33 @@ try {
         .subscribeProviders(
             providers => {
 
+                const address =
+                    getModalAddress();
+
+
+                const namespace =
+                    getWalletNamespaceFromAddress(
+                        address
+                    );
+
+
                 const provider =
-                    providers?.["solana"] ||
-                    null;
+                    namespace
+                        ? providers?.[namespace] || null
+                        : null;
 
 
                 if (
                     provider
                 ) {
 
-                    activeSolanaProvider =
+                    activeWalletProvider =
                         provider;
+
+
+                    activeWalletNamespace =
+                        namespace;
                 }
-
-
-                const address =
-                    getModalAddress();
 
 
                 if (
@@ -2552,8 +2688,12 @@ try {
                         "";
 
 
-                    activeSolanaProvider =
+                    activeWalletProvider =
                         null;
+
+
+                    activeWalletNamespace =
+                        "";
 
 
                     renderWalletUi();
@@ -2591,8 +2731,14 @@ try {
                     state?.provider
                 ) {
 
-                    activeSolanaProvider =
+                    activeWalletProvider =
                         state.provider;
+
+
+                    activeWalletNamespace =
+                        getWalletNamespaceFromAddress(
+                            address
+                        );
                 }
 
 
@@ -2618,7 +2764,7 @@ try {
 
                     const provider =
                         state?.provider ||
-                        getSolanaProvider();
+                        getWalletProvider();
 
 
                     if (
@@ -2675,8 +2821,12 @@ try {
                         "";
 
 
-                    activeSolanaProvider =
+                    activeWalletProvider =
                         null;
+
+
+                    activeWalletNamespace =
+                        "";
 
 
                     renderWalletUi();
