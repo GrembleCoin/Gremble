@@ -86,9 +86,7 @@ const metadata = {
 ===================================================== */
 
 const solanaAdapter =
-    new SolanaAdapter({
-        registerWalletStandard: true
-    });
+    new SolanaAdapter();
 
 const grembleWalletModal =
     createAppKit({
@@ -103,6 +101,10 @@ const grembleWalletModal =
 
         defaultNetwork:
             solana,
+
+        defaultAccountTypes: {
+            solana: "eoa"
+        },
 
         projectId:
             REOWN_PROJECT_ID,
@@ -560,13 +562,36 @@ function getModalAddress() {
 
     try {
 
-        return cleanText(
+        const address =
             grembleWalletModal
-                .getAddress()
-        );
+                .getAddress();
+
+        if (
+            typeof address !== "string"
+        ) {
+
+            return "";
+        }
+
+        const cleanAddress =
+            address.trim();
+
+        if (
+            !cleanAddress
+        ) {
+
+            return "";
+        }
+
+        return cleanAddress;
 
     }
-    catch {
+    catch (error) {
+
+        console.warn(
+            "Could not read Solana wallet address:",
+            error
+        );
 
         return "";
     }
@@ -1545,6 +1570,35 @@ async function verifyConnectedWallet(
     provider,
     walletAddress
 ) {
+
+    const cleanWalletAddress =
+        cleanText(
+            walletAddress
+        );
+
+    if (
+        !cleanWalletAddress
+    ) {
+
+        throw new Error(
+            "No Solana wallet address received."
+        );
+    }
+
+    if (
+        cleanWalletAddress
+            .toLowerCase()
+            .startsWith("0x")
+    ) {
+
+        throw new Error(
+            "EVM wallet detected. Please connect a Solana wallet."
+        );
+    }
+
+    walletAddress =
+        cleanWalletAddress;
+
 
     if (
         !walletFeatureEnabled
