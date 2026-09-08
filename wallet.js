@@ -73,29 +73,22 @@ const GREMBLE_SESSION_KEY =
 ===================================================== */
 
 const metadata = {
-
-    name:
-        "Gremble",
-
-    description:
-        "Gremble community wallet connection",
-
-    url:
-        "https://gremblecoin.com",
-
+    name: "Gremble",
+    description: "Gremble",
+    url: "https://gremblecoin.com",
     icons: [
         "https://gremblecoin.com/gremble.png"
     ]
 };
-
 
 /* =====================================================
    APPKIT
 ===================================================== */
 
 const solanaAdapter =
-    new SolanaAdapter();
-
+    new SolanaAdapter({
+        registerWalletStandard: true
+    });
 
 const grembleWalletModal =
     createAppKit({
