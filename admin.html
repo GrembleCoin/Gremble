@@ -2158,6 +2158,31 @@ button:disabled{
             </span>
         </button>
 
+<button
+    type="button"
+    class="sidebar-nav-button"
+    data-admin-view="holders"
+>
+    <span class="sidebar-nav-icon">
+        <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+        >
+            <circle cx="12" cy="12" r="8"></circle>
+            <path d="M9 8.5h4.2a2.3 2.3 0 0 1 0 4.6H9"></path>
+            <path d="M9 13.1h4.8a2.4 2.4 0 0 1 0 4.8H9"></path>
+            <path d="M11 6v12"></path>
+        </svg>
+    </span>
+
+    <span class="sidebar-nav-text">
+        Holders
+    </span>
+</button>
+
         <button
             type="button"
             class="sidebar-nav-button"
@@ -2532,6 +2557,224 @@ button:disabled{
 
     </section>
 
+</section>
+
+<section
+    class="admin-view"
+    data-view-name="holders"
+    hidden
+>
+    <div class="page-header">
+        <div class="page-eyebrow">
+            GREMBLE HOLDERS
+        </div>
+
+        <h1 class="page-title">
+            Holders
+        </h1>
+
+        <p class="page-description">
+            Verified Gremble holders will appear here after token launch.
+        </p>
+    </div>
+
+
+    <div class="stats-grid">
+
+        <div class="stat-card">
+            <span>
+                TOTAL HOLDERS
+            </span>
+
+            <strong id="holdersTotalCount">
+                0
+            </strong>
+
+            <small>
+                VERIFIED HOLDERS
+            </small>
+        </div>
+
+
+        <div class="stat-card">
+            <span>
+                GREMBLE HELD
+            </span>
+
+            <strong id="holdersTotalTokens">
+                0
+            </strong>
+
+            <small>
+                TOTAL TOKENS
+            </small>
+        </div>
+
+
+        <div class="stat-card">
+            <span>
+                HOLDER VALUE
+            </span>
+
+            <strong id="holdersTotalValue">
+                $0.00
+            </strong>
+
+            <small>
+                TOTAL VALUE
+            </small>
+        </div>
+
+    </div>
+
+
+    <div class="admin-card">
+
+        <div class="admin-card-header">
+
+            <div>
+                <span>
+                    HOLDER TRACKING
+                </span>
+
+                <h2>
+                    Gremble Holders
+                </h2>
+            </div>
+
+            <button
+                type="button"
+                class="refresh-button"
+                id="refreshHolders"
+                disabled
+            >
+                REFRESH HOLDERS
+            </button>
+
+        </div>
+
+
+        <div
+            style="
+                padding:60px 24px;
+                text-align:center;
+            "
+        >
+
+            <div
+                style="
+                    width:58px;
+                    height:58px;
+                    margin:0 auto 18px;
+                    display:flex;
+                    align-items:center;
+                    justify-content:center;
+                    border:1px solid rgba(101,255,131,.22);
+                    border-radius:50%;
+                    background:rgba(101,255,131,.05);
+                    color:#65ff83;
+                    box-shadow:0 0 30px rgba(101,255,131,.05);
+                "
+            >
+                <svg
+                    viewBox="0 0 24 24"
+                    width="26"
+                    height="26"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.7"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                >
+                    <circle cx="12" cy="12" r="8"></circle>
+                    <path d="M9 8.5h4.2a2.3 2.3 0 0 1 0 4.6H9"></path>
+                    <path d="M9 13.1h4.8a2.4 2.4 0 0 1 0 4.8H9"></path>
+                    <path d="M11 6v12"></path>
+                </svg>
+            </div>
+
+
+            <div
+                style="
+                    color:#65ff83;
+                    font-size:8px;
+                    font-weight:900;
+                    letter-spacing:2px;
+                "
+            >
+                WAITING FOR TOKEN LAUNCH
+            </div>
+
+
+            <h2
+                style="
+                    margin-top:12px;
+                    font-size:22px;
+                    color:#f4f7f5;
+                "
+            >
+                Holder tracking is not active yet
+            </h2>
+
+
+            <p
+                style="
+                    max-width:520px;
+                    margin:10px auto 0;
+                    color:#78857d;
+                    font-size:10px;
+                    line-height:1.7;
+                "
+            >
+                After the official Gremble token launch,
+                verified wallets holding more than $1 in Gremble
+                will automatically appear here.
+            </p>
+
+        </div>
+
+<div
+    id="holdersTableSection"
+    hidden
+>
+    <div class="members-table-wrap">
+
+        <table class="members-table">
+
+            <thead>
+                <tr>
+                    <th>TELEGRAM</th>
+                    <th>X ACCOUNT</th>
+                    <th>WALLET</th>
+                    <th>GREMBLE</th>
+                    <th>VALUE</th>
+                    <th>STATUS</th>
+                </tr>
+            </thead>
+
+            <tbody id="holdersTableBody">
+            </tbody>
+
+        </table>
+
+    </div>
+
+    <div
+        id="holdersEmpty"
+        hidden
+        style="
+            padding:40px 20px;
+            text-align:center;
+            color:#78857d;
+            font-size:9px;
+            font-weight:800;
+        "
+    >
+        NO HOLDERS FOUND.
+    </div>
+</div>
+        
+    </div>
 </section>
 
 <section
@@ -3746,7 +3989,7 @@ button:disabled{
 
 </template>
 
-<script src="admin.js?v=118"></script>
+<script src="admin.js?v=119"></script>
 
 <script>
 (() => {
@@ -3796,7 +4039,12 @@ button:disabled{
             label:"MEMBERS",
             title:"Registered People"
         },
-
+        
+        holders:{
+    label:"GREMBLE HOLDERS",
+    title:"Holders"
+},
+        
         contest:{
             label:"MEME CONTEST",
             title:"Contest Participants"

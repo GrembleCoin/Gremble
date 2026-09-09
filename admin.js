@@ -403,6 +403,31 @@ const walletVisibilitySwitch =
 
 
 /* =====================================================
+   HOLDERS
+===================================================== */
+
+const holdersTotalCount =
+    $("holdersTotalCount");
+
+const holdersTotalTokens =
+    $("holdersTotalTokens");
+
+const holdersTotalValue =
+    $("holdersTotalValue");
+
+const refreshHolders =
+    $("refreshHolders");
+
+const holdersTableSection =
+    $("holdersTableSection");
+
+const holdersTableBody =
+    $("holdersTableBody");
+
+const holdersEmpty =
+    $("holdersEmpty");
+
+/* =====================================================
    STATE
 ===================================================== */
 
@@ -1170,6 +1195,80 @@ function createVerifiedWalletCell(member) {
 
 
     return cell;
+
+}
+
+
+/* =====================================================
+   HOLDERS
+===================================================== */
+
+function renderHolders() {
+
+    if (
+        holdersTotalCount
+    ) {
+
+        holdersTotalCount.textContent =
+            "0";
+    }
+
+
+    if (
+        holdersTotalTokens
+    ) {
+
+        holdersTotalTokens.textContent =
+            "0";
+    }
+
+
+    if (
+        holdersTotalValue
+    ) {
+
+        holdersTotalValue.textContent =
+            "$0.00";
+    }
+
+
+    if (
+        holdersTableBody
+    ) {
+
+        holdersTableBody.innerHTML =
+            "";
+    }
+
+
+    if (
+        holdersTableSection
+    ) {
+
+        holdersTableSection.hidden =
+            true;
+    }
+
+
+    if (
+        holdersEmpty
+    ) {
+
+        holdersEmpty.hidden =
+            true;
+    }
+
+
+    if (
+        refreshHolders
+    ) {
+
+        refreshHolders.disabled =
+            true;
+
+        refreshHolders.textContent =
+            "REFRESH HOLDERS";
+    }
 
 }
 
@@ -8167,6 +8266,7 @@ document.addEventListener(
 
         await loadAdminData();
 
+        renderHolders();
 
         await loadSavedQuizzes();
 
