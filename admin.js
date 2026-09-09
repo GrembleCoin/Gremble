@@ -4,6 +4,7 @@
 ===================================================== */
 
 const ADMIN_MEMBERS_ENDPOINT = "https://tffzjqeckoezursrvcpw.supabase.co/functions/v1/admin-members";
+const ADMIN_ALL_HOLDERS_ENDPOINT = "https://tffzjqeckoezursrvcpw.supabase.co/functions/v1/admin-all-holders";
 const ADMIN_CONTEST_ENDPOINT = "https://tffzjqeckoezursrvcpw.supabase.co/functions/v1/admin-contest";
 const ADMIN_QUIZ_ENDPOINT = "https://tffzjqeckoezursrvcpw.supabase.co/functions/v1/admin-quiz";
 const ADMIN_QUIZ_LIVE_ENDPOINT = "https://tffzjqeckoezursrvcpw.supabase.co/functions/v1/admin-quiz-live";
@@ -12,6 +13,7 @@ const GREMBLE_SESSION_KEY = "gremble_session_token";
 const GREMBLE_SESSION_EXPIRY_KEY = "gremble_session_expires_at";
 
 const MEMBERS_ITEMS_PER_PAGE = 10;
+const ALL_HOLDERS_ITEMS_PER_PAGE = 10;
 const CONTEST_ITEMS_PER_PAGE = 5;
 const PAST_QUIZZES_ITEMS_PER_PAGE = 5;
 
@@ -427,6 +429,57 @@ const holdersTableBody =
 const holdersEmpty =
     $("holdersEmpty");
 
+
+    /* =====================================================
+   ALL HOLDERS
+===================================================== */
+
+const allHoldersTotalCount =
+    $("allHoldersTotalCount");
+
+const allHoldersTotalTokens =
+    $("allHoldersTotalTokens");
+
+const allHoldersTopTenPercent =
+    $("allHoldersTopTenPercent");
+
+const allHoldersTotalValue =
+    $("allHoldersTotalValue");
+
+const allHoldersSearch =
+    $("allHoldersSearch");
+
+const refreshAllHolders =
+    $("refreshAllHolders");
+
+const allHoldersLaunchMessage =
+    $("allHoldersLaunchMessage");
+
+const allHoldersWaiting =
+    $("allHoldersWaiting");
+
+const allHoldersTableSection =
+    $("allHoldersTableSection");
+
+const allHoldersTableBody =
+    $("allHoldersTableBody");
+
+const allHoldersEmpty =
+    $("allHoldersEmpty");
+
+const allHoldersPagination =
+    $("allHoldersPagination");
+
+const allHoldersPrevPage =
+    $("allHoldersPrevPage");
+
+const allHoldersNextPage =
+    $("allHoldersNextPage");
+
+const allHoldersPageInfo =
+    $("allHoldersPageInfo");
+
+
 /* =====================================================
    STATE
 ===================================================== */
@@ -437,6 +490,17 @@ let allMembers =
 let membersCurrentPage =
     1;
 
+let allHolders =
+    [];
+
+let allHoldersCurrentPage =
+    1;
+
+let allHoldersLoaded =
+    false;
+
+let allHoldersLoading =
+    false;
 
 let allContestEntries =
     [];
@@ -1272,6 +1336,745 @@ function renderHolders() {
 
 }
 
+
+/* =====================================================
+   ALL HOLDERS
+===================================================== */
+
+function getFilteredAllHolders() {
+
+    const search =
+        cleanText(
+            allHoldersSearch?.value
+        ).toLowerCase();
+
+
+    if (
+        !search
+    ) {
+
+        return [
+            ...allHolders
+        ];
+    }
+
+
+    return allHolders.filter(
+        holder =>
+            cleanText(
+                holder.wallet_address ??
+                holder.wallet ??
+                holder.owner
+            )
+                .toLowerCase()
+                .includes(
+                    search
+                )
+    );
+}
+
+
+function createAllHolderRow(
+    holder,
+    rank
+) {
+
+    const row =
+        document.createElement(
+            "tr"
+        );
+
+
+    const walletAddress =
+        cleanText(
+            holder.wallet_address ??
+            holder.wallet ??
+            holder.owner
+        );
+
+
+    const balance =
+        numberOrZero(
+            holder.gremble_balance ??
+            holder.balance ??
+            holder.amount
+        );
+
+
+    const supplyPercent =
+        numberOrZero(
+            holder.supply_percent ??
+            holder.percent_of_supply ??
+            holder.percentage
+        );
+
+
+    const usdValue =
+        numberOrZero(
+            holder.value_usd ??
+            holder.usd_value
+        );
+
+
+    /* RANK */
+
+    const rankCell =
+        document.createElement(
+            "td"
+        );
+
+
+    rankCell.textContent =
+        `#${rank}`;
+
+
+    /* WALLET */
+
+    const walletCell =
+        document.createElement(
+            "td"
+        );
+
+
+    const walletWrapper =
+        document.createElement(
+            "div"
+        );
+
+
+    walletWrapper.className =
+        "wallet-cell";
+
+
+    const walletText =
+        document.createElement(
+            "span"
+        );
+
+
+    walletText.className =
+        "wallet-address";
+
+
+    walletText.textContent =
+        walletAddress
+            ? shortWallet(
+                walletAddress
+            )
+            : "—";
+
+
+    walletText.title =
+        walletAddress;
+
+
+    if (
+        walletAddress
+    ) {
+
+        const copyButton =
+            document.createElement(
+                "button"
+            );
+
+
+        copyButton.type =
+            "button";
+
+
+        copyButton.className =
+            "copy-button";
+
+
+        copyButton.textContent =
+            "COPY";
+
+
+        copyButton.addEventListener(
+            "click",
+            () =>
+                copyText(
+                    walletAddress,
+                    copyButton
+                )
+        );
+
+
+        walletWrapper.append(
+            walletText,
+            copyButton
+        );
+
+    }
+    else {
+
+        walletWrapper.appendChild(
+            walletText
+        );
+    }
+
+
+    walletCell.appendChild(
+        walletWrapper
+    );
+
+
+    /* GREMBLE */
+
+    const balanceCell =
+        document.createElement(
+            "td"
+        );
+
+
+    balanceCell.textContent =
+        balance.toLocaleString(
+            "en-US",
+            {
+                maximumFractionDigits:
+                    6
+            }
+        );
+
+
+    /* SUPPLY */
+
+    const supplyCell =
+        document.createElement(
+            "td"
+        );
+
+
+    supplyCell.textContent =
+        `${supplyPercent.toFixed(4)}%`;
+
+
+    /* USD */
+
+    const valueCell =
+        document.createElement(
+            "td"
+        );
+
+
+    valueCell.textContent =
+        `$${usdValue.toLocaleString(
+            "en-US",
+            {
+                minimumFractionDigits:
+                    2,
+
+                maximumFractionDigits:
+                    2
+            }
+        )}`;
+
+
+    row.append(
+        rankCell,
+        walletCell,
+        balanceCell,
+        supplyCell,
+        valueCell
+    );
+
+
+    return row;
+}
+
+
+function renderAllHolders() {
+
+    const filtered =
+        getFilteredAllHolders();
+
+
+    const totalPages =
+        Math.max(
+            1,
+            Math.ceil(
+                filtered.length /
+                ALL_HOLDERS_ITEMS_PER_PAGE
+            )
+        );
+
+
+    allHoldersCurrentPage =
+        Math.min(
+            Math.max(
+                1,
+                allHoldersCurrentPage
+            ),
+            totalPages
+        );
+
+
+    const start =
+        (
+            allHoldersCurrentPage -
+            1
+        ) *
+        ALL_HOLDERS_ITEMS_PER_PAGE;
+
+
+    const visibleHolders =
+        filtered.slice(
+            start,
+            start +
+            ALL_HOLDERS_ITEMS_PER_PAGE
+        );
+
+
+    if (
+        allHoldersTableBody
+    ) {
+
+        allHoldersTableBody.innerHTML =
+            "";
+
+
+        visibleHolders.forEach(
+            (
+                holder,
+                index
+            ) => {
+
+                const rank =
+                    start +
+                    index +
+                    1;
+
+
+                allHoldersTableBody.appendChild(
+
+                    createAllHolderRow(
+                        holder,
+                        rank
+                    )
+                );
+            }
+        );
+    }
+
+
+    if (
+        allHoldersTotalCount
+    ) {
+
+        allHoldersTotalCount.textContent =
+            String(
+                allHolders.length
+            );
+    }
+
+
+    const totalTokens =
+        allHolders.reduce(
+            (
+                total,
+                holder
+            ) =>
+                total +
+                numberOrZero(
+                    holder.gremble_balance ??
+                    holder.balance ??
+                    holder.amount
+                ),
+            0
+        );
+
+
+    if (
+        allHoldersTotalTokens
+    ) {
+
+        allHoldersTotalTokens.textContent =
+            totalTokens.toLocaleString(
+                "en-US",
+                {
+                    maximumFractionDigits:
+                        2
+                }
+            );
+    }
+
+
+    const topTenPercent =
+        allHolders
+            .slice(
+                0,
+                10
+            )
+            .reduce(
+                (
+                    total,
+                    holder
+                ) =>
+                    total +
+                    numberOrZero(
+                        holder.supply_percent ??
+                        holder.percent_of_supply ??
+                        holder.percentage
+                    ),
+                0
+            );
+
+
+    if (
+        allHoldersTopTenPercent
+    ) {
+
+        allHoldersTopTenPercent.textContent =
+            `${topTenPercent.toFixed(2)}%`;
+    }
+
+
+    const totalValue =
+        allHolders.reduce(
+            (
+                total,
+                holder
+            ) =>
+                total +
+                numberOrZero(
+                    holder.value_usd ??
+                    holder.usd_value
+                ),
+            0
+        );
+
+
+    if (
+        allHoldersTotalValue
+    ) {
+
+        allHoldersTotalValue.textContent =
+            `$${totalValue.toLocaleString(
+                "en-US",
+                {
+                    minimumFractionDigits:
+                        2,
+
+                    maximumFractionDigits:
+                        2
+                }
+            )}`;
+    }
+
+
+    const hasData =
+        allHolders.length >
+        0;
+
+
+    if (
+        allHoldersWaiting
+    ) {
+
+        allHoldersWaiting.hidden =
+            hasData;
+    }
+
+
+    if (
+        allHoldersTableSection
+    ) {
+
+        allHoldersTableSection.hidden =
+            !hasData;
+    }
+
+
+    if (
+        allHoldersEmpty
+    ) {
+
+        allHoldersEmpty.hidden =
+            filtered.length >
+            0;
+    }
+
+
+    if (
+        allHoldersPagination
+    ) {
+
+        allHoldersPagination.hidden =
+            filtered.length <=
+            ALL_HOLDERS_ITEMS_PER_PAGE;
+    }
+
+
+    if (
+        allHoldersPageInfo
+    ) {
+
+        allHoldersPageInfo.textContent =
+            `${allHoldersCurrentPage} OF ${totalPages}`;
+    }
+
+
+    if (
+        allHoldersPrevPage
+    ) {
+
+        allHoldersPrevPage.disabled =
+            allHoldersCurrentPage <=
+            1;
+    }
+
+
+    if (
+        allHoldersNextPage
+    ) {
+
+        allHoldersNextPage.disabled =
+            allHoldersCurrentPage >=
+            totalPages;
+    }
+
+
+    if (
+        allHoldersSearch
+    ) {
+
+        allHoldersSearch.disabled =
+            !allHoldersLoaded;
+    }
+
+
+    if (
+        refreshAllHolders
+    ) {
+
+        refreshAllHolders.disabled =
+            !allHoldersLoaded ||
+            allHoldersLoading;
+
+
+        refreshAllHolders.textContent =
+            allHoldersLoading
+                ? "LOADING..."
+                : "REFRESH DATA";
+    }
+
+}
+
+
+/* =====================================================
+   LOAD ALL HOLDERS
+===================================================== */
+
+async function loadAllHolders(
+    force = false
+) {
+
+    if (
+        allHoldersLoading
+    ) {
+
+        return;
+    }
+
+
+    if (
+        allHoldersLoaded &&
+        !force
+    ) {
+
+        renderAllHolders();
+
+        return;
+    }
+
+
+    const token =
+        getSessionToken();
+
+
+    if (
+        !token ||
+        sessionIsExpired()
+    ) {
+
+        return;
+    }
+
+
+    allHoldersLoading =
+        true;
+
+
+    if (
+        refreshAllHolders
+    ) {
+
+        refreshAllHolders.disabled =
+            true;
+
+        refreshAllHolders.textContent =
+            "LOADING...";
+    }
+
+
+    try {
+
+        const response =
+            await fetch(
+                ADMIN_ALL_HOLDERS_ENDPOINT,
+                {
+
+                    method:
+                        "GET",
+
+                    headers: {
+
+                        Authorization:
+                            `Bearer ${token}`
+                    },
+
+                    cache:
+                        "no-store"
+                }
+            );
+
+
+        let result =
+            null;
+
+
+        try {
+
+            result =
+                await response.json();
+
+        }
+        catch {
+
+            result =
+                null;
+        }
+
+
+        if (
+            response.status ===
+            401
+        ) {
+
+            clearLocalSession();
+
+            showAccessError(
+                401
+            );
+
+            return;
+        }
+
+
+        if (
+            response.status ===
+            403
+        ) {
+
+            showAccessError(
+                403
+            );
+
+            return;
+        }
+
+
+        if (
+            !response.ok ||
+            result?.success !== true
+        ) {
+
+            throw new Error(
+                result?.error ||
+                "COULD NOT LOAD GREMBLE HOLDERS."
+            );
+        }
+
+
+        allHolders =
+            Array.isArray(
+                result.holders
+            )
+                ? result.holders
+                : [];
+
+
+        allHoldersLoaded =
+            result.launch_ready ===
+            true;
+
+
+        allHoldersCurrentPage =
+            1;
+
+
+        if (
+            allHoldersSearch
+        ) {
+
+            allHoldersSearch.value =
+                "";
+        }
+
+
+        if (
+            allHoldersLaunchMessage
+        ) {
+
+            if (
+                result.launch_ready ===
+                true
+            ) {
+
+                allHoldersLaunchMessage.textContent =
+                    "ON-CHAIN GREMBLE HOLDER DATA LOADED.";
+
+            }
+            else {
+
+                allHoldersLaunchMessage.textContent =
+                    "WAITING FOR TOKEN LAUNCH — ON-CHAIN HOLDER TRACKING WILL ACTIVATE AFTER THE GREMBLE MINT ADDRESS IS ADDED.";
+            }
+        }
+
+
+        renderAllHolders();
+
+    }
+    catch (error) {
+
+        console.error(
+            "All holders error:",
+            error
+        );
+
+
+        setAdminMessage(
+            error?.message ||
+            "COULD NOT LOAD GREMBLE HOLDERS.",
+            "error"
+        );
+
+    }
+    finally {
+
+        allHoldersLoading =
+            false;
+
+
+        renderAllHolders();
+    }
+}
+
+
+window.loadAllHolders =
+    loadAllHolders;
+    
 
 /* =====================================================
    MEMBER STATS
@@ -7908,6 +8711,88 @@ refreshMembers?.addEventListener(
 
 
 /* =====================================================
+   ALL HOLDERS EVENTS
+===================================================== */
+
+allHoldersSearch?.addEventListener(
+    "input",
+    () => {
+
+        allHoldersCurrentPage =
+            1;
+
+
+        renderAllHolders();
+
+    }
+);
+
+
+allHoldersPrevPage?.addEventListener(
+    "click",
+    () => {
+
+        if (
+            allHoldersCurrentPage >
+            1
+        ) {
+
+            allHoldersCurrentPage--;
+
+
+            renderAllHolders();
+        }
+
+    }
+);
+
+
+allHoldersNextPage?.addEventListener(
+    "click",
+    () => {
+
+        const filtered =
+            getFilteredAllHolders();
+
+
+        const totalPages =
+            Math.max(
+                1,
+                Math.ceil(
+                    filtered.length /
+                    ALL_HOLDERS_ITEMS_PER_PAGE
+                )
+            );
+
+
+        if (
+            allHoldersCurrentPage <
+            totalPages
+        ) {
+
+            allHoldersCurrentPage++;
+
+
+            renderAllHolders();
+        }
+
+    }
+);
+
+
+refreshAllHolders?.addEventListener(
+    "click",
+    async () => {
+
+        await loadAllHolders(
+            true
+        );
+
+    }
+);
+
+
+/* =====================================================
    CONTEST EVENTS
 ===================================================== */
 
@@ -8264,6 +9149,8 @@ document.addEventListener(
         updateLiveQuizStatusUI();
 
         renderHolders();
+
+        renderAllHolders();
 
         await loadAdminData();
 

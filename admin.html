@@ -295,6 +295,19 @@ a{color:inherit;text-decoration:none}
     border-radius:50%;
 }
 
+.all-holders-nav-icon{
+    overflow:hidden;
+    padding:3px;
+}
+
+.all-holders-nav-image{
+    width:100%;
+    height:100%;
+    display:block;
+    object-fit:contain;
+    border-radius:50%;
+}
+
 .sidebar-nav-icon svg{
     width:21px;
     height:21px;
@@ -959,20 +972,23 @@ button:disabled{
 }
 
 .members-table-wrap,
-.contest-table-wrap{
+.contest-table-wrap,
+.all-holders-table-wrap{
     width:100%;
     overflow:auto
 }
 
 .members-table,
-.contest-table{
+.contest-table,
+.all-holders-table{
     width:100%;
-    min-width:1180px;
+    min-width:980px;
     border-collapse:collapse
 }
 
 .members-table th,
-.contest-table th{
+.contest-table th,
+.all-holders-table th{
     padding:13px 14px;
     text-align:left;
     color:#657269;
@@ -983,7 +999,8 @@ button:disabled{
 }
 
 .members-table td,
-.contest-table td{
+.contest-table td,
+.all-holders-table td{
     padding:14px;
     border-top:1px solid rgba(255,255,255,.04);
     color:#c7d1cb;
@@ -992,7 +1009,8 @@ button:disabled{
 }
 
 .members-table tr:hover td,
-.contest-table tr:hover td{
+.contest-table tr:hover td,
+.all-holders-table tr:hover td{
     background:rgba(101,255,131,.018)
 }
 
@@ -2189,6 +2207,25 @@ button:disabled{
     </span>
 </button>
 
+
+<button
+    type="button"
+    class="sidebar-nav-button"
+    data-admin-view="all-holders"
+>
+    <span class="sidebar-nav-icon all-holders-nav-icon">
+        <img
+            src="gremble4.png"
+            alt=""
+            class="all-holders-nav-image"
+        >
+    </span>
+
+    <span class="sidebar-nav-text">
+        All Holders
+    </span>
+</button>
+
         <button
             type="button"
             class="sidebar-nav-button"
@@ -2782,6 +2819,311 @@ button:disabled{
         
     </div>
 </section>
+
+
+<section
+    class="admin-view"
+    data-view-name="all-holders"
+    hidden
+>
+    <div class="page-header">
+
+        <div class="page-eyebrow">
+            ALL GREMBLE HOLDERS
+        </div>
+
+        <h1 class="page-title">
+            All Holders
+        </h1>
+
+        <p class="page-description">
+            Complete on-chain overview of every wallet holding Gremble.
+        </p>
+
+    </div>
+
+
+    <div
+        class="admin-message success"
+        id="allHoldersLaunchMessage"
+    >
+        WAITING FOR TOKEN LAUNCH — ON-CHAIN HOLDER TRACKING WILL ACTIVATE AFTER THE GREMBLE MINT ADDRESS IS ADDED.
+    </div>
+
+
+    <div class="stats-grid">
+
+        <div class="stat-card">
+
+            <span>
+                TOTAL HOLDERS
+            </span>
+
+            <strong id="allHoldersTotalCount">
+                0
+            </strong>
+
+            <small>
+                ON-CHAIN HOLDERS
+            </small>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <span>
+                GREMBLE HELD
+            </span>
+
+            <strong id="allHoldersTotalTokens">
+                0
+            </strong>
+
+            <small>
+                TOTAL TOKENS HELD
+            </small>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <span>
+                TOP 10 HOLDERS
+            </span>
+
+            <strong id="allHoldersTopTenPercent">
+                0%
+            </strong>
+
+            <small>
+                OF TOTAL SUPPLY
+            </small>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <span>
+                HOLDER VALUE
+            </span>
+
+            <strong id="allHoldersTotalValue">
+                $0.00
+            </strong>
+
+            <small>
+                TOTAL VALUE
+            </small>
+
+        </div>
+
+    </div>
+
+
+    <div class="admin-card">
+
+        <div class="admin-card-header">
+
+            <div>
+
+                <span>
+                    BLOCKCHAIN HOLDERS
+                </span>
+
+                <h2>
+                    All Gremble Holders
+                </h2>
+
+            </div>
+
+
+            <div
+                style="
+                    display:flex;
+                    align-items:center;
+                    gap:8px;
+                "
+            >
+
+                <input
+                    type="text"
+                    id="allHoldersSearch"
+                    class="member-search"
+                    placeholder="Search wallet..."
+                    autocomplete="off"
+                    disabled
+                >
+
+
+                <button
+                    type="button"
+                    class="refresh-button"
+                    id="refreshAllHolders"
+                    disabled
+                >
+                    REFRESH DATA
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div
+            id="allHoldersWaiting"
+            style="
+                padding:65px 24px;
+                text-align:center;
+            "
+        >
+
+            <div
+                style="
+                    width:58px;
+                    height:58px;
+                    margin:0 auto 18px;
+                    display:flex;
+                    align-items:center;
+                    justify-content:center;
+                    border:1px solid rgba(101,255,131,.22);
+                    border-radius:50%;
+                    background:rgba(101,255,131,.05);
+                    color:#65ff83;
+                    box-shadow:0 0 30px rgba(101,255,131,.05);
+                    font-size:25px;
+                "
+            >
+                ◎
+            </div>
+
+
+            <div
+                style="
+                    color:#65ff83;
+                    font-size:8px;
+                    font-weight:900;
+                    letter-spacing:2px;
+                "
+            >
+                WAITING FOR TOKEN LAUNCH
+            </div>
+
+
+            <h2
+                style="
+                    margin-top:12px;
+                    font-size:22px;
+                    color:#f4f7f5;
+                "
+            >
+                No holder data available yet
+            </h2>
+
+
+            <p
+                style="
+                    max-width:560px;
+                    margin:10px auto 0;
+                    color:#78857d;
+                    font-size:10px;
+                    line-height:1.7;
+                "
+            >
+                After the official Gremble token launch,
+                all on-chain holders will automatically appear here
+                from the Solana blockchain.
+            </p>
+
+        </div>
+
+
+        <div
+            id="allHoldersTableSection"
+            hidden
+        >
+
+            <div class="all-holders-table-wrap">
+
+    <table class="all-holders-table">
+
+                    <thead>
+
+                        <tr>
+                            <th>#</th>
+                            <th>WALLET</th>
+                            <th>GREMBLE HELD</th>
+                            <th>% OF SUPPLY</th>
+                            <th>VALUE USD</th>
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="allHoldersTableBody">
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            <div
+                id="allHoldersEmpty"
+                hidden
+                style="
+                    padding:45px 20px;
+                    text-align:center;
+                    color:#68766d;
+                    font-size:9px;
+                "
+            >
+                NO GREMBLE HOLDERS FOUND.
+            </div>
+
+
+            <div
+                class="members-pagination"
+                id="allHoldersPagination"
+            >
+
+                <button
+                    type="button"
+                    class="members-page-button"
+                    id="allHoldersPrevPage"
+                    disabled
+                >
+                    ‹ PREVIOUS
+                </button>
+
+
+                <div
+                    class="members-page-info"
+                    id="allHoldersPageInfo"
+                >
+                    1 / 1
+                </div>
+
+
+                <button
+                    type="button"
+                    class="members-page-button"
+                    id="allHoldersNextPage"
+                    disabled
+                >
+                    NEXT ›
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
 
 <section
     class="admin-view"
@@ -4051,6 +4393,11 @@ button:disabled{
     title:"Holders"
 },
         
+       "all-holders":{
+             label:"ALL GREMBLE HOLDERS",
+            title:"All Holders"
+},
+
         contest:{
             label:"MEME CONTEST",
             title:"Contest Participants"
@@ -4121,26 +4468,38 @@ button:disabled{
 
     }
 
-    navButtons.forEach(
-        button => {
+   navButtons.forEach(
+    button => {
 
-            button.addEventListener(
-                "click",
-                () => {
+        button.addEventListener(
+            "click",
+            () => {
 
-                    const name =
-                        button.dataset.adminView;
+                const name =
+                    button.dataset.adminView;
 
-                    if(name){
-                        openAdminView(name);
+                if(name){
+
+                    openAdminView(
+                        name
+                    );
+
+                    if(
+                        name ===
+                        "all-holders"
+                    ){
+
+                        window.loadAllHolders?.();
+
                     }
 
                 }
-            );
 
-        }
-    );
+            }
+        );
 
+    }
+);
     mobileMenuButton?.addEventListener(
         "click",
         () => {
