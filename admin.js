@@ -54,6 +54,14 @@ const adminMessage =
 const adminDashboard =
     $("adminDashboard");
 
+const adminSidebar =
+    $("adminSidebar");
+
+const adminTopbar =
+    document.querySelector(
+        ".admin-topbar"
+    );
+
 const adminIdentity =
     $("adminIdentity");
 
@@ -2822,6 +2830,21 @@ function showAccessError(
     message = ""
 ) {
 
+        if (adminSidebar) {
+
+        adminSidebar.hidden =
+            true;
+
+    }
+
+
+    if (adminTopbar) {
+
+        adminTopbar.hidden =
+            true;
+
+    }
+
     if (adminDashboard) {
 
         adminDashboard.hidden =
@@ -3239,6 +3262,21 @@ async function loadAdminData() {
 
         }
 
+
+        if (adminSidebar) {
+
+    adminSidebar.hidden =
+        false;
+
+}
+
+
+if (adminTopbar) {
+
+    adminTopbar.hidden =
+        false;
+
+}
 
         if (openContestPanel) {
 
