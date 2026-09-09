@@ -502,6 +502,11 @@ let allHoldersLoaded =
 let allHoldersLoading =
     false;
 
+const ALL_HOLDERS_AUTO_REFRESH_MS =
+    60000;
+
+let allHoldersAutoRefreshTimer =
+    null;
 let allContestEntries =
     [];
 
@@ -2074,7 +2079,49 @@ async function loadAllHolders(
 
 window.loadAllHolders =
     loadAllHolders;
-    
+
+
+function stopAllHoldersAutoRefresh() {
+
+    if (
+        allHoldersAutoRefreshTimer
+    ) {
+
+        clearInterval(
+            allHoldersAutoRefreshTimer
+        );
+
+        allHoldersAutoRefreshTimer =
+            null;
+    }
+}
+
+
+function startAllHoldersAutoRefresh() {
+
+    stopAllHoldersAutoRefresh();
+
+
+    allHoldersAutoRefreshTimer =
+        setInterval(
+            () => {
+
+                loadAllHolders(
+                    true
+                );
+
+            },
+            ALL_HOLDERS_AUTO_REFRESH_MS
+        );
+}
+
+
+window.startAllHoldersAutoRefresh =
+    startAllHoldersAutoRefresh;
+
+window.stopAllHoldersAutoRefresh =
+    stopAllHoldersAutoRefresh;
+
 
 /* =====================================================
    MEMBER STATS

@@ -4480,20 +4480,26 @@ button:disabled{
 
                 if(name){
 
-                    openAdminView(
-                        name
-                    );
+    openAdminView(
+        name
+    );
 
-                    if(
-                        name ===
-                        "all-holders"
-                    ){
+    if(
+        name ===
+        "all-holders"
+    ){
 
-                        window.loadAllHolders?.();
+        window.loadAllHolders?.();
 
-                    }
+        window.startAllHoldersAutoRefresh?.();
 
-                }
+    }else{
+
+        window.stopAllHoldersAutoRefresh?.();
+
+    }
+
+}
 
             }
         );
