@@ -8263,10 +8263,10 @@ document.addEventListener(
 
         updateLiveQuizStatusUI();
 
+        renderHolders();
 
         await loadAdminData();
 
-        renderHolders();
 
         await loadSavedQuizzes();
 
