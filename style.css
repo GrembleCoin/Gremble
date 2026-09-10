@@ -3234,6 +3234,227 @@ img {
 
 
 /* =====================================================
+   MY ACCOUNT NAVIGATION
+===================================================== */
+
+.account-subnav {
+
+    grid-column:
+        1 / -1;
+
+    width: 100%;
+
+    margin-bottom: -35px;
+
+    display: none;
+
+    align-items: center;
+
+    justify-content: flex-start;
+
+    gap: 8px;
+}
+
+
+.account-subnav-left {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+}
+
+
+.account-subnav-logout {
+
+    margin-left: auto;
+
+    min-height: 42px;
+
+    padding:
+        0 20px;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border:
+        1px solid
+        rgba(
+            255,
+            95,
+            95,
+            0.22
+        );
+
+    border-radius: 22px;
+
+    background:
+        rgba(
+            24,
+            5,
+            5,
+            0.45
+        );
+
+    color:
+        #ff7272;
+
+    font-size: 9px;
+
+    font-weight: 900;
+
+    letter-spacing: 1px;
+
+    transition:
+        color 0.2s ease,
+        border-color 0.2s ease,
+        background 0.2s ease;
+}
+
+
+.account-subnav-logout:hover {
+
+    color: #ff9494;
+
+    border-color:
+        rgba(
+            255,
+            95,
+            95,
+            0.48
+        );
+
+    background:
+        rgba(
+            255,
+            75,
+            75,
+            0.06
+        );
+}
+
+
+/* SHOW ONLY WHEN USER IS LOGGED IN */
+
+.login-shell:has(
+    #memberProfile:not([hidden])
+)
+.account-subnav {
+
+    display: flex;
+}
+
+
+/* BUTTON */
+
+.account-subnav-button {
+
+    min-height: 42px;
+
+    padding:
+        0 20px;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    border:
+        1px solid
+        rgba(
+            105,
+            255,
+            131,
+            0.16
+        );
+
+    border-radius: 22px;
+
+    background:
+        rgba(
+            0,
+            13,
+            8,
+            0.66
+        );
+
+    color:
+        #8f9c95;
+
+    font-size: 10px;
+
+    font-weight: 900;
+
+    letter-spacing: 1px;
+
+    transition:
+        color 0.2s ease,
+        border-color 0.2s ease,
+        background 0.2s ease;
+}
+
+
+/* ACTIVE PROFILE */
+
+.account-subnav-button.active {
+
+    color:
+        #031009;
+
+    border-color:
+        var(--green);
+
+    background:
+        linear-gradient(
+            135deg,
+            #72ef69,
+            #51dda1
+        );
+}
+
+
+/* MY GREMBLE - DISABLED FOR NOW */
+
+.account-subnav-disabled {
+
+    cursor: not-allowed;
+
+    opacity: 0.48;
+}
+
+
+.account-subnav-disabled span {
+
+    padding:
+        4px 7px;
+
+    border-radius: 10px;
+
+    background:
+        rgba(
+            105,
+            255,
+            131,
+            0.08
+        );
+
+    color:
+        var(--green);
+
+    font-size: 6px;
+
+    letter-spacing: 1px;
+}
+
+
+/* =====================================================
    TELEGRAM LOGIN CARD
 ===================================================== */
 
