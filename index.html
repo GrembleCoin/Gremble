@@ -346,16 +346,65 @@
                 </a>
 
 
-                <!-- LOGIN -->
+<!-- MY ACCOUNT -->
 
-                <button
-                   type="button"
-                   class="login-nav-button site-nav-button"
-                   data-site-view="login"
-                   id="accountNavButton"
-                >
-                  LOGIN
-                </button>
+<div class="account-menu">
+
+    <button
+        type="button"
+        class="login-nav-button"
+        id="accountNavButton"
+        aria-expanded="false"
+    >
+        LOGIN
+    </button>
+
+
+    <div
+        class="account-dropdown"
+        id="accountDropdown"
+        hidden
+    >
+
+        <button
+            type="button"
+            class="account-dropdown-item site-nav-button"
+            data-site-view="login"
+        >
+            <span>PROFILE</span>
+            <b>→</b>
+        </button>
+
+
+        <button
+            type="button"
+            class="account-dropdown-item account-dropdown-disabled"
+            disabled
+        >
+            <span>
+                MY GREMBLE
+                <small>COMING SOON</small>
+            </span>
+
+            <b>◇</b>
+        </button>
+
+
+        <div class="account-dropdown-divider"></div>
+
+
+        <button
+            type="button"
+            class="account-dropdown-item account-dropdown-logout"
+            id="memberLogoutButton"
+        >
+            <span>LOG OUT</span>
+            <b>→</b>
+        </button>
+
+    </div>
+
+</div>
 
 
                 <!-- BUY GREMBLE -->
@@ -1750,49 +1799,6 @@
 
  <div class="page-shell login-shell">
 
-
-    <!-- =================================================
-         MY ACCOUNT NAVIGATION
-    ================================================== -->
-
-    <div class="account-subnav">
-
-    <div class="account-subnav-left">
-
-        <button
-            type="button"
-            class="account-subnav-button active"
-        >
-            PROFILE
-        </button>
-
-
-        <button
-            type="button"
-            class="account-subnav-button account-subnav-disabled"
-            disabled
-        >
-            MY GREMBLE
-
-            <span>
-                COMING SOON
-            </span>
-        </button>
-
-    </div>
-
-
-    <button
-        type="button"
-        class="account-subnav-logout"
-        id="memberLogoutButton"
-    >
-        LOG OUT
-    </button>
-
-</div>
-
-
     <div class="login-page-copy">
                     <p class="page-eyebrow">
                         GREMBLE ACCOUNT
@@ -2626,6 +2632,76 @@ const siteNavButtons =
         "[data-site-view]"
     );
 
+
+/* =====================================================
+   MY ACCOUNT DROPDOWN
+===================================================== */
+
+const accountNavButton =
+    document.getElementById(
+        "accountNavButton"
+    );
+
+const accountDropdown =
+    document.getElementById(
+        "accountDropdown"
+    );
+
+
+if (
+    accountNavButton &&
+    accountDropdown
+) {
+
+    accountNavButton.addEventListener(
+        "click",
+        event => {
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            const isOpen =
+                !accountDropdown.hidden;
+
+            accountDropdown.hidden =
+                isOpen;
+
+            accountNavButton.setAttribute(
+                "aria-expanded",
+                String(!isOpen)
+            );
+        }
+    );
+
+
+    accountDropdown.addEventListener(
+        "click",
+        event => {
+
+            event.stopPropagation();
+        }
+    );
+
+
+    document.addEventListener(
+        "click",
+        () => {
+
+            accountDropdown.hidden =
+                true;
+
+            accountNavButton.setAttribute(
+                "aria-expanded",
+                "false"
+            );
+        }
+    );
+}
+
+
+/* =====================================================
+   EXISTING SITE VIEW
+===================================================== */
 
 function openSiteView(
     viewName
