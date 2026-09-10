@@ -149,6 +149,30 @@ const contestMemeUrl =
 const contestPoints =
     $("contestPoints");
 
+const contestAdminNote =
+    $("contestAdminNote");
+
+const contestCurrentTab =
+    $("contestCurrentTab");
+
+const contestPastTab =
+    $("contestPastTab");
+
+const endContestButton =
+    $("endContestButton");
+
+const pastContestsPanel =
+    $("pastContestsPanel");
+
+const pastContestsList =
+    $("pastContestsList");
+
+const pastContestsEmpty =
+    $("pastContestsEmpty");
+
+const pastContestsCount =
+    $("pastContestsCount");
+
 const contestRequirementsYes =
     $("contestRequirementsYes");
 
@@ -530,6 +554,20 @@ let contestLoading =
 let contestSaving =
     false;
 
+let contestViewMode =
+    "current";
+
+let pastContestSessions =
+    [];
+
+let pastContestSessionsLoaded =
+    false;
+
+let pastContestLoading =
+    false;
+
+let selectedPastContestId =
+    null;
 
 let quizDraftQuestions =
     [];
@@ -3931,17 +3969,64 @@ function createContestRow(entry) {
             : "NO";
 
 
-    rulesCell.appendChild(
-        rulesBadge
+rulesCell.appendChild(
+    rulesBadge
+);
+
+
+/* NOTE */
+
+const noteCell =
+    document.createElement(
+        "td"
     );
 
 
-    /* DATE */
+const adminNote =
+    cleanText(
+        entry.admin_note
+    );
 
-    const addedCell =
+
+if (adminNote) {
+
+    const noteText =
         document.createElement(
-            "td"
+            "span"
         );
+
+
+    noteText.className =
+        "contest-note-text";
+
+
+    noteText.textContent =
+        adminNote;
+
+
+    noteText.title =
+        adminNote;
+
+
+    noteCell.appendChild(
+        noteText
+    );
+
+}
+else {
+
+    noteCell.innerHTML =
+        '<span class="empty-value">—</span>';
+
+}
+
+
+/* DATE */
+
+const addedCell =
+    document.createElement(
+        "td"
+    );
 
 
     addedCell.className =
@@ -4058,18 +4143,105 @@ function createContestRow(entry) {
     );
 
 
-    row.append(
-        participantCell,
-        memeCell,
-        pointsCell,
-        rulesCell,
-        addedCell,
-        actionsCell,
-        statusCell
-    );
+ row.append(
+    participantCell,
+    memeCell,
+    pointsCell,
+    rulesCell,
+    noteCell,
+    addedCell,
+    actionsCell,
+    statusCell
+);
 
 
     return row;
+
+}
+
+
+/* =====================================================
+   CONTEST VIEW MODE
+===================================================== */
+
+function setContestViewMode(
+    mode
+) {
+
+    contestViewMode =
+        mode === "past"
+            ? "past"
+            : "current";
+
+
+    if (contestCurrentTab) {
+
+        contestCurrentTab.classList.toggle(
+            "active",
+            contestViewMode ===
+            "current"
+        );
+
+    }
+
+
+    if (contestPastTab) {
+
+        contestPastTab.classList.toggle(
+            "active",
+            contestViewMode ===
+            "past"
+        );
+
+    }
+
+
+    if (endContestButton) {
+
+        endContestButton.hidden =
+            contestViewMode !==
+            "current";
+
+    }
+
+
+const contestBody =
+    document.querySelector(
+        ".contest-body"
+    );
+
+
+const contestStats =
+    document.querySelector(
+        ".contest-stats"
+    );
+
+
+if (contestBody) {
+
+    contestBody.hidden =
+        contestViewMode !==
+        "current";
+
+}
+
+
+if (contestStats) {
+
+    contestStats.hidden =
+        contestViewMode !==
+        "current";
+
+}
+
+
+if (pastContestsPanel) {
+
+    pastContestsPanel.hidden =
+        contestViewMode !==
+        "past";
+
+}
 
 }
 
@@ -4234,18 +4406,25 @@ function resetContestForm() {
     }
 
 
-    if (contestPoints) {
+ if (contestPoints) {
 
-        contestPoints.value =
-            "0";
+    contestPoints.value =
+        "0";
 
-    }
+}
 
 
-    setContestRequirements(
-        false
-    );
+if (contestAdminNote) {
 
+    contestAdminNote.value =
+        "";
+
+}
+
+
+setContestRequirements(
+    false
+);
 
     if (contestSubmitButton) {
 
@@ -4321,22 +4500,32 @@ function startContestEdit(entry) {
     }
 
 
-    if (contestPoints) {
+ if (contestPoints) {
 
-        contestPoints.value =
-            String(
-                numberOrZero(
-                    entry.points
-                )
-            );
+    contestPoints.value =
+        String(
+            numberOrZero(
+                entry.points
+            )
+        );
 
-    }
+}
 
 
-    setContestRequirements(
-        entry.requirements_ok ===
-        true
-    );
+if (contestAdminNote) {
+
+    contestAdminNote.value =
+        cleanText(
+            entry.admin_note
+        );
+
+}
+
+
+setContestRequirements(
+    entry.requirements_ok ===
+    true
+);
 
 
     if (contestSubmitButton) {
@@ -4512,6 +4701,1167 @@ async function contestRequest(
 
 
 /* =====================================================
+   LOAD PAST CONTESTS
+===================================================== */
+
+async function loadPastContestSessions(
+    force = false
+) {
+
+    if (
+        pastContestLoading
+    ) {
+
+        return;
+    }
+
+
+    if (
+        pastContestSessionsLoaded &&
+        !force
+    ) {
+
+        renderPastContestSessions();
+
+        return;
+    }
+
+
+    const token =
+        getSessionToken();
+
+
+    if (
+        !token ||
+        sessionIsExpired()
+    ) {
+
+        return;
+    }
+
+
+    pastContestLoading =
+        true;
+
+
+    if (pastContestsList) {
+
+        pastContestsList.innerHTML =
+            "";
+    }
+
+
+    if (pastContestsEmpty) {
+
+        pastContestsEmpty.hidden =
+            true;
+    }
+
+
+    try {
+
+        const response =
+            await fetch(
+                `${ADMIN_CONTEST_ENDPOINT}?history=1`,
+                {
+
+                    method:
+                        "GET",
+
+                    headers: {
+
+                        Authorization:
+                            `Bearer ${token}`
+
+                    },
+
+                    cache:
+                        "no-store"
+
+                }
+            );
+
+
+        let result =
+            null;
+
+
+        try {
+
+            result =
+                await response.json();
+
+        }
+        catch {
+
+            result =
+                null;
+
+        }
+
+
+        if (
+            response.status ===
+            401
+        ) {
+
+            clearLocalSession();
+
+            showAccessError(
+                401
+            );
+
+            return;
+        }
+
+
+        if (
+            response.status ===
+            403
+        ) {
+
+            showAccessError(
+                403
+            );
+
+            return;
+        }
+
+
+        if (
+            !response.ok ||
+            result?.success !==
+            true
+        ) {
+
+            throw new Error(
+                result?.error ||
+                "COULD NOT LOAD PAST CONTESTS."
+            );
+        }
+
+
+        pastContestSessions =
+            Array.isArray(
+                result.sessions
+            )
+                ? result.sessions
+                : [];
+
+
+        pastContestSessionsLoaded =
+            true;
+
+
+        renderPastContestSessions();
+
+    }
+    catch (error) {
+
+        console.error(
+            "Past contests error:",
+            error
+        );
+
+
+        setContestMessage(
+            error?.message ||
+            "COULD NOT LOAD PAST CONTESTS.",
+            "error"
+        );
+
+    }
+    finally {
+
+        pastContestLoading =
+            false;
+
+    }
+
+}
+
+
+/* =====================================================
+   RENDER PAST CONTESTS
+===================================================== */
+
+function renderPastContestSessions() {
+
+    if (
+        !pastContestsList
+    ) {
+
+        return;
+    }
+
+
+    pastContestsList.innerHTML =
+        "";
+
+
+    if (
+        pastContestsCount
+    ) {
+
+        pastContestsCount.textContent =
+            `${pastContestSessions.length} ${
+                pastContestSessions.length ===
+                1
+                    ? "CONTEST"
+                    : "CONTESTS"
+            }`;
+
+    }
+
+
+    if (
+        pastContestsEmpty
+    ) {
+
+        pastContestsEmpty.hidden =
+            pastContestSessions.length >
+            0;
+
+    }
+
+
+    pastContestSessions.forEach(
+        session => {
+
+            const card =
+                document.createElement(
+                    "div"
+                );
+
+
+            card.className =
+                "past-contest-card";
+
+
+            const copy =
+                document.createElement(
+                    "div"
+                );
+
+
+            const title =
+                document.createElement(
+                    "div"
+                );
+
+
+            title.className =
+                "past-contest-card-title";
+
+
+            title.textContent =
+                cleanText(
+                    session.title
+                ) ||
+                "Gremble Meme Contest";
+
+
+            const meta =
+                document.createElement(
+                    "div"
+                );
+
+
+            meta.className =
+                "past-contest-card-meta";
+
+
+            meta.textContent =
+                `${formatDate(
+                    session.ended_at
+                )} • ${
+                    numberOrZero(
+                        session.total_entries
+                    )
+                } ENTRIES • ${
+                    numberOrZero(
+                        session.verified_entries
+                    )
+                } VERIFIED`;
+
+
+            copy.append(
+                title,
+                meta
+            );
+
+
+            const openButton =
+                document.createElement(
+                    "button"
+                );
+
+
+            openButton.type =
+                "button";
+
+
+            openButton.className =
+                "past-contest-open-button";
+
+
+            openButton.textContent =
+                "OPEN";
+
+
+            openButton.dataset.contestSessionId =
+                String(
+                    session.id
+                );
+
+
+            openButton.addEventListener(
+                 "click",
+                      async () => {
+
+                  await loadPastContestDetail(
+                       session.id
+        );
+
+    }
+);
+
+
+            card.append(
+                copy,
+                openButton
+            );
+
+
+            pastContestsList.appendChild(
+                card
+            );
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   LOAD PAST CONTEST DETAIL
+===================================================== */
+
+async function loadPastContestDetail(
+    sessionId
+) {
+
+    const id =
+        Number(
+            sessionId
+        );
+
+
+    if (
+        !Number.isSafeInteger(
+            id
+        ) ||
+        id <= 0
+    ) {
+
+        return;
+    }
+
+
+    const token =
+        getSessionToken();
+
+
+    if (
+        !token ||
+        sessionIsExpired()
+    ) {
+
+        return;
+    }
+
+
+    try {
+
+        const response =
+            await fetch(
+                `${ADMIN_CONTEST_ENDPOINT}?history=1&session_id=${encodeURIComponent(id)}`,
+                {
+
+                    method:
+                        "GET",
+
+                    headers: {
+
+                        Authorization:
+                            `Bearer ${token}`
+
+                    },
+
+                    cache:
+                        "no-store"
+
+                }
+            );
+
+
+        let result =
+            null;
+
+
+        try {
+
+            result =
+                await response.json();
+
+        }
+        catch {
+
+            result =
+                null;
+
+        }
+
+
+        if (
+            response.status ===
+            401
+        ) {
+
+            clearLocalSession();
+
+            showAccessError(
+                401
+            );
+
+            return;
+        }
+
+
+        if (
+            response.status ===
+            403
+        ) {
+
+            showAccessError(
+                403
+            );
+
+            return;
+        }
+
+
+        if (
+            !response.ok ||
+            result?.success !==
+            true
+        ) {
+
+            throw new Error(
+                result?.error ||
+                "COULD NOT LOAD PAST CONTEST."
+            );
+        }
+
+
+        selectedPastContestId =
+            id;
+
+
+        renderPastContestDetail(
+            result.session,
+            Array.isArray(
+                result.entries
+            )
+                ? result.entries
+                : []
+        );
+
+    }
+    catch (error) {
+
+        console.error(
+            "Past contest detail error:",
+            error
+        );
+
+
+        setContestMessage(
+            error?.message ||
+            "COULD NOT LOAD PAST CONTEST.",
+            "error"
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   END CONTEST
+===================================================== */
+
+async function endCurrentContest() {
+
+    if (
+        contestSaving
+    ) {
+
+        return;
+    }
+
+
+    if (
+        allContestEntries.length ===
+        0
+    ) {
+
+        setContestMessage(
+            "THERE ARE NO ENTRIES TO ARCHIVE.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    const confirmed =
+        window.confirm(
+            `END CURRENT CONTEST?\n\n${allContestEntries.length} participants will be moved to Past Contests.\n\nThis cannot be undone.`
+        );
+
+
+    if (
+        !confirmed
+    ) {
+
+        return;
+    }
+
+
+    contestSaving =
+        true;
+
+
+    if (
+        endContestButton
+    ) {
+
+        endContestButton.disabled =
+            true;
+
+        endContestButton.textContent =
+            "ENDING...";
+
+    }
+
+
+    try {
+
+        const result =
+            await contestRequest(
+                "POST",
+                {
+                    action:
+                        "end_contest",
+
+                    title:
+                        "Gremble Meme Contest"
+                }
+            );
+
+
+        if (
+            result?.success !==
+            true ||
+            result?.ended !==
+            true
+        ) {
+
+            throw new Error(
+                result?.error ||
+                "COULD NOT END CONTEST."
+            );
+
+        }
+
+
+        /*
+           Backend already archived the contest
+           successfully before clearing current entries.
+        */
+
+        allContestEntries =
+            [];
+
+        contestCurrentPage =
+            1;
+
+        contestLoaded =
+            true;
+
+
+        /*
+           Force Past Contests to reload because
+           a new archived contest now exists.
+        */
+
+        pastContestSessionsLoaded =
+            false;
+
+        selectedPastContestId =
+            null;
+
+
+        resetContestForm();
+
+        renderContestEntries();
+
+
+        setContestMessage(
+            "CONTEST ENDED AND SAVED TO PAST CONTESTS.",
+            "success"
+        );
+
+
+        /*
+           Open Past Contests immediately so the admin
+           can see the archived contest.
+        */
+
+        setContestViewMode(
+            "past"
+        );
+
+
+        await loadPastContestSessions(
+            true
+        );
+
+    }
+    catch (error) {
+
+        console.error(
+            "End contest error:",
+            error
+        );
+
+
+        setContestMessage(
+            error?.message ||
+            "COULD NOT END CONTEST.",
+            "error"
+        );
+
+    }
+    finally {
+
+        contestSaving =
+            false;
+
+
+        if (
+            endContestButton
+        ) {
+
+            endContestButton.disabled =
+                false;
+
+            endContestButton.textContent =
+                "END CONTEST";
+
+        }
+
+    }
+
+}
+
+
+/* =====================================================
+   RENDER PAST CONTEST DETAIL
+===================================================== */
+
+function renderPastContestDetail(
+    session,
+    entries
+) {
+
+    if (
+        !pastContestsList
+    ) {
+
+        return;
+    }
+
+
+    pastContestsList.innerHTML =
+        "";
+
+
+    const wrapper =
+        document.createElement(
+            "div"
+        );
+
+
+    wrapper.className =
+        "past-contest-detail";
+
+
+    const top =
+        document.createElement(
+            "div"
+        );
+
+
+    top.className =
+        "past-contest-detail-top";
+
+
+    const copy =
+        document.createElement(
+            "div"
+        );
+
+
+    const title =
+        document.createElement(
+            "div"
+        );
+
+
+    title.className =
+        "past-contest-card-title";
+
+
+    title.textContent =
+        cleanText(
+            session?.title
+        ) ||
+        "Gremble Meme Contest";
+
+
+    const meta =
+        document.createElement(
+            "div"
+        );
+
+
+    meta.className =
+        "past-contest-card-meta";
+
+
+    meta.textContent =
+        `ENDED ${formatDate(
+            session?.ended_at
+        )} • ${
+            numberOrZero(
+                session?.total_entries
+            )
+        } ENTRIES • ${
+            numberOrZero(
+                session?.verified_entries
+            )
+        } VERIFIED`;
+
+
+    copy.append(
+        title,
+        meta
+    );
+
+
+    const backButton =
+        document.createElement(
+            "button"
+        );
+
+
+    backButton.type =
+        "button";
+
+
+    backButton.className =
+        "past-contest-open-button";
+
+
+    backButton.textContent =
+        "← BACK";
+
+
+    backButton.addEventListener(
+        "click",
+        () => {
+
+            selectedPastContestId =
+                null;
+
+            renderPastContestSessions();
+
+        }
+    );
+
+
+    top.append(
+        copy,
+        backButton
+    );
+
+
+    wrapper.appendChild(
+        top
+    );
+
+
+    const tableWrap =
+        document.createElement(
+            "div"
+        );
+
+
+    tableWrap.className =
+        "contest-table-wrap";
+
+
+    const table =
+        document.createElement(
+            "table"
+        );
+
+
+    table.className =
+        "contest-table";
+
+
+    table.innerHTML =
+        `
+            <thead>
+                <tr>
+                    <th>PARTICIPANT</th>
+                    <th>MEME</th>
+                    <th>POINTS</th>
+                    <th>RULES</th>
+                    <th>NOTE</th>
+                    <th>ADDED</th>
+                    <th>STATUS</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        `;
+
+
+    const tableBody =
+        table.querySelector(
+            "tbody"
+        );
+
+
+    entries.forEach(
+        entry => {
+
+            const row =
+                document.createElement(
+                    "tr"
+                );
+
+
+            /* PARTICIPANT */
+
+            const participantCell =
+                document.createElement(
+                    "td"
+                );
+
+
+            const participant =
+                document.createElement(
+                    "span"
+                );
+
+
+            participant.className =
+                "contest-participant-name";
+
+
+            participant.textContent =
+                cleanText(
+                    entry.participant
+                ) ||
+                "—";
+
+
+            participantCell.appendChild(
+                participant
+            );
+
+
+            /* MEME */
+
+            const memeCell =
+                document.createElement(
+                    "td"
+                );
+
+
+            const memeUrl =
+                cleanText(
+                    entry.meme_url
+                );
+
+
+            if (
+                memeUrl
+            ) {
+
+                const link =
+                    document.createElement(
+                        "a"
+                    );
+
+
+                link.href =
+                    memeUrl;
+
+
+                link.target =
+                    "_blank";
+
+
+                link.rel =
+                    "noopener noreferrer";
+
+
+                link.textContent =
+                    "OPEN MEME ↗";
+
+
+                memeCell.appendChild(
+                    link
+                );
+
+            }
+            else {
+
+                memeCell.textContent =
+                    "—";
+
+            }
+
+
+            /* POINTS */
+
+            const pointsCell =
+                document.createElement(
+                    "td"
+                );
+
+
+            pointsCell.textContent =
+                String(
+                    numberOrZero(
+                        entry.points
+                    )
+                );
+
+
+            /* RULES */
+
+            const rulesCell =
+                document.createElement(
+                    "td"
+                );
+
+
+            const rulesBadge =
+                document.createElement(
+                    "span"
+                );
+
+
+            rulesBadge.className =
+                `contest-rule-visual ${
+                    entry.requirements_ok ===
+                    true
+                        ? "yes"
+                        : "no"
+                }`;
+
+
+            rulesBadge.textContent =
+                entry.requirements_ok ===
+                true
+                    ? "YES"
+                    : "NO";
+
+
+            rulesCell.appendChild(
+                rulesBadge
+            );
+
+
+            /* NOTE */
+
+            const noteCell =
+                document.createElement(
+                    "td"
+                );
+
+
+            const note =
+                cleanText(
+                    entry.admin_note
+                );
+
+
+            noteCell.textContent =
+                note ||
+                "—";
+
+
+            if (
+                note
+            ) {
+
+                noteCell.title =
+                    note;
+
+            }
+
+
+            /* ADDED */
+
+            const addedCell =
+                document.createElement(
+                    "td"
+                );
+
+
+            addedCell.className =
+                "date-value";
+
+
+            addedCell.textContent =
+                formatDate(
+                    entry.entry_created_at
+                );
+
+
+            /* STATUS */
+
+            const statusCell =
+                document.createElement(
+                    "td"
+                );
+
+
+            const status =
+                cleanText(
+                    entry.member_status
+                ) ||
+                "not-found";
+
+
+            const statusElement =
+                document.createElement(
+                    "span"
+                );
+
+
+            statusElement.className =
+                `contest-member-status ${status}`;
+
+
+            statusElement.title =
+                cleanText(
+                    entry.member_status_note
+                );
+
+
+            const statusDot =
+                document.createElement(
+                    "span"
+                );
+
+
+            statusDot.className =
+                "contest-member-status-dot";
+
+
+            statusElement.appendChild(
+                statusDot
+            );
+
+
+            statusCell.appendChild(
+                statusElement
+            );
+
+
+            row.append(
+                participantCell,
+                memeCell,
+                pointsCell,
+                rulesCell,
+                noteCell,
+                addedCell,
+                statusCell
+            );
+
+
+            tableBody?.appendChild(
+                row
+            );
+
+        }
+    );
+
+
+    if (
+        entries.length ===
+        0
+    ) {
+
+        const empty =
+            document.createElement(
+                "div"
+            );
+
+
+        empty.className =
+            "past-contests-empty";
+
+
+        empty.textContent =
+            "NO ENTRIES IN THIS CONTEST.";
+
+
+        wrapper.appendChild(
+            empty
+        );
+
+    }
+    else {
+
+        tableWrap.appendChild(
+            table
+        );
+
+
+        wrapper.appendChild(
+            tableWrap
+        );
+
+    }
+
+
+    pastContestsList.appendChild(
+        wrapper
+    );
+
+}
+
+
+/* =====================================================
    LOAD CONTEST
 ===================================================== */
 
@@ -4625,21 +5975,27 @@ async function saveContestEntry(event) {
         );
 
 
-    const points =
-        Number(
-            contestPoints?.value
-        );
+ const points =
+    Number(
+        contestPoints?.value
+    );
 
 
-    const requirementsOk =
-        contestRequirementsValue?.value ===
-        "true";
+const adminNote =
+    cleanText(
+        contestAdminNote?.value
+    );
 
 
-    const id =
-        Number(
-            contestEntryId?.value
-        );
+const requirementsOk =
+    contestRequirementsValue?.value ===
+    "true";
+
+
+const id =
+    Number(
+        contestEntryId?.value
+    );
 
 
     if (!participant) {
@@ -4743,14 +6099,16 @@ async function saveContestEntry(event) {
 
     try {
 
-        const payload = {
-            participant,
-            meme_url:
-                memeUrl,
-            points,
-            requirements_ok:
-                requirementsOk
-        };
+  const payload = {
+    participant,
+    meme_url:
+        memeUrl,
+    points,
+    requirements_ok:
+        requirementsOk,
+    admin_note:
+        adminNote
+};
 
 
         if (editing) {
@@ -8953,8 +10311,59 @@ refreshAllHolders?.addEventListener(
 
 openContestPanel?.addEventListener(
     "click",
-    () =>
-        loadContestEntries()
+    async () => {
+
+        setContestViewMode(
+            "current"
+        );
+
+        selectedPastContestId =
+            null;
+
+        await loadContestEntries();
+
+    }
+);
+
+
+contestCurrentTab?.addEventListener(
+    "click",
+    () => {
+
+        setContestViewMode(
+            "current"
+        );
+
+        selectedPastContestId =
+            null;
+
+        renderContestEntries();
+
+    }
+);
+
+
+contestPastTab?.addEventListener(
+    "click",
+    async () => {
+
+        setContestViewMode(
+            "past"
+        );
+
+        await loadPastContestSessions();
+
+    }
+);
+
+
+endContestButton?.addEventListener(
+    "click",
+    async () => {
+
+        await endCurrentContest();
+
+    }
 );
 
 

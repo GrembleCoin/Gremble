@@ -1320,6 +1320,158 @@ button:disabled{
     color:#e8eeea
 }
 
+.contest-note-input{
+    width:100%;
+    min-height:92px;
+    padding:10px;
+    resize:vertical;
+    border:1px solid rgba(101,255,131,.1);
+    border-radius:8px;
+    background:rgba(0,6,3,.55);
+    color:#e8eeea;
+    font-size:9px;
+    line-height:1.5
+}
+
+.contest-note-input::placeholder{
+    color:#56635b
+}
+
+.contest-header-actions{
+    display:flex;
+    align-items:center;
+    gap:8px
+}
+
+.contest-view-tabs{
+    display:flex;
+    gap:6px;
+    padding:4px;
+    border:1px solid rgba(101,255,131,.1);
+    border-radius:10px;
+    background:rgba(0,6,3,.4)
+}
+
+.contest-view-tab{
+    min-height:34px;
+    padding:0 11px;
+    border:1px solid transparent;
+    border-radius:7px;
+    background:transparent;
+    color:#78857d;
+    font-size:7px;
+    font-weight:900
+}
+
+.contest-view-tab.active{
+    border-color:rgba(101,255,131,.2);
+    background:rgba(101,255,131,.08);
+    color:var(--green)
+}
+
+.contest-end-button{
+    min-height:35px;
+    padding:0 12px;
+    border:1px solid rgba(255,101,112,.28);
+    border-radius:8px;
+    background:rgba(255,101,112,.07);
+    color:#ff737d;
+    font-size:7px;
+    font-weight:900
+}
+
+.past-contests-panel{
+    padding:18px;
+    border-top:1px solid rgba(101,255,131,.08);
+}
+
+.past-contests-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+    margin-bottom:14px;
+}
+
+.past-contests-header span{
+    display:block;
+    margin-bottom:4px;
+    color:#66736b;
+    font-size:7px;
+    font-weight:900;
+    letter-spacing:.12em;
+}
+
+.past-contests-header h3{
+    margin:0;
+    color:#e8eeea;
+    font-size:14px;
+    font-weight:900;
+}
+
+.past-contests-header > span{
+    margin:0;
+    padding:7px 10px;
+    border:1px solid rgba(101,255,131,.12);
+    border-radius:8px;
+    background:rgba(101,255,131,.04);
+    color:var(--green);
+}
+
+.past-contests-list{
+    display:grid;
+    gap:10px;
+}
+
+.past-contests-empty{
+    padding:28px 16px;
+    border:1px dashed rgba(101,255,131,.12);
+    border-radius:10px;
+    color:#66736b;
+    font-size:8px;
+    font-weight:900;
+    text-align:center;
+}
+
+.past-contest-card{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+    padding:14px;
+    border:1px solid rgba(101,255,131,.1);
+    border-radius:10px;
+    background:rgba(0,6,3,.4);
+}
+
+.past-contest-card:hover{
+    border-color:rgba(101,255,131,.22);
+}
+
+.past-contest-card-title{
+    margin:0 0 5px;
+    color:#e8eeea;
+    font-size:10px;
+    font-weight:900;
+}
+
+.past-contest-card-meta{
+    color:#66736b;
+    font-size:7px;
+    font-weight:800;
+}
+
+.past-contest-open-button{
+    min-height:32px;
+    padding:0 11px;
+    border:1px solid rgba(101,255,131,.18);
+    border-radius:7px;
+    background:rgba(101,255,131,.06);
+    color:var(--green);
+    font-size:7px;
+    font-weight:900;
+}
+
 .contest-requirements{
     display:grid;
     grid-template-columns:1fr 1fr;
@@ -3139,20 +3291,52 @@ button:disabled{
 
         <div class="contest-panel-header">
 
-            <div class="contest-title-copy">
-                <span>PRIVATE ADMIN AREA</span>
-                <h2>MEME CONTEST</h2>
-            </div>
+    <div class="contest-title-copy">
+        <span>PRIVATE ADMIN AREA</span>
+        <h2>MEME CONTEST</h2>
+    </div>
+
+    <div class="contest-header-actions">
+
+        <div class="contest-view-tabs">
 
             <button
                 type="button"
-                class="contest-close-button"
-                id="closeContestPanel"
+                class="contest-view-tab active"
+                id="contestCurrentTab"
             >
-                CLOSE
+                CURRENT CONTEST
+            </button>
+
+            <button
+                type="button"
+                class="contest-view-tab"
+                id="contestPastTab"
+            >
+                PAST CONTESTS
             </button>
 
         </div>
+
+        <button
+            type="button"
+            class="contest-end-button"
+            id="endContestButton"
+        >
+            END CONTEST
+        </button>
+
+        <button
+            type="button"
+            class="contest-close-button"
+            id="closeContestPanel"
+        >
+            CLOSE
+        </button>
+
+    </div>
+
+</div>
 
         <div class="contest-stats">
 
@@ -3221,6 +3405,18 @@ button:disabled{
                         value="0"
                     >
 
+                    <label for="contestAdminNote">
+                        NOTE / DESCRIPTION
+                    </label>
+
+                    <textarea
+                         id="contestAdminNote"
+                         class="contest-note-input"
+                        maxlength="3000"
+                        placeholder="Write any private note about this participant..."
+                    ></textarea>
+
+                    
                     <label>
                         REQUIREMENTS
                     </label>
@@ -3324,6 +3520,7 @@ button:disabled{
                                 <th>MEME</th>
                                 <th>POINTS</th>
                                 <th>RULES</th>
+                                <th>NOTE</th>
                                 <th>ADDED</th>
                                 <th>ACTIONS</th>
                                 <th>STATUS</th>
@@ -3375,6 +3572,43 @@ button:disabled{
 
                 </div>
 
+            </div>
+
+        </div>
+
+
+        <div
+            class="past-contests-panel"
+            id="pastContestsPanel"
+            hidden
+        >
+
+            <div class="past-contests-header">
+
+                <div>
+                    <span>CONTEST HISTORY</span>
+                    <h3>PAST CONTESTS</h3>
+                </div>
+
+                <span id="pastContestsCount">
+                    0 CONTESTS
+                </span>
+
+            </div>
+
+
+            <div
+                class="past-contests-list"
+                id="pastContestsList"
+            ></div>
+
+
+            <div
+                class="past-contests-empty"
+                id="pastContestsEmpty"
+                hidden
+            >
+                NO PAST CONTESTS YET.
             </div>
 
         </div>
