@@ -244,7 +244,7 @@ img {
 
 .logo {
 
-    width: 82px;
+    width: 205px;
 
     height: 66px;
 
@@ -256,21 +256,45 @@ img {
 
     justify-content: flex-start;
 
+    gap: 5px;
+
     padding: 0;
 
     background: transparent;
 }
 
 
-.logo img {
+.logo-character {
 
-    width: 72px;
+    width: 58px;
 
     height: 60px;
 
-    object-fit: contain;
+    flex-shrink: 0;
 
     display: block;
+
+    object-fit: contain;
+}
+
+
+.logo-wordmark {
+
+    width: 135px;
+
+    height: 48px;
+
+    display: block;
+
+    object-fit: contain;
+
+    object-position: left center;
+
+    filter:
+        drop-shadow(
+            0 0 8px
+            rgba(72, 255, 155, 0.12)
+        );
 }
 
 
