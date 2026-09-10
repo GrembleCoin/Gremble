@@ -6155,3 +6155,228 @@ body.live-quiz-open {
         font-size: 11px;
     }
 }
+
+/* =====================================================
+   FINAL HOME MOBILE FIX
+===================================================== */
+
+@media (max-width: 700px) {
+
+    .home-view {
+        display: block;
+        min-height: auto;
+    }
+
+
+    .home-shell {
+        width: calc(100% - 28px);
+        min-height: auto;
+
+        margin: 0 auto;
+
+        padding:
+            55px 0
+            65px;
+
+        display: flex !important;
+
+        flex-direction: column !important;
+
+        align-items: stretch !important;
+
+        gap: 36px !important;
+    }
+
+
+    .home-content {
+        width: 100%;
+        max-width: none;
+
+        padding: 0;
+    }
+
+
+    .home-content .page-eyebrow {
+        max-width: none;
+
+        margin-bottom: 18px;
+
+        font-size: 8px;
+
+        line-height: 1.4;
+
+        letter-spacing: 2px;
+
+        white-space: normal;
+    }
+
+
+    .home-title {
+        width: 100%;
+        max-width: none;
+
+        margin: 0;
+
+        font-size:
+            clamp(
+                48px,
+                14vw,
+                66px
+            );
+
+        line-height: 0.88;
+
+        letter-spacing: -3px;
+
+        overflow-wrap: normal;
+
+        word-break: normal;
+    }
+
+
+    .home-title span {
+        display: block;
+
+        width: 100%;
+
+        margin: 0;
+
+        color: var(--green-2);
+    }
+
+
+    .home-description {
+        width: 100%;
+        max-width: 520px;
+
+        margin-top: 24px;
+
+        color:
+            rgba(
+                235,
+                242,
+                237,
+                0.78
+            );
+
+        font-size: 14px;
+
+        line-height: 1.65;
+
+        word-break: normal;
+
+        overflow-wrap: normal;
+    }
+
+
+    .home-actions {
+        width: 100%;
+
+        margin-top: 26px;
+
+        display: grid;
+
+        grid-template-columns: 1fr;
+
+        gap: 10px;
+    }
+
+
+    .home-actions .main-button,
+    .home-actions .outline-button {
+        width: 100%;
+        min-height: 50px;
+    }
+
+
+    .home-community-note {
+        width: 100%;
+        max-width: none;
+
+        margin-top: 25px;
+
+        padding-top: 18px;
+    }
+
+
+    /* LOGIN CARD */
+
+    .home-login-card {
+        width: 100% !important;
+        max-width: none !important;
+
+        margin: 0 !important;
+
+        justify-self: auto !important;
+
+        padding:
+            38px 22px
+            25px;
+
+        border-radius: 22px;
+    }
+
+
+    .home-login-crown {
+        width: 56px;
+        height: 45px;
+
+        margin-bottom: 15px;
+    }
+
+
+    .home-login-small {
+        margin-bottom: 7px;
+
+        font-size: 8px;
+
+        letter-spacing: 2px;
+    }
+
+
+    .home-login-card h2 {
+        font-size:
+            clamp(
+                38px,
+                12vw,
+                50px
+            );
+
+        letter-spacing: -2px;
+    }
+
+
+    .home-login-button {
+        width: 100%;
+
+        min-height: 58px;
+
+        margin-top: 27px;
+
+        grid-template-columns:
+            32px
+            1fr
+            32px;
+
+        border-radius: 30px;
+    }
+
+
+    .home-login-button strong {
+        font-size: 11px;
+
+        letter-spacing: 1.5px;
+    }
+
+
+    .home-login-telegram svg {
+        width: 22px;
+        height: 22px;
+    }
+
+
+    .home-login-arrow {
+        font-size: 21px;
+    }
+
+}
