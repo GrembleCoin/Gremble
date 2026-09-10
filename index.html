@@ -2637,23 +2637,23 @@ const siteNavButtons =
    MY ACCOUNT DROPDOWN
 ===================================================== */
 
-const accountNavButton =
+const accountMenuToggle =
     document.getElementById(
         "accountNavButton"
     );
 
-const accountDropdown =
+const accountMenuDropdown =
     document.getElementById(
         "accountDropdown"
     );
 
 
 if (
-    accountNavButton &&
-    accountDropdown
+    accountMenuToggle &&
+    accountMenuDropdown
 ) {
 
-    accountNavButton.addEventListener(
+    accountMenuToggle.addEventListener(
         "click",
         event => {
 
@@ -2661,12 +2661,12 @@ if (
             event.stopPropagation();
 
             const isOpen =
-                !accountDropdown.hidden;
+                !accountMenuDropdown.hidden;
 
-            accountDropdown.hidden =
+            accountMenuDropdown.hidden =
                 isOpen;
 
-            accountNavButton.setAttribute(
+            accountMenuToggle.setAttribute(
                 "aria-expanded",
                 String(!isOpen)
             );
@@ -2674,7 +2674,7 @@ if (
     );
 
 
-    accountDropdown.addEventListener(
+    accountMenuDropdown.addEventListener(
         "click",
         event => {
 
@@ -2687,10 +2687,10 @@ if (
         "click",
         () => {
 
-            accountDropdown.hidden =
+            accountMenuDropdown.hidden =
                 true;
 
-            accountNavButton.setAttribute(
+            accountMenuToggle.setAttribute(
                 "aria-expanded",
                 "false"
             );
