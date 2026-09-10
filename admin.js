@@ -3355,16 +3355,86 @@ if (adminTopbar) {
 
 function normalizeXUsername(value) {
 
-    return cleanText(value)
-        .toLowerCase()
-        .replace(
-            /^@+/,
-            ""
-        )
-        .replace(
-            /\s+/g,
-            ""
+    let username =
+        cleanText(
+            value
         );
+
+
+    if (
+        !username
+    ) {
+
+        return "";
+    }
+
+
+    username =
+        username.trim();
+
+
+    /*
+       X / Twitter URL
+       Example:
+       https://x.com/Tobi_xv
+       https://twitter.com/Tobi_xv/status/123
+    */
+
+    const urlMatch =
+        username.match(
+            /(?:https?:\/\/)?(?:www\.)?(?:x\.com|twitter\.com)\/@?([A-Za-z0-9_]{1,15})/i
+        );
+
+
+    if (
+        urlMatch?.[1]
+    ) {
+
+        return urlMatch[1]
+            .toLowerCase();
+    }
+
+
+    /*
+       @USERNAME anywhere in the value
+    */
+
+    const atMatch =
+        username.match(
+            /@([A-Za-z0-9_]{1,15})/
+        );
+
+
+    if (
+        atMatch?.[1]
+    ) {
+
+        return atMatch[1]
+            .toLowerCase();
+    }
+
+
+    /*
+       Plain username
+    */
+
+    username =
+        username
+            .replace(
+                /^@+/,
+                ""
+            )
+            .split(
+                /\s+/
+            )[0]
+            .replace(
+                /[^A-Za-z0-9_]/g,
+                ""
+            )
+            .toLowerCase();
+
+
+    return username;
 
 }
 
