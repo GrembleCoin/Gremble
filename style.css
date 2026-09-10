@@ -819,9 +819,15 @@ img {
 
     padding-top: 45px;
 
-    display: flex;
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1.15fr)
+        minmax(360px, 0.72fr);
 
     align-items: center;
+
+    gap: 80px;
 }
 
 
@@ -972,6 +978,298 @@ img {
     font-size: 11px;
 
     line-height: 1.4;
+}
+
+
+/* =====================================================
+   HOME LOGIN CARD
+===================================================== */
+
+.home-login-card {
+
+    position: relative;
+
+    width: 100%;
+
+    max-width: 430px;
+
+    justify-self: end;
+
+    padding:
+        50px 38px 38px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    overflow: hidden;
+
+    border:
+        1px solid
+        rgba(101, 255, 131, 0.30);
+
+    border-radius: 26px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(3, 28, 18, 0.88),
+            rgba(0, 11, 7, 0.94)
+        );
+
+    box-shadow:
+        0 35px 90px
+        rgba(0, 0, 0, 0.48),
+        0 0 60px
+        rgba(74, 255, 125, 0.05);
+
+    backdrop-filter:
+        blur(13px);
+
+    -webkit-backdrop-filter:
+        blur(13px);
+}
+
+
+.home-login-card::before {
+
+    content: "";
+
+    position: absolute;
+
+    width: 260px;
+
+    height: 260px;
+
+    top: -150px;
+
+    left: 50%;
+
+    transform:
+        translateX(-50%);
+
+    border-radius: 50%;
+
+    background:
+        rgba(79, 255, 128, 0.12);
+
+    filter:
+        blur(55px);
+
+    pointer-events: none;
+}
+
+
+.home-login-card::after {
+
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+
+    left: 50%;
+
+    width: 90px;
+
+    height: 2px;
+
+    transform:
+        translateX(-50%);
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            var(--green),
+            transparent
+        );
+
+    box-shadow:
+        0 0 15px
+        rgba(101, 255, 131, 0.70);
+}
+
+
+.home-login-crown {
+
+    position: relative;
+
+    z-index: 2;
+
+    width: 66px;
+
+    height: 54px;
+
+    margin-bottom: 18px;
+
+    color:
+        var(--green);
+
+    filter:
+        drop-shadow(
+            0 0 13px
+            rgba(101, 255, 131, 0.40)
+        );
+}
+
+
+.home-login-crown svg {
+
+    display: block;
+
+    width: 100%;
+
+    height: 100%;
+}
+
+
+.home-login-small {
+
+    position: relative;
+
+    z-index: 2;
+
+    margin-bottom: 6px;
+
+    color:
+        rgba(
+            234,
+            241,
+            237,
+            0.83
+        );
+
+    font-size: 10px;
+
+    font-weight: 900;
+
+    letter-spacing: 2.5px;
+}
+
+
+.home-login-card h2 {
+
+    position: relative;
+
+    z-index: 2;
+
+    margin: 0;
+
+    color:
+        var(--green);
+
+    font-size: 46px;
+
+    line-height: 1;
+
+    letter-spacing: -2px;
+
+    text-shadow:
+        0 0 25px
+        rgba(101, 255, 131, 0.15);
+}
+
+
+.home-login-button {
+
+    position: relative;
+
+    z-index: 2;
+
+    width: 100%;
+
+    min-height: 62px;
+
+    margin-top: 32px;
+
+    padding:
+        0 19px;
+
+    display: grid;
+
+    grid-template-columns:
+        34px
+        1fr
+        34px;
+
+    align-items: center;
+
+    gap: 10px;
+
+    border-radius: 31px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #72ef69,
+            #51dda1
+        );
+
+    color: #031009;
+
+    box-shadow:
+        0 15px 35px
+        rgba(73, 255, 121, 0.13);
+
+    transition:
+        transform 0.22s ease,
+        box-shadow 0.22s ease;
+}
+
+
+.home-login-button:hover {
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 18px 42px
+        rgba(73, 255, 121, 0.23);
+}
+
+
+.home-login-button strong {
+
+    font-size: 12px;
+
+    font-weight: 900;
+
+    letter-spacing: 1.7px;
+}
+
+
+.home-login-telegram {
+
+    width: 26px;
+
+    height: 26px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+}
+
+
+.home-login-telegram svg {
+
+    width: 23px;
+
+    height: 23px;
+}
+
+
+.home-login-arrow {
+
+    font-size: 23px;
+
+    line-height: 1;
+
+    text-align: right;
 }
 
 
