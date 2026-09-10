@@ -70,6 +70,16 @@ const memberLogoutButton =
         "memberLogoutButton"
     );
 
+const accountNavButton =
+    document.getElementById(
+        "accountNavButton"
+    );
+
+const homeAccountButtonText =
+    document.getElementById(
+        "homeAccountButtonText"
+    );
+
 
 /* =====================================================
    HELPERS
@@ -222,6 +232,30 @@ function sessionIsExpired() {
    MEMBER UI
 ===================================================== */
 
+function updateAccountButtons(
+    loggedIn
+) {
+
+    const text =
+        loggedIn
+            ? "MY ACCOUNT"
+            : "LOGIN";
+
+
+    if (accountNavButton) {
+
+        accountNavButton.textContent =
+            text;
+    }
+
+
+    if (homeAccountButtonText) {
+
+        homeAccountButtonText.textContent =
+            text;
+    }
+}
+
 function showVerifiedMember(member) {
 
     if (
@@ -295,10 +329,18 @@ function showVerifiedMember(member) {
 
     if (telegramWidgetWrap) {
 
-        telegramWidgetWrap.style.display =
-            "none";
-    }
+    telegramWidgetWrap.style.display =
+        "none";
 }
+
+
+updateAccountButtons(
+    true
+);
+}
+
+
+
 
 
 function hideMemberProfile() {
@@ -338,11 +380,16 @@ function hideMemberProfile() {
     }
 
 
-    if (telegramWidgetWrap) {
+ if (telegramWidgetWrap) {
 
-        telegramWidgetWrap.style.display =
-            "";
-    }
+    telegramWidgetWrap.style.display =
+        "";
+}
+
+
+updateAccountButtons(
+    false
+);
 }
 
 
