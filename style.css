@@ -4292,6 +4292,122 @@ img {
 
 
 /* =====================================================
+   MY GREMBLE PROFILE LINK
+===================================================== */
+
+.member-gremble-link-wrap {
+
+    margin-top: 22px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 7px;
+}
+
+
+.member-gremble-crown {
+
+    width: 62px;
+
+    height: 52px;
+
+    padding: 4px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border: 0;
+
+    background: transparent;
+
+    color: var(--green);
+
+    cursor: pointer;
+
+    filter:
+        drop-shadow(
+            0 0 12px
+            rgba(101, 255, 131, 0.30)
+        );
+
+    transition:
+        transform 0.2s ease,
+        color 0.2s ease,
+        filter 0.2s ease;
+}
+
+
+.member-gremble-crown svg {
+
+    display: block;
+
+    width: 52px;
+
+    height: 42px;
+
+    pointer-events: none;
+}
+
+
+.member-gremble-text-link {
+
+    padding: 0;
+
+    border: 0;
+
+    background: transparent;
+
+    color: var(--green);
+
+    font-size: 9px;
+
+    font-weight: 900;
+
+    letter-spacing: 1.7px;
+
+    cursor: pointer;
+
+    transition:
+        color 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.member-gremble-crown:hover {
+
+    color: #8aff9d;
+
+    transform:
+        translateY(-2px)
+        scale(1.06);
+
+    filter:
+        drop-shadow(
+            0 0 18px
+            rgba(101, 255, 131, 0.55)
+        );
+}
+
+
+.member-gremble-text-link:hover {
+
+    color: #ffffff;
+
+    transform:
+        translateY(-1px);
+}
+
+
+/* =====================================================
    LOGOUT
 ===================================================== */
 

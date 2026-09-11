@@ -32,6 +32,11 @@ const DEFAULT_GREMBLE_AVATAR = {
     outfit:
         "streetwear",
 
+    /*
+        Hats are currently disabled.
+        We keep this property because the existing
+        database already contains the hat column.
+    */
     hat:
         "none",
 
@@ -79,16 +84,6 @@ const GREMBLE_OUTFITS = [
 ];
 
 
-const GREMBLE_HATS = [
-    "none",
-    "cap-1",
-    "cap-2",
-    "cap-3",
-    "cap-4",
-    "cap-5"
-];
-
-
 const GREMBLE_BACKGROUNDS = [
     "none",
     "wall-1",
@@ -117,97 +112,6 @@ const GREMBLE_HERE_FOR = [
     "Fun",
     "Future"
 ];
-
-
-/* =========================================================
-   HAT POSITION BY POSE
-
-   Every pose has its own calibration.
-
-   top:
-       position from top of card
-
-   left:
-       horizontal center of cap
-
-   width:
-       base width of cap
-
-   rotate:
-       cap angle
-
-   scaleX:
-       horizontal correction
-
-   scaleY:
-       vertical correction
-========================================================= */
-
-const GREMBLE_HAT_POSITIONS = {
-
-    "pose-01": {
-        top: "4.6%",
-        left: "50.0%",
-        width: "45.0%",
-        rotate: "-1.5deg",
-        scaleX: 1.00,
-        scaleY: 0.92
-    },
-
-    "pose-02": {
-        top: "4.0%",
-        left: "49.8%",
-        width: "44.0%",
-        rotate: "-0.5deg",
-        scaleX: 1.00,
-        scaleY: 0.91
-    },
-
-    "pose-03": {
-        top: "4.8%",
-        left: "49.2%",
-        width: "44.5%",
-        rotate: "-1.8deg",
-        scaleX: 1.02,
-        scaleY: 0.92
-    },
-
-    "pose-04": {
-        top: "4.3%",
-        left: "49.9%",
-        width: "45.5%",
-        rotate: "-1.2deg",
-        scaleX: 1.00,
-        scaleY: 0.91
-    },
-
-    "pose-05": {
-        top: "3.8%",
-        left: "49.7%",
-        width: "45.0%",
-        rotate: "-0.4deg",
-        scaleX: 1.00,
-        scaleY: 0.90
-    },
-
-    "pose-06": {
-        top: "4.7%",
-        left: "50.2%",
-        width: "44.0%",
-        rotate: "0.3deg",
-        scaleX: 0.99,
-        scaleY: 0.91
-    },
-
-    "pose-07": {
-        top: "5.1%",
-        left: "51.2%",
-        width: "43.0%",
-        rotate: "2.0deg",
-        scaleX: 0.98,
-        scaleY: 0.90
-    }
-};
 
 
 /* =========================================================
@@ -322,9 +226,6 @@ function cleanAvatarText(
 
 /* =========================================================
    SESSION TOKEN
-
-   We support several possible key names so this file
-   remains compatible with the existing Telegram login.
 ========================================================= */
 
 function getGrembleAvatarSessionToken() {
@@ -507,12 +408,15 @@ function normalizeAvatar(
                 : DEFAULT_GREMBLE_AVATAR.outfit,
 
 
+        /*
+            Hats are disabled.
+
+            Even if an old account previously saved
+            cap-1 / cap-2 / etc., the website now
+            treats it as no hat.
+        */
         hat:
-            GREMBLE_HATS.includes(
-                source.hat
-            )
-                ? source.hat
-                : DEFAULT_GREMBLE_AVATAR.hat,
+            "none",
 
 
         background:
@@ -644,153 +548,29 @@ function getBackgroundImage(
 
 
 /* =========================================================
-   HAT IMAGE
+   REMOVE OLD HAT LAYERS
 ========================================================= */
 
-function getHatImage(
-    avatar
+function removeOldHatLayers(
+    canvas
 ) {
 
-    if (
-        avatar.hat ===
-        "none"
-    ) {
-
-        return "";
-    }
-
-
-    return (
-        `${avatar.hat}.png`
-    );
-}
-
-
-/* =========================================================
-   CREATE HAT LAYER
-========================================================= */
-
-function ensureMainHatLayer() {
-
-    if (!grembleCardCanvas) {
-
-        return null;
-    }
-
-
-    let hat =
-        grembleCardCanvas
-            .querySelector(
-                ".gremble-card-hat"
-            );
-
-
-    if (!hat) {
-
-        hat =
-            document.createElement(
-                "img"
-            );
-
-
-        hat.className =
-            "gremble-card-hat";
-
-
-        hat.id =
-            "grembleCardHat";
-
-
-        hat.alt =
-            "";
-
-
-        hat.hidden =
-            true;
-
-
-        grembleCardCanvas
-            .appendChild(
-                hat
-            );
-    }
-
-
-    return hat;
-}
-
-
-/* =========================================================
-   APPLY HAT POSITION
-========================================================= */
-
-function applyHatPosition(
-    element,
-    pose
-) {
-
-    if (!element) {
+    if (!canvas) {
 
         return;
     }
 
 
-    const config =
-        GREMBLE_HAT_POSITIONS[
-            pose
-        ] ||
-        GREMBLE_HAT_POSITIONS[
-            "pose-01"
-        ];
+    canvas
+        .querySelectorAll(
+            ".gremble-card-hat"
+        )
+        .forEach(
+            element => {
 
-
-    /*
-        Everything is set inline here so old CSS
-        positioning cannot override the cap.
-    */
-
-    element.style.position =
-        "absolute";
-
-
-    element.style.top =
-        config.top;
-
-
-    element.style.left =
-        config.left;
-
-
-    element.style.width =
-        config.width;
-
-
-    element.style.height =
-        "auto";
-
-
-    element.style.maxWidth =
-        "none";
-
-
-    element.style.objectFit =
-        "contain";
-
-
-    element.style.zIndex =
-        "6";
-
-
-    element.style.pointerEvents =
-        "none";
-
-
-    element.style.transformOrigin =
-        "50% 50%";
-
-
-    element.style.transform =
-        `translateX(-50%) rotate(${config.rotate}) scaleX(${config.scaleX}) scaleY(${config.scaleY})`;
+                element.remove();
+            }
+        );
 }
 
 
@@ -821,32 +601,14 @@ function renderAvatarCanvas(
         );
 
 
-    let hat =
-        canvas.querySelector(
-            ".gremble-card-hat"
-        );
+    /*
+        Remove old cap layers from previous
+        versions of My Gremble.
+    */
 
-
-    if (!hat) {
-
-        hat =
-            document.createElement(
-                "img"
-            );
-
-
-        hat.className =
-            "gremble-card-hat";
-
-
-        hat.alt =
-            "";
-
-
-        canvas.appendChild(
-            hat
-        );
-    }
+    removeOldHatLayers(
+        canvas
+    );
 
 
     /* CHARACTER */
@@ -898,49 +660,6 @@ function renderAvatarCanvas(
                 );
         }
     }
-
-
-    /* HAT */
-
-    const hatSrc =
-        getHatImage(
-            avatar
-        );
-
-
-    if (hatSrc) {
-
-        hat.src =
-            hatSrc;
-
-
-        hat.hidden =
-            false;
-
-
-        hat.classList
-            .remove(
-                "is-hidden"
-            );
-
-
-        applyHatPosition(
-            hat,
-            avatar.pose
-        );
-
-    }
-    else {
-
-        hat.hidden =
-            true;
-
-
-        hat.classList
-            .add(
-                "is-hidden"
-            );
-    }
 }
 
 
@@ -949,9 +668,6 @@ function renderAvatarCanvas(
 ========================================================= */
 
 function renderSavedAvatar() {
-
-    ensureMainHatLayer();
-
 
     renderAvatarCanvas(
         grembleCardCanvas,
@@ -1055,14 +771,6 @@ function createGrembleEditor() {
                             id="grembleEditorCharacter"
                         >
 
-                        <img
-                            src=""
-                            alt=""
-                            class="gremble-card-hat"
-                            id="grembleEditorHat"
-                            hidden
-                        >
-
                         <div class="gremble-card-brand">
 
                             <span>
@@ -1079,6 +787,13 @@ function createGrembleEditor() {
 
                 </div>
 
+
+                <div
+                    class="gremble-editor-status"
+                    id="grembleEditorStatus"
+                    aria-live="polite"
+                ></div>
+
             </div>
 
 
@@ -1089,73 +804,27 @@ function createGrembleEditor() {
             <div class="gremble-editor-panel">
 
 
-                <div class="gremble-editor-heading">
-
-                    <small>
-                        CUSTOMIZE
-                    </small>
-
-                    <h3>
-                        BUILD YOUR GREMBLE.
-                    </h3>
-
-                    <p>
-                        Choose your pose, outfit,
-                        cap and background.
-                    </p>
-
-                </div>
-
-
                 <!-- POSE -->
 
                 <div class="gremble-editor-section">
 
-                    <div class="gremble-editor-section-title">
+                    <div class="gremble-editor-section-heading">
 
-                        <strong>
+                        <h3>
                             POSE
-                        </strong>
+                        </h3>
 
                         <small>
-                            CHOOSE 1
+                            CHOOSE YOUR GREMBLE
                         </small>
 
                     </div>
 
+
                     <div
                         class="gremble-option-grid gremble-pose-grid"
                         id="gremblePoseOptions"
-                    >
-
-                        ${GREMBLE_POSES.map(
-                            (
-                                pose,
-                                index
-                            ) => `
-
-                            <button
-                                type="button"
-                                class="gremble-option-button"
-                                data-avatar-type="pose"
-                                data-avatar-value="${pose}"
-                            >
-
-                                <img
-                                    src="${pose}.png"
-                                    alt="Pose ${index + 1}"
-                                >
-
-                                <span>
-                                    POSE ${index + 1}
-                                </span>
-
-                            </button>
-
-                        `
-                        ).join("")}
-
-                    </div>
+                    ></div>
 
                 </div>
 
@@ -1164,133 +833,23 @@ function createGrembleEditor() {
 
                 <div class="gremble-editor-section">
 
-                    <div class="gremble-editor-section-title">
+                    <div class="gremble-editor-section-heading">
 
-                        <strong>
+                        <h3>
                             OUTFIT
-                        </strong>
+                        </h3>
 
                         <small>
-                            CHOOSE 1
+                            PICK YOUR STYLE
                         </small>
 
                     </div>
+
 
                     <div
                         class="gremble-option-grid gremble-outfit-grid"
-                    >
-
-                        <button
-                            type="button"
-                            class="gremble-option-button"
-                            data-avatar-type="outfit"
-                            data-avatar-value="streetwear"
-                        >
-
-                            <img
-                                src="Streetwear.png"
-                                alt="Streetwear"
-                            >
-
-                            <span>
-                                STREETWEAR
-                            </span>
-
-                        </button>
-
-
-                        <button
-                            type="button"
-                            class="gremble-option-button"
-                            data-avatar-type="outfit"
-                            data-avatar-value="suit"
-                        >
-
-                            <img
-                                src="suit.png"
-                                alt="Suit"
-                            >
-
-                            <span>
-                                SUIT
-                            </span>
-
-                        </button>
-
-                    </div>
-
-                </div>
-
-
-                <!-- HAT -->
-
-                <div class="gremble-editor-section">
-
-                    <div class="gremble-editor-section-title">
-
-                        <strong>
-                            CAP
-                        </strong>
-
-                        <small>
-                            OPTIONAL
-                        </small>
-
-                    </div>
-
-
-                    <div
-                        class="gremble-option-grid gremble-hat-grid"
-                    >
-
-                        <button
-                            type="button"
-                            class="gremble-option-button gremble-none-option"
-                            data-avatar-type="hat"
-                            data-avatar-value="none"
-                        >
-
-                            <strong>
-                                NONE
-                            </strong>
-
-                        </button>
-
-
-                        ${[
-                            "cap-1",
-                            "cap-2",
-                            "cap-3",
-                            "cap-4",
-                            "cap-5"
-                        ].map(
-                            (
-                                cap,
-                                index
-                            ) => `
-
-                            <button
-                                type="button"
-                                class="gremble-option-button"
-                                data-avatar-type="hat"
-                                data-avatar-value="${cap}"
-                            >
-
-                                <img
-                                    src="${cap}.png"
-                                    alt="Cap ${index + 1}"
-                                >
-
-                                <span>
-                                    CAP ${index + 1}
-                                </span>
-
-                            </button>
-
-                        `
-                        ).join("")}
-
-                    </div>
+                        id="grembleOutfitOptions"
+                    ></div>
 
                 </div>
 
@@ -1299,14 +858,14 @@ function createGrembleEditor() {
 
                 <div class="gremble-editor-section">
 
-                    <div class="gremble-editor-section-title">
+                    <div class="gremble-editor-section-heading">
 
-                        <strong>
+                        <h3>
                             BACKGROUND
-                        </strong>
+                        </h3>
 
                         <small>
-                            OPTIONAL
+                            CHOOSE YOUR WORLD
                         </small>
 
                     </div>
@@ -1314,194 +873,98 @@ function createGrembleEditor() {
 
                     <div
                         class="gremble-option-grid gremble-background-grid"
-                    >
-
-                        <button
-                            type="button"
-                            class="gremble-option-button gremble-none-option"
-                            data-avatar-type="background"
-                            data-avatar-value="none"
-                        >
-
-                            <strong>
-                                NONE
-                            </strong>
-
-                        </button>
+                        id="grembleBackgroundOptions"
+                    ></div>
 
 
-                        ${[
-                            "wall-1",
-                            "wall-2",
-                            "wall-3"
-                        ].map(
-                            (
-                                wall,
-                                index
-                            ) => `
-
-                            <button
-                                type="button"
-                                class="gremble-option-button"
-                                data-avatar-type="background"
-                                data-avatar-value="${wall}"
-                            >
-
-                                <img
-                                    src="${wall}.png"
-                                    alt="Wall ${index + 1}"
-                                >
-
-                                <span>
-                                    WALL ${index + 1}
-                                </span>
-
-                            </button>
-
-                        `
-                        ).join("")}
-
+                    <div class="gremble-custom-background">
 
                         <label
-                            class="gremble-background-upload"
-                            id="grembleBackgroundUpload"
+                            for="grembleCustomBackgroundInput"
+                            class="gremble-upload-background-button"
                         >
-
-                            <strong>
-                                ↑
-                            </strong>
-
-                            <span>
-                                UPLOAD YOUR OWN
-                            </span>
-
-                            <input
-                                type="file"
-                                id="grembleCustomBackgroundInput"
-                                accept="image/png,image/jpeg,image/webp"
-                            >
-
+                            UPLOAD YOUR OWN BACKGROUND
                         </label>
 
+
+                        <input
+                            type="file"
+                            id="grembleCustomBackgroundInput"
+                            accept="image/png,image/jpeg,image/webp"
+                            hidden
+                        >
+
+
+                        <small>
+                            PNG, JPG OR WEBP · MAX 5 MB
+                        </small>
+
                     </div>
 
                 </div>
 
 
-                <!-- ROLE -->
+                <!-- PERSONALITY -->
 
                 <div class="gremble-editor-section">
 
-                    <div class="gremble-editor-section-title">
+                    <div class="gremble-editor-section-heading">
 
-                        <strong>
+                        <h3>
                             WHAT KIND OF GREMBLE ARE YOU?
-                        </strong>
-
-                    </div>
-
-
-                    <div class="gremble-editor-section-title">
+                        </h3>
 
                         <small>
-                            ROLE
+                            CHOOSE YOUR PERSONALITY
                         </small>
 
                     </div>
 
 
-                    <div class="gremble-select-grid">
-
-                        ${GREMBLE_ROLES.map(
-                            value => `
-
-                            <button
-                                type="button"
-                                class="gremble-select-button"
-                                data-avatar-type="role"
-                                data-avatar-value="${value}"
-                            >
-
-                                ${value.toUpperCase()}
-
-                            </button>
-
-                        `
-                        ).join("")}
-
-                    </div>
-
-                </div>
+                    <div class="gremble-personality-editor">
 
 
-                <!-- ENERGY -->
+                        <div class="gremble-personality-editor-group">
 
-                <div class="gremble-editor-section">
+                            <span>
+                                ROLE
+                            </span>
 
-                    <div class="gremble-editor-section-title">
+                            <div
+                                class="gremble-personality-options"
+                                id="grembleRoleOptions"
+                            ></div>
 
-                        <small>
-                            ENERGY
-                        </small>
-
-                    </div>
-
-
-                    <div class="gremble-select-grid">
-
-                        ${GREMBLE_ENERGIES.map(
-                            value => `
-
-                            <button
-                                type="button"
-                                class="gremble-select-button"
-                                data-avatar-type="energy"
-                                data-avatar-value="${value}"
-                            >
-
-                                ${value.toUpperCase()}
-
-                            </button>
-
-                        `
-                        ).join("")}
-
-                    </div>
-
-                </div>
+                        </div>
 
 
-                <!-- HERE FOR -->
+                        <div class="gremble-personality-editor-group">
 
-                <div class="gremble-editor-section">
+                            <span>
+                                ENERGY
+                            </span>
 
-                    <div class="gremble-editor-section-title">
+                            <div
+                                class="gremble-personality-options"
+                                id="grembleEnergyOptions"
+                            ></div>
 
-                        <small>
-                            HERE FOR
-                        </small>
-
-                    </div>
+                        </div>
 
 
-                    <div class="gremble-select-grid">
+                        <div class="gremble-personality-editor-group">
 
-                        ${GREMBLE_HERE_FOR.map(
-                            value => `
+                            <span>
+                                HERE FOR
+                            </span>
 
-                            <button
-                                type="button"
-                                class="gremble-select-button"
-                                data-avatar-type="here_for"
-                                data-avatar-value="${value}"
-                            >
+                            <div
+                                class="gremble-personality-options"
+                                id="grembleHereForOptions"
+                            ></div>
 
-                                ${value.toUpperCase()}
+                        </div>
 
-                            </button>
-
-                        `
-                        ).join("")}
 
                     </div>
 
@@ -1512,46 +975,44 @@ function createGrembleEditor() {
 
                 <div class="gremble-editor-section">
 
-                    <div class="gremble-editor-section-title">
+                    <div class="gremble-editor-section-heading">
 
-                        <strong>
+                        <h3>
                             YOUR MESSAGE
-                        </strong>
+                        </h3>
 
-                        <small id="grembleMessageCounter">
-                            0 / 200
+                        <small>
+                            MAX 200 CHARACTERS
                         </small>
 
                     </div>
 
 
                     <textarea
-                        class="gremble-message-input"
                         id="grembleMessageInput"
+                        class="gremble-message-input"
                         maxlength="200"
+                        rows="4"
                         placeholder="Write something about your Gremble..."
                     ></textarea>
+
+
+                    <div class="gremble-message-counter">
+
+                        <span id="grembleMessageCounter">
+                            0
+                        </span>
+
+                        <span>
+                            / 200
+                        </span>
+
+                    </div>
 
                 </div>
 
 
-                <!-- STATUS -->
-
-                <div
-                    id="grembleAvatarStatus"
-                    aria-live="polite"
-                    style="
-                        min-height: 22px;
-                        margin-top: 18px;
-                        color: rgba(255,255,255,.55);
-                        font-size: 9px;
-                        font-weight: 800;
-                        letter-spacing: .8px;
-                    "
-                ></div>
-
-
-                <!-- SAVE / CANCEL -->
+                <!-- ACTIONS -->
 
                 <div class="gremble-editor-actions">
 
@@ -1581,103 +1042,713 @@ function createGrembleEditor() {
     `;
 
 
-    /*
-        Insert editor after normal card actions.
-    */
-
-    const cardActions =
-        myGremblePage
-            .querySelector(
-                ".gremble-card-actions"
-            );
+    myGremblePage.appendChild(
+        editor
+    );
 
 
-    if (cardActions) {
-
-        cardActions
-            .insertAdjacentElement(
-                "afterend",
-                editor
-            );
-
-    }
-    else {
-
-        myGremblePage
-            .appendChild(
-                editor
-            );
-    }
-
-
-    setupEditorEvents();
+    bindEditorEvents();
 }
 
 
 /* =========================================================
-   EDITOR ELEMENTS
+   CREATE OPTION BUTTON
 ========================================================= */
 
-function getEditorElements() {
+function createAvatarOptionButton({
+    value,
+    label,
+    image,
+    selected,
+    className = ""
+}) {
 
-    return {
+    const button =
+        document.createElement(
+            "button"
+        );
 
-        editor:
-            document.getElementById(
-                "myGrembleEditor"
-            ),
 
-        canvas:
-            document.getElementById(
-                "grembleEditorCanvas"
-            ),
+    button.type =
+        "button";
 
-        message:
-            document.getElementById(
-                "grembleMessageInput"
-            ),
 
-        counter:
-            document.getElementById(
-                "grembleMessageCounter"
-            ),
+    button.className =
+        `gremble-option-button ${className}`;
 
-        saveButton:
-            document.getElementById(
-                "saveMyGrembleButton"
-            ),
 
-        cancelButton:
-            document.getElementById(
-                "cancelMyGrembleButton"
-            ),
+    button.dataset.value =
+        value;
 
-        uploadInput:
-            document.getElementById(
-                "grembleCustomBackgroundInput"
-            ),
 
-        status:
-            document.getElementById(
-                "grembleAvatarStatus"
-            )
-    };
+    if (selected) {
+
+        button.classList.add(
+            "selected"
+        );
+    }
+
+
+    if (image) {
+
+        const imageElement =
+            document.createElement(
+                "img"
+            );
+
+
+        imageElement.src =
+            image;
+
+
+        imageElement.alt =
+            label;
+
+
+        button.appendChild(
+            imageElement
+        );
+    }
+
+
+    const labelElement =
+        document.createElement(
+            "span"
+        );
+
+
+    labelElement.textContent =
+        label;
+
+
+    button.appendChild(
+        labelElement
+    );
+
+
+    return button;
 }
 
 
 /* =========================================================
-   EDITOR STATUS
+   POSE OPTIONS
+========================================================= */
+
+function renderPoseOptions() {
+
+    const container =
+        document.getElementById(
+            "gremblePoseOptions"
+        );
+
+
+    if (!container) {
+
+        return;
+    }
+
+
+    container.innerHTML =
+        "";
+
+
+    GREMBLE_POSES.forEach(
+        (
+            pose,
+            index
+        ) => {
+
+            const previewAvatar = {
+
+                ...editingGrembleAvatar,
+
+                pose
+            };
+
+
+            const button =
+                createAvatarOptionButton({
+
+                    value:
+                        pose,
+
+                    label:
+                        `POSE ${index + 1}`,
+
+                    image:
+                        getCharacterImage(
+                            previewAvatar
+                        ),
+
+                    selected:
+                        editingGrembleAvatar.pose ===
+                        pose,
+
+                    className:
+                        "gremble-pose-option"
+                });
+
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    editingGrembleAvatar.pose =
+                        pose;
+
+
+                    renderEditorControls();
+
+                    renderEditorPreview();
+                }
+            );
+
+
+            container.appendChild(
+                button
+            );
+        }
+    );
+}
+
+
+/* =========================================================
+   OUTFIT OPTIONS
+========================================================= */
+
+function renderOutfitOptions() {
+
+    const container =
+        document.getElementById(
+            "grembleOutfitOptions"
+        );
+
+
+    if (!container) {
+
+        return;
+    }
+
+
+    container.innerHTML =
+        "";
+
+
+    const outfits = [
+
+        {
+            value:
+                "streetwear",
+
+            label:
+                "STREETWEAR",
+
+            image:
+                "Streetwear.png"
+        },
+
+        {
+            value:
+                "suit",
+
+            label:
+                "SUIT",
+
+            image:
+                "suit.png"
+        }
+    ];
+
+
+    outfits.forEach(
+        outfit => {
+
+            const button =
+                createAvatarOptionButton({
+
+                    value:
+                        outfit.value,
+
+                    label:
+                        outfit.label,
+
+                    image:
+                        outfit.image,
+
+                    selected:
+                        editingGrembleAvatar.outfit ===
+                        outfit.value,
+
+                    className:
+                        "gremble-outfit-option"
+                });
+
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    editingGrembleAvatar.outfit =
+                        outfit.value;
+
+
+                    renderEditorControls();
+
+                    renderEditorPreview();
+                }
+            );
+
+
+            container.appendChild(
+                button
+            );
+        }
+    );
+}
+
+
+/* =========================================================
+   BACKGROUND OPTIONS
+========================================================= */
+
+function renderBackgroundOptions() {
+
+    const container =
+        document.getElementById(
+            "grembleBackgroundOptions"
+        );
+
+
+    if (!container) {
+
+        return;
+    }
+
+
+    container.innerHTML =
+        "";
+
+
+    const backgrounds = [
+
+        {
+            value:
+                "none",
+
+            label:
+                "NONE",
+
+            image:
+                null
+        },
+
+        {
+            value:
+                "wall-1",
+
+            label:
+                "WORLD 1",
+
+            image:
+                "wall-1.png"
+        },
+
+        {
+            value:
+                "wall-2",
+
+            label:
+                "WORLD 2",
+
+            image:
+                "wall-2.png"
+        },
+
+        {
+            value:
+                "wall-3",
+
+            label:
+                "WORLD 3",
+
+            image:
+                "wall-3.png"
+        }
+    ];
+
+
+    backgrounds.forEach(
+        background => {
+
+            const button =
+                createAvatarOptionButton({
+
+                    value:
+                        background.value,
+
+                    label:
+                        background.label,
+
+                    image:
+                        background.image,
+
+                    selected:
+                        editingGrembleAvatar.background ===
+                        background.value,
+
+                    className:
+                        "gremble-background-option"
+                });
+
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    editingGrembleAvatar.background =
+                        background.value;
+
+
+                    renderEditorControls();
+
+                    renderEditorPreview();
+                }
+            );
+
+
+            container.appendChild(
+                button
+            );
+        }
+    );
+
+
+    if (
+        editingGrembleAvatar.background ===
+        "custom"
+    ) {
+
+        const customButton =
+            createAvatarOptionButton({
+
+                value:
+                    "custom",
+
+                label:
+                    "CUSTOM",
+
+                image:
+                    customBackgroundPreviewUrl ||
+                    editingGrembleAvatar
+                        .custom_background_url,
+
+                selected:
+                    true,
+
+                className:
+                    "gremble-background-option"
+            });
+
+
+        customButton.addEventListener(
+            "click",
+            () => {
+
+                editingGrembleAvatar.background =
+                    "custom";
+
+
+                renderEditorPreview();
+            }
+        );
+
+
+        container.appendChild(
+            customButton
+        );
+    }
+}
+
+
+/* =========================================================
+   PERSONALITY OPTION
+========================================================= */
+
+function createPersonalityButton(
+    value,
+    currentValue,
+    onSelect
+) {
+
+    const button =
+        document.createElement(
+            "button"
+        );
+
+
+    button.type =
+        "button";
+
+
+    button.className =
+        "gremble-personality-select-button";
+
+
+    button.textContent =
+        value;
+
+
+    if (
+        value ===
+        currentValue
+    ) {
+
+        button.classList.add(
+            "selected"
+        );
+    }
+
+
+    button.addEventListener(
+        "click",
+        () => {
+
+            onSelect(
+                value
+            );
+        }
+    );
+
+
+    return button;
+}
+
+
+/* =========================================================
+   PERSONALITY OPTIONS
+========================================================= */
+
+function renderPersonalityOptions() {
+
+    const roleContainer =
+        document.getElementById(
+            "grembleRoleOptions"
+        );
+
+
+    const energyContainer =
+        document.getElementById(
+            "grembleEnergyOptions"
+        );
+
+
+    const hereForContainer =
+        document.getElementById(
+            "grembleHereForOptions"
+        );
+
+
+    if (roleContainer) {
+
+        roleContainer.innerHTML =
+            "";
+
+
+        GREMBLE_ROLES.forEach(
+            value => {
+
+                roleContainer.appendChild(
+
+                    createPersonalityButton(
+
+                        value,
+
+                        editingGrembleAvatar.role,
+
+                        selectedValue => {
+
+                            editingGrembleAvatar.role =
+                                selectedValue;
+
+
+                            renderPersonalityOptions();
+                        }
+                    )
+                );
+            }
+        );
+    }
+
+
+    if (energyContainer) {
+
+        energyContainer.innerHTML =
+            "";
+
+
+        GREMBLE_ENERGIES.forEach(
+            value => {
+
+                energyContainer.appendChild(
+
+                    createPersonalityButton(
+
+                        value,
+
+                        editingGrembleAvatar.energy,
+
+                        selectedValue => {
+
+                            editingGrembleAvatar.energy =
+                                selectedValue;
+
+
+                            renderPersonalityOptions();
+                        }
+                    )
+                );
+            }
+        );
+    }
+
+
+    if (hereForContainer) {
+
+        hereForContainer.innerHTML =
+            "";
+
+
+        GREMBLE_HERE_FOR.forEach(
+            value => {
+
+                hereForContainer.appendChild(
+
+                    createPersonalityButton(
+
+                        value,
+
+                        editingGrembleAvatar.here_for,
+
+                        selectedValue => {
+
+                            editingGrembleAvatar.here_for =
+                                selectedValue;
+
+
+                            renderPersonalityOptions();
+                        }
+                    )
+                );
+            }
+        );
+    }
+}
+
+
+/* =========================================================
+   MESSAGE
+========================================================= */
+
+function updateMessageCounter() {
+
+    const input =
+        document.getElementById(
+            "grembleMessageInput"
+        );
+
+
+    const counter =
+        document.getElementById(
+            "grembleMessageCounter"
+        );
+
+
+    if (
+        !input ||
+        !counter
+    ) {
+
+        return;
+    }
+
+
+    counter.textContent =
+        String(
+            input.value.length
+        );
+}
+
+
+/* =========================================================
+   RENDER EDITOR CONTROLS
+========================================================= */
+
+function renderEditorControls() {
+
+    renderPoseOptions();
+
+    renderOutfitOptions();
+
+    renderBackgroundOptions();
+
+    renderPersonalityOptions();
+
+
+    const messageInput =
+        document.getElementById(
+            "grembleMessageInput"
+        );
+
+
+    if (messageInput) {
+
+        if (
+            messageInput.value !==
+            editingGrembleAvatar.message
+        ) {
+
+            messageInput.value =
+                editingGrembleAvatar.message;
+        }
+
+
+        updateMessageCounter();
+    }
+}
+
+
+/* =========================================================
+   RENDER EDITOR PREVIEW
+========================================================= */
+
+function renderEditorPreview() {
+
+    const canvas =
+        document.getElementById(
+            "grembleEditorCanvas"
+        );
+
+
+    renderAvatarCanvas(
+        canvas,
+        editingGrembleAvatar
+    );
+}
+
+
+/* =========================================================
+   STATUS
 ========================================================= */
 
 function setAvatarStatus(
-    text = "",
+    message,
     type = ""
 ) {
 
-    const {
-        status
-    } =
-        getEditorElements();
+    const status =
+        document.getElementById(
+            "grembleEditorStatus"
+        );
 
 
     if (!status) {
@@ -1687,340 +1758,22 @@ function setAvatarStatus(
 
 
     status.textContent =
-        text;
+        message || "";
 
 
-    if (
-        type ===
-        "error"
-    ) {
-
-        status.style.color =
-            "#ff7777";
-    }
-
-    else if (
-        type ===
-        "success"
-    ) {
-
-        status.style.color =
-            "#69ff83";
-    }
-
-    else {
-
-        status.style.color =
-            "rgba(255,255,255,.55)";
-    }
-}
-
-
-/* =========================================================
-   ACTIVE OPTION STATES
-========================================================= */
-
-function updateEditorActiveStates() {
-
-    document
-        .querySelectorAll(
-            "[data-avatar-type][data-avatar-value]"
-        )
-        .forEach(
-            button => {
-
-                const type =
-                    button.dataset
-                        .avatarType;
-
-
-                const value =
-                    button.dataset
-                        .avatarValue;
-
-
-                if (
-                    !type ||
-                    !value
-                ) {
-
-                    return;
-                }
-
-
-                const active =
-                    editingGrembleAvatar[
-                        type
-                    ] === value;
-
-
-                button.classList.toggle(
-                    "active",
-                    active
-                );
-            }
-        );
-}
-
-
-/* =========================================================
-   MESSAGE COUNTER
-========================================================= */
-
-function updateMessageCounter() {
-
-    const {
-        message,
-        counter
-    } =
-        getEditorElements();
-
-
-    if (
-        !message ||
-        !counter
-    ) {
-
-        return;
-    }
-
-
-    counter.textContent =
-        `${message.value.length} / 200`;
-}
-
-
-/* =========================================================
-   RENDER EDITOR
-========================================================= */
-
-function renderEditorAvatar() {
-
-    const {
-        canvas,
-        message
-    } =
-        getEditorElements();
-
-
-    renderAvatarCanvas(
-        canvas,
-        editingGrembleAvatar
+    status.classList.remove(
+        "success",
+        "error",
+        "loading"
     );
 
 
-    if (
-        message &&
-        document.activeElement !==
-            message
-    ) {
+    if (type) {
 
-        message.value =
-            editingGrembleAvatar.message;
-    }
-
-
-    updateMessageCounter();
-
-    updateEditorActiveStates();
-}
-
-
-/* =========================================================
-   OPEN EDITOR
-========================================================= */
-
-function openGrembleEditor() {
-
-    const token =
-        getGrembleAvatarSessionToken();
-
-
-    if (!token) {
-
-        alert(
-            "Connect Telegram first to edit your Gremble."
+        status.classList.add(
+            type
         );
-
-        return;
     }
-
-
-    editingGrembleAvatar = {
-        ...savedGrembleAvatar
-    };
-
-
-    customBackgroundPreviewUrl =
-        savedGrembleAvatar
-            .custom_background_url ||
-        "";
-
-
-    myGremblePage
-        ?.classList
-        .add(
-            "editing"
-        );
-
-
-    renderEditorAvatar();
-
-
-    setAvatarStatus(
-        ""
-    );
-
-
-    document
-        .getElementById(
-            "myGrembleEditor"
-        )
-        ?.scrollIntoView({
-            behavior:
-                "smooth",
-
-            block:
-                "start"
-        });
-}
-
-
-/* =========================================================
-   CLOSE EDITOR
-========================================================= */
-
-function closeGrembleEditor() {
-
-    myGremblePage
-        ?.classList
-        .remove(
-            "editing"
-        );
-
-
-    editingGrembleAvatar = {
-        ...savedGrembleAvatar
-    };
-
-
-    customBackgroundPreviewUrl =
-        savedGrembleAvatar
-            .custom_background_url ||
-        "";
-
-
-    renderEditorAvatar();
-
-
-    window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-    });
-}
-
-
-/* =========================================================
-   OPTION CLICK
-========================================================= */
-
-function selectAvatarOption(
-    type,
-    value
-) {
-
-    if (
-        !type ||
-        value === undefined
-    ) {
-
-        return;
-    }
-
-
-    if (
-        type === "pose" &&
-        !GREMBLE_POSES.includes(
-            value
-        )
-    ) {
-
-        return;
-    }
-
-
-    if (
-        type === "outfit" &&
-        !GREMBLE_OUTFITS.includes(
-            value
-        )
-    ) {
-
-        return;
-    }
-
-
-    if (
-        type === "hat" &&
-        !GREMBLE_HATS.includes(
-            value
-        )
-    ) {
-
-        return;
-    }
-
-
-    if (
-        type === "background" &&
-        !GREMBLE_BACKGROUNDS.includes(
-            value
-        )
-    ) {
-
-        return;
-    }
-
-
-    if (
-        type === "role" &&
-        !GREMBLE_ROLES.includes(
-            value
-        )
-    ) {
-
-        return;
-    }
-
-
-    if (
-        type === "energy" &&
-        !GREMBLE_ENERGIES.includes(
-            value
-        )
-    ) {
-
-        return;
-    }
-
-
-    if (
-        type === "here_for" &&
-        !GREMBLE_HERE_FOR.includes(
-            value
-        )
-    ) {
-
-        return;
-    }
-
-
-    editingGrembleAvatar[
-        type
-    ] = value;
-
-
-    renderEditorAvatar();
 }
 
 
@@ -2029,8 +1782,17 @@ function selectAvatarOption(
 ========================================================= */
 
 async function handleCustomBackground(
-    file
+    event
 ) {
+
+    const input =
+        event.target;
+
+
+    const file =
+        input.files &&
+        input.files[0];
+
 
     if (!file) {
 
@@ -2038,12 +1800,14 @@ async function handleCustomBackground(
     }
 
 
-    const allowedTypes =
-        [
-            "image/png",
-            "image/jpeg",
-            "image/webp"
-        ];
+    const allowedTypes = [
+
+        "image/png",
+
+        "image/jpeg",
+
+        "image/webp"
+    ];
 
 
     if (
@@ -2053,58 +1817,59 @@ async function handleCustomBackground(
     ) {
 
         setAvatarStatus(
-            "ONLY PNG, JPG OR WEBP IS ALLOWED.",
+            "PLEASE USE PNG, JPG OR WEBP.",
             "error"
         );
 
+
+        input.value =
+            "";
+
+
         return;
     }
+
+
+    const MAX_SIZE =
+        5 *
+        1024 *
+        1024;
 
 
     if (
         file.size >
-        5 * 1024 * 1024
+        MAX_SIZE
     ) {
 
         setAvatarStatus(
-            "IMAGE MUST BE SMALLER THAN 5 MB.",
+            "BACKGROUND MUST BE UNDER 5 MB.",
             "error"
         );
+
+
+        input.value =
+            "";
+
 
         return;
     }
 
-
-    const token =
-        getGrembleAvatarSessionToken();
-
-
-    if (!token) {
-
-        setAvatarStatus(
-            "CONNECT TELEGRAM FIRST.",
-            "error"
-        );
-
-        return;
-    }
-
-
-    /*
-        Local preview appears immediately.
-    */
 
     if (
         customBackgroundPreviewUrl &&
-        customBackgroundPreviewUrl
-            .startsWith(
-                "blob:"
-            )
+        customBackgroundPreviewUrl.startsWith(
+            "blob:"
+        )
     ) {
 
-        URL.revokeObjectURL(
-            customBackgroundPreviewUrl
-        );
+        try {
+
+            URL.revokeObjectURL(
+                customBackgroundPreviewUrl
+            );
+
+        }
+        catch {}
     }
 
 
@@ -2119,204 +1884,270 @@ async function handleCustomBackground(
 
 
     editingGrembleAvatar
-        .custom_background_url =
-            customBackgroundPreviewUrl;
+        .custom_background_file =
+            file;
 
 
-    renderEditorAvatar();
+    renderBackgroundOptions();
+
+    renderEditorPreview();
 
 
     setAvatarStatus(
-        "UPLOADING BACKGROUND..."
+        "CUSTOM BACKGROUND READY. SAVE YOUR GREMBLE TO KEEP IT.",
+        "success"
     );
-
-
-    try {
-
-        const formData =
-            new FormData();
-
-
-        formData.append(
-            "file",
-            file
-        );
-
-
-        const response =
-            await fetch(
-                GREMBLE_AVATAR_ENDPOINT,
-                {
-                    method:
-                        "POST",
-
-                    headers: {
-                        "Authorization":
-                            `Bearer ${token}`
-                    },
-
-                    body:
-                        formData
-                }
-            );
-
-
-        const result =
-            await response.json();
-
-
-        if (
-            !response.ok ||
-            !result?.success
-        ) {
-
-            throw new Error(
-                result?.error ||
-                "Could not upload background."
-            );
-        }
-
-
-        editingGrembleAvatar =
-            normalizeAvatar(
-                result.avatar,
-                result.custom_background_url
-            );
-
-
-        customBackgroundPreviewUrl =
-            result
-                .custom_background_url ||
-            "";
-
-
-        renderEditorAvatar();
-
-
-        setAvatarStatus(
-            "BACKGROUND UPLOADED.",
-            "success"
-        );
-
-    }
-    catch (error) {
-
-        console.error(
-            "Custom background upload error:",
-            error
-        );
-
-
-        setAvatarStatus(
-            error?.message ||
-            "COULD NOT UPLOAD BACKGROUND.",
-            "error"
-        );
-    }
 }
 
 
 /* =========================================================
-   SETUP EDITOR EVENTS
+   EDITOR EVENTS
 ========================================================= */
 
-function setupEditorEvents() {
+function bindEditorEvents() {
 
-    const {
-        message,
-        saveButton,
-        cancelButton,
-        uploadInput
-    } =
-        getEditorElements();
-
-
-    document
-        .getElementById(
-            "myGrembleEditor"
-        )
-        ?.addEventListener(
-            "click",
-            event => {
-
-                const button =
-                    event.target.closest(
-                        "[data-avatar-type][data-avatar-value]"
-                    );
-
-
-                if (!button) {
-
-                    return;
-                }
-
-
-                selectAvatarOption(
-                    button.dataset
-                        .avatarType,
-
-                    button.dataset
-                        .avatarValue
-                );
-            }
+    const customBackgroundInput =
+        document.getElementById(
+            "grembleCustomBackgroundInput"
         );
 
 
-    if (message) {
+    const messageInput =
+        document.getElementById(
+            "grembleMessageInput"
+        );
 
-        message.addEventListener(
-            "input",
-            () => {
 
-                editingGrembleAvatar
-                    .message =
-                        message.value
+    const saveButton =
+        document.getElementById(
+            "saveMyGrembleButton"
+        );
+
+
+    const cancelButton =
+        document.getElementById(
+            "cancelMyGrembleButton"
+        );
+
+
+    if (customBackgroundInput) {
+
+        customBackgroundInput
+            .addEventListener(
+                "change",
+                handleCustomBackground
+            );
+    }
+
+
+    if (messageInput) {
+
+        messageInput
+            .addEventListener(
+                "input",
+                () => {
+
+                    editingGrembleAvatar.message =
+                        messageInput.value
                             .slice(
                                 0,
                                 200
                             );
 
 
-                updateMessageCounter();
-            }
-        );
-    }
-
-
-    if (uploadInput) {
-
-        uploadInput.addEventListener(
-            "change",
-            () => {
-
-                const file =
-                    uploadInput
-                        .files?.[0];
-
-
-                if (file) {
-
-                    handleCustomBackground(
-                        file
-                    );
+                    updateMessageCounter();
                 }
-            }
-        );
+            );
     }
 
 
-    saveButton
-        ?.addEventListener(
-            "click",
-            saveMyGremble
-        );
+    if (saveButton) {
+
+        saveButton
+            .addEventListener(
+                "click",
+                saveMyGremble
+            );
+    }
 
 
-    cancelButton
-        ?.addEventListener(
-            "click",
-            closeGrembleEditor
-        );
+    if (cancelButton) {
+
+        cancelButton
+            .addEventListener(
+                "click",
+                closeGrembleEditor
+            );
+    }
+}
+
+
+/* =========================================================
+   OPEN EDITOR
+========================================================= */
+
+function openGrembleEditor() {
+
+    createGrembleEditor();
+
+
+    editingGrembleAvatar = {
+
+        ...savedGrembleAvatar,
+
+        /*
+            Hats are disabled.
+        */
+        hat:
+            "none"
+    };
+
+
+    delete editingGrembleAvatar
+        .custom_background_file;
+
+
+    customBackgroundPreviewUrl =
+        savedGrembleAvatar
+            .custom_background_url ||
+        "";
+
+
+    if (myGremblePage) {
+
+        myGremblePage
+            .classList
+            .add(
+                "editing"
+            );
+    }
+
+
+    const cardLayout =
+        myGremblePage
+            ?.querySelector(
+                ".gremble-card-layout"
+            );
+
+
+    const cardActions =
+        myGremblePage
+            ?.querySelector(
+                ".gremble-card-actions"
+            );
+
+
+    if (cardLayout) {
+
+        cardLayout.hidden =
+            true;
+    }
+
+
+    if (cardActions) {
+
+        cardActions.hidden =
+            true;
+    }
+
+
+    renderEditorControls();
+
+    renderEditorPreview();
+
+
+    setAvatarStatus(
+        ""
+    );
+
+
+    window.scrollTo({
+        top:
+            myGremblePage
+                ?.offsetTop ||
+            0,
+
+        behavior:
+            "smooth"
+    });
+}
+
+
+/* =========================================================
+   CLOSE EDITOR
+========================================================= */
+
+function closeGrembleEditor() {
+
+    if (myGremblePage) {
+
+        myGremblePage
+            .classList
+            .remove(
+                "editing"
+            );
+    }
+
+
+    const cardLayout =
+        myGremblePage
+            ?.querySelector(
+                ".gremble-card-layout"
+            );
+
+
+    const cardActions =
+        myGremblePage
+            ?.querySelector(
+                ".gremble-card-actions"
+            );
+
+
+    if (cardLayout) {
+
+        cardLayout.hidden =
+            false;
+    }
+
+
+    if (cardActions) {
+
+        cardActions.hidden =
+            false;
+    }
+
+
+    if (
+        customBackgroundPreviewUrl &&
+        customBackgroundPreviewUrl.startsWith(
+            "blob:"
+        )
+    ) {
+
+        try {
+
+            URL.revokeObjectURL(
+                customBackgroundPreviewUrl
+            );
+
+        }
+        catch {}
+    }
+
+
+    customBackgroundPreviewUrl =
+        savedGrembleAvatar
+            .custom_background_url ||
+        "";
+
+
+    editingGrembleAvatar = {
+
+        ...savedGrembleAvatar
+    };
+
+
+    renderSavedAvatar();
 }
 
 
@@ -2324,9 +2155,8 @@ function setupEditorEvents() {
    API REQUEST
 ========================================================= */
 
-async function avatarRequest(
-    method = "GET",
-    body = null
+async function avatarApiRequest(
+    options = {}
 ) {
 
     const token =
@@ -2336,79 +2166,66 @@ async function avatarRequest(
     if (!token) {
 
         throw new Error(
-            "Connect Telegram first."
+            "PLEASE LOG IN WITH TELEGRAM FIRST."
         );
     }
 
 
-    const options = {
+    const headers = {
 
-        method,
-
-        headers: {
-
-            "Authorization":
-                `Bearer ${token}`,
-
-            "Content-Type":
-                "application/json"
-        }
+        ...(options.headers || {})
     };
 
 
-    if (
-        body !== null
-    ) {
-
-        options.body =
-            JSON.stringify(
-                body
-            );
-    }
+    headers.Authorization =
+        `Bearer ${token}`;
 
 
     const response =
         await fetch(
             GREMBLE_AVATAR_ENDPOINT,
-            options
+            {
+
+                ...options,
+
+                headers
+            }
         );
 
 
-    let result;
+    let data =
+        null;
 
 
     try {
 
-        result =
+        data =
             await response.json();
 
     }
     catch {
 
+        data =
+            null;
+    }
+
+
+    if (!response.ok) {
+
         throw new Error(
-            "Invalid server response."
+            data?.error ||
+            data?.message ||
+            "MY GREMBLE REQUEST FAILED."
         );
     }
 
 
-    if (
-        !response.ok ||
-        !result?.success
-    ) {
-
-        throw new Error(
-            result?.error ||
-            "Avatar request failed."
-        );
-    }
-
-
-    return result;
+    return data;
 }
 
 
 /* =========================================================
-   LOAD AVATAR FROM SUPABASE
+   LOAD FROM SERVER
 ========================================================= */
 
 async function loadMyGremble(
@@ -2418,10 +2235,6 @@ async function loadMyGremble(
     const token =
         getGrembleAvatarSessionToken();
 
-
-    /*
-        Not logged in.
-    */
 
     if (!token) {
 
@@ -2444,14 +2257,7 @@ async function loadMyGremble(
             );
 
 
-        editingGrembleAvatar = {
-            ...savedGrembleAvatar
-        };
-
-
         renderSavedAvatar();
-
-        renderEditorAvatar();
 
         return;
     }
@@ -2460,18 +2266,13 @@ async function loadMyGremble(
     if (
         !force &&
         avatarLoadedForSession &&
-        lastAvatarSessionToken ===
-            token
+        token ===
+            lastAvatarSessionToken
     ) {
 
         return;
     }
 
-
-    /*
-        Render local cache first
-        so the card appears immediately.
-    */
 
     const cached =
         loadAvatarCache();
@@ -2485,41 +2286,46 @@ async function loadMyGremble(
             );
 
 
-        editingGrembleAvatar = {
-            ...savedGrembleAvatar
-        };
-
-
         renderSavedAvatar();
     }
 
 
     try {
 
-        const result =
-            await avatarRequest(
-                "GET"
-            );
+        const data =
+            await avatarApiRequest({
+                method:
+                    "GET"
+            });
+
+
+        const avatar =
+            data?.avatar ||
+            data?.profile ||
+            data?.data ||
+            data;
+
+
+        const customBackgroundUrl =
+            data?.custom_background_url ||
+            data?.customBackgroundUrl ||
+            avatar?.custom_background_url ||
+            null;
 
 
         savedGrembleAvatar =
             normalizeAvatar(
-                result.avatar,
-
-                result
-                    .custom_background_url
+                avatar,
+                customBackgroundUrl
             );
 
 
-        editingGrembleAvatar = {
-            ...savedGrembleAvatar
-        };
+        /*
+            Force hats off.
+        */
 
-
-        customBackgroundPreviewUrl =
-            savedGrembleAvatar
-                .custom_background_url ||
-            "";
+        savedGrembleAvatar.hat =
+            "none";
 
 
         saveAvatarCache(
@@ -2537,48 +2343,151 @@ async function loadMyGremble(
 
         renderSavedAvatar();
 
-        renderEditorAvatar();
-
     }
     catch (error) {
 
         console.error(
-            "Could not load My Gremble:",
+            "Load My Gremble error:",
             error
         );
+
+
+        if (!cached) {
+
+            savedGrembleAvatar =
+                normalizeAvatar(
+                    DEFAULT_GREMBLE_AVATAR
+                );
+
+
+            renderSavedAvatar();
+        }
     }
 }
 
 
 /* =========================================================
-   SAVE AVATAR
+   UPLOAD CUSTOM BACKGROUND
+========================================================= */
+
+async function uploadCustomBackground(
+    file
+) {
+
+    if (!file) {
+
+        return null;
+    }
+
+
+    const token =
+        getGrembleAvatarSessionToken();
+
+
+    if (!token) {
+
+        throw new Error(
+            "PLEASE LOG IN WITH TELEGRAM FIRST."
+        );
+    }
+
+
+    const formData =
+        new FormData();
+
+
+    formData.append(
+        "file",
+        file
+    );
+
+
+    formData.append(
+        "action",
+        "upload-background"
+    );
+
+
+    const response =
+        await fetch(
+            GREMBLE_AVATAR_ENDPOINT,
+            {
+
+                method:
+                    "POST",
+
+                headers: {
+
+                    Authorization:
+                        `Bearer ${token}`
+                },
+
+                body:
+                    formData
+            }
+        );
+
+
+    let data =
+        null;
+
+
+    try {
+
+        data =
+            await response.json();
+
+    }
+    catch {
+
+        data =
+            null;
+    }
+
+
+    if (!response.ok) {
+
+        throw new Error(
+            data?.error ||
+            data?.message ||
+            "BACKGROUND UPLOAD FAILED."
+        );
+    }
+
+
+    return data;
+}
+
+
+/* =========================================================
+   SAVE MY GREMBLE
 ========================================================= */
 
 async function saveMyGremble() {
 
-    const {
-        saveButton,
-        message
-    } =
-        getEditorElements();
+    const saveButton =
+        document.getElementById(
+            "saveMyGrembleButton"
+        );
 
 
-    if (message) {
+    const token =
+        getGrembleAvatarSessionToken();
 
-        editingGrembleAvatar
-            .message =
-                message.value
-                    .trim()
-                    .slice(
-                        0,
-                        200
-                    );
+
+    if (!token) {
+
+        setAvatarStatus(
+            "PLEASE LOG IN WITH TELEGRAM FIRST.",
+            "error"
+        );
+
+
+        return;
     }
 
 
-    if (
-        saveButton
-    ) {
+    if (saveButton) {
 
         saveButton.disabled =
             true;
@@ -2590,66 +2499,172 @@ async function saveMyGremble() {
 
 
     setAvatarStatus(
-        "SAVING YOUR GREMBLE..."
+        "SAVING YOUR GREMBLE...",
+        "loading"
     );
 
 
     try {
 
+        let customBackgroundPath =
+            editingGrembleAvatar
+                .custom_background_path ||
+            null;
+
+
+        let customBackgroundUrl =
+            editingGrembleAvatar
+                .custom_background_url ||
+            null;
+
+
+        const customFile =
+            editingGrembleAvatar
+                .custom_background_file;
+
+
+        if (customFile) {
+
+            const uploadResult =
+                await uploadCustomBackground(
+                    customFile
+                );
+
+
+            customBackgroundPath =
+                uploadResult
+                    ?.custom_background_path ||
+                uploadResult
+                    ?.path ||
+                uploadResult
+                    ?.background_path ||
+                customBackgroundPath;
+
+
+            customBackgroundUrl =
+                uploadResult
+                    ?.custom_background_url ||
+                uploadResult
+                    ?.url ||
+                uploadResult
+                    ?.signed_url ||
+                customBackgroundUrl;
+        }
+
+
+        const avatarToSave = {
+
+            pose:
+                editingGrembleAvatar.pose,
+
+            outfit:
+                editingGrembleAvatar.outfit,
+
+            /*
+                Keep database compatibility,
+                but hats are disabled.
+            */
+            hat:
+                "none",
+
+            background:
+                editingGrembleAvatar.background,
+
+            custom_background_path:
+                customBackgroundPath,
+
+            role:
+                editingGrembleAvatar.role,
+
+            energy:
+                editingGrembleAvatar.energy,
+
+            here_for:
+                editingGrembleAvatar.here_for,
+
+            message:
+                (
+                    editingGrembleAvatar
+                        .message ||
+                    ""
+                )
+                    .trim()
+                    .slice(
+                        0,
+                        200
+                    )
+        };
+
+
         const result =
-            await avatarRequest(
-                "POST",
-                {
-                    pose:
-                        editingGrembleAvatar.pose,
+            await avatarApiRequest({
 
-                    outfit:
-                        editingGrembleAvatar.outfit,
+                method:
+                    "POST",
 
-                    hat:
-                        editingGrembleAvatar.hat,
+                headers: {
 
-                    background:
-                        editingGrembleAvatar.background,
+                    "Content-Type":
+                        "application/json"
+                },
 
-                    role:
-                        editingGrembleAvatar.role,
+                body:
+                    JSON.stringify(
+                        avatarToSave
+                    )
+            });
 
-                    energy:
-                        editingGrembleAvatar.energy,
 
-                    here_for:
-                        editingGrembleAvatar.here_for,
+        const returnedAvatar =
+            result?.avatar ||
+            result?.profile ||
+            result?.data ||
+            avatarToSave;
 
-                    message:
-                        editingGrembleAvatar.message
-                }
-            );
+
+        const returnedBackgroundUrl =
+            result
+                ?.custom_background_url ||
+            result
+                ?.customBackgroundUrl ||
+            returnedAvatar
+                ?.custom_background_url ||
+            customBackgroundUrl;
 
 
         savedGrembleAvatar =
             normalizeAvatar(
-                result.avatar,
+                {
 
-                result
-                    .custom_background_url
+                    ...avatarToSave,
+
+                    ...returnedAvatar,
+
+                    custom_background_path:
+                        returnedAvatar
+                            ?.custom_background_path ||
+                        customBackgroundPath
+                },
+
+                returnedBackgroundUrl
             );
 
 
-        editingGrembleAvatar = {
-            ...savedGrembleAvatar
-        };
-
-
-        customBackgroundPreviewUrl =
-            savedGrembleAvatar
-                .custom_background_url ||
-            "";
+        savedGrembleAvatar.hat =
+            "none";
 
 
         saveAvatarCache(
             savedGrembleAvatar
         );
+
+
+        avatarLoadedForSession =
+            true;
+
+
+        lastAvatarSessionToken =
+            token;
 
 
         renderSavedAvatar();
@@ -2688,9 +2703,7 @@ async function saveMyGremble() {
     }
     finally {
 
-        if (
-            saveButton
-        ) {
+        if (saveButton) {
 
             saveButton.disabled =
                 false;
@@ -2925,7 +2938,7 @@ async function createGrembleCardBlob() {
 
 
     /*
-        Base
+        BASE
     */
 
     context.fillStyle =
@@ -2940,102 +2953,49 @@ async function createGrembleCardBlob() {
     );
 
 
+    /*
+        BACKGROUND
+    */
+
     const backgroundSrc =
         getBackgroundImage(
             savedGrembleAvatar
         );
 
 
-    const characterSrc =
-        getCharacterImage(
-            savedGrembleAvatar
-        );
+    if (backgroundSrc) {
+
+        try {
+
+            const background =
+                await loadExportImage(
+                    backgroundSrc
+                );
 
 
-    const hatSrc =
-        getHatImage(
-            savedGrembleAvatar
-        );
-
-
-    const [
-        backgroundImage,
-        characterImage,
-        hatImage
-    ] =
-        await Promise.all([
-
-            loadExportImage(
-                backgroundSrc
-            ),
-
-            loadExportImage(
-                characterSrc
-            ),
-
-            loadExportImage(
-                hatSrc
-            )
-        ]);
-
-
-    /*
-        Background
-    */
-
-    if (backgroundImage) {
-
-        drawCover(
-            context,
-            backgroundImage,
-            WIDTH,
-            HEIGHT
-        );
-
-    }
-    else {
-
-        const gradient =
-            context.createRadialGradient(
-                WIDTH / 2,
-                HEIGHT / 2,
-                100,
-                WIDTH / 2,
-                HEIGHT / 2,
-                800
+            drawCover(
+                context,
+                background,
+                WIDTH,
+                HEIGHT
             );
 
+        }
+        catch (error) {
 
-        gradient.addColorStop(
-            0,
-            "#0a3a25"
-        );
-
-
-        gradient.addColorStop(
-            1,
-            "#020906"
-        );
-
-
-        context.fillStyle =
-            gradient;
-
-
-        context.fillRect(
-            0,
-            0,
-            WIDTH,
-            HEIGHT
-        );
+            console.warn(
+                "Could not load background for export:",
+                error
+            );
+        }
     }
 
 
     /*
-        Dark overlay
+        DARK OVERLAY
     */
 
-    const overlay =
+    const gradient =
         context.createLinearGradient(
             0,
             0,
@@ -3044,26 +3004,20 @@ async function createGrembleCardBlob() {
         );
 
 
-    overlay.addColorStop(
+    gradient.addColorStop(
         0,
-        "rgba(0,0,0,0.02)"
+        "rgba(0, 0, 0, 0.08)"
     );
 
 
-    overlay.addColorStop(
-        0.62,
-        "rgba(0,0,0,0.04)"
-    );
-
-
-    overlay.addColorStop(
+    gradient.addColorStop(
         1,
-        "rgba(0,8,5,0.78)"
+        "rgba(0, 0, 0, 0.48)"
     );
 
 
     context.fillStyle =
-        overlay;
+        gradient;
 
 
     context.fillRect(
@@ -3075,169 +3029,33 @@ async function createGrembleCardBlob() {
 
 
     /*
-        Character
+        CHARACTER
     */
 
-    if (characterImage) {
-
-        drawContain(
-            context,
-            characterImage,
-
-            130,
-            90,
-
-            940,
-            930
-        );
-    }
-
-
-    /*
-        Hat
-    */
-
-    if (hatImage) {
-
-        const config =
-            GREMBLE_HAT_POSITIONS[
-                savedGrembleAvatar.pose
-            ] ||
-            GREMBLE_HAT_POSITIONS[
-                "pose-01"
-            ];
-
-
-        const baseHatWidth =
-            WIDTH *
-            (
-                parseFloat(
-                    config.width
-                ) / 100
-            );
-
-
-        /*
-            The real PNG ratio is used here.
-            This makes downloaded cards use the same
-            cap proportions as the live website preview.
-        */
-
-        const intrinsicRatio =
-            hatImage.height /
-            hatImage.width;
-
-
-        const baseHatHeight =
-            baseHatWidth *
-            intrinsicRatio;
-
-
-        const centerX =
-            WIDTH *
-            (
-                parseFloat(
-                    config.left
-                ) / 100
-            );
-
-
-        const topY =
-            HEIGHT *
-            (
-                parseFloat(
-                    config.top
-                ) / 100
-            );
-
-
-        const rotation =
-            parseFloat(
-                config.rotate
-            ) *
-            Math.PI /
-            180;
-
-
-        context.save();
-
-
-        context.translate(
-            centerX,
-            topY +
-            baseHatHeight / 2
+    const characterSrc =
+        getCharacterImage(
+            savedGrembleAvatar
         );
 
 
-        context.rotate(
-            rotation
+    const character =
+        await loadExportImage(
+            characterSrc
         );
 
 
-        context.scale(
-            Number(
-                config.scaleX
-            ) || 1,
-            Number(
-                config.scaleY
-            ) || 1
-        );
-
-
-        context.drawImage(
-            hatImage,
-
-            -baseHatWidth / 2,
-            -baseHatHeight / 2,
-
-            baseHatWidth,
-            baseHatHeight
-        );
-
-
-        context.restore();
-    }
-
-
-    /*
-        Bottom gradient
-    */
-
-    const bottomGradient =
-        context.createLinearGradient(
-            0,
-            HEIGHT * 0.70,
-            0,
-            HEIGHT
-        );
-
-
-    bottomGradient.addColorStop(
-        0,
-        "rgba(0,0,0,0)"
-    );
-
-
-    bottomGradient.addColorStop(
-        1,
-        "rgba(0,8,5,0.88)"
-    );
-
-
-    context.fillStyle =
-        bottomGradient;
-
-
-    context.fillRect(
-        0,
-        HEIGHT * 0.70,
-        WIDTH,
-        HEIGHT * 0.30
+    drawContain(
+        context,
+        character,
+        70,
+        80,
+        WIDTH - 140,
+        HEIGHT - 150
     );
 
 
     /*
-        Brand
+        BRAND
     */
 
     context.textAlign =
@@ -3245,17 +3063,194 @@ async function createGrembleCardBlob() {
 
 
     context.fillStyle =
-        "#69ff83";
+        "#ffffff";
 
 
     context.font =
-        "900 30px Arial";
+        "700 34px Arial";
 
 
     context.fillText(
         "MY GREMBLE",
-        70,
-        1040
+        55,
+        70
+    );
+
+
+    context.fillStyle =
+        "#8cff00";
+
+
+    context.font =
+        "900 34px Arial";
+
+
+    context.textAlign =
+        "right";
+
+
+    context.fillText(
+        "#GREMBLE",
+        WIDTH - 55,
+        70
+    );
+
+
+    /*
+        PERSONALITY CARD
+    */
+
+    const panelX =
+        55;
+
+
+    const panelY =
+        HEIGHT - 235;
+
+
+    const panelWidth =
+        WIDTH - 110;
+
+
+    const panelHeight =
+        170;
+
+
+    context.fillStyle =
+        "rgba(1, 17, 10, 0.86)";
+
+
+    context.beginPath();
+
+
+    if (
+        typeof context.roundRect ===
+        "function"
+    ) {
+
+        context.roundRect(
+            panelX,
+            panelY,
+            panelWidth,
+            panelHeight,
+            28
+        );
+
+    }
+    else {
+
+        context.rect(
+            panelX,
+            panelY,
+            panelWidth,
+            panelHeight
+        );
+    }
+
+
+    context.fill();
+
+
+    context.strokeStyle =
+        "rgba(140, 255, 0, 0.35)";
+
+
+    context.lineWidth =
+        2;
+
+
+    context.stroke();
+
+
+    /*
+        LABELS
+    */
+
+    context.textAlign =
+        "left";
+
+
+    context.fillStyle =
+        "rgba(255,255,255,0.6)";
+
+
+    context.font =
+        "700 18px Arial";
+
+
+    context.fillText(
+        "ROLE",
+        90,
+        panelY + 45
+    );
+
+
+    context.fillText(
+        "ENERGY",
+        350,
+        panelY + 45
+    );
+
+
+    context.fillText(
+        "HERE FOR",
+        650,
+        panelY + 45
+    );
+
+
+    /*
+        VALUES
+    */
+
+    context.fillStyle =
+        "#ffffff";
+
+
+    context.font =
+        "900 26px Arial";
+
+
+    context.fillText(
+        savedGrembleAvatar.role
+            .toUpperCase(),
+        90,
+        panelY + 80
+    );
+
+
+    context.fillText(
+        savedGrembleAvatar.energy
+            .toUpperCase(),
+        350,
+        panelY + 80
+    );
+
+
+    context.fillText(
+        savedGrembleAvatar.here_for
+            .toUpperCase(),
+        650,
+        panelY + 80
+    );
+
+
+    /*
+        MESSAGE
+    */
+
+    context.fillStyle =
+        "#8cff00";
+
+
+    context.font =
+        "700 18px Arial";
+
+
+    context.fillText(
+        "MY MESSAGE",
+        90,
+        panelY + 120
     );
 
 
@@ -3264,114 +3259,70 @@ async function createGrembleCardBlob() {
 
 
     context.font =
-        "900 46px Arial";
+        "500 19px Arial";
 
-
-    context.fillText(
-        savedGrembleAvatar.role
-            .toUpperCase(),
-        70,
-        1100
-    );
-
-
-    /*
-        Message
-    */
 
     const message =
-        savedGrembleAvatar
-            .message
-            .trim();
+        savedGrembleAvatar.message ||
+        "";
 
 
-    if (message) {
-
-        context.fillStyle =
-            "rgba(255,255,255,.78)";
+    const maxMessageLength =
+        85;
 
 
-        context.font =
-            "600 25px Arial";
-
-
-        const maxTextWidth =
-            750;
-
-
-        let displayMessage =
-            message;
-
-
-        while (
-            context.measureText(
-                displayMessage
-            ).width >
-                maxTextWidth &&
-            displayMessage.length >
-                3
-        ) {
-
-            displayMessage =
-                displayMessage.slice(
+    const exportMessage =
+        message.length >
+        maxMessageLength
+            ? (
+                message.slice(
                     0,
-                    -1
-                );
-        }
-
-
-        if (
-            displayMessage !==
-            message
-        ) {
-
-            displayMessage =
-                displayMessage
-                    .slice(
-                        0,
-                        -3
-                    ) +
-                "...";
-        }
-
-
-        context.fillText(
-            displayMessage,
-            70,
-            1145
-        );
-    }
-
-
-    /*
-        Hashtag
-    */
-
-    context.textAlign =
-        "right";
-
-
-    context.fillStyle =
-        "#69ff83";
-
-
-    context.font =
-        "900 28px Arial";
+                    maxMessageLength
+                ) +
+                "..."
+            )
+            : message;
 
 
     context.fillText(
-        "#GREMBLE",
-        WIDTH - 70,
-        1110
+        exportMessage,
+        220,
+        panelY + 120
     );
 
 
-    return await new Promise(
-        resolve => {
+    /*
+        CREATE BLOB
+    */
+
+    return new Promise(
+        (
+            resolve,
+            reject
+        ) => {
 
             canvas.toBlob(
-                resolve,
+                blob => {
+
+                    if (!blob) {
+
+                        reject(
+                            new Error(
+                                "Could not create Gremble image."
+                            )
+                        );
+
+                        return;
+                    }
+
+
+                    resolve(
+                        blob
+                    );
+                },
+
                 "image/png",
+
                 1
             );
         }
@@ -3385,13 +3336,10 @@ async function createGrembleCardBlob() {
 
 async function downloadMyGremble() {
 
-    if (
-        downloadMyGrembleButton
-    ) {
+    if (downloadMyGrembleButton) {
 
-        downloadMyGrembleButton
-            .disabled =
-                true;
+        downloadMyGrembleButton.disabled =
+            true;
     }
 
 
@@ -3401,44 +3349,35 @@ async function downloadMyGremble() {
             await createGrembleCardBlob();
 
 
-        if (!blob) {
-
-            throw new Error(
-                "Could not create image."
-            );
-        }
-
-
         const url =
             URL.createObjectURL(
                 blob
             );
 
 
-        const anchor =
+        const link =
             document.createElement(
                 "a"
             );
 
 
-        anchor.href =
+        link.href =
             url;
 
 
-        anchor.download =
+        link.download =
             "my-gremble.png";
 
 
-        document.body
-            .appendChild(
-                anchor
-            );
+        document.body.appendChild(
+            link
+        );
 
 
-        anchor.click();
+        link.click();
 
 
-        anchor.remove();
+        link.remove();
 
 
         setTimeout(
@@ -3449,7 +3388,7 @@ async function downloadMyGremble() {
                 );
 
             },
-            2000
+            1500
         );
 
     }
@@ -3468,31 +3407,25 @@ async function downloadMyGremble() {
     }
     finally {
 
-        if (
-            downloadMyGrembleButton
-        ) {
+        if (downloadMyGrembleButton) {
 
-            downloadMyGrembleButton
-                .disabled =
-                    false;
+            downloadMyGrembleButton.disabled =
+                false;
         }
     }
 }
 
 
 /* =========================================================
-   SHARE
+   SHARE ON X
 ========================================================= */
 
 async function shareMyGremble() {
 
-    if (
-        shareMyGrembleButton
-    ) {
+    if (shareMyGrembleButton) {
 
-        shareMyGrembleButton
-            .disabled =
-                true;
+        shareMyGrembleButton.disabled =
+            true;
     }
 
 
@@ -3500,14 +3433,6 @@ async function shareMyGremble() {
 
         const blob =
             await createGrembleCardBlob();
-
-
-        if (!blob) {
-
-            throw new Error(
-                "Could not create image."
-            );
-        }
 
 
         const file =
@@ -3523,41 +3448,33 @@ async function shareMyGremble() {
             );
 
 
-        const shareText =
-            savedGrembleAvatar
-                .message
-                .trim()
-                ? `${savedGrembleAvatar.message} #GREMBLE`
-                : "This is my Gremble. #GREMBLE";
+        const shareData = {
 
+            title:
+                "My Gremble",
 
-        /*
-            Mobile / supported browsers:
-            Native share includes image file.
-        */
+            text:
+                "Meet my Gremble 👀 #GREMBLE",
+
+            files: [
+                file
+            ]
+        };
+
 
         if (
             navigator.share &&
-            navigator.canShare &&
-            navigator.canShare({
-                files: [
-                    file
-                ]
-            })
+            (
+                !navigator.canShare ||
+                navigator.canShare(
+                    shareData
+                )
+            )
         ) {
 
-            await navigator.share({
-
-                files: [
-                    file
-                ],
-
-                text:
-                    shareText,
-
-                title:
-                    "My Gremble"
-            });
+            await navigator.share(
+                shareData
+            );
 
 
             return;
@@ -3566,62 +3483,59 @@ async function shareMyGremble() {
 
         /*
             Desktop fallback:
-            download image and open X composer.
+            download image first and open X composer.
         */
 
-        const objectUrl =
+        const url =
             URL.createObjectURL(
                 blob
             );
 
 
-        const anchor =
+        const link =
             document.createElement(
                 "a"
             );
 
 
-        anchor.href =
-            objectUrl;
+        link.href =
+            url;
 
 
-        anchor.download =
+        link.download =
             "my-gremble.png";
 
 
-        document.body
-            .appendChild(
-                anchor
-            );
+        document.body.appendChild(
+            link
+        );
 
 
-        anchor.click();
+        link.click();
 
-
-        anchor.remove();
+        link.remove();
 
 
         setTimeout(
             () => {
 
                 URL.revokeObjectURL(
-                    objectUrl
+                    url
                 );
 
             },
-            2000
+            1500
         );
 
 
-        const xUrl =
-            "https://x.com/intent/post?text=" +
+        const text =
             encodeURIComponent(
-                shareText
+                "Meet my Gremble 👀 #GREMBLE"
             );
 
 
         window.open(
-            xUrl,
+            `https://x.com/intent/post?text=${text}`,
             "_blank",
             "noopener,noreferrer"
         );
@@ -3630,120 +3544,212 @@ async function shareMyGremble() {
     catch (error) {
 
         if (
-            error?.name ===
+            error?.name !==
             "AbortError"
         ) {
 
-            return;
+            console.error(
+                "Share My Gremble error:",
+                error
+            );
         }
-
-
-        console.error(
-            "Share My Gremble error:",
-            error
-        );
-
-
-        alert(
-            "Could not share your Gremble."
-        );
 
     }
     finally {
 
-        if (
-            shareMyGrembleButton
-        ) {
+        if (shareMyGrembleButton) {
 
-            shareMyGrembleButton
-                .disabled =
-                    false;
+            shareMyGrembleButton.disabled =
+                false;
         }
     }
 }
 
 
 /* =========================================================
-   SESSION WATCH
-
-   Telegram login can happen after avatar.js loads.
+   RESET WHEN LOGGED OUT
 ========================================================= */
 
-async function watchAvatarSession() {
+function resetMyGrembleSession() {
 
-    const currentToken =
+    avatarLoadedForSession =
+        false;
+
+
+    lastAvatarSessionToken =
+        "";
+
+
+    savedGrembleAvatar =
+        normalizeAvatar(
+            loadAvatarCache() ||
+            DEFAULT_GREMBLE_AVATAR
+        );
+
+
+    savedGrembleAvatar.hat =
+        "none";
+
+
+    editingGrembleAvatar = {
+
+        ...savedGrembleAvatar
+    };
+
+
+    renderSavedAvatar();
+}
+
+
+/* =========================================================
+   CHECK SESSION CHANGES
+========================================================= */
+
+function watchGrembleSession() {
+
+    let previousToken =
         getGrembleAvatarSessionToken();
 
 
-    if (
-        currentToken !==
-        lastAvatarSessionToken
-    ) {
+    setInterval(
+        () => {
 
-        avatarLoadedForSession =
-            false;
+            const currentToken =
+                getGrembleAvatarSessionToken();
 
 
-        if (currentToken) {
+            if (
+                currentToken ===
+                previousToken
+            ) {
 
-            await loadMyGremble(
-                true
-            );
-
-        }
-        else {
-
-            lastAvatarSessionToken =
-                "";
+                return;
+            }
 
 
-            const cached =
-                loadAvatarCache();
+            previousToken =
+                currentToken;
 
 
-            savedGrembleAvatar =
-                normalizeAvatar(
-                    cached ||
-                    DEFAULT_GREMBLE_AVATAR
+            if (currentToken) {
+
+                avatarLoadedForSession =
+                    false;
+
+
+                loadMyGremble(
+                    true
                 );
 
+            }
+            else {
 
-            editingGrembleAvatar = {
-                ...savedGrembleAvatar
-            };
+                resetMyGrembleSession();
+            }
 
-
-            renderSavedAvatar();
-
-            renderEditorAvatar();
-        }
-    }
+        },
+        1500
+    );
 }
 
 
 /* =========================================================
-   MAIN BUTTON EVENTS
+   WATCH MY GREMBLE VIEW
 ========================================================= */
 
-editMyGrembleButton
-    ?.addEventListener(
-        "click",
-        openGrembleEditor
+function watchMyGrembleView() {
+
+    const myGrembleView =
+        document.querySelector(
+            '[data-site-view-name="my-gremble"]'
+        );
+
+
+    if (!myGrembleView) {
+
+        return;
+    }
+
+
+    const observer =
+        new MutationObserver(
+            () => {
+
+                if (
+                    !myGrembleView.hidden
+                ) {
+
+                    loadMyGremble();
+                }
+            }
+        );
+
+
+    observer.observe(
+        myGrembleView,
+        {
+            attributes:
+                true,
+
+            attributeFilter: [
+                "hidden"
+            ]
+        }
     );
+}
 
 
-downloadMyGrembleButton
-    ?.addEventListener(
-        "click",
-        downloadMyGremble
-    );
+/* =========================================================
+   CLEAN OLD HAT ELEMENTS FROM PAGE
+========================================================= */
+
+function cleanLegacyHatElements() {
+
+    document
+        .querySelectorAll(
+            ".gremble-card-hat"
+        )
+        .forEach(
+            element => {
+
+                element.remove();
+            }
+        );
+}
 
 
-shareMyGrembleButton
-    ?.addEventListener(
-        "click",
-        shareMyGremble
-    );
+/* =========================================================
+   BUTTON EVENTS
+========================================================= */
+
+if (editMyGrembleButton) {
+
+    editMyGrembleButton
+        .addEventListener(
+            "click",
+            openGrembleEditor
+        );
+}
+
+
+if (downloadMyGrembleButton) {
+
+    downloadMyGrembleButton
+        .addEventListener(
+            "click",
+            downloadMyGremble
+        );
+}
+
+
+if (shareMyGrembleButton) {
+
+    shareMyGrembleButton
+        .addEventListener(
+            "click",
+            shareMyGremble
+        );
+}
 
 
 /* =========================================================
@@ -3752,21 +3758,8 @@ shareMyGrembleButton
 
 function initializeMyGremble() {
 
-    if (!myGremblePage) {
+    cleanLegacyHatElements();
 
-        return;
-    }
-
-
-    ensureMainHatLayer();
-
-
-    createGrembleEditor();
-
-
-    /*
-        Show cached/default card immediately.
-    */
 
     const cached =
         loadAvatarCache();
@@ -3779,33 +3772,34 @@ function initializeMyGremble() {
         );
 
 
+    savedGrembleAvatar.hat =
+        "none";
+
+
     editingGrembleAvatar = {
+
         ...savedGrembleAvatar
     };
 
 
     renderSavedAvatar();
 
-    renderEditorAvatar();
+
+    createGrembleEditor();
 
 
-    /*
-        Then replace with Supabase version.
-    */
-
-    loadMyGremble(
-        true
-    );
+    watchGrembleSession();
 
 
-    /*
-        Watch Telegram login/logout.
-    */
+    watchMyGrembleView();
 
-    setInterval(
-        watchAvatarSession,
-        1000
-    );
+
+    if (
+        getGrembleAvatarSessionToken()
+    ) {
+
+        loadMyGremble();
+    }
 }
 
 
