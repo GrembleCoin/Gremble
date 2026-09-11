@@ -854,55 +854,29 @@ function createGrembleEditor() {
                 </div>
 
 
-                <!-- BACKGROUND -->
+ <!-- BACKGROUND -->
 
-                <div class="gremble-editor-section">
+<div class="gremble-editor-section">
 
-                    <div class="gremble-editor-section-heading">
+    <div class="gremble-editor-section-heading">
 
-                        <h3>
-                            BACKGROUND
-                        </h3>
+        <h3>
+            BACKGROUND
+        </h3>
 
-                        <small>
-                            CHOOSE YOUR WORLD
-                        </small>
+        <small>
+            CHOOSE YOUR WORLD
+        </small>
 
-                    </div>
-
-
-                    <div
-                        class="gremble-option-grid gremble-background-grid"
-                        id="grembleBackgroundOptions"
-                    ></div>
+    </div>
 
 
-                    <div class="gremble-custom-background">
+    <div
+        class="gremble-option-grid gremble-background-grid"
+        id="grembleBackgroundOptions"
+    ></div>
 
-                        <label
-                            for="grembleCustomBackgroundInput"
-                            class="gremble-upload-background-button"
-                        >
-                            UPLOAD YOUR OWN BACKGROUND
-                        </label>
-
-
-                        <input
-                            type="file"
-                            id="grembleCustomBackgroundInput"
-                            accept="image/png,image/jpeg,image/webp"
-                            hidden
-                        >
-
-
-                        <small>
-                            PNG, JPG OR WEBP · MAX 5 MB
-                        </small>
-
-                    </div>
-
-                </div>
-
+</div>
 
                 <!-- PERSONALITY -->
 
@@ -1423,51 +1397,107 @@ function renderBackgroundOptions() {
     );
 
 
-    if (
-        editingGrembleAvatar.background ===
-        "custom"
-    ) {
+ if (
+    editingGrembleAvatar.background ===
+    "custom"
+) {
 
-        const customButton =
-            createAvatarOptionButton({
+    const customButton =
+        createAvatarOptionButton({
 
-                value:
-                    "custom",
+            value:
+                "custom",
 
-                label:
-                    "CUSTOM",
+            label:
+                "CUSTOM",
 
-                image:
-                    customBackgroundPreviewUrl ||
-                    editingGrembleAvatar
-                        .custom_background_url,
+            image:
+                customBackgroundPreviewUrl ||
+                editingGrembleAvatar
+                    .custom_background_url,
 
-                selected:
-                    true,
+            selected:
+                true,
 
-                className:
-                    "gremble-background-option"
-            });
-
-
-        customButton.addEventListener(
-            "click",
-            () => {
-
-                editingGrembleAvatar.background =
-                    "custom";
+            className:
+                "gremble-background-option"
+        });
 
 
-                renderEditorPreview();
-            }
-        );
+    customButton.addEventListener(
+        "click",
+        () => {
+
+            editingGrembleAvatar.background =
+                "custom";
 
 
-        container.appendChild(
-            customButton
-        );
-    }
+            renderEditorPreview();
+        }
+    );
+
+
+    container.appendChild(
+        customButton
+    );
 }
+
+
+/* =====================================================
+   UPLOAD YOUR OWN BACKGROUND CARD
+===================================================== */
+
+const uploadLabel =
+    document.createElement(
+        "label"
+    );
+
+
+uploadLabel.className =
+    "gremble-background-upload";
+
+
+uploadLabel.innerHTML = `
+
+    <strong>
+        +
+    </strong>
+
+    <span>
+        UPLOAD YOUR OWN
+    </span>
+
+    <small>
+        PNG, JPG OR WEBP · MAX 5 MB
+    </small>
+
+    <input
+        type="file"
+        id="grembleCustomBackgroundInput"
+        accept="image/png,image/jpeg,image/webp"
+    >
+`;
+
+
+const uploadInput =
+    uploadLabel.querySelector(
+        "#grembleCustomBackgroundInput"
+    );
+
+
+if (uploadInput) {
+
+    uploadInput.addEventListener(
+        "change",
+        handleCustomBackground
+    );
+}
+
+
+container.appendChild(
+    uploadLabel
+);
+    }
 
 
 /* =========================================================
@@ -1494,8 +1524,56 @@ function createPersonalityButton(
         "gremble-select-button";
 
 
-    button.textContent =
-        value.toUpperCase();
+    button.dataset.value =
+        value;
+
+
+    const iconMap = {
+
+        Builder:
+            "🔨",
+
+        Explorer:
+            "◈",
+
+        Dreamer:
+            "☆",
+
+        Mischievous:
+            "☻",
+
+        Chill:
+            "♧",
+
+        Bold:
+            "♨",
+
+        Community:
+            "♟",
+
+        Fun:
+            "🎮",
+
+        Future:
+            "➤"
+    };
+
+
+    const icon =
+        iconMap[value] ||
+        "◆";
+
+
+    button.innerHTML = `
+
+        <span class="gremble-choice-icon">
+            ${icon}
+        </span>
+
+        <span class="gremble-choice-name">
+            ${value.toUpperCase()}
+        </span>
+    `;
 
 
     if (

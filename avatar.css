@@ -1701,3 +1701,776 @@
     }
 
 }
+
+
+/* =========================================================
+   MY GREMBLE EDITOR - NEW PERSONALITY DESIGN
+   OVERRIDES
+========================================================= */
+
+
+/* =========================================================
+   SECTION HEADINGS
+========================================================= */
+
+.gremble-editor-section-heading {
+
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    margin-bottom: 16px;
+}
+
+
+.gremble-editor-section-heading h3 {
+
+    margin: 0;
+
+    color: #ffffff;
+
+    font-size: 19px;
+    font-weight: 950;
+
+    line-height: 1.1;
+
+    letter-spacing: -0.4px;
+}
+
+
+.gremble-editor-section-heading h3 span {
+
+    color:
+        var(--green, #69ff83);
+}
+
+
+.gremble-editor-section-heading small {
+
+    flex-shrink: 0;
+
+    color:
+        rgba(255,255,255,0.34);
+
+    font-size: 7px;
+    font-weight: 900;
+
+    letter-spacing: 2px;
+
+    text-transform: uppercase;
+}
+
+
+/* =========================================================
+   PERSONALITY MAIN CARD
+========================================================= */
+
+.gremble-personality-editor {
+
+    position: relative;
+
+    overflow: hidden;
+
+    padding:
+        0 0 2px;
+
+    border:
+        1px solid
+        rgba(105,255,131,0.18);
+
+    border-radius: 20px;
+
+    background:
+        radial-gradient(
+            circle at 100% 0%,
+            rgba(105,255,131,0.07),
+            transparent 42%
+        ),
+        linear-gradient(
+            145deg,
+            rgba(3,27,18,0.96),
+            rgba(1,12,8,0.98)
+        );
+
+    box-shadow:
+        0 18px 45px
+        rgba(0,0,0,0.20);
+}
+
+
+/* =========================================================
+   PERSONALITY ROW
+========================================================= */
+
+.gremble-personality-editor-group {
+
+    position: relative;
+
+    padding:
+        18px 20px 20px;
+}
+
+
+.gremble-personality-editor-group +
+.gremble-personality-editor-group {
+
+    border-top:
+        1px solid
+        rgba(105,255,131,0.10);
+}
+
+
+/* ROLE / ENERGY / HERE FOR */
+
+.gremble-personality-editor-group > span {
+
+    position: relative;
+
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    margin-bottom: 13px;
+
+    padding-left: 30px;
+
+    color: #ffffff;
+
+    font-size: 10px;
+    font-weight: 950;
+
+    letter-spacing: 1px;
+
+    text-transform: uppercase;
+}
+
+
+/* GREEN ICON AREA */
+
+.gremble-personality-editor-group > span::before {
+
+    position: absolute;
+
+    left: 0;
+
+    width: 21px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color:
+        var(--green, #69ff83);
+
+    font-size: 18px;
+
+    line-height: 1;
+}
+
+
+/* ROLE ICON */
+
+.gremble-personality-editor-group:nth-child(1)
+> span::before {
+
+    content: "♟";
+}
+
+
+/* ENERGY ICON */
+
+.gremble-personality-editor-group:nth-child(2)
+> span::before {
+
+    content: "ϟ";
+
+    font-size: 22px;
+    font-weight: 950;
+}
+
+
+/* HERE FOR ICON */
+
+.gremble-personality-editor-group:nth-child(3)
+> span::before {
+
+    content: "♣";
+
+    font-size: 19px;
+}
+
+
+/* SMALL RIGHT DESCRIPTION */
+
+.gremble-personality-editor-group > span::after {
+
+    position: absolute;
+
+    right: 0;
+
+    color:
+        rgba(255,255,255,0.28);
+
+    font-size: 6px;
+    font-weight: 800;
+
+    letter-spacing: 1.8px;
+}
+
+
+.gremble-personality-editor-group:nth-child(1)
+> span::after {
+
+    content:
+        "WHAT BEST DESCRIBES YOU?";
+}
+
+
+.gremble-personality-editor-group:nth-child(2)
+> span::after {
+
+    content:
+        "WHAT'S YOUR VIBE?";
+}
+
+
+.gremble-personality-editor-group:nth-child(3)
+> span::after {
+
+    content:
+        "WHAT DRIVES YOU?";
+}
+
+
+/* =========================================================
+   PERSONALITY BUTTON GRID
+========================================================= */
+
+.gremble-personality-options {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3,minmax(0,1fr));
+
+    gap: 11px;
+}
+
+
+/* =========================================================
+   PERSONALITY BUTTON
+========================================================= */
+
+.gremble-personality-options
+.gremble-select-button {
+
+    position: relative;
+
+    width: 100%;
+    min-height: 46px;
+
+    padding:
+        0 15px;
+
+    border:
+        1px solid
+        rgba(105,255,131,0.30);
+
+    border-radius: 15px;
+
+    background:
+        rgba(0,12,8,0.52);
+
+    color:
+        rgba(255,255,255,0.74);
+
+    font-size: 9px;
+    font-weight: 950;
+
+    letter-spacing: 0.8px;
+
+    cursor: pointer;
+
+    text-align: center;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.gremble-personality-options
+.gremble-select-button:hover {
+
+    border-color:
+        var(--green, #69ff83);
+
+    color: #ffffff;
+
+    background:
+        rgba(105,255,131,0.055);
+
+    transform:
+        translateY(-1px);
+}
+
+
+.gremble-personality-options
+.gremble-select-button.active {
+
+    border-color:
+        var(--green, #69ff83);
+
+    background:
+        linear-gradient(
+            135deg,
+            #67ff72,
+            #53e6b2
+        );
+
+    color:
+        #00170d;
+
+    box-shadow:
+        0 8px 25px
+        rgba(105,255,131,0.15);
+}
+
+
+/* =========================================================
+   MESSAGE SECTION
+========================================================= */
+
+.gremble-personality-editor +
+.gremble-editor-section {
+
+    margin-top: 18px;
+}
+
+
+.gremble-message-input {
+
+    min-height: 112px;
+
+    padding:
+        17px 18px;
+
+    border:
+        1px solid
+        rgba(105,255,131,0.25);
+
+    border-radius: 15px;
+
+    background:
+        rgba(0,12,8,0.58);
+
+    color: #ffffff;
+
+    font-size: 12px;
+
+    resize: vertical;
+}
+
+
+.gremble-message-input:focus {
+
+    border-color:
+        var(--green, #69ff83);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(105,255,131,0.06);
+}
+
+
+.gremble-message-counter {
+
+    display: flex;
+    align-items: center;
+
+    margin-top: 7px;
+
+    color:
+        rgba(255,255,255,0.72);
+
+    font-size: 10px;
+}
+
+
+/* =========================================================
+   SAVE + CANCEL
+========================================================= */
+
+.gremble-editor-actions {
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(0,1.45fr)
+        minmax(150px,0.6fr);
+
+    gap: 14px;
+
+    margin-top: 26px;
+}
+
+
+.gremble-save-button,
+.gremble-cancel-button {
+
+    min-height: 55px;
+
+    border-radius: 16px;
+}
+
+
+.gremble-save-button {
+
+    border:
+        1px solid
+        var(--green, #69ff83);
+
+    background:
+        linear-gradient(
+            135deg,
+            #68ff70,
+            #52e8af
+        );
+
+    color:
+        #00170d;
+
+    box-shadow:
+        0 12px 30px
+        rgba(105,255,131,0.10);
+}
+
+
+.gremble-save-button:hover {
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 16px 35px
+        rgba(105,255,131,0.18);
+}
+
+
+.gremble-cancel-button {
+
+    border:
+        1px solid
+        rgba(105,255,131,0.25);
+
+    background:
+        rgba(0,12,8,0.55);
+
+    color:
+        rgba(255,255,255,0.62);
+}
+
+
+.gremble-cancel-button:hover {
+
+    border-color:
+        rgba(105,255,131,0.50);
+
+    color: #ffffff;
+
+    background:
+        rgba(105,255,131,0.04);
+}
+
+
+/* =========================================================
+   BACKGROUND GRID
+========================================================= */
+
+.gremble-background-grid {
+
+    grid-template-columns:
+        repeat(2,minmax(0,1fr));
+
+    gap: 11px;
+}
+
+
+.gremble-background-grid
+.gremble-option-button {
+
+    min-height: 120px;
+
+    border:
+        1px solid
+        rgba(105,255,131,0.16);
+
+    border-radius: 15px;
+
+    background:
+        rgba(0,14,9,0.50);
+}
+
+
+.gremble-background-grid
+.gremble-option-button:hover {
+
+    border-color:
+        rgba(105,255,131,0.46);
+}
+
+
+.gremble-background-grid
+.gremble-option-button.selected,
+.gremble-background-grid
+.gremble-option-button.active {
+
+    border-color:
+        var(--green, #69ff83);
+
+    box-shadow:
+        inset 0 0 0 1px
+        rgba(105,255,131,0.07);
+}
+
+
+.gremble-background-grid
+.gremble-option-button img {
+
+    width: 100%;
+    height: 90px;
+
+    border-radius: 9px;
+
+    object-fit: cover;
+}
+
+
+/* =========================================================
+   CUSTOM BACKGROUND
+   MAKE IT LOOK LIKE THE OTHER BACKGROUND CARDS
+========================================================= */
+
+.gremble-custom-background {
+
+    position: relative;
+
+    width: 100%;
+
+    min-height: 120px;
+
+    margin-top: 11px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-direction: column;
+
+    gap: 7px;
+
+    border:
+        1px dashed
+        rgba(105,255,131,0.30);
+
+    border-radius: 15px;
+
+    background:
+        radial-gradient(
+            circle at 50% 35%,
+            rgba(105,255,131,0.055),
+            transparent 65%
+        ),
+        rgba(0,14,9,0.50);
+
+    overflow: hidden;
+
+    transition:
+        border-color 0.2s ease,
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.gremble-custom-background:hover {
+
+    border-color:
+        var(--green, #69ff83);
+
+    background:
+        rgba(105,255,131,0.045);
+
+    transform:
+        translateY(-1px);
+}
+
+
+.gremble-upload-background-button {
+
+    width: 100%;
+    min-height: 76px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding:
+        15px 20px 4px;
+
+    border: 0;
+
+    background:
+        transparent;
+
+    color:
+        var(--green, #69ff83);
+
+    font-size: 9px;
+    font-weight: 950;
+
+    letter-spacing: 1px;
+
+    text-align: center;
+
+    cursor: pointer;
+}
+
+
+.gremble-upload-background-button::before {
+
+    content: "+";
+
+    width: 32px;
+    height: 32px;
+
+    margin-right: 10px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    border:
+        1px solid
+        rgba(105,255,131,0.28);
+
+    border-radius: 50%;
+
+    color:
+        var(--green, #69ff83);
+
+    font-size: 20px;
+    font-weight: 400;
+}
+
+
+.gremble-custom-background > small {
+
+    padding-bottom: 14px;
+
+    color:
+        rgba(255,255,255,0.35);
+
+    font-size: 7px;
+    font-weight: 800;
+
+    letter-spacing: 1px;
+}
+
+
+/* =========================================================
+   FIX OPTION ACTIVE STATE
+========================================================= */
+
+.gremble-option-button.selected {
+
+    border-color:
+        var(--green, #69ff83);
+
+    background:
+        rgba(105,255,131,0.08);
+
+    box-shadow:
+        inset 0 0 0 1px
+        rgba(105,255,131,0.05);
+}
+
+
+.gremble-option-button.selected span {
+
+    color:
+        var(--green, #69ff83);
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 700px) {
+
+    .gremble-editor-section-heading {
+
+        align-items:
+            flex-start;
+
+        flex-direction:
+            column;
+
+        gap: 6px;
+    }
+
+
+    .gremble-editor-section-heading h3 {
+
+        font-size: 17px;
+    }
+
+
+    .gremble-personality-editor-group {
+
+        padding:
+            17px 15px 18px;
+    }
+
+
+    .gremble-personality-editor-group
+    > span::after {
+
+        display: none;
+    }
+
+
+    .gremble-personality-options {
+
+        grid-template-columns:
+            1fr;
+    }
+
+
+    .gremble-personality-options
+    .gremble-select-button {
+
+        min-height: 48px;
+    }
+
+
+    .gremble-editor-actions {
+
+        grid-template-columns:
+            1fr;
+    }
+
+
+    .gremble-background-grid {
+
+        grid-template-columns:
+            1fr 1fr;
+    }
+
+}
