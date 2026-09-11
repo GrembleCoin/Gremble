@@ -3526,13 +3526,25 @@ async function shareMyGremble() {
             );
 
 
+        const shareText =
+            "My Gremble card #GrembleCoin";
+
+
+        /*
+            MOBILE / SUPPORTED DEVICES
+
+            If the browser supports sharing files,
+            send the PNG + text to the native share sheet.
+            User can choose X.
+        */
+
         const shareData = {
 
             title:
                 "My Gremble",
 
             text:
-                "Meet my Gremble 👀 #GREMBLE",
+                shareText,
 
             files: [
                 file
@@ -3560,60 +3572,64 @@ async function shareMyGremble() {
 
 
         /*
-            Desktop fallback:
-            download image first and open X composer.
+            DESKTOP FALLBACK
+
+            1. Download the generated image.
+            2. Open X composer with prepared text.
+            3. User only attaches the downloaded PNG.
         */
 
-        const url =
+        const imageUrl =
             URL.createObjectURL(
                 blob
             );
 
 
-        const link =
+        const downloadLink =
             document.createElement(
                 "a"
             );
 
 
-        link.href =
-            url;
+        downloadLink.href =
+            imageUrl;
 
 
-        link.download =
+        downloadLink.download =
             "my-gremble.png";
 
 
         document.body.appendChild(
-            link
+            downloadLink
         );
 
 
-        link.click();
+        downloadLink.click();
 
-        link.remove();
+
+        downloadLink.remove();
 
 
         setTimeout(
             () => {
 
                 URL.revokeObjectURL(
-                    url
+                    imageUrl
                 );
 
             },
-            1500
+            2000
         );
 
 
-        const text =
+        const encodedText =
             encodeURIComponent(
-                "Meet my Gremble 👀 #GREMBLE"
+                shareText
             );
 
 
         window.open(
-            `https://x.com/intent/post?text=${text}`,
+            `https://x.com/intent/post?text=${encodedText}`,
             "_blank",
             "noopener,noreferrer"
         );
@@ -3629,6 +3645,11 @@ async function shareMyGremble() {
             console.error(
                 "Share My Gremble error:",
                 error
+            );
+
+
+            alert(
+                "Could not share your Gremble."
             );
         }
 
