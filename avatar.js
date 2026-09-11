@@ -1491,11 +1491,11 @@ function createPersonalityButton(
 
 
     button.className =
-        "gremble-personality-select-button";
+        "gremble-select-button";
 
 
     button.textContent =
-        value;
+        value.toUpperCase();
 
 
     if (
@@ -1504,7 +1504,7 @@ function createPersonalityButton(
     ) {
 
         button.classList.add(
-            "selected"
+            "active"
         );
     }
 
