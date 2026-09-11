@@ -122,59 +122,90 @@ const GREMBLE_HERE_FOR = [
 /* =========================================================
    HAT POSITION BY POSE
 
-   These values can later be fine-tuned
-   independently without changing any HTML.
+   Every pose has its own calibration.
+
+   top:
+       position from top of card
+
+   left:
+       horizontal center of cap
+
+   width:
+       base width of cap
+
+   rotate:
+       cap angle
+
+   scaleX:
+       horizontal correction
+
+   scaleY:
+       vertical correction
 ========================================================= */
 
 const GREMBLE_HAT_POSITIONS = {
 
     "pose-01": {
-        top: "11%",
-        left: "50%",
-        width: "34%",
-        rotate: "0deg"
+        top: "4.6%",
+        left: "50.0%",
+        width: "45.0%",
+        rotate: "-1.5deg",
+        scaleX: 1.00,
+        scaleY: 0.92
     },
 
     "pose-02": {
-        top: "10%",
-        left: "51%",
-        width: "33%",
-        rotate: "2deg"
+        top: "4.0%",
+        left: "49.8%",
+        width: "44.0%",
+        rotate: "-0.5deg",
+        scaleX: 1.00,
+        scaleY: 0.91
     },
 
     "pose-03": {
-        top: "10%",
-        left: "50%",
-        width: "34%",
-        rotate: "-2deg"
+        top: "4.8%",
+        left: "49.2%",
+        width: "44.5%",
+        rotate: "-1.8deg",
+        scaleX: 1.02,
+        scaleY: 0.92
     },
 
     "pose-04": {
-        top: "10%",
-        left: "50%",
-        width: "34%",
-        rotate: "0deg"
+        top: "4.3%",
+        left: "49.9%",
+        width: "45.5%",
+        rotate: "-1.2deg",
+        scaleX: 1.00,
+        scaleY: 0.91
     },
 
     "pose-05": {
-        top: "10%",
-        left: "50%",
-        width: "34%",
-        rotate: "1deg"
+        top: "3.8%",
+        left: "49.7%",
+        width: "45.0%",
+        rotate: "-0.4deg",
+        scaleX: 1.00,
+        scaleY: 0.90
     },
 
     "pose-06": {
-        top: "10%",
-        left: "50%",
-        width: "34%",
-        rotate: "-1deg"
+        top: "4.7%",
+        left: "50.2%",
+        width: "44.0%",
+        rotate: "0.3deg",
+        scaleX: 0.99,
+        scaleY: 0.91
     },
 
     "pose-07": {
-        top: "9%",
-        left: "50%",
-        width: "35%",
-        rotate: "0deg"
+        top: "5.1%",
+        left: "51.2%",
+        width: "43.0%",
+        rotate: "2.0deg",
+        scaleX: 0.98,
+        scaleY: 0.90
     }
 };
 
@@ -331,11 +362,6 @@ function getGrembleAvatarSessionToken() {
         }
     }
 
-
-    /*
-        Try known global helpers if Telegram code
-        exposes one.
-    */
 
     const helperNames = [
 
@@ -718,6 +744,15 @@ function applyHatPosition(
         ];
 
 
+    /*
+        Everything is set inline here so old CSS
+        positioning cannot override the cap.
+    */
+
+    element.style.position =
+        "absolute";
+
+
     element.style.top =
         config.top;
 
@@ -730,8 +765,32 @@ function applyHatPosition(
         config.width;
 
 
+    element.style.height =
+        "auto";
+
+
+    element.style.maxWidth =
+        "none";
+
+
+    element.style.objectFit =
+        "contain";
+
+
+    element.style.zIndex =
+        "6";
+
+
+    element.style.pointerEvents =
+        "none";
+
+
+    element.style.transformOrigin =
+        "50% 50%";
+
+
     element.style.transform =
-        `translateX(-50%) rotate(${config.rotate})`;
+        `translateX(-50%) rotate(${config.rotate}) scaleX(${config.scaleX}) scaleY(${config.scaleY})`;
 }
 
 
@@ -1190,9 +1249,11 @@ function createGrembleEditor() {
                             data-avatar-type="hat"
                             data-avatar-value="none"
                         >
+
                             <strong>
                                 NONE
                             </strong>
+
                         </button>
 
 
@@ -1360,7 +1421,9 @@ function createGrembleEditor() {
                                 data-avatar-type="role"
                                 data-avatar-value="${value}"
                             >
+
                                 ${value.toUpperCase()}
+
                             </button>
 
                         `
@@ -1395,7 +1458,9 @@ function createGrembleEditor() {
                                 data-avatar-type="energy"
                                 data-avatar-value="${value}"
                             >
+
                                 ${value.toUpperCase()}
+
                             </button>
 
                         `
@@ -1430,7 +1495,9 @@ function createGrembleEditor() {
                                 data-avatar-type="here_for"
                                 data-avatar-value="${value}"
                             >
+
                                 ${value.toUpperCase()}
+
                             </button>
 
                         `
@@ -3032,18 +3099,16 @@ async function createGrembleCardBlob() {
 
     if (hatImage) {
 
-        /*
-            Export hat position is approximate.
-            Fine tuning can be done later per pose.
-        */
-
         const config =
             GREMBLE_HAT_POSITIONS[
                 savedGrembleAvatar.pose
+            ] ||
+            GREMBLE_HAT_POSITIONS[
+                "pose-01"
             ];
 
 
-        const hatWidth =
+        const baseHatWidth =
             WIDTH *
             (
                 parseFloat(
@@ -3052,9 +3117,20 @@ async function createGrembleCardBlob() {
             );
 
 
-        const hatHeight =
-            hatWidth *
-            0.65;
+        /*
+            The real PNG ratio is used here.
+            This makes downloaded cards use the same
+            cap proportions as the live website preview.
+        */
+
+        const intrinsicRatio =
+            hatImage.height /
+            hatImage.width;
+
+
+        const baseHatHeight =
+            baseHatWidth *
+            intrinsicRatio;
 
 
         const centerX =
@@ -3075,16 +3151,6 @@ async function createGrembleCardBlob() {
             );
 
 
-        context.save();
-
-
-        context.translate(
-            centerX,
-            topY +
-            hatHeight / 2
-        );
-
-
         const rotation =
             parseFloat(
                 config.rotate
@@ -3093,20 +3159,39 @@ async function createGrembleCardBlob() {
             180;
 
 
+        context.save();
+
+
+        context.translate(
+            centerX,
+            topY +
+            baseHatHeight / 2
+        );
+
+
         context.rotate(
             rotation
         );
 
 
-        drawContain(
-            context,
+        context.scale(
+            Number(
+                config.scaleX
+            ) || 1,
+            Number(
+                config.scaleY
+            ) || 1
+        );
+
+
+        context.drawImage(
             hatImage,
 
-            -hatWidth / 2,
-            -hatHeight / 2,
+            -baseHatWidth / 2,
+            -baseHatHeight / 2,
 
-            hatWidth,
-            hatHeight
+            baseHatWidth,
+            baseHatHeight
         );
 
 
@@ -3448,10 +3533,7 @@ async function shareMyGremble() {
 
         /*
             Mobile / supported browsers:
-            Native share sheet includes the image.
-
-            User can choose X and the image can be
-            attached through the operating system.
+            Native share includes image file.
         */
 
         if (
@@ -3483,13 +3565,8 @@ async function shareMyGremble() {
 
 
         /*
-            Desktop fallback.
-
-            X Web Intent cannot accept a local image file
-            directly without X media-upload authentication.
-
-            We therefore download the card and open the
-            prepared X post.
+            Desktop fallback:
+            download image and open X composer.
         */
 
         const objectUrl =
@@ -3551,11 +3628,6 @@ async function shareMyGremble() {
 
     }
     catch (error) {
-
-        /*
-            User cancelling native sharing
-            should not show an ugly error.
-        */
 
         if (
             error?.name ===
