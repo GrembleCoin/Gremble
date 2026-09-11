@@ -23,6 +23,11 @@
         href="style.css?v=108"
     >
 
+    <link
+        rel="stylesheet"
+        href="avatar.css?v=100"
+    >
+
 </head>
 
 
@@ -376,18 +381,17 @@
         </button>
 
 
-        <button
-            type="button"
-            class="account-dropdown-item account-dropdown-disabled"
-            disabled
-        >
-            <span>
-                MY GREMBLE
-                <small>COMING SOON</small>
-            </span>
+    <button
+    type="button"
+    class="account-dropdown-item site-nav-button"
+    data-site-view="my-gremble"
+>
+    <span>
+        MY GREMBLE
+    </span>
 
-            <b>◇</b>
-        </button>
+    <b>◇</b>
+</button>
 
 
         <div class="account-dropdown-divider"></div>
@@ -2178,7 +2182,255 @@
 
         </section>
 
-    </main>
+
+    <!-- =================================================
+         MY GREMBLE
+    ================================================== -->
+
+    <section
+        class="site-view my-gremble-view"
+        id="myGremble"
+        data-site-view-name="my-gremble"
+        hidden
+    >
+
+  <div class="my-gremble-page">
+
+    <!-- HEADER -->
+
+    <div class="my-gremble-heading">
+
+        <p class="page-eyebrow">
+            YOUR CHARACTER. YOUR STYLE.
+        </p>
+
+        <h2>
+            MY <span>GREMBLE.</span>
+        </h2>
+
+        <p class="my-gremble-subtitle">
+            Your Gremble. Your personality. Your card.
+        </p>
+
+    </div>
+
+
+    <!-- GREMBLE CARD -->
+
+    <div class="gremble-card-layout">
+
+
+        <!-- LEFT SIDE -->
+
+        <div class="gremble-card-preview">
+
+            <div
+                class="gremble-card-canvas"
+                id="grembleCardCanvas"
+            >
+
+                <img
+                    src="wall-1.png"
+                    alt=""
+                    class="gremble-card-background"
+                    id="grembleCardBackground"
+                >
+
+                <img
+                    src="pose-01.png"
+                    alt="My Gremble"
+                    class="gremble-card-character"
+                    id="grembleCardCharacter"
+                >
+
+                <div class="gremble-card-brand">
+
+                    <span>
+                        MY GREMBLE
+                    </span>
+
+                    <strong>
+                        #GREMBLE
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- RIGHT SIDE -->
+
+        <div class="gremble-card-info">
+
+            <div class="gremble-card-info-top">
+
+                <div>
+
+                    <small>
+                        GREMBLE CARD
+                    </small>
+
+                    <h3>
+                        WHAT KIND OF GREMBLE ARE YOU?
+                    </h3>
+
+                </div>
+
+                <button
+                    type="button"
+                    class="gremble-edit-button"
+                    id="editMyGrembleButton"
+                >
+                    EDIT MY GREMBLE
+                </button>
+
+            </div>
+
+
+            <!-- PERSONALITY -->
+
+            <div class="gremble-personality-grid">
+
+                <div class="gremble-personality-item">
+
+                    <small>
+                        ROLE
+                    </small>
+
+                    <strong id="grembleRoleValue">
+                        BUILDER
+                    </strong>
+
+                    <span>
+                        Here to build.
+                    </span>
+
+                </div>
+
+
+                <div class="gremble-personality-item">
+
+                    <small>
+                        ENERGY
+                    </small>
+
+                    <strong id="grembleEnergyValue">
+                        MISCHIEVOUS
+                    </strong>
+
+                    <span>
+                        Never too serious.
+                    </span>
+
+                </div>
+
+
+                <div class="gremble-personality-item">
+
+                    <small>
+                        HERE FOR
+                    </small>
+
+                    <strong id="grembleHereForValue">
+                        COMMUNITY
+                    </strong>
+
+                    <span>
+                        Building together.
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- MESSAGE -->
+
+            <div class="gremble-card-message">
+
+                <small>
+                    MY MESSAGE
+                </small>
+
+                <p id="grembleMessageValue">
+                    Building a better tomorrow with Gremble.
+                </p>
+
+            </div>
+
+
+            <!-- MEMBER SINCE -->
+
+            <div class="gremble-member-since">
+
+                <small>
+                    MEMBER SINCE
+                </small>
+
+                <strong>
+                    SEPTEMBER 2026
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- BOTTOM ACTIONS -->
+
+    <div class="gremble-card-actions">
+
+        <button
+            type="button"
+            class="gremble-download-button"
+            id="downloadMyGrembleButton"
+        >
+            <span>↓</span>
+
+            <div>
+                <strong>
+                    DOWNLOAD
+                </strong>
+
+                <small>
+                    Save your Gremble
+                </small>
+            </div>
+
+        </button>
+
+
+        <button
+            type="button"
+            class="gremble-share-button"
+            id="shareMyGrembleButton"
+        >
+            <span>𝕏</span>
+
+            <div>
+                <strong>
+                    SHARE ON X
+                </strong>
+
+                <small>
+                    Show your Gremble to the world
+                </small>
+            </div>
+
+        </button>
+
+    </div>
+
+</div>
+
+    </section>
+
+
+</main>
 
 
     <!-- =================================================
@@ -2611,6 +2863,13 @@
 
 
 <!-- =====================================================
+     MY GREMBLE
+===================================================== -->
+
+<script src="avatar.js?v=100"></script>
+
+
+<!-- =====================================================
      WEBSITE SCRIPT
 ===================================================== -->
 
@@ -2713,7 +2972,9 @@ function openSiteView(
         "roadmap",
         "arcade",
         "faq",
-        "login"
+        "login",
+        "my-gremble"
+
     ];
 
 
@@ -2838,7 +3099,8 @@ if (
         "roadmap",
         "arcade",
         "faq",
-        "login"
+        "login",
+        "my-gremble"
     ].includes(
         initialHash
     )
