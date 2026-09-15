@@ -246,6 +246,11 @@ function updateAccountButtons(
 
         accountNavButton.textContent =
             text;
+
+        accountNavButton.setAttribute(
+            "aria-expanded",
+            "false"
+        );
     }
 
 
@@ -253,6 +258,22 @@ function updateAccountButtons(
 
         homeAccountButtonText.textContent =
             text;
+    }
+
+
+    const accountDropdown =
+        document.getElementById(
+            "accountDropdown"
+        );
+
+
+    if (
+        accountDropdown &&
+        !loggedIn
+    ) {
+
+        accountDropdown.hidden =
+            true;
     }
 }
 

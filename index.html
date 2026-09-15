@@ -3025,7 +3025,7 @@
      TELEGRAM LOGIN
 ===================================================== -->
 
-<script src="telegram.js?v=103"></script>
+<script src="telegram.js?v=104"></script>
 
 
 <!-- =====================================================
@@ -3099,6 +3099,32 @@ const accountMenuDropdown =
     );
 
 
+function hasGrembleSession() {
+
+    return Boolean(
+        localStorage.getItem(
+            "gremble_session_token"
+        )
+    );
+}
+
+
+function closeAccountDropdown() {
+
+    if (!accountMenuDropdown) {
+        return;
+    }
+
+    accountMenuDropdown.hidden =
+        true;
+
+    accountMenuToggle?.setAttribute(
+        "aria-expanded",
+        "false"
+    );
+}
+
+
 if (
     accountMenuToggle &&
     accountMenuDropdown
@@ -3110,6 +3136,23 @@ if (
 
             event.preventDefault();
             event.stopPropagation();
+
+
+            /* NOT LOGGED IN */
+
+            if (!hasGrembleSession()) {
+
+                closeAccountDropdown();
+
+                openSiteView(
+                    "login"
+                );
+
+                return;
+            }
+
+
+            /* LOGGED IN */
 
             const isOpen =
                 !accountMenuDropdown.hidden;
@@ -3138,13 +3181,7 @@ if (
         "click",
         () => {
 
-            accountMenuDropdown.hidden =
-                true;
-
-            accountMenuToggle.setAttribute(
-                "aria-expanded",
-                "false"
-            );
+            closeAccountDropdown();
         }
     );
 }
@@ -3166,16 +3203,29 @@ function openSiteView(
         "faq",
         "login",
         "my-gremble"
-
     ];
 
 
-    const targetView =
+    let targetView =
         allowedViews.includes(
             viewName
         )
             ? viewName
             : "home";
+
+
+    /* =================================================
+       PROTECT MY GREMBLE
+    ================================================= */
+
+    if (
+        targetView === "my-gremble" &&
+        !hasGrembleSession()
+    ) {
+
+        targetView =
+            "login";
+    }
 
 
     siteViews.forEach(
