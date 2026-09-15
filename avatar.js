@@ -211,6 +211,28 @@ const shareMyGrembleButton =
 
 
 /* =========================================================
+   HOME GREMBLE MINI CARD
+========================================================= */
+
+const homeGrembleMiniCard =
+    document.getElementById(
+        "homeGrembleMiniCard"
+    );
+
+
+const homeGrembleMiniCharacter =
+    document.getElementById(
+        "homeGrembleMiniCharacter"
+    );
+
+
+const homeGrembleMiniBackground =
+    document.getElementById(
+        "homeGrembleMiniBackground"
+    );
+
+
+/* =========================================================
    CLEAN TEXT
 ========================================================= */
 
@@ -704,6 +726,77 @@ function renderSavedAvatar() {
         grembleMessageValue.textContent =
             savedGrembleAvatar.message ||
             "No message yet.";
+    }
+
+
+    renderHomeGrembleMiniCard();
+}
+
+
+/* =========================================================
+   RENDER HOME GREMBLE MINI CARD
+========================================================= */
+
+function renderHomeGrembleMiniCard() {
+
+    if (!homeGrembleMiniCard) {
+
+        return;
+    }
+
+
+    const token =
+        getGrembleAvatarSessionToken();
+
+
+    if (!token) {
+
+        homeGrembleMiniCard.hidden =
+            true;
+
+        return;
+    }
+
+
+    homeGrembleMiniCard.hidden =
+        false;
+
+
+    if (homeGrembleMiniCharacter) {
+
+        homeGrembleMiniCharacter.src =
+            getCharacterImage(
+                savedGrembleAvatar
+            );
+    }
+
+
+    if (homeGrembleMiniBackground) {
+
+        const backgroundSrc =
+            getBackgroundImage(
+                savedGrembleAvatar
+            );
+
+
+        if (backgroundSrc) {
+
+            homeGrembleMiniBackground.src =
+                backgroundSrc;
+
+            homeGrembleMiniBackground.hidden =
+                false;
+
+        }
+        else {
+
+            homeGrembleMiniBackground.removeAttribute(
+                "src"
+            );
+
+            homeGrembleMiniBackground.hidden =
+                true;
+        }
     }
 }
 
