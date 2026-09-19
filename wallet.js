@@ -41,20 +41,8 @@ import {
 
 
 import {
-    EthersAdapter
-} from "https://esm.sh/@reown/appkit-adapter-ethers@1.8.23?bundle";
-
-
-import {
-    solana,
-    mainnet,
-    bsc
+    solana
 } from "https://esm.sh/@reown/appkit@1.8.23/networks?bundle";
-
-
-import {
-    BrowserProvider
-} from "https://esm.sh/ethers@6?bundle";
 
 
 import bs58 from "https://esm.sh/bs58@6.0.0?bundle";
@@ -80,6 +68,10 @@ const GREMBLE_SESSION_KEY =
     "gremble_session_token";
 
 
+const GREMBLE_MINT_ADDRESS =
+    "55wNKcF14DxhfC4Wkh6vLPfhZEsiZUJxG5XKRGMWpump";
+
+
 /* =====================================================
    METADATA
 ===================================================== */
@@ -102,30 +94,22 @@ const solanaAdapter =
     new SolanaAdapter();
 
 
-const ethersAdapter =
-    new EthersAdapter();
-
-
 const grembleWalletModal =
     createAppKit({
 
         adapters: [
-            solanaAdapter,
-            ethersAdapter
+            solanaAdapter
         ],
 
         networks: [
-            solana,
-            mainnet,
-            bsc
+            solana
         ],
 
         defaultNetwork:
-            mainnet,
+            solana,
 
         defaultAccountTypes: {
-            solana: "eoa",
-            eip155: "eoa"
+            solana: "eoa"
         },
 
         projectId:
@@ -556,11 +540,7 @@ function getWalletNamespaceFromAddress(
     }
 
 
-    return cleanAddress
-        .toLowerCase()
-        .startsWith("0x")
-            ? "eip155"
-            : "solana";
+    return "solana";
 }
 
 
@@ -1673,12 +1653,11 @@ async function verifyConnectedWallet(
 
 
     if (
-        walletNamespace !== "solana" &&
-        walletNamespace !== "eip155"
+        walletNamespace !== "solana"
     ) {
 
         throw new Error(
-            "Unsupported wallet network."
+            "Only Solana wallets are supported."
         );
     }
 
@@ -1751,46 +1730,17 @@ async function verifyConnectedWallet(
         );
 
 
-        let signature =
-            "";
-
-
-        if (
-            walletNamespace === "solana"
-        ) {
-
-            const signatureResult =
-                await provider
-                    .signMessage(
-                        encodedMessage
-                    );
-
-
-            signature =
-                signatureToBase58(
-                    signatureResult
-                );
-
-        }
-        else {
-
-            const ethersProvider =
-                new BrowserProvider(
-                    provider
+        const signatureResult =
+            await provider
+                .signMessage(
+                    encodedMessage
                 );
 
 
-            const signer =
-                await ethersProvider
-                    .getSigner();
-
-
-            signature =
-                await signer
-                    .signMessage(
-                        message
-                    );
-        }
+        const signature =
+            signatureToBase58(
+                signatureResult
+            );
 
 
         const providerName =
@@ -2015,7 +1965,7 @@ async function connectAndVerifyWallet() {
         ) {
 
             setWalletStatus(
-                "SELECT YOUR WALLET...",
+                "SELECT YOUR SOLANA WALLET...",
                 "loading"
             );
 
@@ -2223,7 +2173,7 @@ async function changeWallet() {
 
 
     setWalletStatus(
-        "SELECT A NEW WALLET...",
+        "SELECT A NEW SOLANA WALLET...",
         "loading"
     );
 
@@ -2305,7 +2255,7 @@ async function changeWallet() {
         ) {
 
             throw new Error(
-                "New wallet connection failed."
+                "New Solana wallet connection failed."
             );
         }
 
@@ -2642,8 +2592,8 @@ try {
 
 
                 const provider =
-                    namespace
-                        ? providers?.[namespace] || null
+                    namespace === "solana"
+                        ? providers?.solana || null
                         : null;
 
 
@@ -2656,7 +2606,7 @@ try {
 
 
                     activeWalletNamespace =
-                        namespace;
+                        "solana";
                 }
 
 
@@ -2736,9 +2686,7 @@ try {
 
 
                     activeWalletNamespace =
-                        getWalletNamespaceFromAddress(
-                            address
-                        );
+                        "solana";
                 }
 
 
