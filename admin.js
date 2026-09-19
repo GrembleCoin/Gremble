@@ -513,6 +513,32 @@ const allHoldersPageInfo =
 
 
 /* =====================================================
+   PRIVATE WALLET LABELS
+===================================================== */
+
+const walletLabelModal =
+    $("walletLabelModal");
+
+const walletLabelModalClose =
+    $("walletLabelModalClose");
+
+const walletLabelAddress =
+    $("walletLabelAddress");
+
+const walletLabelRemove =
+    $("walletLabelRemove");
+
+const walletLabelCancel =
+    $("walletLabelCancel");
+
+const walletLabelSave =
+    $("walletLabelSave");
+
+const walletLabelOptions =
+    $$("[data-wallet-label]");
+
+
+/* =====================================================
    STATE
 ===================================================== */
 
@@ -539,6 +565,23 @@ const ALL_HOLDERS_AUTO_REFRESH_MS =
 
 let allHoldersAutoRefreshTimer =
     null;
+
+
+/* PRIVATE WALLET LABEL STATE */
+
+const walletLabels =
+    new Map();
+
+let selectedWalletLabelAddress =
+    "";
+
+let selectedWalletLabel =
+    "";
+
+let walletLabelSaving =
+    false;
+
+
 let allContestEntries =
     [];
 
@@ -1467,6 +1510,12 @@ function createAllHolderRow(
         );
 
 
+    const privateLabel =
+        cleanText(
+            holder.private_label
+        ).toLowerCase();
+
+
     /* RANK */
 
     const rankCell =
@@ -1621,12 +1670,128 @@ function createAllHolderRow(
         )}`;
 
 
+    /* PRIVATE LABEL */
+
+    const labelCell =
+        document.createElement(
+            "td"
+        );
+
+
+    const labelWrapper =
+        document.createElement(
+            "div"
+        );
+
+
+    labelWrapper.className =
+        "wallet-private-label";
+
+
+    if (
+        privateLabel === "my_wallet" ||
+        privateLabel === "friends"
+    ) {
+
+        const badge =
+            document.createElement(
+                "span"
+            );
+
+
+        badge.className =
+            "wallet-private-label-badge";
+
+
+        if (
+            privateLabel === "friends"
+        ) {
+
+            badge.classList.add(
+                "friends"
+            );
+        }
+
+
+        badge.textContent =
+            privateLabel === "my_wallet"
+                ? "MY WALLET"
+                : "FRIENDS";
+
+
+        labelWrapper.appendChild(
+            badge
+        );
+    }
+
+
+    /* EDIT BUTTON */
+
+    if (
+        walletAddress
+    ) {
+
+        const editButton =
+            document.createElement(
+                "button"
+            );
+
+
+        editButton.type =
+            "button";
+
+
+        editButton.className =
+            "wallet-label-edit";
+
+
+        editButton.textContent =
+            "✎";
+
+
+        editButton.title =
+            privateLabel
+                ? "EDIT PRIVATE LABEL"
+                : "ADD PRIVATE LABEL";
+
+
+        editButton.dataset.walletAddress =
+            walletAddress;
+
+
+        editButton.addEventListener(
+            "click",
+            () => {
+
+                openWalletLabelModal(
+                    walletAddress,
+                    privateLabel
+                );
+
+            }
+        );
+
+
+        labelWrapper.appendChild(
+            editButton
+        );
+    }
+
+
+    labelCell.appendChild(
+        labelWrapper
+    );
+
+
+    /* ROW */
+
     row.append(
         rankCell,
         walletCell,
         balanceCell,
         supplyCell,
-        valueCell
+        valueCell,
+        labelCell
     );
 
 
@@ -2167,6 +2332,982 @@ window.startAllHoldersAutoRefresh =
 
 window.stopAllHoldersAutoRefresh =
     stopAllHoldersAutoRefresh;
+
+
+/* =====================================================
+   PRIVATE WALLET LABEL MODAL
+===================================================== */
+
+function openWalletLabelModal(
+    walletAddress,
+    currentLabel = ""
+) {
+
+    const wallet =
+        cleanText(
+            walletAddress
+        );
+
+
+    if (
+        !wallet ||
+        !walletLabelModal
+    ) {
+
+        return;
+    }
+
+
+    selectedWalletLabelAddress =
+        wallet;
+
+
+    selectedWalletLabel =
+        cleanText(
+            currentLabel
+        ).toLowerCase();
+
+
+    walletLabelSaving =
+        false;
+
+
+    if (
+        walletLabelAddress
+    ) {
+
+        walletLabelAddress.textContent =
+            wallet;
+
+
+        walletLabelAddress.title =
+            wallet;
+    }
+
+
+walletLabelOptions.forEach(
+    option => {
+
+        option.disabled =
+            false;
+
+
+        const optionLabel =
+            cleanText(
+                option.dataset.walletLabel
+            ).toLowerCase();
+
+
+        option.classList.toggle(
+            "active",
+            optionLabel ===
+                selectedWalletLabel
+        );
+    }
+);
+
+
+    if (
+        walletLabelRemove
+    ) {
+
+        walletLabelRemove.disabled =
+            !selectedWalletLabel;
+    }
+
+
+    if (
+        walletLabelSave
+    ) {
+
+        walletLabelSave.disabled =
+            !selectedWalletLabel;
+
+        walletLabelSave.textContent =
+            "SAVE";
+    }
+
+
+    walletLabelModal.hidden =
+        false;
+
+
+    document.body.style.overflow =
+        "hidden";
+}
+
+
+/* =====================================================
+   CLOSE WALLET LABEL MODAL
+===================================================== */
+
+function closeWalletLabelModal() {
+
+    if (
+        walletLabelSaving
+    ) {
+
+        return;
+    }
+
+
+    if (
+        walletLabelModal
+    ) {
+
+        walletLabelModal.hidden =
+            true;
+    }
+
+
+    document.body.style.overflow =
+        "";
+
+
+    selectedWalletLabelAddress =
+        "";
+
+
+    selectedWalletLabel =
+        "";
+
+
+    walletLabelOptions.forEach(
+        option => {
+
+            option.classList.remove(
+                "active"
+            );
+        }
+    );
+
+
+    if (
+        walletLabelAddress
+    ) {
+
+        walletLabelAddress.textContent =
+            "—";
+
+        walletLabelAddress.title =
+            "";
+    }
+
+
+    if (
+        walletLabelSave
+    ) {
+
+        walletLabelSave.disabled =
+            true;
+
+        walletLabelSave.textContent =
+            "SAVE";
+    }
+
+
+    if (
+        walletLabelRemove
+    ) {
+
+        walletLabelRemove.disabled =
+            true;
+
+        walletLabelRemove.textContent =
+            "REMOVE LABEL";
+    }
+}
+
+
+/* =====================================================
+   SELECT WALLET LABEL
+===================================================== */
+
+function selectWalletLabel(
+    label
+) {
+
+    if (
+        walletLabelSaving
+    ) {
+
+        return;
+    }
+
+
+    const normalized =
+        cleanText(
+            label
+        ).toLowerCase();
+
+
+    if (
+        normalized !== "my_wallet" &&
+        normalized !== "friends"
+    ) {
+
+        return;
+    }
+
+
+    selectedWalletLabel =
+        normalized;
+
+
+    walletLabelOptions.forEach(
+        option => {
+
+            const optionLabel =
+                cleanText(
+                    option.dataset.walletLabel
+                ).toLowerCase();
+
+
+            option.classList.toggle(
+                "active",
+                optionLabel ===
+                    selectedWalletLabel
+            );
+        }
+    );
+
+
+    if (
+        walletLabelSave
+    ) {
+
+        walletLabelSave.disabled =
+            false;
+    }
+}
+
+
+/* =====================================================
+   UPDATE HOLDER LABEL LOCALLY
+===================================================== */
+
+function updateHolderPrivateLabel(
+    walletAddress,
+    label
+) {
+
+    const wallet =
+        cleanText(
+            walletAddress
+        );
+
+
+    const normalizedLabel =
+        cleanText(
+            label
+        ).toLowerCase();
+
+
+    const holder =
+        allHolders.find(
+            item =>
+                cleanText(
+                    item.wallet_address ??
+                    item.wallet ??
+                    item.owner
+                ) === wallet
+        );
+
+
+    if (
+        holder
+    ) {
+
+        holder.private_label =
+            normalizedLabel ||
+            null;
+    }
+
+
+    if (
+        normalizedLabel
+    ) {
+
+        walletLabels.set(
+            wallet,
+            normalizedLabel
+        );
+    }
+    else {
+
+        walletLabels.delete(
+            wallet
+        );
+    }
+
+
+    renderAllHolders();
+}
+
+
+/* =====================================================
+   SAVE WALLET LABEL
+===================================================== */
+
+async function saveWalletLabel() {
+
+    if (
+        walletLabelSaving
+    ) {
+
+        return;
+    }
+
+
+    const walletAddress =
+        cleanText(
+            selectedWalletLabelAddress
+        );
+
+
+    const label =
+        cleanText(
+            selectedWalletLabel
+        ).toLowerCase();
+
+
+    if (
+        !walletAddress
+    ) {
+
+        return;
+    }
+
+
+    if (
+        label !== "my_wallet" &&
+        label !== "friends"
+    ) {
+
+        setAdminMessage(
+            "SELECT A WALLET LABEL FIRST.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    const token =
+        getSessionToken();
+
+
+    if (
+        !token ||
+        sessionIsExpired()
+    ) {
+
+        if (
+            sessionIsExpired()
+        ) {
+
+            clearLocalSession();
+        }
+
+
+        closeWalletLabelModal();
+
+
+        showAccessError(
+            401
+        );
+
+
+        return;
+    }
+
+
+    walletLabelSaving =
+        true;
+
+
+    if (
+        walletLabelSave
+    ) {
+
+        walletLabelSave.disabled =
+            true;
+
+        walletLabelSave.textContent =
+            "SAVING...";
+    }
+
+
+    if (
+        walletLabelRemove
+    ) {
+
+        walletLabelRemove.disabled =
+            true;
+    }
+
+
+    walletLabelOptions.forEach(
+        option => {
+
+            option.disabled =
+                true;
+        }
+    );
+
+
+    try {
+
+        const response =
+            await fetch(
+                ADMIN_ALL_HOLDERS_ENDPOINT,
+                {
+
+                    method:
+                        "PATCH",
+
+                    headers: {
+
+                        Authorization:
+                            `Bearer ${token}`,
+
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:
+                        JSON.stringify(
+                            {
+
+                                wallet_address:
+                                    walletAddress,
+
+                                label:
+                                    label
+                            }
+                        ),
+
+                    cache:
+                        "no-store"
+                }
+            );
+
+
+        let result =
+            null;
+
+
+        try {
+
+            result =
+                await response.json();
+
+        }
+        catch {
+
+            result =
+                null;
+        }
+
+
+        if (
+            response.status === 401
+        ) {
+
+            clearLocalSession();
+
+
+            walletLabelSaving =
+                false;
+
+
+            closeWalletLabelModal();
+
+
+            showAccessError(
+                401
+            );
+
+
+            return;
+        }
+
+
+        if (
+            response.status === 403
+        ) {
+
+            walletLabelSaving =
+                false;
+
+
+            closeWalletLabelModal();
+
+
+            showAccessError(
+                403
+            );
+
+
+            return;
+        }
+
+
+        if (
+            !response.ok ||
+            result?.success !== true
+        ) {
+
+            throw new Error(
+                result?.error ||
+                "COULD NOT SAVE WALLET LABEL."
+            );
+        }
+
+
+        updateHolderPrivateLabel(
+            walletAddress,
+            label
+        );
+
+
+        walletLabelSaving =
+            false;
+
+
+        closeWalletLabelModal();
+
+
+        setAdminMessage(
+            label === "my_wallet"
+                ? "PRIVATE LABEL SAVED: MY WALLET."
+                : "PRIVATE LABEL SAVED: FRIENDS.",
+            "success"
+        );
+
+    }
+    catch (error) {
+
+        console.error(
+            "Wallet label save error:",
+            error
+        );
+
+
+        walletLabelSaving =
+            false;
+
+
+        walletLabelOptions.forEach(
+            option => {
+
+                option.disabled =
+                    false;
+            }
+        );
+
+
+        if (
+            walletLabelSave
+        ) {
+
+            walletLabelSave.disabled =
+                false;
+
+            walletLabelSave.textContent =
+                "SAVE";
+        }
+
+
+        if (
+            walletLabelRemove
+        ) {
+
+            walletLabelRemove.disabled =
+                false;
+        }
+
+
+        setAdminMessage(
+            error?.message ||
+            "COULD NOT SAVE WALLET LABEL.",
+            "error"
+        );
+    }
+}
+
+
+/* =====================================================
+   REMOVE WALLET LABEL
+===================================================== */
+
+async function removeWalletLabel() {
+
+    if (
+        walletLabelSaving
+    ) {
+
+        return;
+    }
+
+
+    const walletAddress =
+        cleanText(
+            selectedWalletLabelAddress
+        );
+
+
+    if (
+        !walletAddress
+    ) {
+
+        return;
+    }
+
+
+    const token =
+        getSessionToken();
+
+
+    if (
+        !token ||
+        sessionIsExpired()
+    ) {
+
+        if (
+            sessionIsExpired()
+        ) {
+
+            clearLocalSession();
+        }
+
+
+        closeWalletLabelModal();
+
+
+        showAccessError(
+            401
+        );
+
+
+        return;
+    }
+
+
+    walletLabelSaving =
+        true;
+
+
+    if (
+        walletLabelRemove
+    ) {
+
+        walletLabelRemove.disabled =
+            true;
+
+        walletLabelRemove.textContent =
+            "REMOVING...";
+    }
+
+
+    if (
+        walletLabelSave
+    ) {
+
+        walletLabelSave.disabled =
+            true;
+    }
+
+
+    walletLabelOptions.forEach(
+        option => {
+
+            option.disabled =
+                true;
+        }
+    );
+
+
+    try {
+
+        const response =
+            await fetch(
+                ADMIN_ALL_HOLDERS_ENDPOINT,
+                {
+
+                    method:
+                        "DELETE",
+
+                    headers: {
+
+                        Authorization:
+                            `Bearer ${token}`,
+
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:
+                        JSON.stringify(
+                            {
+
+                                wallet_address:
+                                    walletAddress
+                            }
+                        ),
+
+                    cache:
+                        "no-store"
+                }
+            );
+
+
+        let result =
+            null;
+
+
+        try {
+
+            result =
+                await response.json();
+
+        }
+        catch {
+
+            result =
+                null;
+        }
+
+
+        if (
+            response.status === 401
+        ) {
+
+            clearLocalSession();
+
+
+            walletLabelSaving =
+                false;
+
+
+            closeWalletLabelModal();
+
+
+            showAccessError(
+                401
+            );
+
+
+            return;
+        }
+
+
+        if (
+            response.status === 403
+        ) {
+
+            walletLabelSaving =
+                false;
+
+
+            closeWalletLabelModal();
+
+
+            showAccessError(
+                403
+            );
+
+
+            return;
+        }
+
+
+        if (
+            !response.ok ||
+            result?.success !== true
+        ) {
+
+            throw new Error(
+                result?.error ||
+                "COULD NOT REMOVE WALLET LABEL."
+            );
+        }
+
+
+        updateHolderPrivateLabel(
+            walletAddress,
+            ""
+        );
+
+
+        walletLabelSaving =
+            false;
+
+
+        closeWalletLabelModal();
+
+
+        setAdminMessage(
+            "PRIVATE WALLET LABEL REMOVED.",
+            "success"
+        );
+
+    }
+    catch (error) {
+
+        console.error(
+            "Wallet label remove error:",
+            error
+        );
+
+
+        walletLabelSaving =
+            false;
+
+
+        walletLabelOptions.forEach(
+            option => {
+
+                option.disabled =
+                    false;
+            }
+        );
+
+
+        if (
+            walletLabelRemove
+        ) {
+
+            walletLabelRemove.disabled =
+                false;
+
+            walletLabelRemove.textContent =
+                "REMOVE LABEL";
+        }
+
+
+        if (
+            walletLabelSave
+        ) {
+
+            walletLabelSave.disabled =
+                !selectedWalletLabel;
+
+            walletLabelSave.textContent =
+                "SAVE";
+        }
+
+
+        setAdminMessage(
+            error?.message ||
+            "COULD NOT REMOVE WALLET LABEL.",
+            "error"
+        );
+    }
+}
+
+
+/* =====================================================
+   WALLET LABEL EVENTS
+===================================================== */
+
+walletLabelOptions.forEach(
+    option => {
+
+        option.addEventListener(
+            "click",
+            () => {
+
+                selectWalletLabel(
+                    option.dataset.walletLabel
+                );
+
+            }
+        );
+    }
+);
+
+
+if (
+    walletLabelSave
+) {
+
+    walletLabelSave.addEventListener(
+        "click",
+        saveWalletLabel
+    );
+}
+
+
+if (
+    walletLabelRemove
+) {
+
+    walletLabelRemove.addEventListener(
+        "click",
+        removeWalletLabel
+    );
+}
+
+
+if (
+    walletLabelCancel
+) {
+
+    walletLabelCancel.addEventListener(
+        "click",
+        closeWalletLabelModal
+    );
+}
+
+
+if (
+    walletLabelModalClose
+) {
+
+    walletLabelModalClose.addEventListener(
+        "click",
+        closeWalletLabelModal
+    );
+}
+
+
+if (
+    walletLabelModal
+) {
+
+    const walletLabelBackdrop =
+        walletLabelModal.querySelector(
+            ".wallet-label-modal-backdrop"
+        );
+
+
+    if (
+        walletLabelBackdrop
+    ) {
+
+        walletLabelBackdrop.addEventListener(
+            "click",
+            closeWalletLabelModal
+        );
+    }
+}
+
+
+document.addEventListener(
+    "keydown",
+    event => {
+
+        if (
+            event.key === "Escape" &&
+            walletLabelModal &&
+            !walletLabelModal.hidden
+        ) {
+
+            closeWalletLabelModal();
+        }
+    }
+);
 
 
 /* =====================================================

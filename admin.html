@@ -1099,6 +1099,235 @@ button:disabled{
     gap:6px
 }
 
+/* PRIVATE WALLET LABELS */
+
+.wallet-private-label{
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+}
+
+.wallet-private-label-badge{
+    min-height:28px;
+    padding:0 10px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    border:1px solid rgba(101,255,131,.24);
+    border-radius:999px;
+    background:rgba(101,255,131,.07);
+    color:var(--green);
+    font-size:7px;
+    font-weight:900;
+    white-space:nowrap;
+}
+
+.wallet-private-label-badge.friends{
+    border-color:rgba(101,255,131,.16);
+    background:rgba(101,255,131,.035);
+    color:#a9b8ae;
+}
+
+.wallet-label-edit{
+    width:30px;
+    height:30px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    border:1px solid rgba(101,255,131,.14);
+    border-radius:8px;
+    background:rgba(101,255,131,.035);
+    color:var(--green);
+    font-size:13px;
+    transition:.15s ease;
+}
+
+.wallet-label-edit:hover{
+    border-color:rgba(101,255,131,.35);
+    background:rgba(101,255,131,.09);
+}
+
+.wallet-label-modal{
+    position:fixed;
+    inset:0;
+    z-index:9999;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+}
+
+.wallet-label-modal-backdrop{
+    position:absolute;
+    inset:0;
+    background:rgba(0,0,0,.76);
+    backdrop-filter:blur(8px);
+}
+
+.wallet-label-modal-card{
+    position:relative;
+    width:100%;
+    max-width:430px;
+    padding:22px;
+    border:1px solid rgba(101,255,131,.22);
+    border-radius:18px;
+    background:#06100b;
+    box-shadow:
+        0 30px 80px rgba(0,0,0,.55),
+        0 0 40px rgba(101,255,131,.04);
+}
+
+.wallet-label-modal-header{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:20px;
+}
+
+.wallet-label-modal-header span{
+    color:var(--green);
+    font-size:7px;
+    font-weight:900;
+    letter-spacing:1.7px;
+}
+
+.wallet-label-modal-header h3{
+    margin-top:6px;
+    color:#f4f8f5;
+    font-size:19px;
+}
+
+.wallet-label-modal-close{
+    width:34px;
+    height:34px;
+    border:1px solid rgba(255,255,255,.07);
+    border-radius:9px;
+    background:rgba(255,255,255,.025);
+    color:#849087;
+    font-size:18px;
+}
+
+.wallet-label-address{
+    margin-top:18px;
+    padding:12px;
+    border:1px solid rgba(101,255,131,.1);
+    border-radius:10px;
+    background:rgba(101,255,131,.025);
+}
+
+.wallet-label-address span{
+    display:block;
+    color:#657269;
+    font-size:6px;
+    font-weight:900;
+}
+
+.wallet-label-address strong{
+    display:block;
+    margin-top:6px;
+    overflow:hidden;
+    color:#aab6ae;
+    font-size:8px;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+}
+
+.wallet-label-options{
+    margin-top:14px;
+    display:grid;
+    gap:8px;
+}
+
+.wallet-label-option{
+    width:100%;
+    padding:13px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    border:1px solid rgba(101,255,131,.1);
+    border-radius:11px;
+    background:rgba(101,255,131,.02);
+    color:#dce5df;
+    text-align:left;
+}
+
+.wallet-label-option:hover{
+    border-color:rgba(101,255,131,.25);
+    background:rgba(101,255,131,.045);
+}
+
+.wallet-label-option.active{
+    border-color:rgba(101,255,131,.42);
+    background:rgba(101,255,131,.08);
+}
+
+.wallet-label-radio{
+    width:17px;
+    height:17px;
+    flex:0 0 17px;
+    border:1px solid rgba(101,255,131,.3);
+    border-radius:50%;
+}
+
+.wallet-label-option.active .wallet-label-radio{
+    border:5px solid var(--green);
+    box-shadow:0 0 10px rgba(101,255,131,.3);
+}
+
+.wallet-label-option strong{
+    display:block;
+    color:#f1f6f3;
+    font-size:9px;
+}
+
+.wallet-label-option small{
+    display:block;
+    margin-top:4px;
+    color:#68766d;
+    font-size:7px;
+}
+
+.wallet-label-modal-actions{
+    margin-top:20px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+}
+
+.wallet-label-modal-actions > div{
+    display:flex;
+    gap:7px;
+}
+
+.wallet-label-remove,
+.wallet-label-cancel,
+.wallet-label-save{
+    min-height:36px;
+    padding:0 12px;
+    border-radius:8px;
+    font-size:7px;
+    font-weight:900;
+}
+
+.wallet-label-remove{
+    border:1px solid rgba(255,101,112,.16);
+    background:rgba(255,101,112,.04);
+    color:#ff737d;
+}
+
+.wallet-label-cancel{
+    border:1px solid rgba(255,255,255,.07);
+    background:rgba(255,255,255,.025);
+    color:#849087;
+}
+
+.wallet-label-save{
+    border:1px solid rgba(101,255,131,.28);
+    background:rgba(101,255,131,.1);
+    color:var(--green);
+}
+
 /* CONTEST STATUS */
 
 .contest-member-status{
@@ -3209,6 +3438,7 @@ button:disabled{
                             <th>GREMBLE HELD</th>
                             <th>% OF SUPPLY</th>
                             <th>VALUE USD</th>
+                            <th>LABEL (PRIVATE)</th>
                         </tr>
 
                     </thead>
@@ -4571,7 +4801,102 @@ button:disabled{
 
 </template>
 
-<script src="admin.js?v=119"></script>
+
+<!-- PRIVATE WALLET LABEL MODAL -->
+
+<div
+    id="walletLabelModal"
+    class="wallet-label-modal"
+    hidden
+>
+    <div class="wallet-label-modal-backdrop"></div>
+
+    <div class="wallet-label-modal-card">
+
+        <div class="wallet-label-modal-header">
+            <div>
+                <span>PRIVATE ADMIN LABEL</span>
+                <h3>Set wallet label</h3>
+            </div>
+
+            <button
+                type="button"
+                id="walletLabelModalClose"
+                class="wallet-label-modal-close"
+            >
+                ×
+            </button>
+        </div>
+
+        <div class="wallet-label-address">
+            <span>WALLET</span>
+            <strong id="walletLabelAddress">—</strong>
+        </div>
+
+        <div class="wallet-label-options">
+
+            <button
+                type="button"
+                class="wallet-label-option"
+                data-wallet-label="my_wallet"
+            >
+                <span class="wallet-label-radio"></span>
+
+                <div>
+                    <strong>MY WALLET</strong>
+                    <small>Wallet controlled by me</small>
+                </div>
+            </button>
+
+            <button
+                type="button"
+                class="wallet-label-option"
+                data-wallet-label="friends"
+            >
+                <span class="wallet-label-radio"></span>
+
+                <div>
+                    <strong>FRIENDS</strong>
+                    <small>Wallet belonging to a friend</small>
+                </div>
+            </button>
+
+        </div>
+
+        <div class="wallet-label-modal-actions">
+
+            <button
+                type="button"
+                id="walletLabelRemove"
+                class="wallet-label-remove"
+            >
+                REMOVE LABEL
+            </button>
+
+            <div>
+                <button
+                    type="button"
+                    id="walletLabelCancel"
+                    class="wallet-label-cancel"
+                >
+                    CANCEL
+                </button>
+
+                <button
+                    type="button"
+                    id="walletLabelSave"
+                    class="wallet-label-save"
+                >
+                    SAVE
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<script src="admin.js?v=120"></script>
 
 <script>
 (() => {
