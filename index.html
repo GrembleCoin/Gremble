@@ -20,7 +20,7 @@
 
     <link
         rel="stylesheet"
-        href="style.css?v=108"
+        href="style.css?v=109"
     >
 
     <link
@@ -622,16 +622,102 @@
                     </h1>
 
 
-                    <p class="home-description">
+ <p class="home-description">
 
-                        Gremble is more than a memecoin.
-                        It's a character, a world and a community
-                        building something together from almost nothing.
+    Gremble is more than a memecoin.
+    It's a character, a world and a community
+    building something together from almost nothing.
 
-                    </p>
+</p>
 
 
-                    <div class="home-actions">
+<!-- =====================================================
+     GREMBLE LAUNCH COUNTDOWN
+===================================================== -->
+
+<div
+    class="launch-countdown"
+    id="launchCountdown"
+    hidden
+>
+
+    <div class="launch-countdown-heading">
+
+        <span class="launch-countdown-clock">
+            ◷
+        </span>
+
+        <strong>
+            $GREMBLE LAUNCHES IN
+        </strong>
+
+    </div>
+
+
+    <div class="launch-countdown-grid">
+
+        <div class="launch-countdown-box">
+
+            <strong id="launchDays">
+                00
+            </strong>
+
+            <span>
+                DAYS
+            </span>
+
+        </div>
+
+
+        <div class="launch-countdown-box">
+
+            <strong id="launchHours">
+                00
+            </strong>
+
+            <span>
+                HOURS
+            </span>
+
+        </div>
+
+
+        <div class="launch-countdown-box">
+
+            <strong id="launchMinutes">
+                00
+            </strong>
+
+            <span>
+                MINUTES
+            </span>
+
+        </div>
+
+
+        <div class="launch-countdown-box">
+
+            <strong id="launchSeconds">
+                00
+            </strong>
+
+            <span>
+                SECONDS
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <div class="launch-countdown-time">
+        TODAY · 14:30–15:00 UTC
+    </div>
+
+</div>
+
+
+<div class="home-actions">
 
                         <a
                             href="https://t.me/gremblecoin"
@@ -3807,6 +3893,143 @@ document.addEventListener(
 
 setupBuyLinks();
 
+
+</script>
+
+<!-- =====================================================
+     GREMBLE LAUNCH COUNTDOWN
+===================================================== -->
+
+<script>
+
+    /* =================================================
+       COUNTDOWN ZAPNUT / VYPNUT
+
+       true  = ZAPNUTY
+       false = VYPNUTY
+    ================================================= */
+
+    const LAUNCH_COUNTDOWN_ENABLED = true;
+
+
+    /* =================================================
+       LAUNCH TIME
+       19.09.2026 - 15:00 UTC
+    ================================================= */
+
+    const GREMBLE_LAUNCH_TIME =
+        new Date("2026-09-19T15:00:00Z");
+
+
+    const launchCountdown =
+        document.getElementById("launchCountdown");
+
+    const launchDays =
+        document.getElementById("launchDays");
+
+    const launchHours =
+        document.getElementById("launchHours");
+
+    const launchMinutes =
+        document.getElementById("launchMinutes");
+
+    const launchSeconds =
+        document.getElementById("launchSeconds");
+
+
+    function updateLaunchCountdown() {
+
+        /* COUNTDOWN VYPNUTY */
+
+        if (!LAUNCH_COUNTDOWN_ENABLED) {
+
+            if (launchCountdown) {
+                launchCountdown.hidden = true;
+            }
+
+            return;
+        }
+
+
+        if (!launchCountdown) {
+            return;
+        }
+
+
+        /* COUNTDOWN ZAPNUTY */
+
+        launchCountdown.hidden = false;
+
+
+        const now = new Date();
+
+        const distance =
+            GREMBLE_LAUNCH_TIME.getTime()
+            - now.getTime();
+
+
+        /* LAUNCH TIME DOSIAHNUTY */
+
+        if (distance <= 0) {
+
+            launchDays.textContent = "00";
+            launchHours.textContent = "00";
+            launchMinutes.textContent = "00";
+            launchSeconds.textContent = "00";
+
+            return;
+        }
+
+
+        const days =
+            Math.floor(
+                distance /
+                (1000 * 60 * 60 * 24)
+            );
+
+
+        const hours =
+            Math.floor(
+                (distance % (1000 * 60 * 60 * 24)) /
+                (1000 * 60 * 60)
+            );
+
+
+        const minutes =
+            Math.floor(
+                (distance % (1000 * 60 * 60)) /
+                (1000 * 60)
+            );
+
+
+        const seconds =
+            Math.floor(
+                (distance % (1000 * 60)) /
+                1000
+            );
+
+
+        launchDays.textContent =
+            String(days).padStart(2, "0");
+
+        launchHours.textContent =
+            String(hours).padStart(2, "0");
+
+        launchMinutes.textContent =
+            String(minutes).padStart(2, "0");
+
+        launchSeconds.textContent =
+            String(seconds).padStart(2, "0");
+
+    }
+
+
+    updateLaunchCountdown();
+
+    setInterval(
+        updateLaunchCountdown,
+        1000
+    );
 
 </script>
 

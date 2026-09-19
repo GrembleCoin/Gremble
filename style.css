@@ -1271,6 +1271,174 @@ img {
 }
 
 
+/* =====================================================
+   GREMBLE LAUNCH COUNTDOWN
+===================================================== */
+
+.launch-countdown {
+
+    width: 100%;
+
+    max-width: 540px;
+
+    margin-top: 24px;
+
+    padding:
+        18px 20px 16px;
+
+    border:
+        1px solid
+        rgba(105, 255, 131, 0.42);
+
+    border-radius: 20px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(3, 28, 18, 0.88),
+            rgba(0, 11, 7, 0.92)
+        );
+
+    box-shadow:
+        0 18px 45px
+        rgba(0, 0, 0, 0.30),
+        0 0 35px
+        rgba(105, 255, 131, 0.05);
+
+    backdrop-filter:
+        blur(12px);
+
+    -webkit-backdrop-filter:
+        blur(12px);
+}
+
+
+.launch-countdown-heading {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    margin-bottom: 14px;
+
+    color: var(--green);
+
+    font-size: 11px;
+
+    font-weight: 900;
+
+    letter-spacing: 1.8px;
+}
+
+
+.launch-countdown-clock {
+
+    width: 25px;
+
+    height: 25px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border:
+        1px solid
+        rgba(105, 255, 131, 0.40);
+
+    border-radius: 50%;
+
+    font-size: 17px;
+}
+
+
+.launch-countdown-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 10px;
+}
+
+
+.launch-countdown-box {
+
+    min-height: 72px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border:
+        1px solid
+        rgba(105, 255, 131, 0.25);
+
+    border-radius: 14px;
+
+    background:
+        rgba(0, 12, 8, 0.58);
+}
+
+
+.launch-countdown-box strong {
+
+    color: var(--green);
+
+    font-size: 28px;
+
+    line-height: 1;
+
+    font-weight: 900;
+
+    letter-spacing: -1px;
+
+    text-shadow:
+        0 0 18px
+        rgba(105, 255, 131, 0.20);
+}
+
+
+.launch-countdown-box span {
+
+    margin-top: 7px;
+
+    color:
+        rgba(255, 255, 255, 0.58);
+
+    font-size: 7px;
+
+    font-weight: 900;
+
+    letter-spacing: 1.2px;
+}
+
+
+.launch-countdown-time {
+
+    margin-top: 13px;
+
+    color:
+        rgba(255, 255, 255, 0.62);
+
+    font-size: 8px;
+
+    font-weight: 900;
+
+    letter-spacing: 1.8px;
+
+    text-align: center;
+}
+
+
 .home-actions {
 
     margin-top: 30px;
