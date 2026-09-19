@@ -9,6 +9,12 @@ const ADMIN_CONTEST_ENDPOINT = "https://tffzjqeckoezursrvcpw.supabase.co/functio
 const ADMIN_QUIZ_ENDPOINT = "https://tffzjqeckoezursrvcpw.supabase.co/functions/v1/admin-quiz";
 const ADMIN_QUIZ_LIVE_ENDPOINT = "https://tffzjqeckoezursrvcpw.supabase.co/functions/v1/admin-quiz-live";
 
+const GREMBLE_MINT_ADDRESS =
+    "55wNKcF14DxhfC4Wkh6vLPfhZEsiZUJxG5XKRGMWpump";
+
+const GREMBLE_MARKET_DATA_REFRESH_MS =
+    2000;
+
 const GREMBLE_SESSION_KEY = "gremble_session_token";
 const GREMBLE_SESSION_EXPIRY_KEY = "gremble_session_expires_at";
 
@@ -478,6 +484,12 @@ const allHoldersTopTenPercent =
 const allHoldersTotalValue =
     $("allHoldersTotalValue");
 
+const allHoldersMarketCap =
+    $("allHoldersMarketCap");
+
+const allHoldersMarketCapStatus =
+    $("allHoldersMarketCapStatus");
+
 const allHoldersSearch =
     $("allHoldersSearch");
 
@@ -565,6 +577,24 @@ const ALL_HOLDERS_AUTO_REFRESH_MS =
 
 let allHoldersAutoRefreshTimer =
     null;
+
+
+/* LIVE MARKET CAP STATE */
+
+let grembleMarketCapUsd =
+    0;
+
+let grembleMarketCapUpdatedAt =
+    null;
+
+let grembleMarketCapRefreshTimer =
+    null;
+
+let grembleMarketCapClockTimer =
+    null;
+
+let grembleMarketCapLoading =
+    false;
 
 
 /* PRIVATE WALLET LABEL STATE */
@@ -1435,6 +1465,257 @@ function renderHolders() {
    ALL HOLDERS
 ===================================================== */
 
+
+/* =====================================================
+   LIVE MARKET CAP DISPLAY
+===================================================== */
+
+function renderGrembleMarketCap() {
+
+    if (
+        allHoldersMarketCap
+    ) {
+
+        allHoldersMarketCap.textContent =
+            `$${numberOrZero(
+                grembleMarketCapUsd
+            ).toLocaleString(
+                "en-US",
+                {
+                    minimumFractionDigits:
+                        2,
+
+                    maximumFractionDigits:
+                        2
+                }
+            )}`;
+    }
+
+
+    if (
+        !allHoldersMarketCapStatus
+    ) {
+
+        return;
+    }
+
+
+    if (
+        grembleMarketCapLoading &&
+        !grembleMarketCapUpdatedAt
+    ) {
+
+        allHoldersMarketCapStatus.textContent =
+            "LIVE • LOADING...";
+
+        return;
+    }
+
+
+    if (
+        !grembleMarketCapUpdatedAt
+    ) {
+
+        allHoldersMarketCapStatus.textContent =
+            "LIVE • WAITING FOR DATA";
+
+        return;
+    }
+
+
+    const secondsAgo =
+        Math.max(
+            0,
+            Math.floor(
+                (
+                    Date.now() -
+                    grembleMarketCapUpdatedAt
+                ) /
+                1000
+            )
+        );
+
+
+    allHoldersMarketCapStatus.textContent =
+        `LIVE • UPDATED ${secondsAgo}s AGO`;
+}
+
+
+/* =====================================================
+   MARKET CAP CLOCK
+===================================================== */
+
+function startGrembleMarketCapClock() {
+
+    if (
+        grembleMarketCapClockTimer
+    ) {
+
+        clearInterval(
+            grembleMarketCapClockTimer
+        );
+    }
+
+
+    renderGrembleMarketCap();
+
+
+    grembleMarketCapClockTimer =
+        setInterval(
+            () => {
+
+                renderGrembleMarketCap();
+
+            },
+            1000
+        );
+}
+
+/* =====================================================
+   LOAD LIVE MARKET CAP
+===================================================== */
+
+async function loadGrembleMarketCap() {
+
+    if (
+        grembleMarketCapLoading
+    ) {
+
+        return;
+    }
+
+
+    const token =
+        getSessionToken();
+
+
+    if (
+        !token ||
+        sessionIsExpired()
+    ) {
+
+        return;
+    }
+
+
+    grembleMarketCapLoading =
+        true;
+
+
+    renderGrembleMarketCap();
+
+
+    try {
+
+        const response =
+            await fetch(
+                `${ADMIN_ALL_HOLDERS_ENDPOINT}?market=1`,
+                {
+
+                    method:
+                        "GET",
+
+                    headers: {
+
+                        Authorization:
+                            `Bearer ${token}`
+                    },
+
+                    cache:
+                        "no-store"
+                }
+            );
+
+
+        let result =
+            null;
+
+
+        try {
+
+            result =
+                await response.json();
+
+        }
+        catch {
+
+            result =
+                null;
+        }
+
+
+        if (
+            response.status ===
+            401
+        ) {
+
+            clearLocalSession();
+
+            showAccessError(
+                401
+            );
+
+            return;
+        }
+
+
+        if (
+            response.status ===
+            403
+        ) {
+
+            showAccessError(
+                403
+            );
+
+            return;
+        }
+
+
+        if (
+            !response.ok ||
+            result?.success !== true
+        ) {
+
+            throw new Error(
+                result?.error ||
+                "COULD NOT LOAD GREMBLE MARKET CAP."
+            );
+        }
+
+
+        grembleMarketCapUsd =
+            numberOrZero(
+                result.market_cap_usd
+            );
+
+
+        grembleMarketCapUpdatedAt =
+            Date.now();
+
+
+        renderGrembleMarketCap();
+
+    }
+    catch (error) {
+
+        console.error(
+            "Gremble market cap error:",
+            error
+        );
+
+    }
+    finally {
+
+        grembleMarketCapLoading =
+            false;
+
+
+        renderGrembleMarketCap();
+    }
+}
+
+
 function getFilteredAllHolders() {
 
     const search =
@@ -2212,17 +2493,33 @@ async function loadAllHolders(
         }
 
 
-        allHolders =
-            Array.isArray(
-                result.holders
-            )
-                ? result.holders
-                : [];
+allHolders =
+    Array.isArray(
+        result.holders
+    )
+        ? result.holders
+        : [];
 
 
-        allHoldersLoaded =
-            result.launch_ready ===
-            true;
+/* LIVE MARKET CAP */
+
+grembleMarketCapUsd =
+    numberOrZero(
+        result.market_cap_usd ??
+        result.stats?.market_cap_usd
+    );
+
+grembleMarketCapUpdatedAt =
+    Date.now();
+
+renderGrembleMarketCap();
+
+startGrembleMarketCapClock();
+
+
+allHoldersLoaded =
+    result.launch_ready ===
+    true;
 
 
         allHoldersCurrentPage =
@@ -2290,6 +2587,66 @@ async function loadAllHolders(
 
 window.loadAllHolders =
     loadAllHolders;
+
+
+/* =====================================================
+   LIVE MARKET CAP AUTO REFRESH
+===================================================== */
+
+function stopGrembleMarketCapRefresh() {
+
+    if (
+        grembleMarketCapRefreshTimer
+    ) {
+
+        clearInterval(
+            grembleMarketCapRefreshTimer
+        );
+
+        grembleMarketCapRefreshTimer =
+            null;
+    }
+
+
+    if (
+        grembleMarketCapClockTimer
+    ) {
+
+        clearInterval(
+            grembleMarketCapClockTimer
+        );
+
+        grembleMarketCapClockTimer =
+            null;
+    }
+}
+
+
+function startGrembleMarketCapRefresh() {
+
+    stopGrembleMarketCapRefresh();
+
+
+    loadGrembleMarketCap();
+
+
+    grembleMarketCapRefreshTimer =
+        setInterval(
+            () => {
+
+                loadGrembleMarketCap();
+
+            },
+            GREMBLE_MARKET_DATA_REFRESH_MS
+        );
+}
+
+
+window.startGrembleMarketCapRefresh =
+    startGrembleMarketCapRefresh;
+
+window.stopGrembleMarketCapRefresh =
+    stopGrembleMarketCapRefresh;
 
 
 function stopAllHoldersAutoRefresh() {
@@ -11858,6 +12215,11 @@ document.addEventListener(
         renderAllHolders();
 
         await loadAdminData();
+
+
+        startGrembleMarketCapClock();
+
+        startGrembleMarketCapRefresh();
 
 
         await loadSavedQuizzes();
