@@ -20,7 +20,7 @@
 
     <link
         rel="stylesheet"
-        href="style.css?v=109"
+        href="style.css?v=110"
     >
 
     <link
@@ -622,12 +622,97 @@
                     </h1>
 
 
- <p class="home-description">
+ <!-- =====================================================
+     GREMBLE CONTRACT ADDRESS
+===================================================== -->
 
-    CONTRACT ADDRESS: 
-    55wNKcF14DxhfC4Wkh6vLPfhZEsiZUJxG5XKRGMWpump
-    
-</p>
+<div class="home-contract-card">
+
+    <div
+        class="home-contract-solana"
+        aria-hidden="true"
+    >
+        <svg
+            viewBox="0 0 32 32"
+            fill="none"
+        >
+            <defs>
+                <linearGradient
+                    id="homeSolanaGradient"
+                    x1="4"
+                    y1="28"
+                    x2="28"
+                    y2="4"
+                    gradientUnits="userSpaceOnUse"
+                >
+                    <stop stop-color="#9945FF"></stop>
+                    <stop offset="0.5" stop-color="#14F195"></stop>
+                    <stop offset="1" stop-color="#00D1FF"></stop>
+                </linearGradient>
+            </defs>
+
+            <path
+                d="M8 7H27L23 11H4L8 7Z"
+                fill="url(#homeSolanaGradient)"
+            ></path>
+
+            <path
+                d="M4 14H23L27 18H8L4 14Z"
+                fill="url(#homeSolanaGradient)"
+            ></path>
+
+            <path
+                d="M8 21H27L23 25H4L8 21Z"
+                fill="url(#homeSolanaGradient)"
+            ></path>
+        </svg>
+    </div>
+
+
+    <div class="home-contract-content">
+
+        <span>
+            CONTRACT ADDRESS
+        </span>
+
+        <strong id="homeContractAddress">
+            55wNKcF14DxhfC4Wkh6vLPfhZEsiZUJxG5XKRGMWpump
+        </strong>
+
+    </div>
+
+
+    <button
+        type="button"
+        class="home-contract-copy"
+        id="homeContractCopy"
+        aria-label="Copy Gremble contract address"
+        title="Copy contract address"
+    >
+        <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+        >
+            <rect
+                x="8"
+                y="8"
+                width="11"
+                height="11"
+                rx="2"
+            ></rect>
+
+            <path
+                d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"
+            ></path>
+        </svg>
+    </button>
+
+</div>
 
 
 <!-- =====================================================
@@ -822,16 +907,52 @@
                     </div>
 
 
-                    <!-- TITLE -->
+ <!-- TITLE -->
 
-                    <p class="home-login-small">
-                        WELCOME TO
-                    </p>
+<p class="home-login-small">
+    WELCOME TO
+</p>
+
+<h2>
+    GREMBLE
+</h2>
 
 
-                    <h2>
-                        GREMBLE
-                    </h2>
+<!-- =====================================================
+     LIVE GREMBLE MARKET DATA
+===================================================== -->
+
+<div class="home-market-data">
+
+    <div class="home-market-item">
+
+        <span>
+            PRICE (USD)
+        </span>
+
+        <strong id="homeGremblePrice">
+            $0.00000000
+        </strong>
+
+    </div>
+
+
+    <div class="home-market-divider"></div>
+
+
+    <div class="home-market-item">
+
+        <span>
+            MARKET CAP
+        </span>
+
+        <strong id="homeGrembleMarketCap">
+            $0
+        </strong>
+
+    </div>
+
+</div>
 
 
 <!-- LOGGED IN GREMBLE CARD -->
@@ -3094,48 +3215,67 @@
             Select the platform you want to use.
         </p>
 
-
-        <div class="buy-platforms">
-
-
-            <a
-                href="#"
-                id="pumpfunBuyLink"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="buy-platform-button"
-            >
-
-                <span>
-                    PUMPFUN
-                </span>
-
-                <small>
-                    BUY $GREMBLE →
-                </small>
-
-            </a>
+<div class="buy-platforms">
 
 
-            <a
-                href="#"
-                id="fomoBuyLink"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="buy-platform-button"
-            >
+    <a
+        href="#"
+        id="pumpfunBuyLink"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="buy-platform-button"
+    >
 
-                <span>
-                    FOMO
-                </span>
+        <span>
+            PUMPFUN
+        </span>
 
-                <small>
-                    BUY $GREMBLE →
-                </small>
+        <small>
+            BUY $GREMBLE →
+        </small>
 
-            </a>
+    </a>
 
-        </div>
+
+    <a
+        href="#"
+        id="fomoBuyLink"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="buy-platform-button"
+    >
+
+        <span>
+            FOMO
+        </span>
+
+        <small>
+            BUY $GREMBLE →
+        </small>
+
+    </a>
+
+
+    <a
+        href="#"
+        id="dexscreenerBuyLink"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="buy-platform-button"
+    >
+
+        <span>
+            DEXSCREENER
+        </span>
+
+        <small>
+            VIEW $GREMBLE →
+        </small>
+
+    </a>
+
+
+</div>
 
 
         <p
@@ -3661,7 +3801,10 @@ const GREMBLE_BUY_LINKS = {
         "https://pump.fun/coin/55wNKcF14DxhfC4Wkh6vLPfhZEsiZUJxG5XKRGMWpump",
 
     fomo:
-        "https://fomo.family/tokens/solana/55wNKcF14DxhfC4Wkh6vLPfhZEsiZUJxG5XKRGMWpump"
+        "https://fomo.family/tokens/solana/55wNKcF14DxhfC4Wkh6vLPfhZEsiZUJxG5XKRGMWpump",
+
+    dexscreener:
+        "https://dexscreener.com/solana/5gyjwla3fgrtqjzydnjkafpfi4btznxrccjhvnutwzf2"
 
 };
 
@@ -3702,6 +3845,12 @@ const fomoBuyLink =
     );
 
 
+const dexscreenerBuyLink =
+    document.getElementById(
+        "dexscreenerBuyLink"
+    );
+
+
 const buyComingSoon =
     document.getElementById(
         "buyComingSoon"
@@ -3715,26 +3864,26 @@ function setupBuyLinks() {
 
 
     if (
+        pumpfunBuyLink &&
         GREMBLE_BUY_LINKS.pumpfun
     ) {
 
         pumpfunBuyLink.href =
             GREMBLE_BUY_LINKS.pumpfun;
 
-
         pumpfunBuyLink.classList.remove(
             "disabled-buy-link"
         );
 
-
         activeLinks++;
 
     }
-    else {
+    else if (
+        pumpfunBuyLink
+    ) {
 
         pumpfunBuyLink.href =
             "#";
-
 
         pumpfunBuyLink.classList.add(
             "disabled-buy-link"
@@ -3744,26 +3893,26 @@ function setupBuyLinks() {
 
 
     if (
+        fomoBuyLink &&
         GREMBLE_BUY_LINKS.fomo
     ) {
 
         fomoBuyLink.href =
             GREMBLE_BUY_LINKS.fomo;
 
-
         fomoBuyLink.classList.remove(
             "disabled-buy-link"
         );
 
-
         activeLinks++;
 
     }
-    else {
+    else if (
+        fomoBuyLink
+    ) {
 
         fomoBuyLink.href =
             "#";
-
 
         fomoBuyLink.classList.add(
             "disabled-buy-link"
@@ -3773,17 +3922,52 @@ function setupBuyLinks() {
 
 
     if (
-        activeLinks > 0
+        dexscreenerBuyLink &&
+        GREMBLE_BUY_LINKS.dexscreener
     ) {
 
-        buyComingSoon.textContent =
-            "CHOOSE YOUR PLATFORM";
+        dexscreenerBuyLink.href =
+            GREMBLE_BUY_LINKS.dexscreener;
+
+        dexscreenerBuyLink.classList.remove(
+            "disabled-buy-link"
+        );
+
+        activeLinks++;
 
     }
-    else {
+    else if (
+        dexscreenerBuyLink
+    ) {
 
-        buyComingSoon.textContent =
-            "TRADING LINKS COMING AT LAUNCH";
+        dexscreenerBuyLink.href =
+            "#";
+
+        dexscreenerBuyLink.classList.add(
+            "disabled-buy-link"
+        );
+
+    }
+
+
+    if (
+        buyComingSoon
+    ) {
+
+        if (
+            activeLinks > 0
+        ) {
+
+            buyComingSoon.textContent =
+                "CHOOSE YOUR PLATFORM";
+
+        }
+        else {
+
+            buyComingSoon.textContent =
+                "TRADING LINKS COMING AT LAUNCH";
+
+        }
 
     }
 
@@ -3791,6 +3975,15 @@ function setupBuyLinks() {
 
 
 function openBuyModal() {
+
+    if (
+        !buyModal
+    ) {
+
+        return;
+
+    }
+
 
     setupBuyLinks();
 
@@ -3811,12 +4004,21 @@ function openBuyModal() {
     );
 
 
-    closeBuyModalButton.focus();
+    closeBuyModalButton?.focus();
 
 }
 
 
 function closeBuyModal() {
+
+    if (
+        !buyModal
+    ) {
+
+        return;
+
+    }
+
 
     buyModal.classList.remove(
         "active"
@@ -3860,7 +4062,7 @@ document.addEventListener(
 
         if (
             event.key === "Escape" &&
-            buyModal.classList.contains(
+            buyModal?.classList.contains(
                 "active"
             )
         ) {
@@ -3875,7 +4077,8 @@ document.addEventListener(
 
 [
     pumpfunBuyLink,
-    fomoBuyLink
+    fomoBuyLink,
+    dexscreenerBuyLink
 ].forEach(
     link => {
 
@@ -4039,6 +4242,322 @@ setupBuyLinks();
         updateLaunchCountdown,
         1000
     );
+
+</script>
+
+
+<!-- =====================================================
+     GREMBLE LIVE MARKET DATA
+===================================================== -->
+
+<script>
+
+    const GREMBLE_MARKET_ENDPOINT =
+        "https://tffzjqeckoezursrvcpw.supabase.co/functions/v1/gremble-market";
+
+
+    const GREMBLE_MARKET_REFRESH_MS =
+        1000;
+
+
+    const homeGremblePrice =
+        document.getElementById(
+            "homeGremblePrice"
+        );
+
+
+    const homeGrembleMarketCap =
+        document.getElementById(
+            "homeGrembleMarketCap"
+        );
+
+
+    let grembleMarketLoading =
+        false;
+
+
+    function formatGremblePrice(
+        value
+    ) {
+
+        const price =
+            Number(
+                value
+            );
+
+
+        if (
+            !Number.isFinite(
+                price
+            ) ||
+            price <= 0
+        ) {
+
+            return "$0.00000000";
+        }
+
+
+        return (
+            "$" +
+            price.toLocaleString(
+                "en-US",
+                {
+                    minimumFractionDigits: 8,
+                    maximumFractionDigits: 10
+                }
+            )
+        );
+    }
+
+
+    function formatGrembleMarketCap(
+        value
+    ) {
+
+        const marketCap =
+            Number(
+                value
+            );
+
+
+        if (
+            !Number.isFinite(
+                marketCap
+            ) ||
+            marketCap <= 0
+        ) {
+
+            return "$0";
+        }
+
+
+        return (
+            "$" +
+            marketCap.toLocaleString(
+                "en-US",
+                {
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0
+                }
+            )
+        );
+    }
+
+
+    async function loadGrembleMarketData() {
+
+        if (
+            grembleMarketLoading
+        ) {
+
+            return;
+        }
+
+
+        grembleMarketLoading =
+            true;
+
+
+        try {
+
+            const response =
+                await fetch(
+                    GREMBLE_MARKET_ENDPOINT,
+                    {
+                        method:
+                            "GET",
+
+                        headers: {
+                            "Accept":
+                                "application/json"
+                        },
+
+                        cache:
+                            "no-store"
+                    }
+                );
+
+
+            if (
+                !response.ok
+            ) {
+
+                throw new Error(
+                    `Market request failed: ${response.status}`
+                );
+            }
+
+
+            const data =
+                await response.json();
+
+
+            if (
+                !data?.success
+            ) {
+
+                throw new Error(
+                    data?.error ||
+                    "Market data unavailable."
+                );
+            }
+
+
+            const priceUsd =
+                Number(
+                    data.price_usd
+                );
+
+
+            const marketCapUsd =
+                Number(
+                    data.market_cap_usd
+                );
+
+
+            if (
+                Number.isFinite(
+                    priceUsd
+                ) &&
+                priceUsd > 0 &&
+                homeGremblePrice
+            ) {
+
+                homeGremblePrice.textContent =
+                    formatGremblePrice(
+                        priceUsd
+                    );
+            }
+
+
+            if (
+                Number.isFinite(
+                    marketCapUsd
+                ) &&
+                marketCapUsd > 0 &&
+                homeGrembleMarketCap
+            ) {
+
+                homeGrembleMarketCap.textContent =
+                    formatGrembleMarketCap(
+                        marketCapUsd
+                    );
+            }
+
+        }
+        catch (
+            error
+        ) {
+
+            console.error(
+                "GREMBLE MARKET DATA ERROR:",
+                error
+            );
+
+        }
+        finally {
+
+            grembleMarketLoading =
+                false;
+
+        }
+    }
+
+
+    loadGrembleMarketData();
+
+
+    setInterval(
+        loadGrembleMarketData,
+        GREMBLE_MARKET_REFRESH_MS
+    );
+
+</script>
+
+
+<!-- =====================================================
+     COPY GREMBLE CONTRACT ADDRESS
+===================================================== -->
+
+<script>
+
+    const homeContractCopy =
+        document.getElementById(
+            "homeContractCopy"
+        );
+
+
+    const homeContractAddress =
+        document.getElementById(
+            "homeContractAddress"
+        );
+
+
+    if (
+        homeContractCopy &&
+        homeContractAddress
+    ) {
+
+        homeContractCopy.addEventListener(
+            "click",
+            async () => {
+
+                const address =
+                    homeContractAddress
+                        .textContent
+                        .trim();
+
+
+                try {
+
+                    await navigator.clipboard.writeText(
+                        address
+                    );
+
+
+                    const originalTitle =
+                        homeContractCopy.title;
+
+
+                    homeContractCopy.title =
+                        "Copied!";
+
+
+                    homeContractCopy.classList.add(
+                        "copied"
+                    );
+
+
+                    setTimeout(
+                        () => {
+
+                            homeContractCopy.title =
+                                originalTitle;
+
+                            homeContractCopy.classList.remove(
+                                "copied"
+                            );
+
+                        },
+                        1500
+                    );
+
+                }
+                catch (
+                    error
+                ) {
+
+                    console.error(
+                        "COPY CONTRACT ADDRESS ERROR:",
+                        error
+                    );
+
+                }
+
+            }
+        );
+
+    }
 
 </script>
 

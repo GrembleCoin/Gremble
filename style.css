@@ -1272,6 +1272,297 @@ img {
 
 
 /* =====================================================
+   HOME CONTRACT ADDRESS
+===================================================== */
+
+.home-contract-card {
+
+    width: 100%;
+
+    max-width: 610px;
+
+    min-height: 64px;
+
+    margin-top: 28px;
+
+    padding:
+        10px 12px;
+
+    display: grid;
+
+    grid-template-columns:
+        42px
+        minmax(0, 1fr)
+        42px;
+
+    align-items: center;
+
+    gap: 12px;
+
+    border:
+        1px solid
+        rgba(105, 255, 131, 0.22);
+
+    border-radius: 17px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(4, 25, 16, 0.78),
+            rgba(0, 10, 6, 0.82)
+        );
+
+    box-shadow:
+        0 15px 40px
+        rgba(0, 0, 0, 0.24),
+        inset 0 0 30px
+        rgba(105, 255, 131, 0.018);
+
+    backdrop-filter:
+        blur(10px);
+
+    -webkit-backdrop-filter:
+        blur(10px);
+}
+
+
+.home-contract-solana {
+
+    width: 42px;
+
+    height: 42px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border:
+        1px solid
+        rgba(105, 255, 131, 0.18);
+
+    border-radius: 12px;
+
+    background:
+        rgba(0, 8, 5, 0.72);
+}
+
+
+.home-contract-solana svg {
+
+    width: 27px;
+
+    height: 27px;
+
+    display: block;
+}
+
+
+.home-contract-content {
+
+    min-width: 0;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 5px;
+}
+
+
+.home-contract-content span {
+
+    color:
+        rgba(255, 255, 255, 0.42);
+
+    font-size: 7px;
+
+    font-weight: 900;
+
+    letter-spacing: 1.7px;
+}
+
+
+.home-contract-content strong {
+
+    display: block;
+
+    overflow: hidden;
+
+    color: #e9f2ec;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    letter-spacing: 0.15px;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+}
+
+
+.home-contract-copy {
+
+    width: 42px;
+
+    height: 42px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border:
+        1px solid
+        rgba(105, 255, 131, 0.18);
+
+    border-radius: 12px;
+
+    background:
+        rgba(105, 255, 131, 0.045);
+
+    color:
+        var(--green);
+
+    transition:
+        transform 0.2s ease,
+        border-color 0.2s ease,
+        background 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.home-contract-copy:hover {
+
+    transform:
+        translateY(-1px);
+
+    border-color:
+        rgba(105, 255, 131, 0.55);
+
+    background:
+        rgba(105, 255, 131, 0.10);
+
+    box-shadow:
+        0 0 20px
+        rgba(105, 255, 131, 0.10);
+}
+
+
+.home-contract-copy svg {
+
+    width: 18px;
+
+    height: 18px;
+
+    display: block;
+}
+
+
+
+/* =====================================================
+   HOME LIVE MARKET DATA
+===================================================== */
+
+.home-market-data {
+
+    position: relative;
+
+    z-index: 2;
+
+    width: 100%;
+
+    margin-top: 24px;
+
+    padding:
+        17px 8px;
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1fr)
+        1px
+        minmax(0, 1fr);
+
+    align-items: center;
+
+    border-top:
+        1px solid
+        rgba(105, 255, 131, 0.12);
+
+    border-bottom:
+        1px solid
+        rgba(105, 255, 131, 0.12);
+}
+
+
+.home-market-item {
+
+    min-width: 0;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    gap: 7px;
+
+    text-align: center;
+}
+
+
+.home-market-item span {
+
+    color:
+        rgba(255, 255, 255, 0.42);
+
+    font-size: 7px;
+
+    font-weight: 900;
+
+    letter-spacing: 1.7px;
+}
+
+
+.home-market-item strong {
+
+    color:
+        var(--green);
+
+    font-size: 18px;
+
+    font-weight: 900;
+
+    letter-spacing: -0.4px;
+
+    text-shadow:
+        0 0 18px
+        rgba(105, 255, 131, 0.13);
+}
+
+
+.home-market-divider {
+
+    width: 1px;
+
+    height: 35px;
+
+    background:
+        linear-gradient(
+            180deg,
+            transparent,
+            rgba(105, 255, 131, 0.22),
+            transparent
+        );
+}
+
+
+/* =====================================================
    GREMBLE LAUNCH COUNTDOWN
 ===================================================== */
 
@@ -5182,17 +5473,19 @@ img {
 
 .buy-platforms {
 
+    width: 100%;
+
     margin-top: 30px;
 
     display: grid;
 
     grid-template-columns:
         repeat(
-            2,
-            1fr
+            3,
+            minmax(0, 1fr)
         );
 
-    gap: 12px;
+    gap: 10px;
 }
 
 
